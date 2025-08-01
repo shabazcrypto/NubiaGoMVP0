@@ -2,7 +2,7 @@
 
 ## Overview
 
-Nubiago is a static HTML website project that appears to be a search or discovery platform with the tagline "Find what you need, faster!". The project consists of a single HTML file with embedded CSS styling, creating a modern, clean interface with glassmorphism design elements. The website features a responsive layout with a top header, main navigation, and hero section structure.
+Nubiago is a general e-commerce platform with the tagline "Find what you need, faster!" that offers products across six main categories: Electronics & Tech, Fashion & Beauty, Home & Living, Real Estate, Health & Wellness, and Sports & Outdoors. The project consists of a single HTML file with embedded CSS styling, creating a modern, clean interface with glassmorphism design elements and a responsive layout.
 
 ## User Preferences
 

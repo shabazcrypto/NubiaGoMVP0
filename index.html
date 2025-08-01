@@ -78,11 +78,11 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .logo-text {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: #333;
         }
@@ -90,6 +90,7 @@
         .main-nav {
             display: flex;
             gap: 30px;
+            list-style: none;
         }
 
         .main-nav a {
@@ -107,37 +108,30 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #f8f9fa;
-            border-radius: 25px;
-            padding: 10px 20px;
-            width: 300px;
+        .search-icon, .cart-icon, .user-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.3s ease;
         }
 
-        .search-bar input {
-            border: none;
-            background: none;
-            outline: none;
-            flex: 1;
-            padding: 5px;
-            font-size: 14px;
-        }
-
-        .search-bar input::placeholder {
-            color: #999;
+        .search-icon:hover, .cart-icon:hover, .user-icon:hover {
+            color: #dc3545;
         }
 
         .btn {
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
         }
 
         .btn-primary {
@@ -395,6 +389,247 @@
             border-radius: 50%;
         }
 
+        /* New Arrivals Section */
+        .new-arrivals {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .new-arrivals-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .arrivals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .arrival-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .arrival-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .arrival-image {
+            width: 100%;
+            height: 220px;
+            background: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arrival-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .arrival-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #dc3545;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .arrival-content {
+            padding: 25px;
+        }
+
+        .arrival-category {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .arrival-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .arrival-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+
+        .arrival-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .promotion-card {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .promotion-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .promotion-subtitle {
+            font-size: 16px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .promotion-btn {
+            background: white;
+            color: #dc3545;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .promotion-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Shop By Categories Section */
+        .shop-categories {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .categories-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .category-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover .category-overlay {
+            opacity: 1;
+        }
+
+        .category-content {
+            text-align: center;
+            color: white;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover .category-content {
+            transform: translateY(0);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+        .category-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .category-count {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
         /* Fashion Collection Section */
         .fashion-collection {
             padding: 80px 0;
@@ -499,184 +734,6 @@
             width: 100%;
             height: 400px;
             object-fit: cover;
-        }
-
-        @media (max-width: 768px) {
-            .collection-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            
-            .collection-brand {
-                font-size: 28px;
-            }
-            
-            .collection-title,
-            .collection-subtitle {
-                font-size: 24px;
-            }
-            
-            .collection-thumbnails {
-                gap: 12px;
-            }
-            
-            .thumbnail {
-                width: 60px;
-                height: 60px;
-            }
-        }
-
-        /* Category Navigation */
-        .category-nav {
-            background: #fff;
-            padding: 30px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .category-nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            overflow-x: auto;
-        }
-
-        .category-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 100px;
-            text-align: center;
-        }
-
-        .category-nav-item:hover {
-            transform: translateY(-3px);
-        }
-
-        .category-nav-icon {
-            width: 80px;
-            height: 80px;
-            background: #f8f9fa;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            overflow: hidden;
-        }
-
-        .category-nav-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .category-nav-item:hover .category-nav-icon {
-            background: #e3f2fd;
-            border-color: #2196f3;
-            transform: scale(1.05);
-        }
-
-        .sale-badge {
-            background: #dc3545 !important;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .category-nav-item.sale:hover .sale-badge {
-            background: #c82333 !important;
-            border-color: #dc3545;
-        }
-
-        .category-nav-label {
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-            white-space: nowrap;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            
-            .hero-title {
-                font-size: 36px;
-            }
-            
-            .main-header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .search-bar {
-                width: 100%;
-                max-width: 400px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 28px;
-            }
-            
-            .hero-subtitle {
-                font-size: 18px;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .hero-btn {
-                width: 100%;
-                max-width: 300px;
-                text-align: center;
-            }
-            
-            .hero-features {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .main-nav {
-                gap: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .category-nav-content {
-                justify-content: flex-start;
-                padding: 0 20px;
-                gap: 15px;
-            }
-            
-            .category-nav-item {
-                min-width: 80px;
-            }
-            
-            .category-nav-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 20px;
-            }
-            
-            .category-nav-label {
-                font-size: 12px;
-            }
         }
 
         /* Shop Our Offers Section */
@@ -846,436 +903,39 @@
         .color-option.purple { background: #dda0dd; }
         .color-option.orange { background: #ffa500; }
 
-        /* New Arrivals Section */
-        .new-arrivals {
-            background: linear-gradient(180deg, #fafbfc 0%, #f8f9fa 100%);
-            padding: 80px 0;
-            position: relative;
-        }
-
-        .new-arrivals::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%);
-        }
-
-        .new-arrivals-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 50px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid rgba(224, 224, 224, 0.5);
-        }
-
-        .section-title {
-            font-size: 36px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .section-subtitle {
-            font-size: 16px;
-            color: #666;
-            margin: 0;
-        }
-
-        .section-tabs {
-            display: flex;
-            gap: 30px;
-        }
-
-        .tab-button {
-            background: none;
-            border: none;
-            font-size: 16px;
-            font-weight: 500;
-            color: #999;
-            cursor: pointer;
-            padding: 8px 0;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .tab-button.active {
-            color: #333;
-            border-bottom-color: #333;
-        }
-
-        .tab-button:hover {
-            color: #333;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-            gap: 30px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-        }
-
-        .promotion-card {
-            background: linear-gradient(135deg, #8b7355 0%, #a68b5b 100%);
-            color: white;
-            position: relative;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 30px;
-            box-shadow: 0 8px 30px rgba(139, 115, 85, 0.3);
-            border: none;
-        }
-
-        .promotion-content {
-            z-index: 2;
-        }
-
-        .promotion-label {
-            font-size: 14px;
-            font-weight: 500;
-            opacity: 0.9;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .promotion-title {
-            font-size: 28px;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 25px;
-        }
-
-        .shop-now-btn {
-            background: white;
-            color: #8b7355;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .shop-now-btn:hover {
-            background: #f0f0f0;
-        }
-
-        .promotion-image {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 60%;
-            height: 60%;
-            opacity: 0.3;
-        }
-
-        .promotion-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .product-image {
-            position: relative;
-            width: 100%;
-            height: 250px;
-            overflow: hidden;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.05);
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: #dc3545;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            z-index: 2;
-        }
-
-        .product-info {
-            padding: 20px;
-        }
-
-        .product-category {
-            font-size: 12px;
-            font-weight: 600;
-            color: #999;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .product-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin: 0 0 12px 0;
-            line-height: 1.3;
-        }
-
-        .product-price {
-            margin-bottom: 15px;
-        }
-
-        .price {
-            font-size: 18px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .sale-price {
-            font-size: 18px;
-            font-weight: 700;
-            color: #dc3545;
-            margin-right: 8px;
-        }
-
-        .original-price {
-            font-size: 16px;
-            color: #999;
-            text-decoration: line-through;
-        }
-
-        .color-swatches {
-            display: flex;
-            gap: 8px;
-        }
-
-        .color-swatch {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid #e0e0e0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .color-swatch:hover {
-            transform: scale(1.1);
-            border-color: #333;
-        }
-
-        /* Responsive Design for New Arrivals */
-        @media (max-width: 992px) {
-            .products-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 25px;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
             }
-            
-            .section-header {
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .arrivals-grid,
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .collection-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .offers-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 20px;
             }
-            
-            .section-title {
-                font-size: 28px;
-            }
-        }
 
-        @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .new-arrivals {
-                padding: 50px 0;
-            }
-            
-            .section-title {
-                font-size: 24px;
-            }
-            
-            .promotion-title {
-                font-size: 24px;
-            }
-        }
-
-        /* Shop By Categories Section */
-        .shop-categories {
-            background: white;
-            padding: 80px 0;
-            position: relative;
-        }
-
-        .shop-categories::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%);
-        }
-
-        .shop-categories-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-
-        .category-card {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            height: 280px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .category-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-        }
-
-        .category-image {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .category-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .category-card:hover .category-image img {
-            transform: scale(1.1);
-        }
-
-        .category-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .category-card:hover .category-overlay {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.7) 100%);
-        }
-
-        .category-content {
-            text-align: center;
-            color: white;
-            z-index: 2;
-        }
-
-        .category-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            transition: all 0.3s ease;
-        }
-
-        .category-card:hover .category-icon {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-
-        .category-name {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: white;
-        }
-
-        .category-count {
-            font-size: 14px;
-            font-weight: 500;
-            opacity: 0.9;
-            color: white;
-        }
-
-        /* Responsive Design for Categories */
-        @media (max-width: 992px) {
-            .categories-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 25px;
-            }
-            
-            .category-card {
-                height: 250px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .categories-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .shop-categories {
-                padding: 50px 0;
-            }
-            
-            .category-card {
-                height: 220px;
-            }
-            
-            .category-name {
-                font-size: 20px;
+            .main-nav {
+                display: none;
             }
         }
     </style>
@@ -1285,12 +945,11 @@
     <header class="top-header">
         <div class="top-header-content">
             <div class="contact-info">
-                <span>📞 +1 (555) 123-4567</span>
-                <span>📧 support@nubiago.com</span>
+                <span>📞 +234 800 123 4567</span>
+                <span>✉️ hello@nubiago.com</span>
             </div>
             <div class="top-header-right">
-                <span>💵 USD</span>
-                <span>🌍 English</span>
+                <span>Free shipping on orders over ₦50,000</span>
             </div>
         </div>
     </header>
@@ -1300,80 +959,34 @@
         <div class="main-header-content">
             <a href="#" class="logo">
                 <div class="logo-icon">N</div>
-                <div class="logo-text">Nubiago</div>
+                <span class="logo-text">Nubiago</span>
             </a>
             
-            <nav class="main-nav">
-                <a href="#">Home</a>
-                <a href="#">Categories</a>
-                <a href="#">Products</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="#electronics">Electronics</a></li>
+                    <li><a href="#fashion">Fashion</a></li>
+                    <li><a href="#home">Home & Living</a></li>
+                    <li><a href="#realestate">Real Estate</a></li>
+                    <li><a href="#health">Health</a></li>
+                    <li><a href="#sports">Sports</a></li>
+                </ul>
             </nav>
             
             <div class="header-actions">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search for products...">
-                    <span>🔍</span>
-                </div>
-                <a href="#" class="btn btn-primary">My Account</a>
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="cart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5M9 19.5C9.8 19.5 10.5 20.2 10.5 21S9.8 22.5 9 22.5 7.5 21.8 7.5 21 8.2 19.5 9 19.5ZM20 19.5C20.8 19.5 21.5 20.2 21.5 21S20.8 22.5 20 22.5 18.5 21.8 18.5 21 19.2 19.5 20 19.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="user-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 17.9 19.1 17 18 17H6C4.9 17 4 17.9 4 19V21M16 7C16 9.2 14.2 11 12 11S8 9.2 8 7 9.8 3 12 3 16 4.8 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <a href="#" class="btn btn-primary">Sign Up</a>
             </div>
         </div>
     </header>
-
-    <!-- Category Navigation -->
-    <section class="category-nav">
-        <div class="category-nav-content">
-            <div class="category-nav-item sale">
-                <div class="category-nav-icon sale-badge">
-                    <span>Sale</span>
-                </div>
-                <span class="category-nav-label">Sale Items</span>
-            </div>
-            <div class="category-nav-item">
-                <div class="category-nav-icon">
-                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop&crop=center" alt="Press Tables" />
-                </div>
-                <span class="category-nav-label">Press Tables</span>
-            </div>
-            <div class="category-nav-item">
-                <div class="category-nav-icon">
-                    <img src="https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=200&h=200&fit=crop&crop=center" alt="Lighting" />
-                </div>
-                <span class="category-nav-label">Lighting</span>
-            </div>
-            <div class="category-nav-item">
-                <div class="category-nav-icon">
-                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&h=200&fit=crop&crop=center" alt="Spoke Sofa" />
-                </div>
-                <span class="category-nav-label">Spoke Sofa</span>
-            </div>
-            <div class="category-nav-item">
-                <div class="category-nav-icon">
-                    <img src="https://images.unsplash.com/photo-1586627561040-0c632e40cd66?w=200&h=200&fit=crop&crop=center" alt="Storage" />
-                </div>
-                <span class="category-nav-label">Storage</span>
-            </div>
-            <div class="category-nav-item">
-                <div class="category-nav-icon">
-                    <img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=200&h=200&fit=crop&crop=center" alt="Turn Chairs" />
-                </div>
-                <span class="category-nav-label">Turn Chairs</span>
-            </div>
-            <div class="category-nav-item">
-                <div class="category-nav-icon">
-                    <img src="https://images.unsplash.com/photo-1549497538-303791108f95?w=200&h=200&fit=crop&crop=center" alt="Chairs" />
-                </div>
-                <span class="category-nav-label">Chairs</span>
-            </div>
-            <div class="category-nav-item">
-                <div class="category-nav-icon">
-                    <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=200&h=200&fit=crop&crop=center" alt="Curve Coat" />
-                </div>
-                <span class="category-nav-label">Curve Coat</span>
-            </div>
-        </div>
-    </section>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -1507,100 +1120,54 @@
     <section class="new-arrivals">
         <div class="new-arrivals-content">
             <div class="section-header">
-                <div class="section-title-area">
-                    <h2 class="section-title">New Arrivals</h2>
-                    <p class="section-subtitle">Traditional divides between personal and professional space.</p>
-                </div>
-                <div class="section-tabs">
-                    <button class="tab-button active">New Arrivals</button>
-                    <button class="tab-button">Hot Items</button>
-                </div>
+                <h2 class="section-title">New Arrivals</h2>
+                <p class="section-subtitle">Discover the latest products across all categories</p>
             </div>
             
-            <div class="products-grid">
-                <!-- Promotion Card -->
-                <div class="product-card promotion-card">
-                    <div class="promotion-content">
-                        <span class="promotion-label">Promotion</span>
-                        <h3 class="promotion-title">Tech Sale Event</h3>
-                        <button class="shop-now-btn">Shop Now</button>
+            <div class="arrivals-grid">
+                <div class="arrival-card">
+                    <div class="arrival-image">
+                        <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=300&fit=crop&crop=center" alt="Premium Sneakers" />
+                        <div class="arrival-badge">New</div>
                     </div>
-                    <div class="promotion-image">
-                        <img src="https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=300&h=400&fit=crop&crop=center" alt="Tech Sale" />
-                    </div>
-                </div>
-
-                <!-- Product 1 -->
-                <div class="product-card">
-                    <div class="product-badge sale-badge">Sale</div>
-                    <div class="product-image">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop&crop=center" alt="Nike Air Max Sneakers" />
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">SHOES</span>
-                        <h4 class="product-name">Nike Air Max Sneakers</h4>
-                        <div class="product-price">
-                            <span class="sale-price">$129.99</span>
-                            <span class="original-price">$160.00</span>
-                        </div>
-                        <div class="color-swatches">
-                            <span class="color-swatch" style="background-color: #ffffff;"></span>
-                            <span class="color-swatch" style="background-color: #000000;"></span>
-                        </div>
+                    <div class="arrival-content">
+                        <div class="arrival-category">Fashion</div>
+                        <h3 class="arrival-title">Premium Running Sneakers</h3>
+                        <div class="arrival-price">₦45,000</div>
+                        <p class="arrival-description">Comfortable and stylish sneakers perfect for your daily runs and casual wear.</p>
                     </div>
                 </div>
 
-                <!-- Product 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop&crop=center" alt="Wireless Headphones" />
+                <div class="arrival-card">
+                    <div class="arrival-image">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop&crop=center" alt="Wireless Headphones" />
+                        <div class="arrival-badge">New</div>
                     </div>
-                    <div class="product-info">
-                        <span class="product-category">ELECTRONICS</span>
-                        <h4 class="product-name">Wireless Headphones</h4>
-                        <div class="product-price">
-                            <span class="price">$299.00</span>
-                        </div>
-                        <div class="color-swatches">
-                            <span class="color-swatch" style="background-color: #000000;"></span>
-                            <span class="color-swatch" style="background-color: #ffffff;"></span>
-                        </div>
+                    <div class="arrival-content">
+                        <div class="arrival-category">Electronics</div>
+                        <h3 class="arrival-title">Wireless Bluetooth Headphones</h3>
+                        <div class="arrival-price">₦75,000</div>
+                        <p class="arrival-description">High-quality sound with noise cancellation and 30-hour battery life.</p>
                     </div>
                 </div>
 
-                <!-- Product 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300&h=300&fit=crop&crop=center" alt="Beauty Kit Essential" />
+                <div class="arrival-card">
+                    <div class="arrival-image">
+                        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=300&fit=crop&crop=center" alt="Beauty Kit" />
+                        <div class="arrival-badge">Hot</div>
                     </div>
-                    <div class="product-info">
-                        <span class="product-category">BEAUTY</span>
-                        <h4 class="product-name">Beauty Kit Essential</h4>
-                        <div class="product-price">
-                            <span class="price">$85.00</span>
-                        </div>
-                        <div class="color-swatches">
-                            <span class="color-swatch" style="background-color: #ff69b4;"></span>
-                            <span class="color-swatch" style="background-color: #ffd700;"></span>
-                        </div>
+                    <div class="arrival-content">
+                        <div class="arrival-category">Beauty</div>
+                        <h3 class="arrival-title">Complete Skincare Set</h3>
+                        <div class="arrival-price">₦32,000</div>
+                        <p class="arrival-description">Everything you need for a complete skincare routine with natural ingredients.</p>
                     </div>
                 </div>
 
-                <!-- Product 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://images.unsplash.com/photo-1571019613540-996a513bc939?w=300&h=300&fit=crop&crop=center" alt="Fitness Tracker" />
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">FITNESS</span>
-                        <h4 class="product-name">Fitness Tracker</h4>
-                        <div class="product-price">
-                            <span class="price">$199.00</span>
-                        </div>
-                        <div class="color-swatches">
-                            <span class="color-swatch" style="background-color: #1e90ff;"></span>
-                        </div>
-                    </div>
+                <div class="arrival-card promotion-card">
+                    <h3 class="promotion-title">Special Offer!</h3>
+                    <p class="promotion-subtitle">Get 25% off on your first order</p>
+                    <a href="#" class="promotion-btn">Shop Now</a>
                 </div>
             </div>
         </div>
@@ -1608,38 +1175,33 @@
 
     <!-- Shop By Categories Section -->
     <section class="shop-categories">
-        <div class="shop-categories-content">
+        <div class="categories-content">
             <div class="section-header">
-                <div class="section-title-area">
-                    <h2 class="section-title">Shop By Categories</h2>
-                    <p class="section-subtitle">Discover amazing products across all categories from trusted sellers worldwide.</p>
-                </div>
+                <h2 class="section-title">Shop by Categories</h2>
+                <p class="section-subtitle">Explore our wide range of product categories</p>
             </div>
             
             <div class="categories-grid">
                 <div class="category-card">
                     <div class="category-image">
-                        <img src="https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=400&h=300&fit=crop&crop=center" alt="Electronics & Tech" />
+                        <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=300&fit=crop&crop=center" alt="Electronics & Tech" />
                     </div>
                     <div class="category-overlay">
                         <div class="category-content">
                             <div class="category-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="5" y="2" width="14" height="20" rx="2" fill="white"/>
-                                    <rect x="7" y="4" width="10" height="1" fill="#4285f4"/>
-                                    <rect x="7" y="6" width="10" height="1" fill="#4285f4"/>
-                                    <rect x="7" y="8" width="6" height="1" fill="#4285f4"/>
                                 </svg>
                             </div>
                             <h3 class="category-name">Electronics & Tech</h3>
-                            <p class="category-count">850+ Products</p>
+                            <p class="category-count">500+ Products</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="category-card">
                     <div class="category-image">
-                        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&h=300&fit=crop&crop=center" alt="Fashion & Beauty" />
+                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop&crop=center" alt="Fashion & Beauty" />
                     </div>
                     <div class="category-overlay">
                         <div class="category-content">
@@ -1647,19 +1209,17 @@
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 2L8 8H16L12 2Z" fill="white"/>
                                     <path d="M8 8V20C8 21.1 8.9 22 10 22H14C15.1 22 16 21.1 16 20V8H8Z" fill="white"/>
-                                    <circle cx="10" cy="12" r="1" fill="#e91e63"/>
-                                    <circle cx="14" cy="12" r="1" fill="#e91e63"/>
                                 </svg>
                             </div>
                             <h3 class="category-name">Fashion & Beauty</h3>
-                            <p class="category-count">1,200+ Products</p>
+                            <p class="category-count">750+ Products</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="category-card">
                     <div class="category-image">
-                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop&crop=center" alt="Home & Living" />
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&crop=center" alt="Home & Living" />
                     </div>
                     <div class="category-overlay">
                         <div class="category-content">
@@ -1669,7 +1229,7 @@
                                 </svg>
                             </div>
                             <h3 class="category-name">Home & Living</h3>
-                            <p class="category-count">675+ Products</p>
+                            <p class="category-count">600+ Products</p>
                         </div>
                     </div>
                 </div>
@@ -1684,9 +1244,6 @@
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="3" y="6" width="18" height="12" rx="1" fill="white"/>
                                     <rect x="5" y="3" width="14" height="3" rx="1" fill="white"/>
-                                    <rect x="7" y="8" width="2" height="2" fill="#ff9800"/>
-                                    <rect x="11" y="8" width="2" height="2" fill="#ff9800"/>
-                                    <rect x="15" y="8" width="2" height="2" fill="#ff9800"/>
                                 </svg>
                             </div>
                             <h3 class="category-name">Real Estate</h3>
@@ -1704,7 +1261,6 @@
                             <div class="category-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 2C16.97 2 21 6.03 21 11C21 16.97 16.97 21 12 21C7.03 21 3 16.97 3 11C3 6.03 7.03 2 12 2Z" fill="white"/>
-                                    <path d="M9 11L11 13L15 9" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </div>
                             <h3 class="category-name">Health & Wellness</h3>
@@ -1722,8 +1278,6 @@
                             <div class="category-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="8" fill="white"/>
-                                    <path d="M8 12L10 14L16 8" stroke="#ff5722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" fill="#ff5722"/>
                                 </svg>
                             </div>
                             <h3 class="category-name">Sports & Outdoors</h3>

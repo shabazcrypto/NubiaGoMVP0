@@ -456,6 +456,274 @@
                 font-size: 12px;
             }
         }
+
+        /* New Arrivals Section */
+        .new-arrivals {
+            background: #fff;
+            padding: 80px 0;
+        }
+
+        .new-arrivals-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin: 0;
+        }
+
+        .section-tabs {
+            display: flex;
+            gap: 30px;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #999;
+            cursor: pointer;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: #333;
+            border-bottom-color: #333;
+        }
+
+        .tab-button:hover {
+            color: #333;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .promotion-card {
+            background: linear-gradient(135deg, #8b7355 0%, #a68b5b 100%);
+            color: white;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+        }
+
+        .promotion-content {
+            z-index: 2;
+        }
+
+        .promotion-label {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .promotion-title {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 25px;
+        }
+
+        .shop-now-btn {
+            background: white;
+            color: #8b7355;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .shop-now-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .promotion-image {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 60%;
+            height: 60%;
+            opacity: 0.3;
+        }
+
+        .promotion-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-image {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-category {
+            font-size: 12px;
+            font-weight: 600;
+            color: #999;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 12px 0;
+            line-height: 1.3;
+        }
+
+        .product-price {
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .sale-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #dc3545;
+            margin-right: 8px;
+        }
+
+        .original-price {
+            font-size: 16px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .color-swatches {
+            display: flex;
+            gap: 8px;
+        }
+
+        .color-swatch {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+            border-color: #333;
+        }
+
+        /* Responsive Design for New Arrivals */
+        @media (max-width: 992px) {
+            .products-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .new-arrivals {
+                padding: 50px 0;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .promotion-title {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -644,6 +912,109 @@
                     <div class="feature-item">
                         <div class="feature-icon">✓</div>
                         <span>24/7 Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Arrivals Section -->
+    <section class="new-arrivals">
+        <div class="new-arrivals-content">
+            <div class="section-header">
+                <div class="section-title-area">
+                    <h2 class="section-title">New Arrivals</h2>
+                    <p class="section-subtitle">Traditional divides between personal and professional space.</p>
+                </div>
+                <div class="section-tabs">
+                    <button class="tab-button active">New Arrivals</button>
+                    <button class="tab-button">Hot Items</button>
+                </div>
+            </div>
+            
+            <div class="products-grid">
+                <!-- Promotion Card -->
+                <div class="product-card promotion-card">
+                    <div class="promotion-content">
+                        <span class="promotion-label">Promotion</span>
+                        <h3 class="promotion-title">Soft Stools Design</h3>
+                        <button class="shop-now-btn">Shop Now</button>
+                    </div>
+                    <div class="promotion-image">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=400&fit=crop&crop=center" alt="Soft Stools" />
+                    </div>
+                </div>
+
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-badge sale-badge">Sale</div>
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1549497538-303791108f95?w=300&h=300&fit=crop&crop=center" alt="Cross Chair Heritage" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">CHAIRS</span>
+                        <h4 class="product-name">Cross Chair Heritage</h4>
+                        <div class="product-price">
+                            <span class="sale-price">$589.00</span>
+                            <span class="original-price">$600.00</span>
+                        </div>
+                        <div class="color-swatches">
+                            <span class="color-swatch" style="background-color: #d4c5b9;"></span>
+                            <span class="color-swatch" style="background-color: #8b4513;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop&crop=center" alt="Ray Sofa Basic" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">SOFAS</span>
+                        <h4 class="product-name">Ray Sofa Basic</h4>
+                        <div class="product-price">
+                            <span class="price">$3,289.00</span>
+                        </div>
+                        <div class="color-swatches">
+                            <span class="color-swatch" style="background-color: #e8e8e8;"></span>
+                            <span class="color-swatch" style="background-color: #98b19a;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=300&h=300&fit=crop&crop=center" alt="Turn Chair Vivid" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">CHAIRS</span>
+                        <h4 class="product-name">Turn Chair Vivid</h4>
+                        <div class="product-price">
+                            <span class="price">$309.00</span>
+                        </div>
+                        <div class="color-swatches">
+                            <span class="color-swatch" style="background-color: #8b4513;"></span>
+                            <span class="color-swatch" style="background-color: #ffd700;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1586627061489-0d2c8b9a7e9f?w=300&h=300&fit=crop&crop=center" alt="Low Stool" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">STOOLS</span>
+                        <h4 class="product-name">Low Stool</h4>
+                        <div class="product-price">
+                            <span class="price">$459.00</span>
+                        </div>
+                        <div class="color-swatches">
+                            <span class="color-swatch" style="background-color: #696969;"></span>
+                        </div>
                     </div>
                 </div>
             </div>

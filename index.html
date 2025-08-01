@@ -528,10 +528,9 @@
             color: #333;
         }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 30px;
+        .promotion-container {
+            display: flex;
+            justify-content: flex-start;
         }
 
         .product-card {
@@ -554,6 +553,7 @@
             color: white;
             position: relative;
             min-height: 400px;
+            width: 350px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -707,11 +707,6 @@
 
         /* Responsive Design for New Arrivals */
         @media (max-width: 992px) {
-            .products-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 25px;
-            }
-            
             .section-header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -721,14 +716,14 @@
             .section-title {
                 font-size: 28px;
             }
+            
+            .promotion-card {
+                width: 100%;
+                max-width: 400px;
+            }
         }
 
         @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
             .new-arrivals {
                 padding: 50px 0;
             }
@@ -739,6 +734,10 @@
             
             .promotion-title {
                 font-size: 24px;
+            }
+            
+            .promotion-container {
+                justify-content: center;
             }
         }
     </style>
@@ -949,7 +948,7 @@
                 </div>
             </div>
             
-            <div class="products-grid">
+            <div class="promotion-container">
                 <!-- Promotion Card -->
                 <div class="product-card promotion-card">
                     <div class="promotion-content">
@@ -959,79 +958,6 @@
                     </div>
                     <div class="promotion-image">
                         <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=400&fit=crop&crop=center" alt="Soft Stools" />
-                    </div>
-                </div>
-
-                <!-- Product 1 -->
-                <div class="product-card">
-                    <div class="product-badge sale-badge">Sale</div>
-                    <div class="product-image">
-                        <img src="https://images.unsplash.com/photo-1549497538-303791108f95?w=300&h=300&fit=crop&crop=center" alt="Cross Chair Heritage" />
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">CHAIRS</span>
-                        <h4 class="product-name">Cross Chair Heritage</h4>
-                        <div class="product-price">
-                            <span class="sale-price">$589.00</span>
-                            <span class="original-price">$600.00</span>
-                        </div>
-                        <div class="color-swatches">
-                            <span class="color-swatch" style="background-color: #d4c5b9;"></span>
-                            <span class="color-swatch" style="background-color: #8b4513;"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop&crop=center" alt="Ray Sofa Basic" />
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">SOFAS</span>
-                        <h4 class="product-name">Ray Sofa Basic</h4>
-                        <div class="product-price">
-                            <span class="price">$3,289.00</span>
-                        </div>
-                        <div class="color-swatches">
-                            <span class="color-swatch" style="background-color: #e8e8e8;"></span>
-                            <span class="color-swatch" style="background-color: #98b19a;"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=300&h=300&fit=crop&crop=center" alt="Turn Chair Vivid" />
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">CHAIRS</span>
-                        <h4 class="product-name">Turn Chair Vivid</h4>
-                        <div class="product-price">
-                            <span class="price">$309.00</span>
-                        </div>
-                        <div class="color-swatches">
-                            <span class="color-swatch" style="background-color: #8b4513;"></span>
-                            <span class="color-swatch" style="background-color: #ffd700;"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://images.unsplash.com/photo-1586627061489-0d2c8b9a7e9f?w=300&h=300&fit=crop&crop=center" alt="Low Stool" />
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">STOOLS</span>
-                        <h4 class="product-name">Low Stool</h4>
-                        <div class="product-price">
-                            <span class="price">$459.00</span>
-                        </div>
-                        <div class="color-swatches">
-                            <span class="color-swatch" style="background-color: #696969;"></span>
-                        </div>
                     </div>
                 </div>
             </div>

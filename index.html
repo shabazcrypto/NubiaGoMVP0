@@ -301,6 +301,77 @@
             font-size: 12px;
         }
 
+        /* Category Navigation */
+        .category-nav {
+            background: #fff;
+            padding: 30px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .category-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            overflow-x: auto;
+        }
+
+        .category-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .category-nav-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .category-nav-icon {
+            width: 80px;
+            height: 80px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-nav-item:hover .category-nav-icon {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: scale(1.05);
+        }
+
+        .sale-badge {
+            background: #dc3545 !important;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .category-nav-item.sale:hover .sale-badge {
+            background: #c82333 !important;
+            border-color: #dc3545;
+        }
+
+        .category-nav-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            white-space: nowrap;
+        }
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .hero-content {
@@ -353,6 +424,26 @@
                 flex-wrap: wrap;
                 justify-content: center;
             }
+            
+            .category-nav-content {
+                justify-content: flex-start;
+                padding: 0 20px;
+                gap: 15px;
+            }
+            
+            .category-nav-item {
+                min-width: 80px;
+            }
+            
+            .category-nav-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
+            }
+            
+            .category-nav-label {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -396,6 +487,60 @@
             </div>
         </div>
     </header>
+
+    <!-- Category Navigation -->
+    <section class="category-nav">
+        <div class="category-nav-content">
+            <div class="category-nav-item sale">
+                <div class="category-nav-icon sale-badge">
+                    <span>Sale</span>
+                </div>
+                <span class="category-nav-label">Sale Items</span>
+            </div>
+            <div class="category-nav-item">
+                <div class="category-nav-icon">
+                    <span>🪑</span>
+                </div>
+                <span class="category-nav-label">Press Tables</span>
+            </div>
+            <div class="category-nav-item">
+                <div class="category-nav-icon">
+                    <span>💡</span>
+                </div>
+                <span class="category-nav-label">Lighting</span>
+            </div>
+            <div class="category-nav-item">
+                <div class="category-nav-icon">
+                    <span>🛋️</span>
+                </div>
+                <span class="category-nav-label">Spoke Sofa</span>
+            </div>
+            <div class="category-nav-item">
+                <div class="category-nav-icon">
+                    <span>📦</span>
+                </div>
+                <span class="category-nav-label">Storage</span>
+            </div>
+            <div class="category-nav-item">
+                <div class="category-nav-icon">
+                    <span>🪑</span>
+                </div>
+                <span class="category-nav-label">Turn Chairs</span>
+            </div>
+            <div class="category-nav-item">
+                <div class="category-nav-icon">
+                    <span>🪑</span>
+                </div>
+                <span class="category-nav-label">Chairs</span>
+            </div>
+            <div class="category-nav-item">
+                <div class="category-nav-icon">
+                    <span>🧥</span>
+                </div>
+                <span class="category-nav-label">Curve Coat</span>
+            </div>
+        </div>
+    </section>
 
     <!-- Hero Section -->
     <section class="hero">

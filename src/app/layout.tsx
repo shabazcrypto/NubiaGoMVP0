@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import '@/lib/asset-preloader' // Initialize asset preloading
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ToastProvider } from '@/components/ui/toast'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { FirebaseAuthProvider } from '@/hooks/useFirebaseAuth'
@@ -143,6 +144,7 @@ export default function RootLayout({
             </ToastProvider>
           </FirebaseAuthProvider>
         </ErrorBoundary>
+        <SpeedInsights />
         
         {/* Load Font Awesome JS asynchronously */}
         <script 

@@ -1,3 +1,71 @@
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'google-fonts',
+        expiration: {
+          maxEntries: 4,
+          maxAgeSeconds: 365 * 24 * 60 * 60, // 365 days
+        },
+      },
+    },
+    {
+      urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'google-fonts-static',
+        expiration: {
+          maxEntries: 4,
+          maxAgeSeconds: 365 * 24 * 60 * 60, // 365 days
+        },
+      },
+    },
+    {
+      urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'static-image-assets',
+        expiration: {
+          maxEntries: 64,
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+      },
+    },
+    {
+      urlPattern: /\.(?:js|css)$/i,
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'static-resources',
+        expiration: {
+          maxEntries: 32,
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+      },
+    },
+    {
+      urlPattern: /\/api\/.*$/i,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'api-cache',
+        networkTimeoutSeconds: 10,
+        expiration: {
+          maxEntries: 16,
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },
+  ],
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ============================================================================
@@ -7,14 +75,23 @@ const nextConfig = {
   trailingSlash: true,
   
   // ============================================================================
+  // PWA & MOBILE OPTIMIZATION
+  // ============================================================================
+  compress: true,
+  poweredByHeader: false,
+  
+  // ============================================================================
   // IMAGE OPTIMIZATION
   // ============================================================================
   images: {
     unoptimized: false, // Vercel handles image optimization
     formats: ['image/webp', 'image/avif'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Mobile-first device sizes optimized for African mobile networks
+    deviceSizes: [320, 480, 640, 750, 828, 1080, 1200],
+    imageSizes: [16, 24, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    // Optimize for slow networks
+    loader: 'default',
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
@@ -53,12 +130,17 @@ const nextConfig = {
   // ============================================================================
   experimental: {
     optimizeCss: true,
+    // Mobile-optimized package imports
     optimizePackageImports: [
       '@headlessui/react', 
       '@heroicons/react', 
       'lucide-react',
       'framer-motion',
       'react-hook-form',
+      'react-intersection-observer',
+      'react-spring',
+      '@react-spring/web',
+      'react-swipeable',
       'zustand',
       'firebase/app',
       'firebase/auth',
@@ -70,6 +152,8 @@ const nextConfig = {
       'zod'
     ],
     webpackBuildWorker: true,
+    // Aggressive code splitting for mobile
+    serverComponentsExternalPackages: ['sharp', 'onnxruntime-node'],
     turbo: {
       rules: {
         '*.svg': {
@@ -152,8 +236,8 @@ const nextConfig = {
       // Split chunks optimization with enhanced granularity
       config.optimization.splitChunks = {
         chunks: 'all',
-        minSize: 20000,
-        maxSize: 244000,
+        minSize: 10000, // Smaller chunks for mobile
+        maxSize: 150000, // Reduced max size for 2G/3G networks
         cacheGroups: {
           // React ecosystem (highest priority)
           react: {
@@ -302,4 +386,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig 
+module.exports = withPWA(nextConfig) 

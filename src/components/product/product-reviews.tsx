@@ -5,6 +5,7 @@ import { Star, ThumbsUp, ThumbsDown, MessageCircle, User, Calendar } from 'lucid
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/form'
 import { TextArea } from '@/components/ui/form'
+import EnhancedImage from '@/components/mobile/EnhancedImage'
 
 interface Review {
   id: string
@@ -277,10 +278,13 @@ export default function ProductReviews({
               {/* User Avatar */}
               <div className="flex-shrink-0">
                 {review.userAvatar ? (
-                  <img
+                  <EnhancedImage
                     src={review.userAvatar}
                     alt={review.userName}
+                    width={40}
+                    height={40}
                     className="w-10 h-10 rounded-full"
+                    sizes="40px"
                   />
                 ) : (
                   <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
@@ -335,11 +339,14 @@ export default function ProductReviews({
                 {review.images && review.images.length > 0 && (
                   <div className="flex gap-2 mb-4">
                     {review.images.map((image, index) => (
-                      <img
+                      <EnhancedImage
                         key={index}
                         src={image}
                         alt={`Review image ${index + 1}`}
+                        width={64}
+                        height={64}
                         className="w-16 h-16 object-cover rounded-lg"
+                        sizes="64px"
                       />
                     ))}
                   </div>

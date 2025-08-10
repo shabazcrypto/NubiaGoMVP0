@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Search, Filter, X, ChevronDown, ChevronUp, Star, Tag, Truck, Clock } from 'lucide-react'
 import { useDebounce } from '@/lib/performance'
 import { ProductService } from '@/lib/services/product.service'
+import EnhancedImage from '@/components/mobile/EnhancedImage'
 
 interface SearchFilters {
   query: string
@@ -75,7 +76,14 @@ const ProductCard = React.memo(function ProductCard({ product, viewMode }: { pro
   if (viewMode === 'list') {
     return (
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex space-x-4">
-        <img src={product.imageUrl} alt={product.name} className="w-24 h-24 object-cover rounded-lg" />
+        <EnhancedImage
+          src={product.imageUrl}
+          alt={product.name}
+          width={96}
+          height={96}
+          className="w-24 h-24 object-cover rounded-lg"
+          sizes="96px"
+        />
         <div className="flex-1">
           <h3 className="font-medium text-gray-900">{product.name}</h3>
           <div className="flex items-center space-x-2 mt-1">
@@ -112,7 +120,14 @@ const ProductCard = React.memo(function ProductCard({ product, viewMode }: { pro
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-      <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover rounded-t-lg" />
+      <EnhancedImage
+        src={product.imageUrl}
+        alt={product.name}
+        width={400}
+        height={192}
+        className="w-full h-48 object-cover rounded-t-lg"
+        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      />
       <div className="p-4">
         <h3 className="font-medium text-gray-900 mb-2">{product.name}</h3>
         <div className="flex items-center space-x-2 mb-2">

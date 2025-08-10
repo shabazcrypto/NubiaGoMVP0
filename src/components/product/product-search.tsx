@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useSearchHistoryStore } from '@/store/search-history'
 import { SearchSuggestions } from './search-suggestions'
 import { Product } from '@/types'
+import EnhancedImage from '@/components/mobile/EnhancedImage'
 
 interface ProductSearchProps {
   products: Product[]
@@ -304,14 +305,14 @@ const ProductSearch = React.memo(function ProductSearch({
           >
             {/* Product Image */}
             <div className="relative aspect-square overflow-hidden rounded-t-lg">
-              <img
+              <EnhancedImage
                 src={product.imageUrl}
                 alt={product.name}
+                width={400}
+                height={400}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.src = '/fallback-product.jpg'
-                }}
+                priority={false}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               {product.originalPrice && product.originalPrice > product.price && (
                 <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">

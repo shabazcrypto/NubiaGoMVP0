@@ -20,6 +20,7 @@ import {
   Twitter,
   Linkedin
 } from 'lucide-react'
+import { PullToRefresh } from '@/components/mobile/PullToRefresh'
 
 // ============================================================================
 // HERO SECTION
@@ -966,7 +967,7 @@ function FooterSection() {
 
 export default function HomePage() {
   return (
-    <>
+    <PullToRefresh onRefresh={() => window.location.reload()}>
       <HeroSection />
       <NewArrivalsSection />
       <ShopByCategoriesSection />
@@ -976,6 +977,6 @@ export default function HomePage() {
       <FeaturedDealsSection />
       <NewsletterSection />
       <FooterSection />
-    </>
+    </PullToRefresh>
   )
 } 

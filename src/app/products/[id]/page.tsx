@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { ArrowLeft, Star, Heart, ShoppingCart, Share2, Eye, Truck, Shield, CheckCircle, Minus, Plus, MessageCircle, ThumbsUp, ThumbsDown } from 'lucide-react'
 import { ProductService } from '@/lib/services/product.service'
 import { Product } from '@/types'
+import EnhancedImage from '@/components/mobile/EnhancedImage'
+import { SwipeableGallery } from '@/components/mobile/SwipeableGallery'
 
 // Generate static paths for all products
 export async function generateStaticParams() {
@@ -155,25 +157,22 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
           {/* Product Images */}
           <div className="space-y-4">
             <div className="relative">
-              <div className="aspect-square bg-white border border-gray-200 rounded-lg overflow-hidden">
-                <img src={product.images[selectedImage]} alt={product.name} className="w-full h-full object-cover" />
-              </div>
+              <SwipeableGallery
+                images={product.images}
+                alt={product.name}
+                showThumbnails={true}
+                showNavigation={true}
+                showCounter={true}
+                autoPlay={false}
+                className="aspect-square bg-white border border-gray-200 rounded-lg overflow-hidden"
+              />
               
               {/* Discount Badge */}
               {product.originalPrice && (
-                <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-medium">
+                <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-medium z-10">
                   {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
                 </div>
               )}
-            </div>
-            
-            {/* Thumbnail Gallery */}
-            <div className="grid grid-cols-4 gap-2">
-              {product.images.map((image, index) => (
-                <div key={index} className="aspect-square bg-white border border-gray-200 rounded-md overflow-hidden cursor-pointer hover:border-blue-500 transition-colors">
-                  <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
-                </div>
-              ))}
             </div>
           </div>
 

@@ -8,6 +8,7 @@ import ProductSearch from '@/components/product/product-search'
 import { ProductService } from '@/lib/services/product.service'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { Product } from '@/types'
+import { PullToRefresh } from '@/components/mobile/PullToRefresh'
 
 
 
@@ -97,7 +98,8 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <PullToRefresh onRefresh={() => loadProducts(searchParams.get('category'), searchParams.get('subcategory'))}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <div className="mb-6">
           <Link 
@@ -217,7 +219,8 @@ export default function ProductsPage() {
             </div>
           </div>
         )}
-      </div>
+        </div>
+      </PullToRefresh>
     </div>
   )
 } 

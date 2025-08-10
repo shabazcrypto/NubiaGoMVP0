@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   WifiIcon, 
-  WifiSlashIcon, 
+  SignalSlashIcon, 
   CloudArrowDownIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon
@@ -50,7 +50,8 @@ export default function OfflineProductCatalog({
   const [sortBy, setSortBy] = useState<'name' | 'price' | 'rating'>('name')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
   
-  const { isOnline, connectionType, estimatedSpeed } = useNetworkStatus()
+  const { networkInfo, estimatedSpeed } = useNetworkStatus()
+  const isOnline = networkInfo.online
 
   // Check offline status and load cached products
   useEffect(() => {
@@ -292,7 +293,7 @@ export default function OfflineProductCatalog({
           <div className="flex items-center space-x-2">
             {isOffline ? (
               <>
-                <WifiSlashIcon className="w-5 h-5" />
+                <SignalSlashIcon className="w-5 h-5" />
                 <span className="font-medium">Offline Mode</span>
                 <span className="text-sm opacity-75">
                   Browsing cached products • {offlineProducts.length} available
@@ -303,7 +304,7 @@ export default function OfflineProductCatalog({
                 <WifiIcon className="w-5 h-5" />
                 <span className="font-medium">Online Mode</span>
                 <span className="text-sm opacity-75">
-                  {connectionType} • {estimatedSpeed > 0 ? `${estimatedSpeed.toFixed(1)} Mbps` : 'Good connection'}
+                  {networkInfo.quality} • {estimatedSpeed > 0 ? `${estimatedSpeed.toFixed(1)} Mbps` : 'Good connection'}
                 </span>
               </>
             )}

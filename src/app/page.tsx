@@ -20,7 +20,7 @@ import {
   Twitter,
   Linkedin
 } from 'lucide-react'
-import { PullToRefresh } from '@/components/mobile/PullToRefresh'
+import PullToRefresh from '@/components/mobile/PullToRefresh'
 
 // ============================================================================
 // HERO SECTION

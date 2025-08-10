@@ -8,7 +8,7 @@ import ProductSearch from '@/components/product/product-search'
 import { ProductService } from '@/lib/services/product.service'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { Product } from '@/types'
-import { PullToRefresh } from '@/components/mobile/PullToRefresh'
+import PullToRefresh from '@/components/mobile/PullToRefresh'
 
 
 

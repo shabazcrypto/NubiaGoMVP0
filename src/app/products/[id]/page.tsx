@@ -4,7 +4,7 @@ import { ArrowLeft, Star, Heart, ShoppingCart, Share2, Eye, Truck, Shield, Check
 import { ProductService } from '@/lib/services/product.service'
 import { Product } from '@/types'
 import EnhancedImage from '@/components/mobile/EnhancedImage'
-import { SwipeableGallery } from '@/components/mobile/SwipeableGallery'
+import SwipeableGallery from '@/components/mobile/SwipeableGallery'
 
 // Generate static paths for all products
 export async function generateStaticParams() {

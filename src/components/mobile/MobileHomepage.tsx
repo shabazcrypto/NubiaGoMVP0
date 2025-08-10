@@ -55,7 +55,7 @@ export default function MobileHomepage({
           const loadRecent = async () => {
             try {
               const recentProducts = await Promise.all(
-                recentIds.slice(0, 6).map(id => productService.getProductById(id))
+                recentIds.slice(0, 6).map((id: string) => productService.getProduct(id))
               )
               setRecentlyViewed(recentProducts.filter(Boolean))
             } catch (error) {
@@ -159,7 +159,7 @@ export default function MobileHomepage({
           ) : (
             <MobileProductGrid
               products={products}
-              onProductClick={handleProductClick}
+              onQuickView={handleProductClick}
             />
           )}
         </section>
@@ -212,7 +212,7 @@ export default function MobileHomepage({
                     className="flex-shrink-0 w-32 bg-white rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow"
                   >
                     <EnhancedImage
-                      src={imageOptimizer.optimizeImage(product.image, {
+                      src={imageOptimizer.optimizeImage(product.imageUrl, {
                         width: 120,
                         height: 120,
                         quality: 75,

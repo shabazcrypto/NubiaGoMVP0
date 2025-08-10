@@ -22,7 +22,7 @@ interface MenuItem {
 }
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  const { user, logout } = useAuth()
+  const { user, signOut } = useAuth()
   const [cartItemCount, setCartItemCount] = useState(0)
   const [wishlistItemCount, setWishlistItemCount] = useState(0)
   const [isClient, setIsClient] = useState(false)
@@ -74,7 +74,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
   const handleLogout = async () => {
     try {
-      await logout()
+      await signOut()
       onClose()
     } catch (error) {
       console.error('Logout error:', error)

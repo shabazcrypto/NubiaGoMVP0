@@ -121,7 +121,7 @@ export default function CategoryPills({
             All Categories
             {showProductCount && (
               <span className="ml-2 text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full">
-                {sortedCategories.reduce((total, cat) => total + (cat.productCount || 0), 0)}
+                {sortedCategories.length}
               </span>
             )}
           </button>
@@ -138,15 +138,11 @@ export default function CategoryPills({
                   : 'hover:bg-gray-100'
               }`}
             >
-              {category.icon && (
-                <span className="mr-2 text-sm">
-                  {category.icon}
-                </span>
-              )}
+
               {category.name}
-              {showProductCount && category.productCount && (
+              {showProductCount && (
                 <span className="ml-2 text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full">
-                  {category.productCount}
+                  {category.subcategories?.length || 0}
                 </span>
               )}
             </button>

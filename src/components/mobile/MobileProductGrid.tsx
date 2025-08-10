@@ -48,13 +48,7 @@ export default function MobileProductGrid({
           return newSet
         })
       } else {
-        await wishlistService.addToWishlist(user.uid, {
-          productId,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          category: product.category
-        })
+        await wishlistService.addToWishlist(user.uid, productId)
         setWishlistItems(prev => new Set(prev).add(productId))
       }
 
@@ -80,13 +74,7 @@ export default function MobileProductGrid({
     setLoadingStates(prev => new Set(prev).add(productId))
 
     try {
-      await cartService.addToCart(user.uid, {
-        productId,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        quantity: 1
-      })
+      await cartService.addToCart(user.uid, productId, 1)
 
       onAddToCart?.(product)
     } catch (error) {
@@ -133,7 +121,7 @@ export default function MobileProductGrid({
       {products.map((product) => {
         const isInWishlist = wishlistItems.has(product.id)
         const isLoading = loadingStates.has(product.id)
-        const optimizedImage = imageOptimizer.optimizeImage(product.image, {
+        const optimizedImage = imageOptimizer.optimizeImage(product.imageUrl, {
           width: 400,
           height: 400,
           quality: 75,

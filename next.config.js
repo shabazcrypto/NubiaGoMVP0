@@ -69,10 +69,9 @@ const withPWA = require('next-pwa')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ============================================================================
-  // PERFORMANCE OPTIMIZATION CONFIGURATION
+  // VERCEL HOSTING CONFIGURATION
   // ============================================================================
-  // Optimized for maximum performance and minimal bundle size
-  trailingSlash: true,
+  // Removed static export settings for full Next.js hosting
   
   // ============================================================================
   // PWA & MOBILE OPTIMIZATION
@@ -81,16 +80,17 @@ const nextConfig = {
   poweredByHeader: false,
   
   // ============================================================================
-  // IMAGE OPTIMIZATION
+  // IMAGE OPTIMIZATION FOR VERCEL
   // ============================================================================
   images: {
-    unoptimized: false, // Vercel handles image optimization
+    // Enable Vercel's image optimization
+    unoptimized: false,
     formats: ['image/webp', 'image/avif'],
     // Mobile-first device sizes optimized for African mobile networks
     deviceSizes: [320, 480, 640, 750, 828, 1080, 1200],
     imageSizes: [16, 24, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
-    // Optimize for slow networks
+    // Use Vercel's image loader
     loader: 'default',
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -118,7 +118,17 @@ const nextConfig = {
   },
 
   // ============================================================================
-  // COMPILER OPTIMIZATION
+  // PERFORMANCE OPTIMIZATION CONFIGURATION
+  // ============================================================================
+  // Optimized for maximum performance and minimal bundle size
+  // ============================================================================
+  // PWA & MOBILE OPTIMIZATION
+  // ============================================================================
+  compress: true,
+  poweredByHeader: false,
+  
+  // ============================================================================
+  // IMAGE OPTIMIZATION
   // ============================================================================
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

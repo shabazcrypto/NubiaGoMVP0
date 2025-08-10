@@ -20,12 +20,13 @@
     "security:fix": "npm audit fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "deploy": "npm run build && firebase deploy",
-    "deploy:hosting": "npm run build && firebase deploy --only hosting",
-    "deploy:firestore": "firebase deploy --only firestore:rules,firestore:indexes",
-    "deploy:storage": "firebase deploy --only storage",
-    "deploy:all": "npm run build && firebase deploy --only hosting,firestore:rules,firestore:indexes,storage",
-    "deploy:functions": "firebase deploy --only functions"
+    "vercel:deploy": "vercel --prod",
+    "vercel:deploy:preview": "vercel",
+    "vercel:dev": "vercel dev",
+    "vercel:build": "vercel build",
+    "vercel:logs": "vercel logs",
+    "vercel:env:pull": "vercel env pull",
+    "vercel:env:push": "vercel env push"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.0",

@@ -108,7 +108,7 @@ export default function MobileSearch({
 
     try {
       // Search products using ProductService
-      const products = await productService.searchProducts(query, 20)
+      const products = await productService.searchProducts(query)
       
       // Process and rank results
       const results: SearchResult[] = products.map(product => {
@@ -293,7 +293,7 @@ export default function MobileSearch({
                     {/* Product Image */}
                     <div className="flex-shrink-0">
                       <EnhancedImage
-                        src={imageOptimizer.optimizeImage(result.product.image, {
+                        src={imageOptimizer.optimizeImage(result.product.imageUrl, {
                           width: 60,
                           height: 60,
                           quality: 75,

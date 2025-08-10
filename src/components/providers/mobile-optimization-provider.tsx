@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { useNetworkStatus } from '@/hooks/useNetworkStatus'
 import { usePWA } from '@/hooks/usePWA'
+import { mobileDetector, DeviceInfo } from '@/lib/mobile-detection'
 
 interface MobileOptimizationContextType {
   // Network information
@@ -20,8 +21,13 @@ interface MobileOptimizationContextType {
   
   // Mobile-specific features
   isMobile: boolean
+  isTablet: boolean
+  isDesktop: boolean
   supportsTouch: boolean
   supportsPWA: boolean
+  
+  // Device information
+  deviceInfo: DeviceInfo | null
   
   // Offline capabilities
   isOffline: boolean
@@ -63,34 +69,53 @@ export function MobileOptimizationProvider({ children }: MobileOptimizationProvi
     fid: null
   })
   const [isMobile, setIsMobile] = useState(false)
+  const [isTablet, setIsTablet] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
   const [supportsTouch, setSupportsTouch] = useState(false)
   const [supportsPWA, setSupportsPWA] = useState(false)
   const [offlineDataAvailable, setOfflineDataAvailable] = useState(false)
+  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo | null>(null)
 
-  // Detect mobile device and capabilities
+  // Detect mobile device and capabilities using MobileDetector
   useEffect(() => {
     const checkMobileCapabilities = () => {
-      // Check if device is mobile
-      const userAgent = navigator.userAgent.toLowerCase()
-      const isMobileDevice = /mobile|android|iphone|ipad|phone|tablet/i.test(userAgent)
-      setIsMobile(isMobileDevice)
-
-      // Check touch support
-      setSupportsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0)
-
+      // Use MobileDetector for accurate device detection
+      const detector = mobileDetector
+      setIsMobile(detector.isMobile())
+      setIsTablet(detector.isTablet())
+      setIsDesktop(detector.isDesktop())
+      setSupportsTouch(detector.hasTouchSupport())
+      setDeviceInfo(detector.getDeviceInfo())
+      
       // Check PWA support
       setSupportsPWA('serviceWorker' in navigator && 'PushManager' in window)
     }
 
     checkMobileCapabilities()
+    
+    // Listen for device changes (orientation, resize)
+    const handleDeviceChange = () => {
+      setTimeout(checkMobileCapabilities, 100)
+    }
+    
+    window.addEventListener('resize', handleDeviceChange)
+    window.addEventListener('orientationchange', handleDeviceChange)
+    
+    return () => {
+      window.removeEventListener('resize', handleDeviceChange)
+      window.removeEventListener('orientationchange', handleDeviceChange)
+    }
   }, [])
 
-  // Network speed detection
+  // Network speed detection using MobileDetector
   useEffect(() => {
-    if ('connection' in navigator) {
-      const connection = (navigator as any).connection
+    const updateNetworkInfo = () => {
+      const detector = mobileDetector
+      setNetworkSpeed(detector.getNetworkSpeed())
       
-      const updateNetworkInfo = () => {
+      // Also check for Network Information API
+      if ('connection' in navigator) {
+        const connection = (navigator as any).connection
         if (connection.effectiveType) {
           const effectiveType = connection.effectiveType
           if (effectiveType === 'slow-2g' || effectiveType === '2g') {
@@ -106,11 +131,18 @@ export function MobileOptimizationProvider({ children }: MobileOptimizationProvi
           setConnectionType(connection.type)
         }
       }
+    }
 
-      updateNetworkInfo()
+    updateNetworkInfo()
+    
+    // Update network info when connection changes
+    if ('connection' in navigator) {
+      const connection = (navigator as any).connection
       connection.addEventListener('change', updateNetworkInfo)
       
-      return () => connection.removeEventListener('change', updateNetworkInfo)
+      return () => {
+        connection.removeEventListener('change', updateNetworkInfo)
+      }
     }
   }, [])
 
@@ -249,8 +281,11 @@ export function MobileOptimizationProvider({ children }: MobileOptimizationProvi
     connectionType,
     performanceMetrics,
     isMobile,
+    isTablet,
+    isDesktop,
     supportsTouch,
     supportsPWA,
+    deviceInfo,
     isOffline: !isOnline,
     offlineDataAvailable,
     getOptimalImageQuality,

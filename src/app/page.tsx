@@ -21,6 +21,9 @@ import {
   Linkedin
 } from 'lucide-react'
 import PullToRefresh from '@/components/mobile/PullToRefresh'
+import MobileHomepage from '@/components/mobile/MobileHomepage'
+import { mobileDetector } from '@/lib/mobile-detection'
+import { useEffect, useState } from 'react'
 
 // ============================================================================
 // HERO SECTION
@@ -966,8 +969,54 @@ function FooterSection() {
 // ============================================================================
 
 export default function HomePage() {
+  const [isMobile, setIsMobile] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+    setIsMobile(mobileDetector.isMobile())
+  }, [])
+
+  // Handle search functionality
+  const handleSearch = (query: string) => {
+    // Redirect to search page with query
+    window.location.href = `/search?q=${encodeURIComponent(query)}`
+  }
+
+  // Handle category selection
+  const handleCategorySelect = (category: string) => {
+    if (category === 'all') {
+      window.location.href = '/products'
+    } else {
+      window.location.href = `/products?category=${encodeURIComponent(category)}`
+    }
+  }
+
+  // Show loading state while detecting device
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-gray-300 border-t-primary-600 rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Render mobile homepage for mobile devices
+  if (isMobile) {
+    return (
+      <MobileHomepage 
+        onSearch={handleSearch}
+        onCategorySelect={handleCategorySelect}
+      />
+    )
+  }
+
+  // Render desktop homepage for larger screens
   return (
-          <PullToRefresh onRefresh={() => Promise.resolve(window.location.reload())}>
+    <PullToRefresh onRefresh={() => Promise.resolve(window.location.reload())}>
       <HeroSection />
       <NewArrivalsSection />
       <ShopByCategoriesSection />

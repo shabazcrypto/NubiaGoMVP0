@@ -1,255 +1,183 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { 
-  Bars3Icon, 
-  XMarkIcon,
-  ShoppingBagIcon,
-  MagnifyingGlassIcon,
-  BellIcon
-} from '@heroicons/react/24/outline'
-import { useCartStore } from '@/hooks/useCartStore'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Search, ShoppingCart, Menu, User, Heart, Bell } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
+import { CartService } from '@/lib/services/cart.service'
+import { WishlistService } from '@/lib/services/wishlist.service'
+import { useEffect } from 'react'
+import MobileSearch from './MobileSearch'
+import { Product } from '@/types'
 
 interface MobileHeaderProps {
-  showSearch?: boolean
-  title?: string
-  showBack?: boolean
-  onBack?: () => void
+  onMenuToggle?: () => void
+  onSearch?: (query: string) => void
 }
 
-export default function MobileHeader({ 
-  showSearch = true, 
-  title,
-  showBack = false,
-  onBack 
-}: MobileHeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+export default function MobileHeader({ onMenuToggle, onSearch }: MobileHeaderProps) {
+  const [cartItemCount, setCartItemCount] = useState(0)
+  const [wishlistItemCount, setWishlistItemCount] = useState(0)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const { items: cartItems } = useCartStore()
+  const [isClient, setIsClient] = useState(false)
 
-  const menuItems = [
-    { href: '/', label: 'Home' },
-    { href: '/products', label: 'All Products' },
-    { href: '/categories', label: 'Categories' },
-    { href: '/orders', label: 'My Orders' },
-    { href: '/profile', label: 'Profile' },
-    { href: '/help', label: 'Help & Support' },
-  ]
+  const { user } = useAuth()
+  const cartService = new CartService()
+  const wishlistService = new WishlistService()
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        if (user?.uid) {
+          const [cart, wishlist] = await Promise.all([
+            cartService.getCart(user.uid),
+            wishlistService.getWishlist(user.uid)
+          ])
+          setCartItemCount(cart.items.length)
+          setWishlistItemCount(wishlist.items.length)
+        }
+      } catch (error) {
+        console.error('Error fetching counts:', error)
+      }
+    }
+
+    fetchCounts()
+  }, [user?.uid])
+
+  const handleSearchToggle = () => {
+    setIsSearchOpen(!isSearchOpen)
+  }
+
+  const handleSearch = (query: string) => {
+    onSearch?.(query)
+  }
+
+  const handleProductSelect = (product: Product) => {
+    // Navigate to product page
+    window.location.href = `/products/${product.id}`
+  }
+
+  if (isSearchOpen) {
+    return (
+      <MobileSearch
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onSearch={handleSearch}
+        onProductSelect={handleProductSelect}
+      />
+    )
+  }
 
   return (
-    <>
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 safe-area-top">
-        <div className="flex items-center justify-between px-4 py-3">
-          {/* Left side */}
-          <div className="flex items-center">
-            {showBack ? (
-              <button
-                onClick={onBack}
-                className="p-2 -ml-2 text-gray-600 hover:text-gray-900 touch-spacing"
-                aria-label="Go back"
-              >
-                <XMarkIcon className="w-6 h-6" />
-              </button>
-            ) : (
-              <button
-                onClick={() => setIsMenuOpen(true)}
-                className="p-2 -ml-2 text-gray-600 hover:text-gray-900 touch-spacing"
-                aria-label="Open menu"
-              >
-                <Bars3Icon className="w-6 h-6" />
-              </button>
-            )}
-          </div>
+    <header className="mobile-header sticky top-0 z-40 bg-white border-b border-gray-200 safe-area-top">
+      <div className="px-4 py-3">
+        {/* Top Row - Logo and Actions */}
+        <div className="flex items-center justify-between mb-3">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">N</span>
+            </div>
+            <span className="text-xl font-bold text-gray-900">NubiaGo</span>
+          </Link>
 
-          {/* Center - Logo or Title */}
-          <div className="flex items-center">
-            {title ? (
-              <h1 className="text-lg font-semibold text-gray-900 truncate max-w-32">
-                {title}
-              </h1>
-            ) : (
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/ui-logo-1.jpg"
-                  alt="NubiaGo"
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-lg"
-                  priority
-                />
-                <span className="ml-2 text-lg font-bold text-gray-900">
-                  NubiaGo
-                </span>
-              </Link>
-            )}
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center space-x-2">
-            {showSearch && (
-              <button
-                onClick={() => setIsSearchOpen(true)}
-                className="p-2 text-gray-600 hover:text-gray-900 touch-spacing"
-                aria-label="Search"
-              >
-                <MagnifyingGlassIcon className="w-6 h-6" />
-              </button>
-            )}
-            
-            <button className="p-2 text-gray-600 hover:text-gray-900 touch-spacing relative">
-              <BellIcon className="w-6 h-6" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+          {/* Right Actions */}
+          <div className="flex items-center space-x-3">
+            {/* Notifications */}
+            <button className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <Bell className="h-5 w-5 text-gray-600" />
+              {/* Notification badge would go here */}
             </button>
 
-            <Link 
-              href="/cart" 
-              className="p-2 text-gray-600 hover:text-gray-900 touch-spacing relative"
+            {/* User Menu */}
+            <Link
+              href={user ? '/customer/profile' : '/login'}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <ShoppingBagIcon className="w-6 h-6" />
-              {cartItems.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                  {cartItems.length > 99 ? '99+' : cartItems.length}
+              <User className="h-5 w-5 text-gray-600" />
+            </Link>
+
+            {/* Menu Toggle */}
+            <button
+              onClick={onMenuToggle}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <Menu className="h-5 w-5 text-gray-600" />
+            </button>
+          </div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative">
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <button
+                type="button"
+                onClick={handleSearchToggle}
+                className="w-full pl-10 pr-4 py-3 text-left text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50 hover:bg-white transition-colors cursor-text"
+              >
+                <span className="text-gray-500">Search products...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Bottom Row - Quick Actions */}
+        <div className="flex items-center justify-between mt-3">
+          {/* Cart */}
+          <Link
+            href="/cart"
+            className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <div className="relative">
+              <ShoppingCart className="h-5 w-5 text-gray-600" />
+              {isClient && cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  {cartItemCount > 99 ? '99+' : cartItemCount}
                 </span>
               )}
+            </div>
+            <span className="text-sm font-medium text-gray-700">Cart</span>
+          </Link>
+
+          {/* Wishlist */}
+          <Link
+            href="/wishlist"
+            className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <div className="relative">
+              <Heart className="h-5 w-5 text-gray-600" />
+              {isClient && wishlistItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  {wishlistItemCount > 99 ? '99+' : wishlistItemCount}
+                </span>
+              )}
+            </div>
+            <span className="text-sm font-medium text-gray-700">Wishlist</span>
+          </Link>
+
+          {/* Quick Categories */}
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/products?category=electronics"
+              className="text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors"
+            >
+              Electronics
+            </Link>
+            <Link
+              href="/products?category=fashion"
+              className="text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors"
+            >
+              Fashion
             </Link>
           </div>
         </div>
-      </header>
-
-      {/* Side Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-black bg-opacity-50 z-50"
-            />
-            
-            {/* Menu */}
-            <motion.div
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 shadow-xl"
-            >
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Image
-                      src="/ui-logo-1.jpg"
-                      alt="NubiaGo"
-                      width={40}
-                      height={40}
-                      className="w-10 h-10 rounded-lg"
-                    />
-                    <div className="ml-3">
-                      <h2 className="font-semibold text-gray-900">NubiaGo</h2>
-                      <p className="text-sm text-gray-500">Premium Shopping</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="p-2 text-gray-400 hover:text-gray-600"
-                  >
-                    <XMarkIcon className="w-6 h-6" />
-                  </button>
-                </div>
-              </div>
-
-              <nav className="py-4">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block px-6 py-4 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200">
-                <div className="text-center">
-                  <p className="text-sm text-gray-500">Version 1.0.0</p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Made with ❤️ for Africa
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Search Overlay */}
-      <AnimatePresence>
-        {isSearchOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-white z-50"
-          >
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <input
-                type="search"
-                placeholder="Search products..."
-                className="flex-1 p-3 text-lg border-none outline-none no-zoom"
-                autoFocus
-              />
-              <button
-                onClick={() => setIsSearchOpen(false)}
-                className="ml-4 p-2 text-gray-600 hover:text-gray-900"
-              >
-                <XMarkIcon className="w-6 h-6" />
-              </button>
-            </div>
-            
-            <div className="p-4">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Recent Searches</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {['Headphones', 'Smartphone', 'Laptop', 'Watch'].map((term) => (
-                      <button
-                        key={term}
-                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-                      >
-                        {term}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Popular Categories</h3>
-                  <div className="space-y-2">
-                    {['Electronics', 'Fashion', 'Home & Living', 'Sports'].map((category) => (
-                      <Link
-                        key={category}
-                        href={`/products?category=${category}`}
-                        onClick={() => setIsSearchOpen(false)}
-                        className="block p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-                      >
-                        {category}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+      </div>
+    </header>
   )
 }

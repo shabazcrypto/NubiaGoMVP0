@@ -26,7 +26,7 @@ interface Product {
 }
 
 interface OfflineProductCatalogProps {
-  products: Product[]
+  products?: Product[]
   onProductSelect?: (product: Product) => void
   className?: string
   showOfflineIndicator?: boolean
@@ -35,7 +35,7 @@ interface OfflineProductCatalogProps {
 }
 
 export default function OfflineProductCatalog({
-  products,
+  products = [],
   onProductSelect,
   className = '',
   showOfflineIndicator = true,

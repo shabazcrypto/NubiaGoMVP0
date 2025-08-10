@@ -195,7 +195,7 @@ export class ImageOptimizer {
    */
   optimizeImageUrl(
     src: string,
-    format: 'webp' | 'avif' | 'jpeg' | 'png' = 'auto',
+    format: 'webp' | 'avif' | 'jpeg' | 'png' | 'auto' = 'auto',
     quality: number = 75,
     width?: number,
     height?: number

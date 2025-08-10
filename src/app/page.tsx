@@ -967,7 +967,7 @@ function FooterSection() {
 
 export default function HomePage() {
   return (
-    <PullToRefresh onRefresh={() => window.location.reload()}>
+          <PullToRefresh onRefresh={() => Promise.resolve(window.location.reload())}>
       <HeroSection />
       <NewArrivalsSection />
       <ShopByCategoriesSection />

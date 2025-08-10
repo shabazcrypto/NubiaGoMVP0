@@ -45,12 +45,18 @@ interface MobileOptimizationProviderProps {
 }
 
 export function MobileOptimizationProvider({ children }: MobileOptimizationProviderProps) {
-  const { isOnline } = useNetworkStatus()
+  const { networkInfo } = useNetworkStatus()
+  const isOnline = networkInfo.online
   const { isInstalled, isUpdateAvailable } = usePWA()
   
   const [networkSpeed, setNetworkSpeed] = useState<'slow' | 'medium' | 'fast'>('medium')
   const [connectionType, setConnectionType] = useState<string | null>(null)
-  const [performanceMetrics, setPerformanceMetrics] = useState({
+  const [performanceMetrics, setPerformanceMetrics] = useState<{
+    fcp: number | null
+    lcp: number | null
+    cls: number | null
+    fid: number | null
+  }>({
     fcp: null,
     lcp: null,
     cls: null,
@@ -147,8 +153,8 @@ export function MobileOptimizationProvider({ children }: MobileOptimizationProvi
       const fidObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries()
         const fidEntry = entries.find(entry => entry.name === 'first-input')
-        if (fidEntry) {
-          setPerformanceMetrics(prev => ({ ...prev, fid: fidEntry.processingStart - fidEntry.startTime }))
+        if (fidEntry && 'processingStart' in fidEntry) {
+          setPerformanceMetrics(prev => ({ ...prev, fid: (fidEntry as any).processingStart - fidEntry.startTime }))
         }
       })
       fidObserver.observe({ entryTypes: ['first-input'] })
@@ -197,7 +203,12 @@ export function MobileOptimizationProvider({ children }: MobileOptimizationProvi
     return networkSpeed === 'slow' || !isOnline
   }
 
-  const getNetworkOptimizedSettings = () => {
+  const getNetworkOptimizedSettings = (): {
+    imageQuality: 'low' | 'medium' | 'high'
+    enableAnimations: boolean
+    enableAutoPlay: boolean
+    cacheStrategy: 'aggressive' | 'balanced' | 'minimal'
+  } => {
     const baseSettings = {
       imageQuality: 'medium' as const,
       enableAnimations: true,
@@ -208,26 +219,26 @@ export function MobileOptimizationProvider({ children }: MobileOptimizationProvi
     if (networkSpeed === 'slow') {
       return {
         ...baseSettings,
-        imageQuality: 'low',
+        imageQuality: 'low' as const,
         enableAnimations: false,
         enableAutoPlay: false,
-        cacheStrategy: 'aggressive'
+        cacheStrategy: 'aggressive' as const
       }
     } else if (networkSpeed === 'medium') {
       return {
         ...baseSettings,
-        imageQuality: 'medium',
+        imageQuality: 'medium' as const,
         enableAnimations: true,
         enableAutoPlay: false,
-        cacheStrategy: 'balanced'
+        cacheStrategy: 'balanced' as const
       }
     } else {
       return {
         ...baseSettings,
-        imageQuality: 'high',
+        imageQuality: 'high' as const,
         enableAnimations: true,
         enableAutoPlay: true,
-        cacheStrategy: 'minimal'
+        cacheStrategy: 'minimal' as const
       }
     }
   }

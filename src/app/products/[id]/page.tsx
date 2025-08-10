@@ -162,7 +162,6 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                 alt={product.name}
                 showThumbnails={true}
                 showNavigation={true}
-                showCounter={true}
                 autoPlay={false}
                 className="aspect-square bg-white border border-gray-200 rounded-lg overflow-hidden"
               />

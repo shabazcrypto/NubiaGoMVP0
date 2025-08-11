@@ -81,6 +81,8 @@
     "zustand": "^4.4.0"
   },
   "devDependencies": {
+    "@axe-core/cli": "^4.10.2",
+    "@axe-core/react": "^4.10.2",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.1.0",
     "@types/uuid": "^10.0.0",
@@ -88,7 +90,10 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "14.0.0",
+    "lighthouse": "^12.8.1",
     "null-loader": "^4.0.1",
+    "pa11y": "^9.0.0",
+    "puppeteer": "^24.16.1",
     "ts-node": "^10.9.2"
   },
   "engines": {

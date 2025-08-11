@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { JWTVerifier } from '@/lib/auth/jwt-verifier'
 import { EdgeUserService } from '@/lib/services/edge-user.service'
+import { CSRFProtection, getCSRFTokenFromRequest, getSessionTokenFromRequest } from '@/lib/security/csrf'
 
 export interface AuthenticatedRequest extends NextRequest {
   user?: {
@@ -79,7 +80,7 @@ export async function authenticateAPI(
       role: userData.role || 'customer',
       status: userData.status || 'pending',
       displayName: userData.displayName || undefined,
-      emailVerified: jwtUserData.emailVerified
+      emailVerified: userData.emailVerified
     }
 
     // Check if user is active (if required)
@@ -127,7 +128,7 @@ export async function authenticateAPI(
 export function withAuth(roleGuard?: RoleGuard) {
   return function(handler: (request: AuthenticatedRequest) => Promise<NextResponse>) {
     return async function(request: NextRequest): Promise<NextResponse> {
-      // Skip authentication during build time
+      // Handle build-time requests
       if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
         // Create a mock authenticated request for build time
         const mockRequest = request as AuthenticatedRequest
@@ -136,6 +137,7 @@ export function withAuth(roleGuard?: RoleGuard) {
           email: 'build@time.com',
           role: 'admin',
           status: 'active',
+          displayName: 'Build System',
           emailVerified: true
         }
         return handler(mockRequest)
@@ -180,14 +182,6 @@ export const withCustomerAuth = withAuth({
 })
 
 /**
- * Any authenticated user API protection
- */
-export const withUserAuth = withAuth({
-  requireActive: true,
-  requireEmailVerified: true
-})
-
-/**
  * Rate limiting middleware
  */
 export function withRateLimit(maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) {
@@ -223,8 +217,8 @@ export function withCSRFProtection(handler: (request: AuthenticatedRequest) => P
   return async function(request: AuthenticatedRequest): Promise<NextResponse> {
     // Only apply to state-changing methods
     if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
-      const csrfToken = request.headers.get('x-csrf-token')
-      const sessionToken = request.cookies.get('session')?.value
+      const csrfToken = getCSRFTokenFromRequest(request)
+      const sessionToken = getSessionTokenFromRequest(request)
       
       if (!csrfToken || !sessionToken) {
         return NextResponse.json(
@@ -233,9 +227,16 @@ export function withCSRFProtection(handler: (request: AuthenticatedRequest) => P
         )
       }
 
-      // In a real implementation, you would validate the CSRF token
-      // against the session token
-      // For now, we'll just check that both exist
+      // Validate CSRF token
+      const secret = process.env.CSRF_SECRET || process.env.JWT_SECRET || 'fallback-secret'
+      const isValidToken = CSRFProtection.validateSignedToken(csrfToken, sessionToken, secret)
+      
+      if (!isValidToken) {
+        return NextResponse.json(
+          { error: 'Invalid CSRF token', code: 'INVALID_CSRF_TOKEN' },
+          { status: 403 }
+        )
+      }
     }
 
     return handler(request)
@@ -305,21 +306,30 @@ export function protectAPI(
   } = {}
 ) {
   return function(handler: (request: AuthenticatedRequest) => Promise<NextResponse>) {
-    let composedHandler = handler
-    
-    if (options.enableLogging !== false) {
-      composedHandler = withRequestLogging(composedHandler)
+    let protectedHandler = handler
+
+    // Apply CSRF protection if enabled
+    if (options.enableCSRF !== false) {
+      protectedHandler = withCSRFProtection(protectedHandler)
     }
-    
-    if (options.enableCSRF) {
-      composedHandler = withCSRFProtection(composedHandler)
-    }
-    
+
+    // Apply rate limiting if specified
     if (options.rateLimit) {
-      composedHandler = withRateLimit(options.rateLimit)(composedHandler)
+      protectedHandler = withRateLimit(options.rateLimit)(protectedHandler)
     }
-    
-    return withAuth(roleGuard)(withErrorHandling(composedHandler))
+
+    // Apply request logging if enabled
+    if (options.enableLogging) {
+      protectedHandler = withRequestLogging(protectedHandler)
+    }
+
+    // Apply authentication and role checking
+    protectedHandler = withAuth(roleGuard)(protectedHandler)
+
+    // Apply error handling
+    protectedHandler = withErrorHandling(protectedHandler)
+
+    return protectedHandler
   }
 }
 
@@ -328,29 +338,21 @@ export function protectAPI(
  */
 export const protectAdminAPI = protectAPI(
   { roles: ['admin'], requireActive: true, requireEmailVerified: true },
-  { rateLimit: 50, enableCSRF: true, enableLogging: true }
+  { enableCSRF: true, rateLimit: 50, enableLogging: true }
 )
 
 /**
- * Supplier API protection
+ * Supplier API protection with full security
  */
 export const protectSupplierAPI = protectAPI(
   { roles: ['supplier'], requireActive: true, requireEmailVerified: true },
-  { rateLimit: 100, enableCSRF: true, enableLogging: true }
+  { enableCSRF: true, rateLimit: 100, enableLogging: true }
 )
 
 /**
- * Customer API protection
+ * Customer API protection with full security
  */
 export const protectCustomerAPI = protectAPI(
   { roles: ['customer'], requireActive: true, requireEmailVerified: true },
-  { rateLimit: 200, enableCSRF: true }
-)
-
-/**
- * General user API protection
- */
-export const protectUserAPI = protectAPI(
-  { requireActive: true, requireEmailVerified: true },
-  { rateLimit: 150, enableCSRF: true }
+  { enableCSRF: true, rateLimit: 200, enableLogging: true }
 ) 

@@ -59,7 +59,7 @@ const UnifiedImage = React.memo(function UnifiedImage({
   const [isLoading, setIsLoading] = useState(true)
 
   // Use intersection observer for lazy loading
-  const { ref: lazyRef, isIntersecting } = useIntersectionObserver<HTMLDivElement>({
+  const { elementRef: lazyRef, isIntersecting } = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.1,
     rootMargin: '50px'
   })

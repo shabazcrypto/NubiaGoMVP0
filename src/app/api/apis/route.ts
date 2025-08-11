@@ -55,15 +55,15 @@ export const POST = protectAdminAPI(async (request: NextRequest) => {
     const validatedData = apiConfigurationSchema.parse(body)
     
     const apiConfig = await apiService.createApiConfiguration({
-      name: validatedData.name,
-      type: validatedData.type,
-      provider: validatedData.provider,
-      apiKey: validatedData.apiKey,
-      apiSecret: validatedData.apiSecret || '',
-      baseUrl: validatedData.baseUrl || '',
-      webhookUrl: validatedData.webhookUrl || '',
-      isActive: validatedData.isActive !== undefined ? validatedData.isActive : true,
-      isTestMode: validatedData.isTestMode !== undefined ? validatedData.isTestMode : true,
+      name: validatedData.name as string,
+      type: validatedData.type as 'logistics' | 'payment' | 'communication' | 'analytics' | 'storage' | 'other',
+      provider: validatedData.provider as string,
+      apiKey: validatedData.apiKey as string | undefined,
+      apiSecret: validatedData.apiSecret as string | undefined || '',
+      baseUrl: validatedData.baseUrl as string | undefined || '',
+      webhookUrl: validatedData.webhookUrl as string | undefined || '',
+      isActive: validatedData.isActive !== undefined ? Boolean(validatedData.isActive) : true,
+      isTestMode: validatedData.isTestMode !== undefined ? Boolean(validatedData.isTestMode) : true,
       config: validatedData.config || {},
       status: 'active'
     })

@@ -73,7 +73,7 @@ export function ImageWithFallback({
   const [isPreloaded, setIsPreloaded] = useState(false)
 
   // Use performance hooks
-  const { ref: lazyRef, isIntersecting } = useIntersectionObserver<HTMLDivElement>({
+  const { elementRef: lazyRef, isIntersecting } = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.1,
     rootMargin: '50px'
   })

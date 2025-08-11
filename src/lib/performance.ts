@@ -1,43 +1,120 @@
-import { useEffect, useRef, useCallback, useState, useMemo } from 'react'
+/**
+ * Performance utilities for the application
+ * Includes code splitting, lazy loading, and performance monitoring
+ */
 
-// ============================================================================
-// PERFORMANCE OPTIMIZATION UTILITIES
-// ============================================================================
+import { ComponentType, Suspense, lazy, useEffect, useRef, useState } from 'react'
 
-// Image lazy loading with Intersection Observer
-export function useLazyImage() {
-  const imgRef = useRef<HTMLImageElement>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const img = imgRef.current
-    if (!img) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsInView(true)
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: '50px' }
-    )
-
-    observer.observe(img)
-    return () => observer.unobserve(img)
-  }, [])
-
-  const handleLoad = useCallback(() => {
-    setIsLoaded(true)
-  }, [])
-
-  return { imgRef, isLoaded, isInView, handleLoad }
+/**
+ * Lazy import with error boundary and retry logic
+ */
+export function lazyImport<T extends ComponentType<any>>(
+  importFunc: () => Promise<{ default: T }>,
+  retries: number = 3,
+  delay: number = 1000
+) {
+  return lazy(async () => {
+    let lastError: Error | null = null
+    
+    for (let i = 0; i < retries; i++) {
+      try {
+        return await importFunc()
+      } catch (error) {
+        lastError = error as Error
+        console.warn(`Lazy import attempt ${i + 1} failed:`, error)
+        
+        if (i < retries - 1) {
+          await new Promise(resolve => setTimeout(resolve, delay * (i + 1)))
+        }
+      }
+    }
+    
+    throw lastError || new Error('Lazy import failed after all retries')
+  })
 }
 
-// Debounce hook for performance
+/**
+ * Lazy load components with specific chunk names for better caching
+ */
+export const lazyComponents = {
+  // Example: FileUpload: lazyImport(() => import('@/components/ui/file-upload')),
+  // ... (only existing components should be here)
+}
+
+/**
+ * Intersection Observer hook for lazy loading
+ */
+export function useIntersectionObserver<T extends HTMLElement>(
+  options: IntersectionObserverInit = {}
+) {
+  const [isIntersecting, setIsIntersecting] = useState(false)
+  const [hasIntersected, setHasIntersected] = useState(false)
+  const elementRef = useRef<T>(null)
+
+  useEffect(() => {
+    const element = elementRef.current
+    if (!element) return
+
+    const observer = new IntersectionObserver(([entry]) => {
+      const isIntersecting = entry.isIntersecting
+      setIsIntersecting(isIntersecting)
+      
+      if (isIntersecting && !hasIntersected) {
+        setHasIntersected(true)
+      }
+    }, {
+      rootMargin: '50px', // Start loading 50px before element comes into view
+      threshold: 0.1,
+      ...options
+    })
+
+    observer.observe(element)
+
+    return () => {
+      observer.unobserve(element)
+    }
+  }, [options, hasIntersected])
+
+  return { elementRef, isIntersecting, hasIntersected }
+}
+
+/**
+ * Performance monitoring hook
+ */
+export function usePerformanceMonitor(componentName: string) {
+  const [renderTime, setRenderTime] = useState<number>(0)
+  const [mountTime, setMountTime] = useState<number>(0)
+  const startTime = useRef<number>(performance.now())
+
+  useEffect(() => {
+    const mountEndTime = performance.now()
+    const mountDuration = mountEndTime - startTime.current
+    setMountTime(mountDuration)
+
+    // Log performance metrics
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Performance] ${componentName} mounted in ${mountDuration.toFixed(2)}ms`)
+    }
+
+    // Report to performance monitoring service
+    if (mountDuration > 100) { // Log slow components
+      console.warn(`[Performance] Slow component: ${componentName} took ${mountDuration.toFixed(2)}ms to mount`)
+    }
+  }, [componentName])
+
+  const measureRender = () => {
+    const renderEndTime = performance.now()
+    const renderDuration = renderEndTime - startTime.current
+    setRenderTime(renderDuration)
+    startTime.current = renderEndTime
+  }
+
+  return { renderTime, mountTime, measureRender }
+}
+
+/**
+ * Debounce hook for search inputs
+ */
 export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
@@ -54,260 +131,379 @@ export function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue
 }
 
-// Throttle hook for performance
-export function useThrottle<T extends (...args: any[]) => any>(
-  callback: T,
-  delay: number
-): T {
-  const lastRun = useRef(Date.now())
-
-  return useCallback(
-    (...args: Parameters<T>) => {
-      if (Date.now() - lastRun.current >= delay) {
-        callback(...args)
-        lastRun.current = Date.now()
-      }
-    },
-    [callback, delay]
-  ) as T
-}
-
-// Virtual scrolling hook for large lists
-export function useVirtualScroll<T>(
-  items: T[],
-  itemHeight: number,
-  containerHeight: number
-) {
-  const [scrollTop, setScrollTop] = useState(0)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const visibleItemCount = Math.ceil(containerHeight / itemHeight)
-  const startIndex = Math.floor(scrollTop / itemHeight)
-  const endIndex = Math.min(startIndex + visibleItemCount + 1, items.length)
-
-  const visibleItems = items.slice(startIndex, endIndex)
-  const totalHeight = items.length * itemHeight
-  const offsetY = startIndex * itemHeight
-
-  const handleScroll = useThrottle((e: React.UIEvent<HTMLDivElement>) => {
-    setScrollTop(e.currentTarget.scrollTop)
-  }, 16)
-
-  return {
-    containerRef,
-    visibleItems,
-    totalHeight,
-    offsetY,
-    handleScroll,
-    startIndex,
-    endIndex
-  }
-}
-
-// Memory management for large datasets
-export function useMemoryOptimization<T>(
-  data: T[],
-  maxItems: number = 1000
-) {
-  const [optimizedData, setOptimizedData] = useState<T[]>([])
+/**
+ * Lazy image loading hook
+ */
+export function useLazyImage(src: string, fallback?: string) {
+  const [imageSrc, setImageSrc] = useState<string>(fallback || '')
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
-    if (data.length <= maxItems) {
-      setOptimizedData(data)
-    } else {
-      // Keep only the most recent items
-      setOptimizedData(data.slice(-maxItems))
+    if (!src) return
+
+    setIsLoading(true)
+    setHasError(false)
+
+    const img = new Image()
+    img.onload = () => {
+      setImageSrc(src)
+      setIsLoading(false)
     }
-  }, [data, maxItems])
-
-  return optimizedData
-}
-
-// Performance monitoring hook
-export function usePerformanceMonitor(componentName: string) {
-  const renderCount = useRef(0)
-  const startTime = useRef(performance.now())
-
-  useEffect(() => {
-    renderCount.current++
-    const endTime = performance.now()
-    const renderTime = endTime - startTime.current
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`${componentName} render #${renderCount.current}: ${renderTime.toFixed(2)}ms`)
-    }
-
-    startTime.current = performance.now()
-  })
-
-  return { renderCount: renderCount.current }
-}
-
-// Bundle size optimization - dynamic imports
-export const lazyImport = {
-  // Lazy load heavy components
-  ProductSearch: () => import('@/components/product/product-search'),
-  ShoppingCart: () => import('@/components/cart/shopping-cart'),
-  Wishlist: () => import('@/components/wishlist/wishlist'),
-  ChatInterface: () => import('@/components/chat/chat-interface'),
-  PaymentForm: () => import('@/components/payment/payment-form'),
-  ShippingCalculator: () => import('@/components/shipping/shipping-calculator'),
-  FileUpload: () => import('@/components/ui/file-upload'),
-  ImageUpload: () => import('@/components/ui/image-upload'),
-  Modal: () => import('@/components/ui/modal'),
-  Toast: () => import('@/components/ui/toast'),
-}
-
-// Intersection Observer hook for lazy loading
-export function useIntersectionObserver<T extends HTMLElement = HTMLElement>(
-  options: IntersectionObserverInit = {}
-) {
-  const [isIntersecting, setIsIntersecting] = useState(false)
-  const [hasIntersected, setHasIntersected] = useState(false)
-  const ref = useRef<T>(null)
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasIntersected) {
-          setIsIntersecting(true)
-          setHasIntersected(true)
-          observer.unobserve(element)
-        }
-      },
-      { threshold: 0.1, ...options }
-    )
-
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [hasIntersected, options])
-
-  return { ref, isIntersecting, hasIntersected }
-}
-
-// Memoization hook for expensive calculations
-export function useMemoizedValue<T>(
-  factory: () => T,
-  deps: React.DependencyList
-): T {
-  return useMemo(factory, deps)
-}
-
-// Resource preloading hook
-export function usePreloadResources(resources: string[]) {
-  useEffect(() => {
-    resources.forEach((resource) => {
-      if (resource.endsWith('.css')) {
-        const link = document.createElement('link')
-        link.rel = 'preload'
-        link.as = 'style'
-        link.href = resource
-        document.head.appendChild(link)
-      } else if (resource.endsWith('.js')) {
-        const link = document.createElement('link')
-        link.rel = 'preload'
-        link.as = 'script'
-        link.href = resource
-        document.head.appendChild(link)
+    img.onerror = () => {
+      if (fallback) {
+        setImageSrc(fallback)
       }
-    })
-  }, [resources])
-}
-
-// Performance metrics tracking
-export function usePerformanceMetrics(componentName: string) {
-  const metrics = useRef({
-    mountTime: 0,
-    renderCount: 0,
-    totalRenderTime: 0,
-  })
-
-  useEffect(() => {
-    const startTime = performance.now()
-    metrics.current.mountTime = startTime
+      setIsLoading(false)
+      setHasError(true)
+    }
+    img.src = src
 
     return () => {
-      const endTime = performance.now()
-      const totalTime = endTime - metrics.current.mountTime
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`${componentName} lifecycle:`, {
-          totalTime: `${totalTime.toFixed(2)}ms`,
-          renderCount: metrics.current.renderCount,
-          averageRenderTime: `${(metrics.current.totalRenderTime / metrics.current.renderCount).toFixed(2)}ms`,
+      img.onload = null
+      img.onerror = null
+    }
+  }, [src, fallback])
+
+  return { imageSrc, isLoading, hasError }
+}
+
+/**
+ * Bundle size analyzer
+ */
+export function useBundleAnalyzer() {
+  const [bundleSize, setBundleSize] = useState<{
+    total: number
+    chunks: Record<string, number>
+  } | null>(null)
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      // In development, we can't get actual bundle sizes
+      // This would be implemented in production with webpack bundle analyzer
+      return
+    }
+
+    // This would be implemented with actual bundle analysis
+    // For now, we'll just set a placeholder
+    setBundleSize({
+      total: 0,
+      chunks: {}
+    })
+  }, [])
+
+  return bundleSize
+}
+
+/**
+ * Memory usage monitor
+ */
+export function useMemoryMonitor() {
+  const [memoryInfo, setMemoryInfo] = useState<{
+    usedJSHeapSize: number
+    totalJSHeapSize: number
+    jsHeapSizeLimit: number
+  } | null>(null)
+
+  useEffect(() => {
+    if (typeof performance !== 'undefined' && (performance as any).memory) {
+      const updateMemoryInfo = () => {
+        const memory = (performance as any).memory
+        setMemoryInfo({
+          usedJSHeapSize: memory.usedJSHeapSize,
+          totalJSHeapSize: memory.totalJSHeapSize,
+          jsHeapSizeLimit: memory.jsHeapSizeLimit
         })
       }
-    }
-  }, [componentName])
 
-  useEffect(() => {
-    metrics.current.renderCount++
-    const startTime = performance.now()
-    
-    return () => {
-      const endTime = performance.now()
-      metrics.current.totalRenderTime += endTime - startTime
-    }
-  })
+      updateMemoryInfo()
+      const interval = setInterval(updateMemoryInfo, 5000) // Update every 5 seconds
 
-  return metrics.current
+      return () => clearInterval(interval)
+    }
+  }, [])
+
+  return memoryInfo
 }
 
-// Bundle size analyzer
-export function useBundleAnalyzer() {
+/**
+ * Network performance monitor
+ */
+export function useNetworkMonitor() {
+  const [networkInfo, setNetworkInfo] = useState<{
+    effectiveType: string
+    downlink: number
+    rtt: number
+  } | null>(null)
+
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
-      // @ts-ignore
-      if (window.__NEXT_DATA__) {
-        console.log('Bundle analysis available at: http://localhost:8888')
+    if ('connection' in navigator) {
+      const connection = (navigator as any).connection
+      
+      const updateNetworkInfo = () => {
+        setNetworkInfo({
+          effectiveType: connection.effectiveType || 'unknown',
+          downlink: connection.downlink || 0,
+          rtt: connection.rtt || 0
+        })
+      }
+
+      updateNetworkInfo()
+      connection.addEventListener('change', updateNetworkInfo)
+
+      return () => {
+        connection.removeEventListener('change', updateNetworkInfo)
       }
     }
   }, [])
+
+  return networkInfo
 }
 
-// Performance optimization for lists
-export function useOptimizedList<T>(
-  items: T[],
-  pageSize: number = 20
-) {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [isLoading, setIsLoading] = useState(false)
-
-  const paginatedItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * pageSize
-    const endIndex = startIndex + pageSize
-    return items.slice(startIndex, endIndex)
-  }, [items, currentPage, pageSize])
-
-  const hasMore = useMemo(() => {
-    return currentPage * pageSize < items.length
-  }, [items.length, currentPage, pageSize])
-
-  const loadMore = useCallback(() => {
-    if (hasMore && !isLoading) {
-      setIsLoading(true)
-      setTimeout(() => {
-        setCurrentPage(prev => prev + 1)
-        setIsLoading(false)
-      }, 100)
-    }
-  }, [hasMore, isLoading])
-
-  useEffect(() => {
-    if (items.length > 0 && paginatedItems.length === 0) {
-      loadMore()
-    }
-  }, [items])
-
-  return {
-    items: paginatedItems,
-    currentPage,
-    hasMore,
-    isLoading,
-    loadMore,
-    totalItems: items.length,
+/**
+ * Performance budget checker
+ */
+export function usePerformanceBudget(
+  budget: {
+    mountTime: number
+    renderTime: number
+    bundleSize: number
   }
+) {
+  const [violations, setViolations] = useState<string[]>([])
+
+  const checkBudget = (metrics: {
+    mountTime?: number
+    renderTime?: number
+    bundleSize?: number
+  }) => {
+    const newViolations: string[] = []
+
+    if (metrics.mountTime && metrics.mountTime > budget.mountTime) {
+      newViolations.push(`Mount time ${metrics.mountTime}ms exceeds budget of ${budget.mountTime}ms`)
+    }
+
+    if (metrics.renderTime && metrics.renderTime > budget.renderTime) {
+      newViolations.push(`Render time ${metrics.renderTime}ms exceeds budget of ${budget.renderTime}ms`)
+    }
+
+    if (metrics.bundleSize && metrics.bundleSize > budget.bundleSize) {
+      newViolations.push(`Bundle size ${metrics.bundleSize}KB exceeds budget of ${budget.bundleSize}KB`)
+    }
+
+    setViolations(newViolations)
+    return newViolations
+  }
+
+  return { violations, checkBudget }
+}
+
+/**
+ * Lazy loading wrapper with loading state
+ * Note: This function returns JSX and should be used in .tsx files
+ */
+export function LazyWrapper<T extends ComponentType<any>>(
+  Component: T,
+  fallback?: React.ReactNode
+) {
+  return {
+    Component,
+    fallback: fallback || 'Loading...'
+  }
+}
+
+/**
+ * Preload component for better performance
+ */
+export function preloadComponent<T extends ComponentType<any>>(
+  importFunc: () => Promise<{ default: T }>
+) {
+  return () => {
+    const promise = importFunc()
+    promise.then(() => {
+      // Component is now loaded and cached
+      console.log('Component preloaded successfully')
+    })
+    return promise
+  }
+}
+
+/**
+ * Performance metrics collector
+ */
+export class PerformanceMetrics {
+  private static instance: PerformanceMetrics
+  private metrics: Map<string, number[]> = new Map()
+  private observers: Set<PerformanceObserver> = new Set()
+
+  static getInstance(): PerformanceMetrics {
+    if (!PerformanceMetrics.instance) {
+      PerformanceMetrics.instance = new PerformanceMetrics()
+    }
+    return PerformanceMetrics.instance
+  }
+
+  /**
+   * Start measuring a performance metric
+   */
+  startMeasure(name: string): string {
+    const markName = `${name}_start_${Date.now()}`
+    performance.mark(markName)
+    return markName
+  }
+
+  /**
+   * End measuring a performance metric
+   */
+  endMeasure(name: string, startMark: string): number {
+    const endMark = `${name}_end_${Date.now()}`
+    performance.mark(endMark)
+    
+    const measureName = `${name}_measure_${Date.now()}`
+    performance.measure(measureName, startMark, endMark)
+    
+    const entries = performance.getEntriesByName(measureName)
+    const duration = entries[entries.length - 1]?.duration || 0
+    
+    // Store metric
+    if (!this.metrics.has(name)) {
+      this.metrics.set(name, [])
+    }
+    this.metrics.get(name)!.push(duration)
+    
+    // Clean up marks and measures
+    performance.clearMarks(startMark)
+    performance.clearMarks(endMark)
+    performance.clearMeasures(measureName)
+    
+    return duration
+  }
+
+  /**
+   * Get average duration for a metric
+   */
+  getAverageDuration(name: string): number {
+    const durations = this.metrics.get(name)
+    if (!durations || durations.length === 0) return 0
+    
+    const sum = durations.reduce((acc, duration) => acc + duration, 0)
+    return sum / durations.length
+  }
+
+  /**
+   * Get all metrics
+   */
+  getAllMetrics(): Record<string, { average: number; count: number; min: number; max: number }> {
+    const result: Record<string, { average: number; count: number; min: number; max: number }> = {}
+    
+    for (const [name, durations] of this.metrics) {
+      if (durations.length === 0) continue
+      
+      const sum = durations.reduce((acc, duration) => acc + duration, 0)
+      const average = sum / durations.length
+      const min = Math.min(...durations)
+      const max = Math.max(...durations)
+      
+      result[name] = { average, count: durations.length, min, max }
+    }
+    
+    return result
+  }
+
+  /**
+   * Clear all metrics
+   */
+  clearMetrics(): void {
+    this.metrics.clear()
+  }
+
+  /**
+   * Setup performance observer for automatic metric collection
+   */
+  setupObserver(): void {
+    if (typeof PerformanceObserver === 'undefined') return
+
+    // Observe navigation timing
+    try {
+      const navigationObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.entryType === 'navigation') {
+            const navEntry = entry as PerformanceNavigationTiming
+            this.recordNavigationMetrics(navEntry)
+          }
+        }
+      })
+      
+      navigationObserver.observe({ entryTypes: ['navigation'] })
+      this.observers.add(navigationObserver)
+    } catch (error) {
+      console.warn('Failed to setup navigation observer:', error)
+    }
+
+    // Observe resource timing
+    try {
+      const resourceObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.entryType === 'resource') {
+            const resourceEntry = entry as PerformanceResourceTiming
+            this.recordResourceMetrics(resourceEntry)
+          }
+        }
+      })
+      
+      resourceObserver.observe({ entryTypes: ['resource'] })
+      this.observers.add(resourceObserver)
+    } catch (error) {
+      console.warn('Failed to setup resource observer:', error)
+    }
+  }
+
+  /**
+   * Record navigation timing metrics
+   */
+  private recordNavigationMetrics(entry: PerformanceNavigationTiming): void {
+    const metrics = {
+      'navigation.domContentLoaded': entry.domContentLoadedEventEnd - entry.domContentLoadedEventStart,
+      'navigation.load': entry.loadEventEnd - entry.loadEventStart,
+      'navigation.domInteractive': entry.domInteractive - entry.fetchStart,
+      'navigation.firstPaint': entry.responseStart - entry.fetchStart
+    }
+
+    for (const [name, duration] of Object.entries(metrics)) {
+      if (!this.metrics.has(name)) {
+        this.metrics.set(name, [])
+      }
+      this.metrics.get(name)!.push(duration)
+    }
+  }
+
+  /**
+   * Record resource timing metrics
+   */
+  private recordResourceMetrics(entry: PerformanceResourceTiming): void {
+    const duration = entry.responseEnd - entry.fetchStart
+    
+    if (!this.metrics.has('resource.duration')) {
+      this.metrics.set('resource.duration', [])
+    }
+    this.metrics.get('resource.duration')!.push(duration)
+  }
+
+  /**
+   * Cleanup observers
+   */
+  cleanup(): void {
+    for (const observer of this.observers) {
+      observer.disconnect()
+    }
+    this.observers.clear()
+  }
+}
+
+// Export singleton instance
+export const performanceMetrics = PerformanceMetrics.getInstance()
+
+// Auto-setup observer
+if (typeof window !== 'undefined') {
+  performanceMetrics.setupObserver()
 } 

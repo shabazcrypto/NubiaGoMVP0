@@ -361,23 +361,23 @@ export default function CustomerDashboard() {
             </div>
             <div className="flex items-center space-x-3">
               {/* Theme Toggle */}
-              <button
+          <button
                 onClick={handleThemeToggle}
                 className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
                 title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               >
                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </button>
-              
+          </button>
+        
               {/* Logout Button */}
-              <button
-                onClick={handleLogout}
+        <button
+          onClick={handleLogout}
                 className="inline-flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
-              >
+        >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
-              </button>
-            </div>
+        </button>
+      </div>
           </div>
         </header>
 
@@ -388,7 +388,7 @@ export default function CustomerDashboard() {
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Quick Navigation</h3>
               <p className="text-sm text-gray-600">Access all customer sections quickly</p>
-            </div>
+                  </div>
             
             <div className="space-y-3">
               {sidebarItems.map(({ id, icon: Icon, label, path }) => (
@@ -413,27 +413,27 @@ export default function CustomerDashboard() {
                       : 'bg-gray-100 text-gray-600'
                   }`}>
                     <Icon className="h-5 w-5" />
-                  </div>
+                </div>
                   <div>
                     <p className="font-medium">{label}</p>
                     <p className="text-xs text-gray-500">Manage {label.toLowerCase()}</p>
                   </div>
                 </button>
               ))}
-            </div>
+                </div>
 
             {/* Quick Actions */}
             <div className="mt-8 pt-6 border-t border-gray-200">
               <h4 className="text-sm font-medium text-gray-900 mb-3">Quick Actions</h4>
               <div className="space-y-2">
-                <button
+                  <button 
                   onClick={() => setShowMessageModal(true)}
                   className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
-                >
+                  >
                   <MessageSquare className="h-4 w-4" />
                   <span>Contact Support</span>
-                </button>
-                <button
+                  </button>
+                  <button 
                   onClick={() => setShowNotificationModal(true)}
                   className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
                 >
@@ -446,10 +446,10 @@ export default function CustomerDashboard() {
                 >
                   <Calendar className="h-4 w-4" />
                   <span>Order Calendar</span>
-                </button>
+                  </button>
               </div>
-            </div>
-          </div>
+                </div>
+              </div>
 
           {/* Main Dashboard Content */}
           <div className="flex-1 p-8">
@@ -469,7 +469,7 @@ export default function CustomerDashboard() {
                     <span className="text-xs text-green-600">+12% this month</span>
                   </div>
                 </div>
-
+                
                 {/* Total Spent Card */}
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -483,7 +483,7 @@ export default function CustomerDashboard() {
                     <span className="text-xs text-green-600">+8% this month</span>
                   </div>
                 </div>
-
+                
                 {/* Loyalty Points Card */}
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -497,7 +497,7 @@ export default function CustomerDashboard() {
                     <span className="text-xs text-green-600">+150 this month</span>
                   </div>
                 </div>
-
+                
                 {/* Wishlist Card */}
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -552,25 +552,25 @@ export default function CustomerDashboard() {
                 </div>
 
                 {/* Quick Stats */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="bg-white rounded-xl shadow-sm p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                         <span className="text-sm font-medium text-gray-900">Member Since</span>
-                      </div>
+                  </div>
                       <span className="text-sm text-gray-600">{new Date(stats.memberSince).toLocaleDateString()}</span>
-                    </div>
+                </div>
                     
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                         <span className="text-sm font-medium text-gray-900">Average Rating</span>
-                      </div>
+              </div>
                       <span className="text-sm text-gray-600">{stats.averageRating}★</span>
-                    </div>
-                    
+            </div>
+
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
@@ -717,20 +717,20 @@ export default function CustomerDashboard() {
                                   <Eye className="h-3 w-3" />
                                   <span>View</span>
                                 </button>
-                                <button
-                                  onClick={() => handleOrderAction('track', order.id)}
-                                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
-                                >
-                                  <Truck className="h-3 w-3" />
-                                  <span>Track</span>
-                                </button>
-                                <button
+                                  <button
+                                    onClick={() => handleOrderAction('track', order.id)}
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
+                                  >
+                                    <Truck className="h-3 w-3" />
+                                    <span>Track</span>
+                                  </button>
+                                  <button
                                   onClick={() => handleOrderAction('reorder', order.id)}
-                                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
-                                >
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
+                                  >
                                   <ShoppingCart className="h-3 w-3" />
                                   <span>Reorder</span>
-                                </button>
+                                  </button>
                               </div>
                             )}
                           </td>
@@ -740,10 +740,10 @@ export default function CustomerDashboard() {
                   </table>
                 </div>
               </div>
+                </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
       {/* Modals */}
       {showMessageModal && (
@@ -753,16 +753,16 @@ export default function CustomerDashboard() {
               <h3 className="text-lg font-semibold">Contact Support</h3>
               <button onClick={() => setShowMessageModal(false)} className="text-gray-400 hover:text-gray-600">
                 <XCircle className="h-5 w-5" />
-              </button>
-            </div>
+                  </button>
+                    </div>
             <div className="space-y-4">
               <div className="text-center py-8">
                 <MessageSquare className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-500">Contact support feature coming soon!</p>
+                    </div>
+                    </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
       )}
 
       {showNotificationModal && (

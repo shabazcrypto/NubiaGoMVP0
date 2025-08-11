@@ -152,11 +152,11 @@ export default function SupplierDashboard() {
     router.push('/supplier/reports')
   }
 
-  // Handle add product
-  const handleAddProduct = () => {
+          // Handle add product
+        const handleAddProduct = () => {
     // Navigate to product creation
     router.push('/supplier/products/create')
-  }
+        }
 
   // Handle theme toggle
   const handleThemeToggle = () => {
@@ -377,9 +377,9 @@ export default function SupplierDashboard() {
             
             <div className="space-y-3">
               {sidebarItems.map(({ id, icon: Icon, label, path }) => (
-                <button
-                  key={id}
-                  onClick={() => {
+          <button
+            key={id}
+            onClick={() => {
                     if (id === 'overview') {
                       handleTabChange('overview')
                     } else if (path) {
@@ -397,21 +397,21 @@ export default function SupplierDashboard() {
                       ? 'bg-primary-100 text-primary-600' 
                       : 'bg-gray-100 text-gray-600'
                   }`}>
-                    <Icon className="h-5 w-5" />
+            <Icon className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="font-medium">{label}</p>
                     <p className="text-xs text-gray-500">Manage {label.toLowerCase()}</p>
                   </div>
-                </button>
-              ))}
+          </button>
+        ))}
             </div>
 
             {/* Quick Actions */}
             <div className="mt-8 pt-6 border-t border-gray-200">
               <h4 className="text-sm font-medium text-gray-900 mb-3">Quick Actions</h4>
               <div className="space-y-2">
-                <button
+        <button
                   onClick={() => setShowMessageModal(true)}
                   className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
                 >
@@ -431,19 +431,19 @@ export default function SupplierDashboard() {
                 >
                   <Calendar className="h-4 w-4" />
                   <span>Order Calendar</span>
-                </button>
-              </div>
-            </div>
+        </button>
+      </div>
+          </div>
           </div>
 
           {/* Main Dashboard Content */}
-          <div className="flex-1 p-8">
-            <div className="space-y-8">
+        <div className="flex-1 p-8">
+          <div className="space-y-8">
               {/* Row 1: Overview Cards */}
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                {/* Total Revenue Card */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <div className="flex items-center justify-between mb-4">
+              {/* Total Revenue Card */}
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="flex items-center justify-between mb-4">
                     <DollarSign className="h-8 w-8 text-green-600" />
                     <TrendingUpIcon className="h-5 w-5 text-green-600" />
                   </div>
@@ -452,8 +452,8 @@ export default function SupplierDashboard() {
                   <div className="flex items-center mt-2">
                     <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
                     <span className="text-xs text-green-600">+{stats.monthlyGrowth}% this month</span>
-                  </div>
                 </div>
+              </div>
 
                 {/* Total Orders Card */}
                 <div className="bg-white rounded-xl shadow-sm p-6">
@@ -468,7 +468,7 @@ export default function SupplierDashboard() {
                     <span className="text-xs text-green-600">+8% this month</span>
                   </div>
                 </div>
-
+                
                 {/* Total Products Card */}
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -482,7 +482,7 @@ export default function SupplierDashboard() {
                     <span className="text-xs text-green-600">+2 this month</span>
                   </div>
                 </div>
-
+                
                 {/* Average Rating Card */}
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -495,9 +495,9 @@ export default function SupplierDashboard() {
                     <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
                     <span className="text-xs text-green-600">+0.2 this month</span>
                   </div>
+                  </div>
                 </div>
-              </div>
-
+                
               {/* Row 2: Performance Metrics and Recent Orders */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Performance Metrics */}
@@ -513,15 +513,15 @@ export default function SupplierDashboard() {
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-gray-50 rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-2">
                         <Users className="h-5 w-5 text-blue-600" />
                         <span className="text-sm text-gray-600">Active Customers</span>
-                      </div>
+                  </div>
                       <p className="text-2xl font-bold text-gray-900">{stats.activeCustomers}</p>
                       <div className="flex items-center mt-1">
                         <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
                         <span className="text-xs text-green-600">+5 this month</span>
-                      </div>
+                  </div>
                     </div>
                     
                     <div className="bg-gray-50 rounded-lg p-4">
@@ -533,14 +533,14 @@ export default function SupplierDashboard() {
                       <div className="flex items-center mt-1">
                         <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
                         <span className="text-xs text-green-600">+12 this month</span>
-                      </div>
-                    </div>
-                    
+                </div>
+              </div>
+
                     <div className="bg-gray-50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-2">
                         <TrendingUp className="h-5 w-5 text-yellow-600" />
                         <span className="text-sm text-gray-600">Profit Margin</span>
-                      </div>
+                  </div>
                       <p className="text-2xl font-bold text-gray-900">{stats.profitMargin}%</p>
                       <div className="flex items-center mt-1">
                         <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
@@ -558,39 +558,39 @@ export default function SupplierDashboard() {
                         <ArrowUpRight className="h-3 w-3 text-red-600 mr-1" />
                         <span className="text-xs text-red-600">Needs attention</span>
                       </div>
-                    </div>
-                  </div>
                 </div>
+              </div>
+            </div>
 
                 {/* Recent Orders */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <div className="flex items-center justify-between mb-6">
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
                     <Link href="/supplier/orders" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
                       View All
                     </Link>
-                  </div>
-                  <div className="space-y-4">
+                </div>
+                <div className="space-y-4">
                     {orders.slice(0, 3).map((order) => (
                       <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
                             <ShoppingBag className="h-4 w-4 text-primary-600" />
-                          </div>
-                          <div>
+                        </div>
+                        <div>
                             <p className="font-medium text-gray-900">{order.id}</p>
                             <p className="text-sm text-gray-600">{order.customerName}</p>
-                          </div>
                         </div>
-                        <div className="text-right">
+                      </div>
+                      <div className="text-right">
                           <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
                             {getStatusIcon(order.status)}
                             <span className="ml-1">{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
                           </span>
                           <p className="text-xs text-gray-500 mt-1">${order.total}</p>
-                        </div>
                       </div>
-                    ))}
+                    </div>
+                  ))}
                   </div>
                 </div>
               </div>
@@ -733,20 +733,20 @@ export default function SupplierDashboard() {
                                   <Eye className="h-3 w-3" />
                                   <span>View</span>
                                 </button>
-                                <button
+                                  <button
                                   onClick={() => handleOrderAction('edit', order.id)}
-                                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
-                                >
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
+                                  >
                                   <Edit className="h-3 w-3" />
                                   <span>Edit</span>
-                                </button>
-                                <button
+                                  </button>
+                                  <button
                                   onClick={() => handleOrderAction('process', order.id)}
-                                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
-                                >
-                                  <Truck className="h-3 w-3" />
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
+                                  >
+                                    <Truck className="h-3 w-3" />
                                   <span>Process</span>
-                                </button>
+                                  </button>
                               </div>
                             )}
                           </td>
@@ -757,7 +757,7 @@ export default function SupplierDashboard() {
                 </div>
               </div>
             </div>
-          </div>
+                    </div>
         </div>
       </div>
 

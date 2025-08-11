@@ -10,11 +10,9 @@ import {
   Wallet, CreditCard, Activity, TrendingDown, ArrowUpRight,
   MoreHorizontal, Star, ShoppingCart, Store, Globe,
   Download, FileText, Eye as ViewIcon, Star as StarIcon,
-  MessageSquare, Award, Target, Zap
+  MessageSquare, Award, Target, Zap, Shield, TrendingUp as TrendingUpIcon
 } from 'lucide-react'
 import Link from 'next/link'
-import { LoadingSpinner } from '@/components/ui/loading-spinner'
-import { useToast } from '@/components/ui/toast'
 
 interface Product {
   id: string
@@ -50,27 +48,43 @@ interface Notification {
   id: string
   title: string
   message: string
-  type: 'order' | 'product' | 'system'
+  type: 'order' | 'product' | 'system' | 'customer'
   date: string
   read: boolean
 }
 
+interface SupplierStats {
+  totalRevenue: number
+  totalOrders: number
+  totalProducts: number
+  averageRating: number
+  monthlyGrowth: number
+  pendingOrders: number
+  lowStockItems: number
+  activeCustomers: number
+  totalSales: number
+  profitMargin: number
+}
+
 export default function SupplierDashboard() {
   const router = useRouter()
-  const { success, error } = useToast()
+  // const { success, error } = useToast() // Removed for now
   const [activeTab, setActiveTab] = useState('overview')
   const [products, setProducts] = useState<Product[]>([])
   const [orders, setOrders] = useState<Order[]>([])
   const [messages, setMessages] = useState<Message[]>([])
   const [notifications, setNotifications] = useState<Notification[]>([])
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<SupplierStats>({
     totalRevenue: 2999.85,
     totalOrders: 15,
     totalProducts: 8,
     averageRating: 4.5,
     monthlyGrowth: 12.5,
     pendingOrders: 3,
-    lowStockItems: 2
+    lowStockItems: 2,
+    activeCustomers: 45,
+    totalSales: 125,
+    profitMargin: 23.5
   })
   const [loading, setLoading] = useState(true)
   const [showSearch, setShowSearch] = useState(false)
@@ -116,35 +130,38 @@ export default function SupplierDashboard() {
   // Handle export data
   const handleExportData = () => {
     const data = {
-      orders: orders,
       products: products,
+      orders: orders,
       stats: stats
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `supplier-data-${new Date().toISOString().split('T')[0]}.json`
+    a.download = `nubiago-supplier-data-${new Date().toISOString().split('T')[0]}.json`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
-    success('Data exported successfully!')
+    alert('Data exported successfully!')
   }
 
   // Handle view reports
   const handleViewReports = () => {
+    // Navigate to reports page
     router.push('/supplier/reports')
   }
 
-          // Handle add product
-        const handleAddProduct = () => {
-          router.push('/products/supplier/create')
-        }
+  // Handle add product
+  const handleAddProduct = () => {
+    // Navigate to product creation
+    router.push('/supplier/products/create')
+  }
 
   // Handle theme toggle
   const handleThemeToggle = () => {
     setDarkMode(!darkMode)
+    // Apply theme to document
     if (!darkMode) {
       document.documentElement.classList.add('dark')
     } else {
@@ -162,6 +179,7 @@ export default function SupplierDashboard() {
   // Handle tab navigation
   const handleTabChange = (tab: string) => {
     setActiveTab(tab)
+    // Reset search when changing tabs
     setSearchQuery('')
   }
 
@@ -177,21 +195,12 @@ export default function SupplierDashboard() {
       case 'view':
         router.push(`/supplier/orders/${orderId}`)
         break
-      case 'process':
-        setOrders(prev => prev.map(order => 
-          order.id === orderId 
-            ? { ...order, status: 'processing' as const }
-            : order
-        ))
-        success('Order processing started!')
+      case 'edit':
+        router.push(`/supplier/orders/${orderId}/edit`)
         break
-      case 'ship':
-        setOrders(prev => prev.map(order => 
-          order.id === orderId 
-            ? { ...order, status: 'shipped' as const }
-            : order
-        ))
-        success('Order shipped successfully!')
+      case 'process':
+        // Process order logic
+        alert('Order processing started!')
         break
       default:
         break
@@ -211,28 +220,73 @@ export default function SupplierDashboard() {
   useEffect(() => {
     setTimeout(() => {
       setProducts([
-        { id: 'PROD-001', name: 'Wireless Headphones', price: 99.99, stock: 45, status: 'active', category: 'Electronics', sales: 23, rating: 4.8, image: '/product-headphones-1.jpg' },
-        { id: 'PROD-002', name: 'Smart Watch', price: 199.99, stock: 12, status: 'active', category: 'Electronics', sales: 8, rating: 4.6, image: '/product-tech-1.jpg' },
-        { id: 'PROD-003', name: 'Women\'s Dress', price: 49.99, stock: 28, status: 'active', category: 'Women', sales: 15, rating: 4.7, image: '/product-lifestyle-1.jpg' },
-        { id: 'PROD-004', name: 'Men\'s Shirt', price: 34.99, stock: 32, status: 'active', category: 'Men', sales: 12, rating: 4.5, image: '/product-home-1.jpg' },
-        { id: 'PROD-005', name: 'Baby Onesie', price: 19.99, stock: 50, status: 'active', category: 'Mother & Child', sales: 18, rating: 4.9, image: '/product-accessories-1.jpg' },
-        { id: 'PROD-006', name: 'Kitchen Set', price: 89.99, stock: 15, status: 'active', category: 'Home & Living', sales: 9, rating: 4.4, image: '/product-lifestyle-1.jpg' },
-        { id: 'PROD-007', name: 'Lipstick Set', price: 24.99, stock: 40, status: 'active', category: 'Cosmetics', sales: 25, rating: 4.6, image: '/product-home-1.jpg' },
-        { id: 'PROD-008', name: 'Leather Handbag', price: 79.99, stock: 20, status: 'active', category: 'Shoes & Bags', sales: 11, rating: 4.3, image: '/product-accessories-1.jpg' }
+        {
+          id: '1',
+          name: 'Premium Wireless Headphones',
+          price: 299.99,
+          stock: 25,
+          status: 'active',
+          category: 'Electronics',
+          sales: 45,
+          rating: 4.8,
+          image: '/images/headphones.jpg'
+        },
+        {
+          id: '2',
+          name: 'Smart Fitness Watch',
+          price: 199.99,
+          stock: 15,
+          status: 'active',
+          category: 'Electronics',
+          sales: 32,
+          rating: 4.6,
+          image: '/images/watch.jpg'
+        },
+        {
+          id: '3',
+          name: 'Laptop Stand',
+          price: 49.99,
+          stock: 8,
+          status: 'active',
+          category: 'Accessories',
+          sales: 28,
+          rating: 4.4,
+          image: '/images/laptop-stand.jpg'
+        }
       ])
       setOrders([
-        { id: 'ORD-001', customerName: 'John Doe', status: 'pending', total: 99.99, createdAt: '2024-01-20', items: 2 },
-        { id: 'ORD-002', customerName: 'Jane Smith', status: 'shipped', total: 199.99, createdAt: '2024-01-19', items: 1 },
-        { id: 'ORD-003', customerName: 'Mike Johnson', status: 'delivered', total: 149.99, createdAt: '2024-01-18', items: 3 },
-        { id: 'ORD-004', customerName: 'Sarah Wilson', status: 'processing', total: 79.99, createdAt: '2024-01-17', items: 1 }
+        {
+          id: 'ORD-001',
+          customerName: 'John Doe',
+          status: 'pending',
+          total: 299.99,
+          createdAt: '2024-01-20',
+          items: 1
+        },
+        {
+          id: 'ORD-002',
+          customerName: 'Jane Smith',
+          status: 'processing',
+          total: 199.99,
+          createdAt: '2024-01-19',
+          items: 1
+        },
+        {
+          id: 'ORD-003',
+          customerName: 'Bob Wilson',
+          status: 'shipped',
+          total: 49.99,
+          createdAt: '2024-01-18',
+          items: 1
+        }
       ])
       setMessages([
-        { id: 'MSG-001', title: 'New Order Received', content: 'Order ORD-001 has been placed by John Doe.', type: 'order', date: '2024-01-20', read: false },
-        { id: 'MSG-002', title: 'Low Stock Alert', content: 'Smart Watch is running low on stock.', type: 'system', date: '2024-01-19', read: true }
+        { id: '1', title: 'New Order Received', content: 'Order ORD-001 has been placed by John Doe.', type: 'order', date: '2024-01-20', read: false },
+        { id: '2', title: 'System Update', content: 'Your dashboard has been updated with new features.', type: 'system', date: '2024-01-19', read: true }
       ])
       setNotifications([
-        { id: 'NOT-001', title: 'Order Shipped', message: 'Order ORD-002 has been shipped successfully.', type: 'order', date: '2024-01-19', read: false },
-        { id: 'NOT-002', title: 'Product Review', message: 'New 5-star review for Wireless Headphones.', type: 'system', date: '2024-01-18', read: true }
+        { id: '1', title: 'Low Stock Alert', message: 'Laptop Stand is running low on stock.', type: 'product', date: '2024-01-20', read: false },
+        { id: '2', title: 'New Customer', message: 'Bob Wilson has made their first purchase.', type: 'customer', date: '2024-01-18', read: true }
       ])
       setLoading(false)
     }, 1000)
@@ -254,6 +308,7 @@ export default function SupplierDashboard() {
       case 'delivered': return <CheckCircle className="h-4 w-4" />
       case 'shipped': return <Truck className="h-4 w-4" />
       case 'processing': return <Clock className="h-4 w-4" />
+      case 'pending': return <Clock className="h-4 w-4" />
       case 'cancelled': return <XCircle className="h-4 w-4" />
       default: return <Clock className="h-4 w-4" />
     }
@@ -262,227 +317,289 @@ export default function SupplierDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-4">
-          <LoadingSpinner size="lg" />
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
       </div>
     )
   }
 
   const sidebarItems = [
-    { id: 'theme', icon: darkMode ? Moon : Sun, label: 'Theme' },
-    { id: 'overview', icon: Grid3X3, label: 'Overview' },
-    { id: 'calendar', icon: Calendar, label: 'Calendar' },
-    { id: 'messages', icon: Mail, label: 'Messages' },
-    { id: 'products', icon: Package, label: 'Products' },
-    { id: 'orders', icon: ShoppingBag, label: 'Orders' },
-    { id: 'notifications', icon: Bell, label: 'Notifications' },
-    { id: 'settings', icon: Settings, label: 'Settings' }
+    { id: 'overview', icon: Grid3X3, label: 'Overview', path: '/supplier' },
+    { id: 'products', icon: Package, label: 'Product Management', path: '/supplier/products' },
+    { id: 'orders', icon: ShoppingBag, label: 'Order Processing', path: '/supplier/orders' },
+    { id: 'analytics', icon: BarChart3, label: 'Analytics & Reports', path: '/supplier/analytics' },
+    { id: 'customers', icon: Users, label: 'Customer Management', path: '/supplier/customers' },
+    { id: 'shipping', icon: Truck, label: 'Shipping & Logistics', path: '/supplier/shipping' },
+    { id: 'support', icon: MessageSquare, label: 'Support', path: '/supplier/support' },
+    { id: 'settings', icon: Settings, label: 'Settings', path: '/supplier/settings' }
   ]
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Left Sidebar */}
-      <div className="w-16 bg-white shadow-sm flex flex-col items-center py-6 space-y-6">
-        {sidebarItems.map(({ id, icon: Icon, label }) => (
-          <button
-            key={id}
-            onClick={() => {
-              if (id === 'theme') {
-                handleThemeToggle()
-              } else if (id === 'calendar') {
-                setShowCalendarModal(true)
-              } else if (id === 'messages') {
-                setShowMessageModal(true)
-              } else if (id === 'notifications') {
-                setShowNotificationModal(true)
-              } else if (id === 'settings') {
-                setShowSettingsModal(true)
-              } else {
-                handleTabChange(id)
-              }
-            }}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-              id === 'theme' 
-                ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                : activeTab === id 
-                  ? 'bg-primary-600 text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-            title={label}
-          >
-            <Icon className="h-5 w-5" />
-          </button>
-        ))}
-        
-        <div className="flex-1" />
-        
-        <button
-          onClick={handleLogout}
-          className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
-          title="Logout"
-        >
-          <LogOut className="h-5 w-5" />
-        </button>
-      </div>
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Top Header */}
         <header className="bg-white shadow-sm px-8 py-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Good morning, Supplier</h1>
-            <p className="text-gray-600 mt-1">Manage your products, track orders, and grow your business.</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Welcome back, Supplier!</h1>
+              <p className="text-gray-600 mt-1">Manage your products, process orders, and grow your business.</p>
+            </div>
+            <div className="flex items-center space-x-3">
+              {/* Theme Toggle */}
+              <button
+                onClick={handleThemeToggle}
+                className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
+              
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </header>
 
         {/* Main Content Area */}
-        <div className="flex-1 p-8">
-          <div className="space-y-8">
-            {/* Row 1: Total Revenue, Summary Cards, Chart */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Total Revenue Card */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Total Revenue</h3>
-                  <div className="flex items-center space-x-2">
-                    <Globe className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">NubiaGo</span>
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
+        <div className="flex-1 flex">
+          {/* Left Sidebar Navigation */}
+          <div className="w-80 bg-white shadow-sm border-r border-gray-200 p-6">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Quick Navigation</h3>
+              <p className="text-sm text-gray-600">Access all supplier sections quickly</p>
+            </div>
+            
+            <div className="space-y-3">
+              {sidebarItems.map(({ id, icon: Icon, label, path }) => (
+                <button
+                  key={id}
+                  onClick={() => {
+                    if (id === 'overview') {
+                      handleTabChange('overview')
+                    } else if (path) {
+                      router.push(path)
+                    }
+                  }}
+                  className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-colors ${
+                    activeTab === id 
+                      ? 'bg-primary-50 border border-primary-200 text-primary-700' 
+                      : 'hover:bg-gray-50 text-gray-700'
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    activeTab === id 
+                      ? 'bg-primary-100 text-primary-600' 
+                      : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    <Icon className="h-5 w-5" />
                   </div>
-                </div>
-                <div className="mb-6">
-                  <p className="text-3xl font-bold text-gray-900">${stats.totalRevenue.toLocaleString()}</p>
-                  <div className="flex items-center mt-2">
-                    <ArrowUpRight className="h-4 w-4 text-green-600 mr-1" />
-                    <span className="text-sm text-green-600">{stats.monthlyGrowth}% this month</span>
+                  <div>
+                    <p className="font-medium">{label}</p>
+                    <p className="text-xs text-gray-500">Manage {label.toLowerCase()}</p>
                   </div>
-                </div>
-                <div className="flex space-x-3">
-                  <button 
-                    onClick={handleViewReports}
-                    className="flex-1 bg-primary-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <FileText className="h-4 w-4" />
-                    <span>View Reports</span>
-                  </button>
-                  <button 
-                    onClick={handleExportData}
-                    className="flex-1 bg-gray-100 text-gray-900 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <Download className="h-4 w-4" />
-                    <span>Export Data</span>
-                  </button>
-                </div>
-              </div>
+                </button>
+              ))}
+            </div>
 
-              {/* Summary Cards Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-primary-600 rounded-xl p-4 text-white">
-                  <div className="flex items-center justify-between mb-2">
-                    <ShoppingBag className="h-5 w-5" />
-                    <ArrowUpRight className="h-4 w-4" />
+            {/* Quick Actions */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h4 className="text-sm font-medium text-gray-900 mb-3">Quick Actions</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => setShowMessageModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span>View Messages</span>
+                </button>
+                <button
+                  onClick={() => setShowNotificationModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <Bell className="h-4 w-4" />
+                  <span>Notifications</span>
+                </button>
+                <button
+                  onClick={() => setShowCalendarModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <Calendar className="h-4 w-4" />
+                  <span>Order Calendar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Dashboard Content */}
+          <div className="flex-1 p-8">
+            <div className="space-y-8">
+              {/* Row 1: Overview Cards */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                {/* Total Revenue Card */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <DollarSign className="h-8 w-8 text-green-600" />
+                    <TrendingUpIcon className="h-5 w-5 text-green-600" />
                   </div>
-                  <p className="text-2xl font-bold">{stats.totalOrders}</p>
-                  <p className="text-sm opacity-90">Total Orders</p>
+                  <p className="text-2xl font-bold text-gray-900">${stats.totalRevenue.toLocaleString()}</p>
+                  <p className="text-sm text-gray-600">Total Revenue</p>
                   <div className="flex items-center mt-2">
-                    <ArrowUpRight className="h-3 w-3 mr-1" />
-                    <span className="text-xs">This month</span>
+                    <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                    <span className="text-xs text-green-600">+{stats.monthlyGrowth}% this month</span>
                   </div>
                 </div>
-                
-                <div className="bg-white rounded-xl p-4 shadow-sm">
-                  <div className="flex items-center justify-between mb-2">
-                    <Package className="h-5 w-5 text-gray-600" />
-                    <TrendingDown className="h-4 w-4 text-red-500" />
+
+                {/* Total Orders Card */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <ShoppingBag className="h-8 w-8 text-primary-600" />
+                    <TrendingUp className="h-5 w-5 text-green-600" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">{stats.pendingOrders}</p>
-                  <p className="text-sm text-gray-600">Pending Orders</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.totalOrders}</p>
+                  <p className="text-sm text-gray-600">Total Orders</p>
                   <div className="flex items-center mt-2">
-                    <Clock className="h-3 w-3 text-red-500 mr-1" />
-                    <span className="text-xs text-red-500">Need attention</span>
+                    <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                    <span className="text-xs text-green-600">+8% this month</span>
                   </div>
                 </div>
-                
-                <div className="bg-white rounded-xl p-4 shadow-sm">
-                  <div className="flex items-center justify-between mb-2">
-                    <StarIcon className="h-5 w-5 text-gray-600" />
-                    <ArrowUpRight className="h-4 w-4 text-green-500" />
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">{stats.averageRating}</p>
-                  <p className="text-sm text-gray-600">Average Rating</p>
-                  <div className="flex items-center mt-2">
-                    <ArrowUpRight className="h-3 w-3 text-green-500 mr-1" />
-                    <span className="text-xs text-green-500">Out of 5</span>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-xl p-4 shadow-sm">
-                  <div className="flex items-center justify-between mb-2">
-                    <Target className="h-5 w-5 text-gray-600" />
-                    <Zap className="h-4 w-4 text-yellow-500" />
+
+                {/* Total Products Card */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Package className="h-8 w-8 text-blue-600" />
+                    <Plus className="h-5 w-5 text-blue-600" />
                   </div>
                   <p className="text-2xl font-bold text-gray-900">{stats.totalProducts}</p>
                   <p className="text-sm text-gray-600">Active Products</p>
                   <div className="flex items-center mt-2">
-                    <TrendingDown className="h-3 w-3 text-yellow-500 mr-1" />
-                    <span className="text-xs text-yellow-500">{stats.lowStockItems} low stock</span>
+                    <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                    <span className="text-xs text-green-600">+2 this month</span>
+                  </div>
+                </div>
+
+                {/* Average Rating Card */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Star className="h-8 w-8 text-yellow-600" />
+                    <Award className="h-5 w-5 text-yellow-600" />
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">{stats.averageRating}</p>
+                  <p className="text-sm text-gray-600">Average Rating</p>
+                  <div className="flex items-center mt-2">
+                    <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                    <span className="text-xs text-green-600">+0.2 this month</span>
                   </div>
                 </div>
               </div>
 
-              {/* Chart */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Sales Analytics</h3>
-                <p className="text-sm text-gray-600 mb-6">View your sales performance over time</p>
-                <div className="h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500">Chart Component</p>
-                    <p className="text-xs text-gray-400">Coming soon</p>
+              {/* Row 2: Performance Metrics and Recent Orders */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Performance Metrics */}
+                <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900">Performance Metrics</h3>
+                    <button 
+                      onClick={handleViewReports}
+                      className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                    >
+                      View Full Reports
+                    </button>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 2: Products and Recent Orders */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Products Section */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">Top Products</h3>
-                  <span className="text-sm text-gray-600">Total {products.length} products</span>
-                </div>
-                <div className="space-y-4">
-                  {products.slice(0, 3).map((product) => (
-                    <div key={product.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <Package className="h-5 w-5 text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">{product.name}</p>
-                          <p className="text-sm text-gray-600">{product.sales} sales</p>
-                        </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <Users className="h-5 w-5 text-blue-600" />
+                        <span className="text-sm text-gray-600">Active Customers</span>
                       </div>
-                      <div className="text-right">
-                        <span className="text-sm text-green-600 font-medium">${product.price}</span>
-                        <div className="flex items-center mt-1">
-                          <StarIcon className="h-3 w-3 text-yellow-500 mr-1" />
-                          <span className="text-xs text-gray-500">{product.rating}</span>
-                        </div>
+                      <p className="text-2xl font-bold text-gray-900">{stats.activeCustomers}</p>
+                      <div className="flex items-center mt-1">
+                        <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                        <span className="text-xs text-green-600">+5 this month</span>
                       </div>
                     </div>
-                  ))}
+                    
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <ShoppingCart className="h-5 w-5 text-green-600" />
+                        <span className="text-sm text-gray-600">Total Sales</span>
+                      </div>
+                      <p className="text-2xl font-bold text-gray-900">{stats.totalSales}</p>
+                      <div className="flex items-center mt-1">
+                        <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                        <span className="text-xs text-green-600">+12 this month</span>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <TrendingUp className="h-5 w-5 text-yellow-600" />
+                        <span className="text-sm text-gray-600">Profit Margin</span>
+                      </div>
+                      <p className="text-2xl font-bold text-gray-900">{stats.profitMargin}%</p>
+                      <div className="flex items-center mt-1">
+                        <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                        <span className="text-xs text-green-600">+2.1% this month</span>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <Package className="h-5 w-5 text-red-600" />
+                        <span className="text-sm text-gray-600">Low Stock Items</span>
+                      </div>
+                      <p className="text-2xl font-bold text-red-600">{stats.lowStockItems}</p>
+                      <div className="flex items-center mt-1">
+                        <ArrowUpRight className="h-3 w-3 text-red-600 mr-1" />
+                        <span className="text-xs text-red-600">Needs attention</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recent Orders */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
+                    <Link href="/supplier/orders" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                      View All
+                    </Link>
+                  </div>
+                  <div className="space-y-4">
+                    {orders.slice(0, 3).map((order) => (
+                      <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                            <ShoppingBag className="h-4 w-4 text-primary-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{order.id}</p>
+                            <p className="text-sm text-gray-600">{order.customerName}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                            {getStatusIcon(order.status)}
+                            <span className="ml-1">{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+                          </span>
+                          <p className="text-xs text-gray-500 mt-1">${order.total}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Recent Orders Table */}
-              <div className="lg:col-span-2 bg-white rounded-xl shadow-sm">
+              {/* Row 3: Orders Table */}
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-200">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">Order Management</h3>
                     <div className="flex items-center space-x-3">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -528,9 +645,22 @@ export default function SupplierDashboard() {
                             >
                               Shipped
                             </button>
+                            <button
+                              onClick={() => { setFilterStatus('delivered'); setShowFilterDropdown(false); }}
+                              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                            >
+                              Delivered
+                            </button>
                           </div>
                         )}
                       </div>
+                      <button 
+                        onClick={handleAddProduct}
+                        className="inline-flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+                      >
+                        <Plus className="h-4 w-4" />
+                        <span>Add Product</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -549,7 +679,7 @@ export default function SupplierDashboard() {
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
@@ -573,25 +703,19 @@ export default function SupplierDashboard() {
                             {order.customerName}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {order.items} items
+                            {order.items}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             ${order.total}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                              <div className={`w-2 h-2 rounded-full mr-2 ${
-                                order.status === 'delivered' ? 'bg-green-500' :
-                                order.status === 'shipped' ? 'bg-blue-500' :
-                                order.status === 'processing' ? 'bg-yellow-500' :
-                                order.status === 'pending' ? 'bg-gray-500' :
-                                'bg-red-500'
-                              }`} />
-                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                              {getStatusIcon(order.status)}
+                              <span className="ml-1">{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {order.createdAt}
+                            {new Date(order.createdAt).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
                             <button 
@@ -609,24 +733,20 @@ export default function SupplierDashboard() {
                                   <Eye className="h-3 w-3" />
                                   <span>View</span>
                                 </button>
-                                {order.status === 'pending' && (
-                                  <button
-                                    onClick={() => handleOrderAction('process', order.id)}
-                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
-                                  >
-                                    <Clock className="h-3 w-3" />
-                                    <span>Process</span>
-                                  </button>
-                                )}
-                                {order.status === 'processing' && (
-                                  <button
-                                    onClick={() => handleOrderAction('ship', order.id)}
-                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
-                                  >
-                                    <Truck className="h-3 w-3" />
-                                    <span>Ship</span>
-                                  </button>
-                                )}
+                                <button
+                                  onClick={() => handleOrderAction('edit', order.id)}
+                                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
+                                >
+                                  <Edit className="h-3 w-3" />
+                                  <span>Edit</span>
+                                </button>
+                                <button
+                                  onClick={() => handleOrderAction('process', order.id)}
+                                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
+                                >
+                                  <Truck className="h-3 w-3" />
+                                  <span>Process</span>
+                                </button>
                               </div>
                             )}
                           </td>
@@ -634,90 +754,6 @@ export default function SupplierDashboard() {
                       ))}
                     </tbody>
                   </table>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 3: Business Overview and Quick Actions */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Business Overview */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Business Overview</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-900">Store Status</span>
-                    </div>
-                    <span className="text-sm text-green-600 font-medium">Active</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-900">Performance</span>
-                    </div>
-                    <span className="text-sm text-gray-600">Excellent</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-900">Low Stock Items</span>
-                    </div>
-                    <span className="text-sm text-yellow-600 font-medium">{stats.lowStockItems} products</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 bg-primary-600 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-900">Customer Rating</span>
-                    </div>
-                    <span className="text-sm text-gray-600">{stats.averageRating}/5 stars</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <button 
-                    onClick={handleAddProduct}
-                    className="bg-primary-600 rounded-xl p-4 text-white hover:bg-primary-700 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <Plus className="h-5 w-5" />
-                      <ArrowUpRight className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm font-medium">Add Product</p>
-                  </button>
-                  
-                  <button className="bg-gray-900 rounded-xl p-4 text-white hover:bg-gray-800 transition-colors">
-                    <div className="flex items-center justify-between mb-2">
-                      <MessageSquare className="h-5 w-5" />
-                      <ArrowUpRight className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm font-medium">View Messages</p>
-                  </button>
-                  
-                  <button className="bg-white border border-gray-200 rounded-xl p-4 text-gray-900 hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center justify-between mb-2">
-                      <Award className="h-5 w-5 text-gray-600" />
-                      <ArrowUpRight className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <p className="text-sm font-medium">View Analytics</p>
-                  </button>
-                  
-                  <button className="bg-white border border-gray-200 rounded-xl p-4 text-gray-900 hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center justify-between mb-2">
-                      <Settings className="h-5 w-5 text-gray-600" />
-                      <ArrowUpRight className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <p className="text-sm font-medium">Settings</p>
-                  </button>
                 </div>
               </div>
             </div>
@@ -765,7 +801,7 @@ export default function SupplierDashboard() {
                 <div key={notification.id} className={`p-3 rounded-lg border ${!notification.read ? 'bg-primary-50 border-primary-200' : 'bg-gray-50 border-gray-200'}`}>
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium text-gray-900">{notification.title}</h4>
-                    {!notification.read && <div className="w-2 h-2 bg-primary-600 rounded-full"></div>}
+                    {!notification.read && <div className="w-2 h-2 bg-primary-500 rounded-full"></div>}
                   </div>
                   <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
                   <p className="text-xs text-gray-500 mt-2">{notification.date}</p>
@@ -780,14 +816,14 @@ export default function SupplierDashboard() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-96">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Calendar</h3>
+              <h3 className="text-lg font-semibold">Order Calendar</h3>
               <button onClick={() => setShowCalendarModal(false)} className="text-gray-400 hover:text-gray-600">
                 <XCircle className="h-5 w-5" />
               </button>
             </div>
             <div className="text-center py-8">
               <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">Calendar feature coming soon!</p>
+              <p className="text-gray-500">Order calendar feature coming soon!</p>
             </div>
           </div>
         </div>

@@ -9,7 +9,8 @@ import {
   Calendar, Bell, ChevronDown, Wallet, CreditCard, Activity, TrendingDown, 
   ArrowUpRight, MoreHorizontal, Star as StarIcon, MessageSquare, Award, 
   Target, Zap, Truck, Download, FileText, Eye as ViewIcon, Gift, 
-  Shield, CreditCard as CreditCardIcon, Truck as TruckIcon
+  Shield, CreditCard as CreditCardIcon, Truck as TruckIcon, TrendingUp,
+  DollarSign, Users, BarChart3, ShoppingCart as CartIcon
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -63,6 +64,17 @@ interface Notification {
   read: boolean
 }
 
+interface CustomerStats {
+  totalOrders: number
+  totalSpent: number
+  loyaltyPoints: number
+  activeWishlist: number
+  pendingOrders: number
+  completedOrders: number
+  averageRating: number
+  memberSince: string
+}
+
 export default function CustomerDashboard() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState('overview')
@@ -84,6 +96,16 @@ export default function CustomerDashboard() {
     loyaltyPoints: 1250,
     memberSince: '2023-01-15'
   })
+  const [stats, setStats] = useState<CustomerStats>({
+    totalOrders: 24,
+    totalSpent: 2847.50,
+    loyaltyPoints: 1250,
+    activeWishlist: 8,
+    pendingOrders: 2,
+    completedOrders: 22,
+    averageRating: 4.8,
+    memberSince: '2023-01-15'
+  })
   const [loading, setLoading] = useState(true)
   const [isEditingProfile, setIsEditingProfile] = useState(false)
   const [editFormData, setEditFormData] = useState({
@@ -98,12 +120,12 @@ export default function CustomerDashboard() {
       zipCode: '',
       country: ''
     },
-    loyaltyPoints: 0,
-    memberSince: ''
   })
+  const [showFilters, setShowFilters] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
+  const [showMessageModal, setShowMessageModal] = useState(false)
   const [showNotificationModal, setShowNotificationModal] = useState(false)
   const [showCalendarModal, setShowCalendarModal] = useState(false)
   const [showSettingsModal, setShowSettingsModal] = useState(false)
@@ -111,28 +133,24 @@ export default function CustomerDashboard() {
   const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<string>('all')
 
-  // Handle profile edit
+  // Handle profile editing
   const handleEditProfile = () => {
     setEditFormData({
       firstName: profile.firstName,
       lastName: profile.lastName,
       email: profile.email,
       phone: profile.phone,
-      address: { ...profile.address },
-      loyaltyPoints: profile.loyaltyPoints,
-      memberSince: profile.memberSince
+      address: { ...profile.address }
     })
     setIsEditingProfile(true)
   }
 
-  // Handle profile save
   const handleSaveProfile = () => {
-    setProfile(editFormData)
+    setProfile({ ...profile, ...editFormData })
     setIsEditingProfile(false)
-    alert('Profile updated successfully!')
+    // Here you would typically make an API call to update the profile
   }
 
-  // Handle profile cancel
   const handleCancelEdit = () => {
     setIsEditingProfile(false)
   }
@@ -164,14 +182,15 @@ export default function CustomerDashboard() {
   const handleExportData = () => {
     const data = {
       orders: orders,
+      wishlist: wishlist,
       profile: profile,
-      wishlist: wishlist
+      stats: stats
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `customer-data-${new Date().toISOString().split('T')[0]}.json`
+    a.download = `nubiago-customer-data-${new Date().toISOString().split('T')[0]}.json`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -182,6 +201,7 @@ export default function CustomerDashboard() {
   // Handle theme toggle
   const handleThemeToggle = () => {
     setDarkMode(!darkMode)
+    // Apply theme to document
     if (!darkMode) {
       document.documentElement.classList.add('dark')
     } else {
@@ -199,6 +219,7 @@ export default function CustomerDashboard() {
   // Handle tab navigation
   const handleTabChange = (tab: string) => {
     setActiveTab(tab)
+    // Reset search when changing tabs
     setSearchQuery('')
   }
 
@@ -215,10 +236,11 @@ export default function CustomerDashboard() {
         router.push(`/orders/${orderId}`)
         break
       case 'track':
-        router.push(`/orders/${orderId}/track`)
+        router.push(`/order/track/${orderId}`)
         break
-      case 'review':
-        router.push(`/orders/${orderId}/review`)
+      case 'reorder':
+        // Add to cart logic
+        alert('Added to cart for reorder!')
         break
       default:
         break
@@ -227,22 +249,25 @@ export default function CustomerDashboard() {
 
   // Filter orders based on search and status
   const filteredOrders = orders.filter(order => {
-    const matchesSearch = order.id.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch = order.items.some(item => 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || order.id.toLowerCase().includes(searchQuery.toLowerCase())
+    
     const matchesStatus = filterStatus === 'all' || order.status === filterStatus
+    
     return matchesSearch && matchesStatus
   })
 
   useEffect(() => {
-    // Simulate loading user data and orders
     setTimeout(() => {
       setOrders([
         {
           id: 'ORD-001',
           status: 'delivered',
           items: [
-            { name: 'Wireless Headphones', price: 99.99, quantity: 1, image: 'https://firebasestorage.googleapis.com/v0/b/nubiago-a000f.firebasestorage.app/o/categories%2Fcategory-api-5.jpg?alt=media&token=620c447f-6c82-4b5b-b44c-d71ee2c1a494' }
+            { name: 'Premium Wireless Headphones', price: 299.99, quantity: 1, image: '/images/headphones.jpg' }
           ],
-          total: 99.99,
+          total: 299.99,
           createdAt: '2024-01-15',
           estimatedDelivery: '2024-01-20',
           trackingNumber: 'TRK123456789'
@@ -251,10 +276,10 @@ export default function CustomerDashboard() {
           id: 'ORD-002',
           status: 'shipped',
           items: [
-            { name: 'Smart Watch', price: 199.99, quantity: 1, image: 'https://firebasestorage.googleapis.com/v0/b/nubiago-a000f.firebasestorage.app/o/products%2Fproduct-order-2.jpg?alt=media&token=480b2c3e-9a42-4c23-8435-a19ebe5ddde8' }
+            { name: 'Smart Fitness Watch', price: 199.99, quantity: 1, image: '/images/watch.jpg' }
           ],
           total: 199.99,
-          createdAt: '2024-01-20',
+          createdAt: '2024-01-18',
           estimatedDelivery: '2024-01-25',
           trackingNumber: 'TRK987654321'
         },
@@ -262,22 +287,22 @@ export default function CustomerDashboard() {
           id: 'ORD-003',
           status: 'processing',
           items: [
-            { name: 'Women\'s Dress', price: 49.99, quantity: 1, image: '/product-lifestyle-1.jpg' }
+            { name: 'Laptop Stand', price: 49.99, quantity: 1, image: '/images/laptop-stand.jpg' }
           ],
           total: 49.99,
-          createdAt: '2024-01-22',
+          createdAt: '2024-01-20',
           estimatedDelivery: '2024-01-27'
         }
       ])
       setWishlist([
-        { id: 'WISH-001', name: 'Leather Handbag', price: 79.99, image: '/product-accessories-1.jpg', category: 'Shoes & Bags', inStock: true },
-        { id: 'WISH-002', name: 'Kitchen Set', price: 89.99, image: '/product-lifestyle-1.jpg', category: 'Home & Living', inStock: false },
-        { id: 'WISH-003', name: 'Lipstick Set', price: 24.99, image: '/product-home-1.jpg', category: 'Cosmetics', inStock: true }
+        { id: '1', name: 'Gaming Mouse', price: 79.99, image: '/images/mouse.jpg', category: 'Electronics', inStock: true },
+        { id: '2', name: 'Mechanical Keyboard', price: 149.99, image: '/images/keyboard.jpg', category: 'Electronics', inStock: true },
+        { id: '3', name: 'Wireless Charger', price: 39.99, image: '/images/charger.jpg', category: 'Electronics', inStock: false }
       ])
       setNotifications([
-        { id: 'NOT-001', title: 'Order Delivered', message: 'Your order ORD-001 has been delivered successfully.', type: 'order', date: '2024-01-20', read: false },
-        { id: 'NOT-002', title: 'Special Offer', message: 'Get 20% off on all electronics this week!', type: 'promotion', date: '2024-01-19', read: true },
-        { id: 'NOT-003', title: 'Order Shipped', message: 'Your order ORD-002 has been shipped.', type: 'order', date: '2024-01-18', read: true }
+        { id: '1', title: 'Order Delivered', message: 'Your order ORD-001 has been delivered successfully.', type: 'order', date: '2024-01-20', read: false },
+        { id: '2', title: 'Special Offer', message: 'Get 20% off on all electronics this week!', type: 'promotion', date: '2024-01-19', read: true },
+        { id: '3', title: 'Order Shipped', message: 'Your order ORD-002 has been shipped.', type: 'order', date: '2024-01-18', read: true }
       ])
       setLoading(false)
     }, 1000)
@@ -299,6 +324,7 @@ export default function CustomerDashboard() {
       case 'delivered': return <CheckCircle className="h-4 w-4" />
       case 'shipped': return <Truck className="h-4 w-4" />
       case 'processing': return <Clock className="h-4 w-4" />
+      case 'pending': return <Clock className="h-4 w-4" />
       case 'cancelled': return <XCircle className="h-4 w-4" />
       default: return <Clock className="h-4 w-4" />
     }
@@ -313,186 +339,262 @@ export default function CustomerDashboard() {
   }
 
   const sidebarItems = [
-    { id: 'theme', icon: darkMode ? Moon : Sun, label: 'Theme' },
-    { id: 'overview', icon: Grid3X3, label: 'Overview' },
-    { id: 'calendar', icon: Calendar, label: 'Calendar' },
-    { id: 'orders', icon: Package, label: 'Orders' },
-    { id: 'wishlist', icon: Heart, label: 'Wishlist' },
-    { id: 'notifications', icon: Bell, label: 'Notifications' },
-    { id: 'profile', icon: User, label: 'Profile' },
-    { id: 'settings', icon: Settings, label: 'Settings' }
+    { id: 'overview', icon: Grid3X3, label: 'Overview', path: '/customer' },
+    { id: 'orders', icon: ShoppingBag, label: 'Order Management', path: '/customer/orders' },
+    { id: 'wishlist', icon: Heart, label: 'Wishlist', path: '/customer/wishlist' },
+    { id: 'profile', icon: User, label: 'Profile Settings', path: '/customer/profile' },
+    { id: 'notifications', icon: Bell, label: 'Notifications', path: '/customer/notifications' },
+    { id: 'support', icon: MessageSquare, label: 'Support', path: '/customer/support' },
+    { id: 'settings', icon: Settings, label: 'Settings', path: '/customer/settings' }
   ]
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Left Sidebar */}
-      <div className="w-16 bg-white shadow-sm flex flex-col items-center py-6 space-y-6">
-        {sidebarItems.map(({ id, icon: Icon, label }) => (
-          <button
-            key={id}
-            onClick={() => {
-              if (id === 'theme') {
-                handleThemeToggle()
-              } else if (id === 'calendar') {
-                setShowCalendarModal(true)
-              } else if (id === 'notifications') {
-                setShowNotificationModal(true)
-              } else if (id === 'settings') {
-                setShowSettingsModal(true)
-              } else {
-                handleTabChange(id)
-              }
-            }}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-              id === 'theme' 
-                ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                : activeTab === id 
-                  ? 'bg-primary-600 text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-            title={label}
-          >
-            <Icon className="h-5 w-5" />
-          </button>
-        ))}
-        
-        <div className="flex-1" />
-        
-        <button
-          onClick={handleLogout}
-          className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
-          title="Logout"
-        >
-          <LogOut className="h-5 w-5" />
-        </button>
-      </div>
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Top Header */}
         <header className="bg-white shadow-sm px-8 py-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Welcome back, {profile.firstName}!</h1>
-            <p className="text-gray-600 mt-1">Track your orders, manage your profile, and discover new products.</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Welcome back, {profile.firstName}!</h1>
+              <p className="text-gray-600 mt-1">Manage your orders, track deliveries, and explore your shopping experience.</p>
+            </div>
+            <div className="flex items-center space-x-3">
+              {/* Theme Toggle */}
+              <button
+                onClick={handleThemeToggle}
+                className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
+              
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </header>
 
         {/* Main Content Area */}
-        <div className="flex-1 p-8">
-          <div className="space-y-8">
-            {/* Row 1: Total Spent, Summary Cards, Chart */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Total Spent Card */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Total Spent</h3>
-                  <div className="flex items-center space-x-2">
-                    <Wallet className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">This Year</span>
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
+        <div className="flex-1 flex">
+          {/* Left Sidebar Navigation */}
+          <div className="w-80 bg-white shadow-sm border-r border-gray-200 p-6">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Quick Navigation</h3>
+              <p className="text-sm text-gray-600">Access all customer sections quickly</p>
+            </div>
+            
+            <div className="space-y-3">
+              {sidebarItems.map(({ id, icon: Icon, label, path }) => (
+                <button
+                  key={id}
+                  onClick={() => {
+                    if (id === 'overview') {
+                      handleTabChange('overview')
+                    } else if (path) {
+                      router.push(path)
+                    }
+                  }}
+                  className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-colors ${
+                    activeTab === id 
+                      ? 'bg-primary-50 border border-primary-200 text-primary-700' 
+                      : 'hover:bg-gray-50 text-gray-700'
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    activeTab === id 
+                      ? 'bg-primary-100 text-primary-600' 
+                      : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    <Icon className="h-5 w-5" />
                   </div>
-                </div>
-                <div className="mb-6">
-                  <p className="text-3xl font-bold text-gray-900">${orders.reduce((sum, order) => sum + order.total, 0).toLocaleString()}</p>
-                  <div className="flex items-center mt-2">
-                    <ArrowUpRight className="h-4 w-4 text-green-600 mr-1" />
-                    <span className="text-sm text-green-600">+15% this month</span>
+                  <div>
+                    <p className="font-medium">{label}</p>
+                    <p className="text-xs text-gray-500">Manage {label.toLowerCase()}</p>
                   </div>
-                </div>
-                <div className="flex space-x-3">
-                  <button 
-                    onClick={handleExportData}
-                    className="flex-1 bg-primary-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <FileText className="h-4 w-4" />
-                    <span>Export Data</span>
-                  </button>
-                  <button 
-                    onClick={() => router.push('/products')}
-                    className="flex-1 bg-gray-100 text-gray-900 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <ShoppingBag className="h-4 w-4" />
-                    <span>Shop Now</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Summary Cards Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-primary-600 rounded-xl p-4 text-white">
-                  <div className="flex items-center justify-between mb-2">
-                    <Package className="h-5 w-5" />
-                    <ArrowUpRight className="h-4 w-4" />
-                  </div>
-                  <p className="text-2xl font-bold">{orders.length}</p>
-                  <p className="text-sm opacity-90">Total Orders</p>
-                  <div className="flex items-center mt-2">
-                    <ArrowUpRight className="h-3 w-3 mr-1" />
-                    <span className="text-xs">This year</span>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-xl p-4 shadow-sm">
-                  <div className="flex items-center justify-between mb-2">
-                    <Heart className="h-5 w-5 text-red-500" />
-                    <ArrowUpRight className="h-4 w-4 text-red-500" />
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">{wishlist.length}</p>
-                  <p className="text-sm text-gray-600">Wishlist Items</p>
-                  <div className="flex items-center mt-2">
-                    <ArrowUpRight className="h-3 w-3 text-red-500 mr-1" />
-                    <span className="text-xs text-red-500">Saved items</span>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-xl p-4 shadow-sm">
-                  <div className="flex items-center justify-between mb-2">
-                    <StarIcon className="h-5 w-5 text-yellow-500" />
-                    <ArrowUpRight className="h-4 w-4 text-yellow-500" />
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">{profile.loyaltyPoints}</p>
-                  <p className="text-sm text-gray-600">Loyalty Points</p>
-                  <div className="flex items-center mt-2">
-                    <ArrowUpRight className="h-3 w-3 text-yellow-500 mr-1" />
-                    <span className="text-xs text-yellow-500">Earned</span>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-xl p-4 shadow-sm">
-                  <div className="flex items-center justify-between mb-2">
-                    <ShoppingCart className="h-5 w-5 text-gray-600" />
-                    <ArrowUpRight className="h-4 w-4 text-gray-600" />
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">3</p>
-                  <p className="text-sm text-gray-600">Cart Items</p>
-                  <div className="flex items-center mt-2">
-                    <ArrowUpRight className="h-3 w-3 text-gray-600 mr-1" />
-                    <span className="text-xs text-gray-600">Ready to buy</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Chart */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Shopping Activity</h3>
-                <p className="text-sm text-gray-600 mb-6">Your shopping patterns over time</p>
-                <div className="h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <Activity className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500">Chart Component</p>
-                    <p className="text-xs text-gray-400">Coming soon</p>
-                  </div>
-                </div>
-              </div>
+                </button>
+              ))}
             </div>
 
-            {/* Row 2: Recent Orders and Wishlist */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Recent Orders Table */}
-              <div className="lg:col-span-2 bg-white rounded-xl shadow-sm">
+            {/* Quick Actions */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h4 className="text-sm font-medium text-gray-900 mb-3">Quick Actions</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => setShowMessageModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span>Contact Support</span>
+                </button>
+                <button
+                  onClick={() => setShowNotificationModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <Bell className="h-4 w-4" />
+                  <span>Notifications</span>
+                </button>
+                <button
+                  onClick={() => setShowCalendarModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <Calendar className="h-4 w-4" />
+                  <span>Order Calendar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Dashboard Content */}
+          <div className="flex-1 p-8">
+            <div className="space-y-8">
+              {/* Row 1: Overview Cards */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                {/* Total Orders Card */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <ShoppingBag className="h-8 w-8 text-primary-600" />
+                    <TrendingUp className="h-5 w-5 text-green-600" />
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">{stats.totalOrders}</p>
+                  <p className="text-sm text-gray-600">Total Orders</p>
+                  <div className="flex items-center mt-2">
+                    <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                    <span className="text-xs text-green-600">+12% this month</span>
+                  </div>
+                </div>
+
+                {/* Total Spent Card */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <DollarSign className="h-8 w-8 text-green-600" />
+                    <TrendingUp className="h-5 w-5 text-green-600" />
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">${stats.totalSpent.toLocaleString()}</p>
+                  <p className="text-sm text-gray-600">Total Spent</p>
+                  <div className="flex items-center mt-2">
+                    <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                    <span className="text-xs text-green-600">+8% this month</span>
+                  </div>
+                </div>
+
+                {/* Loyalty Points Card */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Award className="h-8 w-8 text-yellow-600" />
+                    <Star className="h-5 w-5 text-yellow-600" />
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">{stats.loyaltyPoints}</p>
+                  <p className="text-sm text-gray-600">Loyalty Points</p>
+                  <div className="flex items-center mt-2">
+                    <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                    <span className="text-xs text-green-600">+150 this month</span>
+                  </div>
+                </div>
+
+                {/* Wishlist Card */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Heart className="h-8 w-8 text-red-600" />
+                    <Plus className="h-5 w-5 text-red-600" />
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">{stats.activeWishlist}</p>
+                  <p className="text-sm text-gray-600">Wishlist Items</p>
+                  <div className="flex items-center mt-2">
+                    <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
+                    <span className="text-xs text-green-600">+2 this month</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 2: Recent Orders and Quick Stats */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Recent Orders */}
+                <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
+                    <Link href="/customer/orders" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                      View All Orders
+                    </Link>
+                  </div>
+                  <div className="space-y-4">
+                    {orders.slice(0, 3).map((order) => (
+                      <div key={order.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                            <Package className="h-5 w-5 text-primary-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{order.id}</p>
+                            <p className="text-sm text-gray-600">
+                              {order.items.length} item{order.items.length > 1 ? 's' : ''} • ${order.total}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                            {getStatusIcon(order.status)}
+                            <span className="ml-1">{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+                          </span>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {new Date(order.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Quick Stats */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-900">Member Since</span>
+                      </div>
+                      <span className="text-sm text-gray-600">{new Date(stats.memberSince).toLocaleDateString()}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-900">Average Rating</span>
+                      </div>
+                      <span className="text-sm text-gray-600">{stats.averageRating}★</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-900">Pending Orders</span>
+                      </div>
+                      <span className="text-sm text-yellow-600 font-medium">{stats.pendingOrders}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 bg-primary-600 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-900">Completed Orders</span>
+                      </div>
+                      <span className="text-sm text-gray-600">{stats.completedOrders}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 3: Orders Table */}
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-200">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">Order Management</h3>
                     <div className="flex items-center space-x-3">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -527,6 +629,12 @@ export default function CustomerDashboard() {
                               Pending
                             </button>
                             <button
+                              onClick={() => { setFilterStatus('processing'); setShowFilterDropdown(false); }}
+                              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                            >
+                              Processing
+                            </button>
+                            <button
                               onClick={() => { setFilterStatus('shipped'); setShowFilterDropdown(false); }}
                               className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
                             >
@@ -558,7 +666,7 @@ export default function CustomerDashboard() {
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
@@ -579,25 +687,19 @@ export default function CustomerDashboard() {
                             {order.id}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {order.items.length} items
+                            {order.items.map(item => item.name).join(', ')}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             ${order.total}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                              <div className={`w-2 h-2 rounded-full mr-2 ${
-                                order.status === 'delivered' ? 'bg-green-500' :
-                                order.status === 'shipped' ? 'bg-blue-500' :
-                                order.status === 'processing' ? 'bg-yellow-500' :
-                                order.status === 'pending' ? 'bg-gray-500' :
-                                'bg-red-500'
-                              }`} />
-                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                              {getStatusIcon(order.status)}
+                              <span className="ml-1">{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {order.createdAt}
+                            {new Date(order.createdAt).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
                             <button 
@@ -615,24 +717,20 @@ export default function CustomerDashboard() {
                                   <Eye className="h-3 w-3" />
                                   <span>View</span>
                                 </button>
-                                {order.trackingNumber && (
-                                  <button
-                                    onClick={() => handleOrderAction('track', order.id)}
-                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
-                                  >
-                                    <Truck className="h-3 w-3" />
-                                    <span>Track</span>
-                                  </button>
-                                )}
-                                {order.status === 'delivered' && (
-                                  <button
-                                    onClick={() => handleOrderAction('review', order.id)}
-                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
-                                  >
-                                    <Star className="h-3 w-3" />
-                                    <span>Review</span>
-                                  </button>
-                                )}
+                                <button
+                                  onClick={() => handleOrderAction('track', order.id)}
+                                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
+                                >
+                                  <Truck className="h-3 w-3" />
+                                  <span>Track</span>
+                                </button>
+                                <button
+                                  onClick={() => handleOrderAction('reorder', order.id)}
+                                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center space-x-2"
+                                >
+                                  <ShoppingCart className="h-3 w-3" />
+                                  <span>Reorder</span>
+                                </button>
                               </div>
                             )}
                           </td>
@@ -642,138 +740,31 @@ export default function CustomerDashboard() {
                   </table>
                 </div>
               </div>
-
-              {/* Wishlist Section */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">Wishlist</h3>
-                  <span className="text-sm text-gray-600">{wishlist.length} items</span>
-                </div>
-                <div className="space-y-4">
-                  {wishlist.slice(0, 3).map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <Heart className="h-5 w-5 text-red-500" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">{item.name}</p>
-                          <p className="text-sm text-gray-600">{item.category}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-sm text-gray-900 font-medium">${item.price}</span>
-                        <div className="flex items-center mt-1">
-                          {item.inStock ? (
-                            <span className="text-xs text-green-600">In Stock</span>
-                          ) : (
-                            <span className="text-xs text-red-600">Out of Stock</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Row 3: Account Overview and Quick Actions */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Account Overview */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Overview</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-900">Account Status</span>
-                    </div>
-                    <span className="text-sm text-green-600 font-medium">Active</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-900">Member Since</span>
-                    </div>
-                    <span className="text-sm text-gray-600">{profile.memberSince}</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-900">Loyalty Points</span>
-                    </div>
-                    <span className="text-sm text-yellow-600 font-medium">{profile.loyaltyPoints} pts</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 bg-primary-600 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-900">Total Spent</span>
-                    </div>
-                    <span className="text-sm text-gray-600">${orders.reduce((sum, order) => sum + order.total, 0).toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <button 
-                    onClick={() => router.push('/products')}
-                    className="bg-primary-600 rounded-xl p-4 text-white hover:bg-primary-700 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <ShoppingBag className="h-5 w-5" />
-                      <ArrowUpRight className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm font-medium">Shop Now</p>
-                  </button>
-                  
-                  <button 
-                    onClick={() => router.push('/wishlist')}
-                    className="bg-gray-900 rounded-xl p-4 text-white hover:bg-gray-800 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <Heart className="h-5 w-5" />
-                      <ArrowUpRight className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm font-medium">Wishlist</p>
-                  </button>
-                  
-                  <button 
-                    onClick={() => router.push('/orders')}
-                    className="bg-white border border-gray-200 rounded-xl p-4 text-gray-900 hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <Package className="h-5 w-5 text-gray-600" />
-                      <ArrowUpRight className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <p className="text-sm font-medium">My Orders</p>
-                  </button>
-                  
-                  <button 
-                    onClick={() => router.push('/profile')}
-                    className="bg-white border border-gray-200 rounded-xl p-4 text-gray-900 hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <User className="h-5 w-5 text-gray-600" />
-                      <ArrowUpRight className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <p className="text-sm font-medium">Profile</p>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Modals */}
+      {showMessageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-96 max-h-96 overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Contact Support</h3>
+              <button onClick={() => setShowMessageModal(false)} className="text-gray-400 hover:text-gray-600">
+                <XCircle className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div className="text-center py-8">
+                <MessageSquare className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-500">Contact support feature coming soon!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showNotificationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-96 max-h-96 overflow-y-auto">
@@ -788,7 +779,7 @@ export default function CustomerDashboard() {
                 <div key={notification.id} className={`p-3 rounded-lg border ${!notification.read ? 'bg-primary-50 border-primary-200' : 'bg-gray-50 border-gray-200'}`}>
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium text-gray-900">{notification.title}</h4>
-                    {!notification.read && <div className="w-2 h-2 bg-primary-600 rounded-full"></div>}
+                    {!notification.read && <div className="w-2 h-2 bg-primary-500 rounded-full"></div>}
                   </div>
                   <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
                   <p className="text-xs text-gray-500 mt-2">{notification.date}</p>
@@ -803,14 +794,14 @@ export default function CustomerDashboard() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-96">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Calendar</h3>
+              <h3 className="text-lg font-semibold">Order Calendar</h3>
               <button onClick={() => setShowCalendarModal(false)} className="text-gray-400 hover:text-gray-600">
                 <XCircle className="h-5 w-5" />
               </button>
             </div>
             <div className="text-center py-8">
               <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">Calendar feature coming soon!</p>
+              <p className="text-gray-500">Order calendar feature coming soon!</p>
             </div>
           </div>
         </div>
@@ -836,13 +827,13 @@ export default function CustomerDashboard() {
                 </button>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Email Notifications</span>
+                <span className="text-sm font-medium">Notifications</span>
                 <button className="w-12 h-6 rounded-full bg-primary-600">
                   <div className="w-4 h-4 bg-white rounded-full transform translate-x-6"></div>
                 </button>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">SMS Notifications</span>
+                <span className="text-sm font-medium">Auto-refresh</span>
                 <button className="w-12 h-6 rounded-full bg-gray-300">
                   <div className="w-4 h-4 bg-white rounded-full transform translate-x-1"></div>
                 </button>

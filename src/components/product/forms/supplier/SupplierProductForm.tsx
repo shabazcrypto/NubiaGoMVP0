@@ -113,7 +113,7 @@ export default function SupplierProductForm({
 
       await onSubmit(combinedData)
       success('Product submitted for approval successfully!')
-      router.push('/supplier/products')
+      router.push('/products/supplier')
     } catch (err) {
       error('Failed to submit product for approval')
       throw err

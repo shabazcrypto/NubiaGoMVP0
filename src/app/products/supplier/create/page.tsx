@@ -64,7 +64,7 @@ export default function SupplierCreateProductPage() {
       console.log('Supplier submitting product for approval:', data)
       
       success('Product submitted for approval successfully!')
-      router.push('/supplier/products')
+      router.push('/products/supplier')
     } catch (err) {
       error('Failed to submit product for approval')
       console.error('Error submitting product:', err)
@@ -74,7 +74,7 @@ export default function SupplierCreateProductPage() {
   }
 
   const handleCancel = () => {
-    router.push('/supplier/products')
+    router.push('/products/supplier')
   }
 
   // Show loading while getting supplier ID

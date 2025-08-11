@@ -155,7 +155,7 @@ export default function SupplierDashboard() {
           // Handle add product
         const handleAddProduct = () => {
     // Navigate to product creation
-    router.push('/supplier/products/create')
+    router.push('/products/supplier/create')
         }
 
   // Handle theme toggle
@@ -324,7 +324,7 @@ export default function SupplierDashboard() {
 
   const sidebarItems = [
     { id: 'overview', icon: Grid3X3, label: 'Overview', path: '/supplier' },
-    { id: 'products', icon: Package, label: 'Product Management', path: '/supplier/products' },
+            { id: 'products', icon: Package, label: 'Product Management', path: '/products/supplier' },
     { id: 'orders', icon: ShoppingBag, label: 'Order Processing', path: '/supplier/orders' },
     { id: 'analytics', icon: BarChart3, label: 'Analytics & Reports', path: '/supplier/analytics' },
     { id: 'customers', icon: Users, label: 'Customer Management', path: '/supplier/customers' },

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export interface SearchHistoryItem {
   id: string
@@ -83,7 +83,13 @@ export const useSearchHistoryStore = create<SearchHistoryState>()(
       }
     }),
     {
-      name: 'search-history-storage'
+      name: 'search-history-storage',
+      storage: createJSONStorage(() => (typeof window !== 'undefined' ? window.localStorage : undefined as unknown as Storage)),
+      partialize: (state) => ({
+        history: state.history,
+        recentSearches: state.recentSearches,
+        popularSearches: state.popularSearches,
+      }) as unknown as SearchHistoryState,
     }
   )
 )

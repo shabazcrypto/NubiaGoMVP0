@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   Users, Shield, BarChart3, Settings, LogOut, Search, 
-  Eye, Edit, CheckCircle, XCircle, Clock, TrendingUp, DollarSign,
+  Edit, CheckCircle, XCircle, Clock, TrendingUp, DollarSign,
   Package, ShoppingBag, ArrowRight, Filter, Plus, Sun, Moon,
   Grid3X3, Calendar, Mail, List, User, Bell, ChevronDown,
   Wallet, CreditCard, Activity, TrendingDown, ArrowUpRight,
   MoreHorizontal, Flag, Star, ShoppingCart, Store, Globe,
-  Download, FileText, Eye as ViewIcon, Zap
+  Download, FileText, Zap, Eye
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -327,65 +327,18 @@ export default function AdminDashboard() {
   }
 
   const sidebarItems = [
-    { id: 'theme', icon: darkMode ? Moon : Sun, label: 'Theme' },
-    { id: 'overview', icon: Grid3X3, label: 'Overview' },
-    { id: 'calendar', icon: Calendar, label: 'Calendar' },
-    { id: 'messages', icon: Mail, label: 'Messages' },
-    { id: 'users', icon: Users, label: 'Users' },
-    { id: 'suppliers', icon: Shield, label: 'Suppliers' },
-    { id: 'notifications', icon: Bell, label: 'Notifications' },
-    { id: 'apis', icon: Zap, label: 'APIs' },
-    { id: 'settings', icon: Settings, label: 'Settings' }
+    { id: 'overview', icon: Grid3X3, label: 'Overview', path: '/admin' },
+    { id: 'users', icon: Users, label: 'User Management', path: '/admin/users' },
+    { id: 'suppliers', icon: Shield, label: 'Supplier Management', path: '/admin/suppliers' },
+    { id: 'orders', icon: ShoppingCart, label: 'Order Management', path: '/admin/orders' },
+    { id: 'approvals', icon: CheckCircle, label: 'Approval System', path: '/admin/approvals' },
+    { id: 'monitoring', icon: BarChart3, label: 'System Monitoring', path: '/admin/monitoring' },
+    { id: 'apis', icon: Zap, label: 'API Management', path: '/admin/apis' },
+    { id: 'settings', icon: Settings, label: 'Settings', path: '/admin/settings' }
   ]
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Left Sidebar */}
-      <div className="w-16 bg-white shadow-sm flex flex-col items-center py-6 space-y-6">
-        {sidebarItems.map(({ id, icon: Icon, label }) => (
-          <button
-            key={id}
-            onClick={() => {
-              if (id === 'theme') {
-                handleThemeToggle()
-              } else if (id === 'calendar') {
-                setShowCalendarModal(true)
-              } else if (id === 'messages') {
-                setShowMessageModal(true)
-              } else if (id === 'notifications') {
-                setShowNotificationModal(true)
-              } else if (id === 'apis') {
-                router.push('/admin/apis')
-              } else if (id === 'settings') {
-                setShowSettingsModal(true)
-              } else {
-                handleTabChange(id)
-              }
-            }}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-              id === 'theme' 
-                ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                : activeTab === id 
-                  ? 'bg-primary-600 text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-            title={label}
-          >
-            <Icon className="h-5 w-5" />
-          </button>
-        ))}
-        
-        <div className="flex-1" />
-        
-        <button
-          onClick={handleLogout}
-          className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
-          title="Logout"
-        >
-          <LogOut className="h-5 w-5" />
-        </button>
-      </div>
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Top Header */}
@@ -396,18 +349,98 @@ export default function AdminDashboard() {
               <p className="text-gray-600 mt-1">Stay on top of your marketplace, monitor orders, and track performance.</p>
             </div>
             <div className="flex items-center space-x-3">
+              {/* Theme Toggle */}
               <button
-                onClick={() => router.push('/admin/apis')}
-                className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                onClick={handleThemeToggle}
+                className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               >
-                <Zap className="h-4 w-4" />
-                <span>Manage APIs</span>
+                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
+              
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
               </button>
             </div>
           </div>
         </header>
 
         {/* Main Content Area */}
+        <div className="flex-1 flex">
+          {/* Left Sidebar Navigation */}
+          <div className="w-80 bg-white shadow-sm border-r border-gray-200 p-6">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Quick Navigation</h3>
+              <p className="text-sm text-gray-600">Access all admin sections quickly</p>
+            </div>
+            
+            <div className="space-y-3">
+              {sidebarItems.map(({ id, icon: Icon, label, path }) => (
+          <button
+            key={id}
+            onClick={() => {
+                    if (id === 'overview') {
+                      handleTabChange('overview')
+                    } else if (path) {
+                      router.push(path)
+                    }
+                  }}
+                  className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-colors ${
+                    activeTab === id 
+                      ? 'bg-primary-50 border border-primary-200 text-primary-700' 
+                      : 'hover:bg-gray-50 text-gray-700'
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    activeTab === id 
+                      ? 'bg-primary-100 text-primary-600' 
+                      : 'bg-gray-100 text-gray-600'
+                  }`}>
+            <Icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{label}</p>
+                    <p className="text-xs text-gray-500">Manage {label.toLowerCase()}</p>
+                  </div>
+          </button>
+        ))}
+            </div>
+
+            {/* Quick Actions */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h4 className="text-sm font-medium text-gray-900 mb-3">Quick Actions</h4>
+              <div className="space-y-2">
+        <button
+                  onClick={() => setShowMessageModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+        >
+                  <Mail className="h-4 w-4" />
+                  <span>View Messages</span>
+        </button>
+              <button
+                  onClick={() => setShowNotificationModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <Bell className="h-4 w-4" />
+                  <span>Notifications</span>
+                </button>
+                <button
+                  onClick={() => setShowCalendarModal(true)}
+                  className="w-full flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <Calendar className="h-4 w-4" />
+                  <span>Calendar</span>
+              </button>
+            </div>
+          </div>
+          </div>
+
+          {/* Main Dashboard Content */}
         <div className="flex-1 p-8">
           <div className="space-y-8">
             {/* Row 1: Total Revenue, Summary Cards, Chart */}
@@ -810,6 +843,9 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
+          </div>
+
+
         </div>
       </div>
 

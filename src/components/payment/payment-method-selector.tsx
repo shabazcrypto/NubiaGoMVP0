@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { CreditCard, Smartphone, Building2, Wallet } from 'lucide-react'
 import { CreditCardForm } from './credit-card-form'
 import { MobileMoneyForm } from './mobile-money-form'
+import { EnhancedMobileMoneyPayment } from './enhanced-mobile-money-payment'
 import { PaymentForm } from './payment-form'
 
 interface PaymentMethod {
@@ -18,6 +19,7 @@ interface PaymentMethod {
 interface PaymentMethodSelectorProps {
   amount: number
   currency: string
+  orderId?: string
   onSuccess?: (paymentData: any) => void
   onError?: (error: string) => void
   className?: string
@@ -26,6 +28,7 @@ interface PaymentMethodSelectorProps {
 export function PaymentMethodSelector({ 
   amount, 
   currency, 
+  orderId = `ORDER-${Date.now()}`,
   onSuccess, 
   onError, 
   className = '' 
@@ -92,11 +95,12 @@ export function PaymentMethodSelector({
         )
       case 'mobile_money':
         return (
-          <MobileMoneyForm
+          <EnhancedMobileMoneyPayment
+            orderId={orderId}
             amount={amount}
             currency={currency}
-            onSuccess={() => handlePaymentSuccess({})}
-            onError={handlePaymentError}
+            onPaymentComplete={(paymentId) => handlePaymentSuccess({ paymentId, method: 'mobile_money' })}
+            onPaymentFailed={handlePaymentError}
           />
         )
       case 'bank_transfer':
@@ -105,7 +109,7 @@ export function PaymentMethodSelector({
           <PaymentForm
             amount={amount}
             currency={currency}
-            orderId={`ORDER-${Date.now()}`}
+            orderId={orderId}
             onSuccess={() => handlePaymentSuccess({})}
             onError={handlePaymentError}
           />
@@ -116,95 +120,84 @@ export function PaymentMethodSelector({
   }
 
   return (
-    <div className={`bg-white rounded-lg shadow ${className}`}>
-      <div className="p-6 border-b border-gray-200">
-        <h2 className="text-lg font-medium text-gray-900 mb-2">Choose Payment Method</h2>
-        <p className="text-sm text-gray-600">
-          Select your preferred payment method to complete your purchase
-        </p>
-      </div>
-
-      <div className="p-6">
-        {!selectedMethod ? (
-          // Payment Method Selection
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {paymentMethods.map((method) => (
-                <button
-                  key={method.id}
-                  onClick={() => handleMethodSelect(method.id)}
-                  disabled={!method.available}
-                  className={`relative p-4 border rounded-lg text-left transition-all ${
-                    method.available
-                      ? 'border-gray-300 hover:border-primary-500 hover:bg-primary-50 cursor-pointer'
-                      : 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-2 rounded-lg ${
-                      method.available ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-400'
-                    }`}>
-                      {method.icon}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className={`font-medium ${
-                        method.available ? 'text-gray-900' : 'text-gray-500'
-                      }`}>
-                        {method.name}
-                      </h3>
-                      <p className={`text-sm ${
-                        method.available ? 'text-gray-600' : 'text-gray-400'
-                      }`}>
-                        {method.description}
-                      </p>
-                    </div>
-                  </div>
+    <div className={`space-y-6 ${className}`}>
+      {/* Payment Method Selection */}
+      <div>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Choose Payment Method</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {paymentMethods.map((method) => (
+            <label
+              key={method.id}
+              className={`relative flex items-start p-4 border rounded-lg cursor-pointer transition-all ${
+                selectedMethod === method.id
+                  ? 'border-blue-500 bg-blue-50 shadow-md'
+                  : method.available
+                    ? 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                    : 'border-gray-200 bg-gray-100 cursor-not-allowed opacity-60'
+              }`}
+            >
+              <input
+                type="radio"
+                name="paymentMethod"
+                value={method.id}
+                checked={selectedMethod === method.id}
+                onChange={() => handleMethodSelect(method.id)}
+                disabled={!method.available}
+                className="sr-only"
+              />
+              <div className="flex items-center space-x-3">
+                <div className={`p-2 rounded-lg ${
+                  selectedMethod === method.id ? 'bg-blue-100' : 'bg-gray-100'
+                }`}>
+                  {method.icon}
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-gray-900">{method.name}</div>
+                  <div className="text-sm text-gray-500">{method.description}</div>
                   {!method.available && (
-                    <div className="absolute top-2 right-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                        Coming Soon
-                      </span>
-                    </div>
+                    <div className="text-xs text-gray-400 mt-1">Coming soon</div>
                   )}
-                </button>
-              ))}
-            </div>
-
-            {/* Payment Summary */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Total Amount:</span>
-                <span className="font-semibold text-lg">
-                  {amount.toLocaleString()} {currency}
-                </span>
+                </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          // Selected Payment Form
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <button
-                onClick={() => setSelectedMethod('')}
-                className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                <span>Change Payment Method</span>
-              </button>
-              <div className="flex items-center space-x-2">
-                {paymentMethods.find(m => m.id === selectedMethod)?.icon}
-                <span className="font-medium text-gray-900">
-                  {paymentMethods.find(m => m.id === selectedMethod)?.name}
-                </span>
-              </div>
-            </div>
-
-            {renderPaymentForm()}
-          </div>
-        )}
+              {selectedMethod === method.id && (
+                <div className="absolute top-2 right-2 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                </div>
+              )}
+            </label>
+          ))}
+        </div>
       </div>
+
+      {/* Payment Form */}
+      {selectedMethod && (
+        <div className="border-t pt-6">
+          {renderPaymentForm()}
+        </div>
+      )}
+
+      {/* Payment Summary */}
+      {selectedMethod && (
+        <div className="bg-gray-50 rounded-lg p-4">
+          <h4 className="font-medium text-gray-900 mb-2">Payment Summary</h4>
+          <div className="space-y-2 text-sm text-gray-600">
+            <div className="flex justify-between">
+              <span>Amount:</span>
+              <span className="font-medium">{currency} {amount.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Method:</span>
+              <span className="font-medium">
+                {paymentMethods.find(m => m.id === selectedMethod)?.name}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Order ID:</span>
+              <span className="font-medium font-mono">{orderId}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 } 

@@ -21,6 +21,11 @@ interface SupplierProductFormData extends ProductFormData {
   maxOrderQuantity?: number
   minOrderQuantity?: number
   leadTime?: number // Days to fulfill
+  // SEO Optimization Fields
+  seoTitle?: string
+  seoDescription?: string
+  metaKeywords?: string[]
+  productHighlights?: string[]
 }
 
 interface SupplierProductFormProps extends Omit<ProductFormProps, 'mode' | 'onSubmit'> {
@@ -68,6 +73,11 @@ export default function SupplierProductForm({
     maxOrderQuantity: undefined,
     minOrderQuantity: 1,
     leadTime: 3, // Default 3 days
+    // SEO Optimization Fields
+    seoTitle: '',
+    seoDescription: '',
+    metaKeywords: [],
+    productHighlights: [],
     ...initialData
   })
 
@@ -327,6 +337,135 @@ export default function SupplierProductForm({
                   Lead time should reflect actual fulfillment capability
                 </li>
               </ul>
+            </div>
+
+            {/* SEO Optimization */}
+            <div className="space-y-4">
+              <h4 className="text-md font-medium text-gray-900 flex items-center">
+                <Eye className="h-4 w-4 mr-2" />
+                SEO Optimization
+              </h4>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    SEO Title
+                  </label>
+                  <input
+                    type="text"
+                    value={supplierFormData.seoTitle || ''}
+                    onChange={(e) => handleSupplierFieldChange('seoTitle', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="Enter SEO-optimized title (max 60 characters)"
+                    maxLength={60}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {supplierFormData.seoTitle?.length || 0}/60 characters
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Meta Description
+                  </label>
+                  <textarea
+                    value={supplierFormData.seoDescription || ''}
+                    onChange={(e) => handleSupplierFieldChange('seoDescription', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="Enter SEO-optimized description (max 160 characters)"
+                    maxLength={160}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {supplierFormData.seoDescription?.length || 0}/160 characters
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Meta Keywords
+                  </label>
+                  <div className="space-y-2">
+                    <div className="flex space-x-2">
+                      <input
+                        type="text"
+                        placeholder="Add keyword"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            const input = e.target as HTMLInputElement
+                            if (input.value.trim()) {
+                              handleSupplierFieldChange('metaKeywords', [...(supplierFormData.metaKeywords || []), input.value.trim()])
+                              input.value = ''
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                    {supplierFormData.metaKeywords && supplierFormData.metaKeywords.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {supplierFormData.metaKeywords.map((keyword, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                          >
+                            {keyword}
+                            <button
+                              type="button"
+                              onClick={() => handleSupplierFieldChange('metaKeywords', supplierFormData.metaKeywords?.filter((_, i) => i !== index) || [])}
+                              className="ml-2 text-blue-600 hover:text-blue-800"
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Product Highlights
+                  </label>
+                  <div className="space-y-2">
+                    <div className="flex space-x-2">
+                      <input
+                        type="text"
+                        placeholder="Add product highlight"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            const input = e.target as HTMLInputElement
+                            if (input.value.trim()) {
+                              handleSupplierFieldChange('productHighlights', [...(supplierFormData.productHighlights || []), input.value.trim()])
+                              input.value = ''
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                    {supplierFormData.productHighlights && supplierFormData.productHighlights.length > 0 && (
+                      <div className="space-y-2">
+                        {supplierFormData.productHighlights.map((highlight, index) => (
+                          <div key={index} className="flex items-center space-x-2">
+                            <span className="text-blue-600">•</span>
+                            <span className="flex-1 text-sm text-gray-700">{highlight}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleSupplierFieldChange('productHighlights', supplierFormData.productHighlights?.filter((_, i) => i !== index) || [])}
+                              className="text-red-600 hover:text-red-800"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Status Indicators */}

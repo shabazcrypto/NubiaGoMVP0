@@ -42,7 +42,7 @@ export default function StoreProvider({ children }: StoreProviderProps) {
 
         // Add a very short timeout to prevent long loading
         const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Store rehydration timeout')), 1500)
+          setTimeout(() => reject(new Error('Store rehydration timeout')), 800)
         )
         
         const rehydratePromise = useSearchHistoryStore.persist.rehydrate()
@@ -52,7 +52,7 @@ export default function StoreProvider({ children }: StoreProviderProps) {
         setError(null)
       } catch (error) {
         console.warn('Store rehydration failed or timed out:', error)
-        setError('Store initialization failed, continuing without persistence')
+        setError('Continuing without persistence')
         // Continue anyway to prevent infinite loading
         setIsHydrated(true)
       }
@@ -61,9 +61,9 @@ export default function StoreProvider({ children }: StoreProviderProps) {
     // Very short fallback timeout to ensure we never get stuck
     const fallbackTimeout = setTimeout(() => {
       console.warn('Store provider fallback timeout - forcing hydration')
-      setError('Store initialization timed out, continuing without persistence')
+      setError('Continuing without persistence')
       setIsHydrated(true)
-    }, 2000)
+    }, 1200)
 
     initializeStores()
 

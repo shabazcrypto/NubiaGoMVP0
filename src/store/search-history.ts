@@ -100,7 +100,7 @@ export const useSearchHistoryStore = create<SearchHistoryState>()(
     }),
     {
       name: 'search-history-storage',
-      storage: createJSONStorage(() => getSafeStorage()),
+      storage: getSafeStorage() ? createJSONStorage(() => getSafeStorage()!) : undefined,
       partialize: (state) => ({
         history: state.history,
         recentSearches: state.recentSearches,

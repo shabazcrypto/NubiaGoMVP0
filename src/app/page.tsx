@@ -14,11 +14,7 @@ import {
   Search,
   Star,
   Users,
-  Globe,
-  Facebook,
-  Instagram,
-  Twitter,
-  Linkedin
+  Globe
 } from 'lucide-react'
 import PullToRefresh from '@/components/mobile/PullToRefresh'
 import MobileHomepage from '@/components/mobile/MobileHomepage'
@@ -875,94 +871,7 @@ function NewsletterSection() {
   )
 }
 
-// ============================================================================
-// FOOTER SECTION
-// ============================================================================
 
-function FooterSection() {
-  return (
-    <footer className="bg-gray-900 text-white">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">N</span>
-              </div>
-              <span className="text-xl font-bold">NubiaGo</span>
-            </div>
-            <p className="text-gray-400 leading-relaxed">
-              Africa's premier marketplace connecting trusted sellers with millions of customers across the continent.
-            </p>
-            <div className="flex space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Facebook">
-                <Facebook className="h-6 w-6" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
-                <Instagram className="h-6 w-6" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
-                <Twitter className="h-6 w-6" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
-                <Linkedin className="h-6 w-6" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><Link href="/products" className="text-gray-400 hover:text-white transition-colors">All Products</Link></li>
-              <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
-              <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</Link></li>
-              <li><Link href="/careers" className="text-gray-400 hover:text-white transition-colors">Careers</Link></li>
-            </ul>
-          </div>
-
-          {/* Customer Service */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Customer Service</h3>
-            <ul className="space-y-2">
-              <li><Link href="/help" className="text-gray-400 hover:text-white transition-colors">Help Center</Link></li>
-              <li><Link href="/shipping" className="text-gray-400 hover:text-white transition-colors">Shipping Info</Link></li>
-              <li><Link href="/returns" className="text-gray-400 hover:text-white transition-colors">Returns</Link></li>
-              <li><Link href="/support" className="text-gray-400 hover:text-white transition-colors">Support</Link></li>
-              <li><Link href="/faq" className="text-gray-400 hover:text-white transition-colors">FAQ</Link></li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Legal</h3>
-            <ul className="space-y-2">
-              <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link href="/cookies" className="text-gray-400 hover:text-white transition-colors">Cookie Policy</Link></li>
-              <li><Link href="/gdpr" className="text-gray-400 hover:text-white transition-colors">GDPR</Link></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
-              © 2024 NubiaGo. All rights reserved.
-            </p>
-            <div className="flex items-center space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy</Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">Terms</Link>
-              <Link href="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors">Cookies</Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  )
-}
 
 // ============================================================================
 // MAIN PAGE COMPONENT
@@ -1025,7 +934,6 @@ export default function HomePage() {
       <TestimonialsSection />
       <FeaturedDealsSection />
       <NewsletterSection />
-      <FooterSection />
     </PullToRefresh>
   )
 } 

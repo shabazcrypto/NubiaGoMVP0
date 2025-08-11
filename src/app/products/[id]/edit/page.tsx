@@ -35,7 +35,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     category: 'electronics',
     stock: 15,
     images: [
-      '/product-edit-1.jpg'
+              '/product-edit-1.jpg'
     ]
   }
 

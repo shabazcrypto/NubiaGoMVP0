@@ -20,6 +20,7 @@ import {
   UsersIcon,
   ChatBubbleLeftIcon
 } from '@heroicons/react/24/outline'
+import { Logo } from '@/components/ui/Logo'
 
 // ============================================================================
 // CHAT DASHBOARD TYPES
@@ -237,9 +238,7 @@ const SupplierChatDashboard: React.FC = () => {
             {/* Logo and Title */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">N</span>
-                </div>
+                <Logo size="md" />
                 <span className="text-xl font-bold text-gray-900">NubiaGo</span>
               </div>
               <div className="h-6 w-px bg-gray-300"></div>

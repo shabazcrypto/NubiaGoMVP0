@@ -123,12 +123,12 @@ export const mockProducts: Product[] = [
     description: 'High-quality wireless headphones with noise cancellation',
     price: 89.99,
     originalPrice: 129.99,
-    imageUrl: '/product-headphones-1.jpg',
-    images: [
-      '/product-headphones-1.jpg',
-      '/product-headphones-2.jpg'
-    ],
-    thumbnailUrl: '/product-headphones-1.jpg',
+          imageUrl: '/product-headphones-1.jpg',
+      images: [
+        '/product-headphones-1.jpg',
+        '/product-headphones-2.jpg'
+      ],
+      thumbnailUrl: '/product-headphones-1.jpg',
     category: 'Electronics',
     subcategory: 'Audio',
     brand: 'TechAudio',
@@ -153,13 +153,13 @@ export const mockProducts: Product[] = [
     description: 'Advanced smartwatch with health monitoring features',
     price: 299.99,
     originalPrice: 399.99,
-    imageUrl: '/product-watch-1.jpg',
-    images: [
-      '/product-watch-1.jpg',
-      '/product-watch-2.jpg',
-      '/product-watch-3.jpg'
-    ],
-    thumbnailUrl: '/product-watch-1.jpg',
+          imageUrl: '/product-watch-1.jpg',
+      images: [
+        '/product-watch-1.jpg',
+        '/product-watch-2.jpg',
+        '/product-watch-3.jpg'
+      ],
+      thumbnailUrl: '/product-watch-1.jpg',
     category: 'Electronics',
     subcategory: 'Wearables',
     brand: 'SmartTech',
@@ -184,12 +184,12 @@ export const mockProducts: Product[] = [
     description: 'Handcrafted leather bag with multiple compartments',
     price: 149.99,
     originalPrice: 199.99,
-    imageUrl: '/product-bag-1.jpg',
-    images: [
-      '/product-bag-1.jpg',
-      '/product-bag-2.jpg'
-    ],
-    thumbnailUrl: '/product-bag-1.jpg',
+          imageUrl: '/product-bag-1.jpg',
+      images: [
+        '/product-bag-1.jpg',
+        '/product-bag-2.jpg'
+      ],
+      thumbnailUrl: '/product-bag-1.jpg',
     category: 'Shoes & Bags',
     subcategory: 'Bags',
     brand: 'LeatherCraft',
@@ -214,13 +214,13 @@ export const mockProducts: Product[] = [
     description: 'Professional running shoes with advanced cushioning',
     price: 129.99,
     originalPrice: 159.99,
-    imageUrl: '/product-shoes-1.jpg',
-    images: [
-      '/product-shoes-1.jpg',
-      '/product-shoes-2.jpg',
-      '/product-shoes-3.jpg'
-    ],
-    thumbnailUrl: '/product-shoes-1.jpg',
+          imageUrl: '/product-shoes-1.jpg',
+      images: [
+        '/product-shoes-1.jpg',
+        '/product-shoes-2.jpg',
+        '/product-shoes-3.jpg'
+      ],
+      thumbnailUrl: '/product-shoes-1.jpg',
     category: 'Shoes & Bags',
     subcategory: 'Shoes',
     brand: 'RunFast',
@@ -245,11 +245,11 @@ export const mockProducts: Product[] = [
     description: 'Natural organic face cream for all skin types',
     price: 34.99,
     originalPrice: 44.99,
-    imageUrl: '/product-cosmetics-1.jpg',
-    images: [
-      '/product-cosmetics-1.jpg'
-    ],
-    thumbnailUrl: '/product-cosmetics-1.jpg',
+          imageUrl: '/product-cosmetics-1.jpg',
+      images: [
+        '/product-cosmetics-1.jpg'
+      ],
+      thumbnailUrl: '/product-cosmetics-1.jpg',
     category: 'Beauty & Cosmetics',
     subcategory: 'Skincare',
     brand: 'NaturalBeauty',
@@ -274,11 +274,11 @@ export const mockProducts: Product[] = [
     description: 'Elegant modern coffee table for your living room',
     price: 299.99,
     originalPrice: 399.99,
-    imageUrl: '/product-home-1.jpg',
-    images: [
-      '/product-home-1.jpg'
-    ],
-    thumbnailUrl: '/product-home-1.jpg',
+          imageUrl: '/product-home-1.jpg',
+      images: [
+        '/product-home-1.jpg'
+      ],
+      thumbnailUrl: '/product-home-1.jpg',
     category: 'Home & Living',
     subcategory: 'Furniture',
     brand: 'ModernHome',

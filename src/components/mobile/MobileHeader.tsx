@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Search, ShoppingCart, Menu, User, Heart, Bell } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { Logo } from '@/components/ui/Logo'
 import { CartService } from '@/lib/services/cart.service'
 import { WishlistService } from '@/lib/services/wishlist.service'
 import { useEffect } from 'react'
@@ -79,9 +80,7 @@ export default function MobileHeader({ onMenuToggle, onSearch }: MobileHeaderPro
         <div className="flex items-center justify-between mb-3">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">N</span>
-            </div>
+            <Logo size="md" />
             <span className="text-xl font-bold text-gray-900">NubiaGo</span>
           </Link>
 

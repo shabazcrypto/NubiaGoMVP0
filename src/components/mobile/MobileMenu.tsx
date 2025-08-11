@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { X, User, ShoppingBag, Heart, Settings, LogOut, HelpCircle, Star, Gift, Truck, Shield, CreditCard } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { Logo } from '@/components/ui/Logo'
 import { CartService } from '@/lib/services/cart.service'
 import { WishlistService } from '@/lib/services/wishlist.service'
 
@@ -198,9 +199,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">N</span>
-            </div>
+            <Logo size="md" />
             <span className="text-xl font-bold text-gray-900">NubiaGo</span>
           </div>
           <button

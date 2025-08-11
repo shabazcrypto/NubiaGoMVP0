@@ -46,7 +46,7 @@ export default function SupplierProductsPage() {
           category: 'Electronics',
           sales: 45,
           rating: 4.8,
-          image: '/images/headphones.jpg',
+          image: '/headphones.jpg',
           approvalStatus: 'approved',
           submittedAt: '2024-01-15'
         },
@@ -59,7 +59,7 @@ export default function SupplierProductsPage() {
           category: 'Electronics',
           sales: 32,
           rating: 4.6,
-          image: '/images/watch.jpg',
+          image: '/watch.jpg',
           approvalStatus: 'approved',
           submittedAt: '2024-01-10'
         },
@@ -72,7 +72,7 @@ export default function SupplierProductsPage() {
           category: 'Accessories',
           sales: 0,
           rating: 0,
-          image: '/images/laptop-stand.jpg',
+          image: '/laptop-stand.jpg',
           approvalStatus: 'pending',
           submittedAt: '2024-01-20'
         }

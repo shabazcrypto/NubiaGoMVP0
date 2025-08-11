@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { CartService } from '@/lib/services/cart.service'
+import { Logo } from './Logo'
 
 // ============================================================================
 // TYPES
@@ -406,9 +407,7 @@ export default function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">N</span>
-              </div>
+              <Logo size="md" />
               <span className="text-xl font-bold text-gray-900">NubiaGo</span>
             </Link>
           </div>

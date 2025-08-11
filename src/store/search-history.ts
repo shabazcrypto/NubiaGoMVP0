@@ -21,6 +21,22 @@ interface SearchHistoryState {
   getPopularSearches: (limit?: number) => string[]
 }
 
+// Safe localStorage access
+const getSafeStorage = () => {
+  if (typeof window === 'undefined') return undefined
+  
+  try {
+    // Test localStorage access
+    const testKey = '__zustand_test__'
+    window.localStorage.setItem(testKey, 'test')
+    window.localStorage.removeItem(testKey)
+    return window.localStorage
+  } catch (error) {
+    console.warn('localStorage access blocked, using memory storage:', error)
+    return undefined
+  }
+}
+
 export const useSearchHistoryStore = create<SearchHistoryState>()(
   persist(
     (set, get) => ({
@@ -84,12 +100,15 @@ export const useSearchHistoryStore = create<SearchHistoryState>()(
     }),
     {
       name: 'search-history-storage',
-      storage: createJSONStorage(() => (typeof window !== 'undefined' ? window.localStorage : undefined as unknown as Storage)),
+      storage: createJSONStorage(() => getSafeStorage()),
       partialize: (state) => ({
         history: state.history,
         recentSearches: state.recentSearches,
         popularSearches: state.popularSearches,
       }) as unknown as SearchHistoryState,
+      onRehydrateStorage: () => (state) => {
+        console.log('Search history store rehydrated:', state)
+      },
     }
   )
 )

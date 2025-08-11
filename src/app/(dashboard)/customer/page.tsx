@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -9,8 +10,8 @@ import {
   Calendar, Bell, ChevronDown, Wallet, CreditCard, Activity, TrendingDown, 
   ArrowUpRight, MoreHorizontal, Star as StarIcon, MessageSquare, Award, 
   Target, Zap, Truck, Download, FileText, Eye as ViewIcon, Gift, 
-  Shield, CreditCard as CreditCardIcon, Truck as TruckIcon, TrendingUp,
-  DollarSign, Users, BarChart3, ShoppingCart as CartIcon
+  Shield, CreditCard as CreditCardIcon, TrendingUp,
+  DollarSign, Users, BarChart3
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -265,7 +266,7 @@ export default function CustomerDashboard() {
           id: 'ORD-001',
           status: 'delivered',
           items: [
-            { name: 'Premium Wireless Headphones', price: 299.99, quantity: 1, image: '/images/headphones.jpg' }
+            { name: 'Premium Wireless Headphones', price: 299.99, quantity: 1, image: '/headphones.jpg' }
           ],
           total: 299.99,
           createdAt: '2024-01-15',
@@ -276,7 +277,7 @@ export default function CustomerDashboard() {
           id: 'ORD-002',
           status: 'shipped',
           items: [
-            { name: 'Smart Fitness Watch', price: 199.99, quantity: 1, image: '/images/watch.jpg' }
+            { name: 'Smart Fitness Watch', price: 199.99, quantity: 1, image: '/watch.jpg' }
           ],
           total: 199.99,
           createdAt: '2024-01-18',
@@ -287,7 +288,7 @@ export default function CustomerDashboard() {
           id: 'ORD-003',
           status: 'processing',
           items: [
-            { name: 'Laptop Stand', price: 49.99, quantity: 1, image: '/images/laptop-stand.jpg' }
+            { name: 'Laptop Stand', price: 49.99, quantity: 1, image: '/laptop-stand.jpg' }
           ],
           total: 49.99,
           createdAt: '2024-01-20',
@@ -295,9 +296,9 @@ export default function CustomerDashboard() {
         }
       ])
       setWishlist([
-        { id: '1', name: 'Gaming Mouse', price: 79.99, image: '/images/mouse.jpg', category: 'Electronics', inStock: true },
-        { id: '2', name: 'Mechanical Keyboard', price: 149.99, image: '/images/keyboard.jpg', category: 'Electronics', inStock: true },
-        { id: '3', name: 'Wireless Charger', price: 39.99, image: '/images/charger.jpg', category: 'Electronics', inStock: false }
+        { id: '1', name: 'Gaming Mouse', price: 79.99, image: '/mouse.jpg', category: 'Electronics', inStock: true },
+        { id: '2', name: 'Mechanical Keyboard', price: 149.99, image: '/keyboard.jpg', category: 'Electronics', inStock: true },
+        { id: '3', name: 'Wireless Charger', price: 39.99, image: '/charger.jpg', category: 'Electronics', inStock: false }
       ])
       setNotifications([
         { id: '1', title: 'Order Delivered', message: 'Your order ORD-001 has been delivered successfully.', type: 'order', date: '2024-01-20', read: false },

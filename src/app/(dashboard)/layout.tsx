@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Home } from 'lucide-react'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
+import { Logo } from '@/components/ui/Logo'
 import { ToastProvider } from '@/components/ui/toast'
 import { FirebaseAuthProvider } from '@/hooks/useFirebaseAuth'
 import { RoleChangeHandler } from '@/components/auth/role-change-handler'
@@ -24,9 +25,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">N</span>
-                      </div>
+                      <Logo size="md" />
                       <span className="text-xl font-bold text-gray-900">NubiaGo</span>
                     </div>
                     

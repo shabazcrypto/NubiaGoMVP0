@@ -48,6 +48,7 @@ import {
   Flame,
   Star as StarIcon
 } from 'lucide-react'
+import { Logo } from '@/components/ui/Logo'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
@@ -282,9 +283,7 @@ export default function Navigation() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">N</span>
-              </div>
+              <Logo size="md" />
               <span className="text-xl font-bold text-gray-900">NubiaGo</span>
             </Link>
 

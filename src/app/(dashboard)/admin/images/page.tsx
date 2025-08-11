@@ -51,7 +51,7 @@ export default function ImagesPage() {
       {
         id: '1',
         filename: 'product_hero_001.jpg',
-        url: '/api/images/product_hero_001.jpg',
+        url: '/api/product_hero_001.jpg',
         size: '2.4 MB',
         dimensions: '1920x1080',
         category: 'Product',
@@ -65,7 +65,7 @@ export default function ImagesPage() {
       {
         id: '2',
         filename: 'supplier_logo_002.png',
-        url: '/api/images/supplier_logo_002.png',
+        url: '/api/supplier_logo_002.png',
         size: '156 KB',
         dimensions: '512x512',
         category: 'Logo',
@@ -79,7 +79,7 @@ export default function ImagesPage() {
       {
         id: '3',
         filename: 'banner_promo_003.jpg',
-        url: '/api/images/banner_promo_003.jpg',
+        url: '/api/banner_promo_003.jpg',
         size: '1.8 MB',
         dimensions: '1200x400',
         category: 'Banner',
@@ -93,7 +93,7 @@ export default function ImagesPage() {
       {
         id: '4',
         filename: 'category_icon_004.svg',
-        url: '/api/images/category_icon_004.svg',
+        url: '/api/category_icon_004.svg',
         size: '23 KB',
         dimensions: '64x64',
         category: 'Icon',
@@ -107,7 +107,7 @@ export default function ImagesPage() {
       {
         id: '5',
         filename: 'gallery_thumb_005.jpg',
-        url: '/api/images/gallery_thumb_005.jpg',
+        url: '/api/gallery_thumb_005.jpg',
         size: '890 KB',
         dimensions: '300x300',
         category: 'Gallery',

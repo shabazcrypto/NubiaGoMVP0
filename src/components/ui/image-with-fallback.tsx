@@ -31,7 +31,7 @@ function getImagePath(filename: string): string {
   if (filename.startsWith('http')) {
     return filename
   }
-  return `/images/${filename}`
+  return `/${filename}`
 }
 
 // Preload image function

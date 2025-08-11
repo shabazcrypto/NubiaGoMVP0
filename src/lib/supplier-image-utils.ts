@@ -37,7 +37,7 @@ export const supplierImageUtils = {
 
   // Generate image URL for supplier
   generateSupplierImageUrl: (imageName: string, supplierId: string): string => {
-    return `/suppliers/${supplierId}/images/${imageName}`
+    return `/suppliers/${supplierId}/${imageName}`
   },
 
   // Process image for supplier use

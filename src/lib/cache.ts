@@ -49,7 +49,7 @@ export class EnhancedCache {
     const fullKey = this.getNamespacedKey(key)
     const entry: CacheEntry<T> = {
       value,
-      timestamp: Date.now(),
+        timestamp: Date.now(),
       ttl: ttl || this.options.ttl,
       accessCount: 0,
       lastAccessed: Date.now()
@@ -76,8 +76,8 @@ export class EnhancedCache {
     const entry = this.cache.get(fullKey)
 
     if (!entry) {
-      return null
-    }
+        return null
+      }
 
     // Check if entry has expired
     if (this.isExpired(entry)) {
@@ -286,7 +286,7 @@ export class EnhancedCache {
     }
     
     this.set(key, value, ttl)
-    return true
+      return true
   }
 
   /**

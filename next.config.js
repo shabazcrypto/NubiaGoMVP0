@@ -114,7 +114,7 @@ const nextConfig = {
         pathname: '/o/**',
       },
     ],
-    domains: ['images.unsplash.com', 'firebasestorage.googleapis.com'],
+
   },
 
   // ============================================================================

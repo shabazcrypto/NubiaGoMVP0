@@ -14,9 +14,10 @@ import { Loading } from '@/components/ui/loading'
 import BottomNavigation from '@/components/mobile/BottomNavigation'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import { MobileOptimizationProvider } from '@/components/providers/mobile-optimization-provider'
+import { Suspense } from 'react'
 
 // Optimize font loading
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   preload: true,
@@ -46,16 +47,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
     ],
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    other: [
-      { rel: 'icon', url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { rel: 'icon', url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { rel: 'icon', url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
     ],
   },
   manifest: '/manifest.json',
@@ -65,6 +61,37 @@ export const metadata: Metadata = {
     'apple-mobile-web-app-status-bar-style': 'default',
     'apple-mobile-web-app-title': 'NubiaGo',
   },
+}
+
+// Loading fallback component
+function AppLoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="relative mb-8">
+          <div className="w-24 h-24 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl flex items-center justify-center mx-auto animate-pulse">
+            <div className="w-16 h-16 bg-white rounded-2xl animate-spin"></div>
+          </div>
+          <div className="absolute inset-0 w-24 h-24 border-4 border-transparent border-t-primary-600 border-r-secondary-600 rounded-3xl animate-spin mx-auto"></div>
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
+            Loading NubiaGo...
+          </h2>
+          <p className="text-xl text-gray-600 max-w-md mx-auto leading-relaxed">
+            Please wait while we prepare your shopping experience
+          </p>
+        </div>
+
+        <div className="flex justify-center space-x-2 mt-8">
+          <div className="w-3 h-3 bg-primary-600 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-secondary-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+          <div className="w-3 h-3 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function RootLayout({
@@ -78,7 +105,7 @@ export default function RootLayout({
         {/* ============================================================================
         PERFORMANCE OPTIMIZATIONS - CRITICAL RESOURCE PRELOADING
         ============================================================================ */}
-        
+
         {/* DNS prefetch for external domains */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
@@ -86,7 +113,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//firebasestorage.googleapis.com" />
         <link rel="dns-prefetch" href="//images.unsplash.com" />
         <link rel="dns-prefetch" href="//api.nubiago.com" />
-        
+
         {/* Preconnect to critical origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -94,102 +121,102 @@ export default function RootLayout({
         <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.nubiago.com" crossOrigin="anonymous" />
-        
+
         {/* ============================================================================
         CRITICAL RESOURCE PRELOADING
         ============================================================================ */}
-        
+
         {/* Critical CSS preload */}
         <link rel="preload" href="/globals.css" as="style" />
         <link rel="preload" href="/mobile.css" as="style" media="(max-width: 768px)" />
         <link rel="preload" href="/desktop.css" as="style" media="(min-width: 769px)" />
-        
+
         {/* Critical fonts preload */}
-        <link 
-          rel="preload" 
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" 
-          as="style" 
+        <link
+          rel="preload"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          as="style"
         />
-        
+
         {/* Critical images preload */}
         <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
         <link rel="preload" href="/hero-image.webp" as="image" type="image/webp" />
         <link rel="preload" href="/fallback-product.jpg" as="image" type="image/jpeg" />
-        
+
         {/* Critical JavaScript preload */}
         <link rel="preload" href="/sw.js" as="script" />
-        
+
         {/* Critical API endpoints preload */}
         <link rel="preload" href="/api/products" as="fetch" crossOrigin="anonymous" />
         <link rel="preload" href="/api/categories" as="fetch" crossOrigin="anonymous" />
-        
+
         {/* ============================================================================
         INTELLIGENT PREFETCHING - LIKELY NEXT PAGES
         ============================================================================ */}
-        
+
         {/* Main navigation pages */}
         <link rel="prefetch" href="/products" as="document" />
         <link rel="prefetch" href="/categories" as="document" />
         <link rel="prefetch" href="/cart" as="document" />
         <link rel="prefetch" href="/account" as="document" />
         <link rel="prefetch" href="/search" as="document" />
-        
+
         {/* Product listing and detail patterns */}
         <link rel="prefetch" href="/products?category=electronics" as="document" />
         <link rel="prefetch" href="/products?category=clothing" as="document" />
         <link rel="prefetch" href="/products?category=home" as="document" />
-        
+
         {/* ============================================================================
         MOBILE-OPTIMIZED RESOURCE HINTS
         ============================================================================ */}
-        
-        {/* Touch icons for mobile */}
-        <link rel="preload" href="/apple-touch-icon.png" as="image" type="image/png" />
-        <link rel="preload" href="/android-chrome-192x192.png" as="image" type="image/png" />
-        
+
+                 {/* Touch icons for mobile */}
+         <link rel="preload" href="/apple-touch-icon.png" as="image" type="image/png" />
+
         {/* Mobile-specific CSS */}
         <link rel="preload" href="/mobile.css" as="style" media="(max-width: 768px)" />
-        
+
         {/* ============================================================================
         FAVICONS AND ICONS
         ============================================================================ */}
-        
-        {/* Favicons */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/manifest.json" />
-        
+
+                 {/* App Icons */}
+         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+         <link rel="shortcut icon" href="/favicon-32x32.png" />
+         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+         <link rel="manifest" href="/manifest.json" />
+         <link rel="manifest" href="/site.webmanifest" />
+
         {/* ============================================================================
         EXTERNAL RESOURCES
         ============================================================================ */}
-        
+
         {/* Font Awesome - load asynchronously */}
-        <link 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          rel="stylesheet" 
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          rel="stylesheet"
         />
-        
+
         {/* ============================================================================
         META TAGS FOR PERFORMANCE
         ============================================================================ */}
-        
+
         <meta name="theme-color" content="#0F52BA" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="NubiaGo" />
-        
+
         {/* Performance optimization meta tags */}
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        
+
         {/* ============================================================================
         SERVICE WORKER REGISTRATION
         ============================================================================ */}
-        
+
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -210,58 +237,60 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} dark:bg-gray-900 dark:text-gray-100`}>
         <ErrorBoundary>
-          <FirebaseAuthProvider>
-            <ToastProvider>
-              <StoreProvider>
-                <RoleChangeHandler>
-                  <MobileOptimizationProvider>
-                    {/* Mobile-first navigation */}
-                    <div className="md:hidden">
-                      <MobileHeader />
-                    </div>
-                    
-                    {/* Desktop navigation */}
-                    <div className="hidden md:block">
-                      <ConditionalNavigation />
-                    </div>
-                    
-                    {/* Main content with mobile-optimized spacing */}
-                    <main className="min-h-screen pb-20 md:pb-0">
-                      {children}
-                    </main>
-                    
-                    {/* Mobile bottom navigation */}
-                    <div className="md:hidden">
-                      <BottomNavigation />
-                    </div>
-                    
-                    {/* Desktop footer */}
-                    <div className="hidden md:block">
-                      <Footer />
-                    </div>
-                  </MobileOptimizationProvider>
-                </RoleChangeHandler>
-              </StoreProvider>
-            </ToastProvider>
-          </FirebaseAuthProvider>
+          <Suspense fallback={<AppLoadingFallback />}>
+            <FirebaseAuthProvider>
+              <ToastProvider>
+                <StoreProvider>
+                  <RoleChangeHandler>
+                    <MobileOptimizationProvider>
+                      {/* Mobile-first navigation */}
+                      <div className="md:hidden">
+                        <MobileHeader />
+                      </div>
+
+                      {/* Desktop navigation */}
+                      <div className="hidden md:block">
+                        <ConditionalNavigation />
+                      </div>
+
+                      {/* Main content with mobile-optimized spacing */}
+                      <main className="min-h-screen pb-20 md:pb-0">
+                        {children}
+                      </main>
+
+                      {/* Mobile bottom navigation */}
+                      <div className="md:hidden">
+                        <BottomNavigation />
+                      </div>
+
+                      {/* Desktop footer */}
+                      <div className="hidden md:block">
+                        <Footer />
+                      </div>
+                    </MobileOptimizationProvider>
+                  </RoleChangeHandler>
+                </StoreProvider>
+              </ToastProvider>
+            </FirebaseAuthProvider>
+          </Suspense>
         </ErrorBoundary>
         <SpeedInsights />
-        
+
         {/* ============================================================================
         ASYNCHRONOUS RESOURCE LOADING
         ============================================================================ */}
-        
+
         {/* Load Font Awesome JS asynchronously */}
-        <script 
+        <script
           src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
           async
           defer
         />
-        
+
         {/* ============================================================================
         PERFORMANCE MONITORING
         ============================================================================ */}
-        
+
         {process.env.NODE_ENV === 'development' && (
           <script
             dangerouslySetInnerHTML={{
@@ -278,7 +307,7 @@ export default function RootLayout({
                           'Total Load Time': perfData.loadEventEnd - perfData.fetchStart + 'ms'
                         });
                       }
-                      
+
                       // Log resource hints statistics
                       if (window.assetPreloader) {
                         console.log('Resource Hints Stats:', window.assetPreloader.getStats());

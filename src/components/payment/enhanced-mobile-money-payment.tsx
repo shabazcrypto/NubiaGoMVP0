@@ -325,7 +325,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
                   <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                     {operator.logo ? (
                       <img 
-                        src={`/images/operators/${operator.operatorCode}.png`} 
+                        src={`/operators/${operator.operatorCode}.png`} 
                         alt={operator.operatorName}
                         onError={(e) => {
                           e.currentTarget.style.display = 'none'

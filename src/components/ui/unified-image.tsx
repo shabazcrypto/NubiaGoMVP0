@@ -34,7 +34,7 @@ function getOptimizedImagePath(src: string): string {
   if (src.startsWith('http') || src.startsWith('/')) {
     return src
   }
-  return `/images/${src}`
+  return `/${src}`
 }
 
 const UnifiedImage = React.memo(function UnifiedImage({

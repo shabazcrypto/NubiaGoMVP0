@@ -16,7 +16,7 @@ export function getStorageUrl(path: string): string {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   
   // Encode the path for Firebase Storage
-  const encodedPath = encodeURIComponent(`assets/images/${cleanPath}`);
+  const encodedPath = encodeURIComponent(`assets/${cleanPath}`);
   
   // Return direct Firebase Storage URL
   return `${STORAGE_BASE_URL}/${encodedPath}?alt=media`;

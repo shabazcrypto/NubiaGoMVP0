@@ -59,7 +59,7 @@ export default function SupplierProductsPage() {
           category: 'Electronics',
           sales: 45,
           rating: 4.8,
-          image: '/images/headphones.jpg',
+          image: '/headphones.jpg',
           approvalStatus: 'approved',
           submittedAt: '2024-01-15',
           approvedAt: '2024-01-16',
@@ -78,7 +78,7 @@ export default function SupplierProductsPage() {
           category: 'Electronics',
           sales: 32,
           rating: 4.6,
-          image: '/images/watch.jpg',
+          image: '/watch.jpg',
           approvalStatus: 'approved',
           submittedAt: '2024-01-10',
           approvedAt: '2024-01-11',
@@ -97,7 +97,7 @@ export default function SupplierProductsPage() {
           category: 'Accessories',
           sales: 0,
           rating: 0,
-          image: '/images/laptop-stand.jpg',
+          image: '/laptop-stand.jpg',
           approvalStatus: 'pending',
           submittedAt: '2024-01-20',
           isFeatured: false,
@@ -115,7 +115,7 @@ export default function SupplierProductsPage() {
           category: 'Furniture',
           sales: 18,
           rating: 4.9,
-          image: '/images/chair.jpg',
+          image: '/chair.jpg',
           approvalStatus: 'approved',
           submittedAt: '2024-01-05',
           approvedAt: '2024-01-06',
@@ -279,9 +279,9 @@ export default function SupplierProductsPage() {
                 href="/supplier"
                 className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
               >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
-              </Link>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Link>
               <h1 className="text-3xl font-bold text-gray-900">Product Management</h1>
               <p className="text-gray-600 mt-2">Manage your product catalog, track performance, and optimize sales</p>
             </div>
@@ -293,15 +293,15 @@ export default function SupplierProductsPage() {
                 <Upload className="w-4 h-4 mr-2" />
                 Bulk Upload
               </Link>
-              <button
+            <button
                 onClick={handleAddProduct}
                 className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 flex items-center"
-              >
+            >
                 <Plus className="w-5 h-5 mr-2" />
-                Add Product
-              </button>
-            </div>
+              Add Product
+            </button>
           </div>
+        </div>
         </div>
 
         {/* Stats Cards */}
@@ -412,18 +412,18 @@ export default function SupplierProductsPage() {
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
+              <input
+                type="text"
                   placeholder="Search products, categories..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
+              />
+            </div>
             </div>
 
             <div className="flex items-center space-x-3">
-              <div className="relative">
+            <div className="relative">
                 <button
                   onClick={() => setShowFilterDropdown(!showFilterDropdown)}
                   className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
@@ -438,15 +438,15 @@ export default function SupplierProductsPage() {
                     <div className="p-4 space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select
-                          value={filterStatus}
-                          onChange={(e) => setFilterStatus(e.target.value)}
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
                           className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                        >
-                          <option value="all">All Status</option>
-                          <option value="active">Active</option>
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
                           <option value="inactive">Inactive</option>
-                          <option value="draft">Draft</option>
+                <option value="draft">Draft</option>
                           <option value="pending">Pending</option>
                           <option value="rejected">Rejected</option>
                         </select>
@@ -463,7 +463,7 @@ export default function SupplierProductsPage() {
                           <option value="Accessories">Accessories</option>
                           <option value="Furniture">Furniture</option>
                           <option value="Clothing">Clothing</option>
-                        </select>
+              </select>
                       </div>
                     </div>
                   </div>
@@ -538,9 +538,9 @@ export default function SupplierProductsPage() {
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
                       {product.name}
-                    </h3>
-                  </div>
-
+            </h3>
+          </div>
+          
                   <p className="text-gray-600 text-sm mb-3">{product.category}</p>
 
                   <div className="flex items-center justify-between mb-4">
@@ -567,7 +567,7 @@ export default function SupplierProductsPage() {
                     <span>Stock: {product.stock}</span>
                     <span>Sales: {product.sales}</span>
                     <span>Rating: {product.rating}</span>
-                  </div>
+              </div>
 
                   <div className="flex space-x-2">
                     <button
@@ -584,18 +584,18 @@ export default function SupplierProductsPage() {
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
                     </button>
-                    <button
+              <button
                       onClick={() => handleDeleteProduct(product.id)}
                       className="bg-red-100 text-red-700 px-3 py-2 rounded-lg hover:bg-red-200"
-                    >
+              >
                       <Trash2 className="w-4 h-4" />
-                    </button>
+              </button>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
-        ) : (
+            </div>
+          ) : (
           /* Table View */
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200">
@@ -651,14 +651,14 @@ export default function SupplierProductsPage() {
                             onChange={(e) => handleProductSelection(product.id, e.target.checked)}
                             className="rounded border-gray-300 mr-3"
                           />
-                          <div className="flex items-center">
-                            <img
-                              src={product.image}
-                              alt={product.name}
+                        <div className="flex items-center">
+                          <img
+                            src={product.image}
+                            alt={product.name}
                               className="w-10 h-10 rounded-lg object-cover mr-3"
-                            />
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                          />
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">{product.name}</div>
                               <div className="text-sm text-gray-500">SKU: {product.id}</div>
                             </div>
                           </div>
@@ -676,8 +676,8 @@ export default function SupplierProductsPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex flex-col space-y-1">
                           <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(product.status)}`}>
-                            {product.status}
-                          </span>
+                          {product.status}
+                        </span>
                           <div className="flex items-center">
                             {getApprovalStatusIcon(product.approvalStatus)}
                             <span className="ml-1 text-xs text-gray-500">{product.approvalStatus}</span>
@@ -693,21 +693,21 @@ export default function SupplierProductsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center space-x-2">
-                          <button
+                          <button 
                             onClick={() => handleViewProduct(product.id)}
                             className="text-blue-600 hover:text-blue-900"
                             title="View Product"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
-                          <button
+                          <button 
                             onClick={() => handleEditProduct(product.id)}
                             className="text-indigo-600 hover:text-indigo-900"
                             title="Edit Product"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
-                          <button
+                          <button 
                             onClick={() => handleDeleteProduct(product.id)}
                             className="text-red-600 hover:text-red-900"
                             title="Delete Product"
@@ -720,9 +720,9 @@ export default function SupplierProductsPage() {
                   ))}
                 </tbody>
               </table>
-            </div>
-          </div>
-        )}
+                    </div>
+                  </div>
+                )}
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
@@ -735,15 +735,15 @@ export default function SupplierProductsPage() {
               }
             </p>
             {!searchQuery && filterStatus === 'all' && filterCategory === 'all' && (
-              <button
+                <button
                 onClick={handleAddProduct}
                 className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700"
-              >
+                >
                 Add Product
-              </button>
+                </button>
             )}
-          </div>
-        )}
+        </div>
+      )}
       </div>
     </div>
   )

@@ -229,7 +229,7 @@ export default function SupplierDashboard() {
           category: 'Electronics',
           sales: 45,
           rating: 4.8,
-          image: '/images/headphones.jpg'
+          image: '/headphones.jpg'
         },
         {
           id: '2',
@@ -240,7 +240,7 @@ export default function SupplierDashboard() {
           category: 'Electronics',
           sales: 32,
           rating: 4.6,
-          image: '/images/watch.jpg'
+          image: '/watch.jpg'
         },
         {
           id: '3',
@@ -251,7 +251,7 @@ export default function SupplierDashboard() {
           category: 'Accessories',
           sales: 28,
           rating: 4.4,
-          image: '/images/laptop-stand.jpg'
+          image: '/laptop-stand.jpg'
         }
       ])
       setOrders([

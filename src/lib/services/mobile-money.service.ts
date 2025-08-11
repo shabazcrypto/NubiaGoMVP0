@@ -172,7 +172,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 1,
-            logo: '/images/operators/orange-money.png',
+            logo: '/operators/orange-money.png',
             description: 'Orange Money Cameroon'
           },
           {
@@ -183,7 +183,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 2,
-            logo: '/images/operators/mtn-momo.png',
+            logo: '/operators/mtn-momo.png',
             description: 'MTN Mobile Money Cameroon'
           },
           {
@@ -194,7 +194,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 3,
-            logo: '/images/operators/express-union.png',
+            logo: '/operators/express-union.png',
             description: 'Express Union Mobile Money'
           }
         )
@@ -210,7 +210,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 1,
-            logo: '/images/operators/orange-money.png',
+            logo: '/operators/orange-money.png',
             description: 'Orange Money Côte d\'Ivoire'
           },
           {
@@ -221,7 +221,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 2,
-            logo: '/images/operators/mtn-momo.png',
+            logo: '/operators/mtn-momo.png',
             description: 'MTN Mobile Money Côte d\'Ivoire'
           }
         )
@@ -237,7 +237,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 1,
-            logo: '/images/operators/mtn-momo.png',
+            logo: '/operators/mtn-momo.png',
             description: 'MTN Mobile Money Ghana'
           },
           {
@@ -248,7 +248,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 2,
-            logo: '/images/operators/vodafone-cash.png',
+            logo: '/operators/vodafone-cash.png',
             description: 'Vodafone Cash Ghana'
           }
         )
@@ -264,7 +264,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 1,
-            logo: '/images/operators/m-pesa.png',
+            logo: '/operators/m-pesa.png',
             description: 'Safaricom M-Pesa'
           },
           {
@@ -275,7 +275,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 2,
-            logo: '/images/operators/airtel-money.png',
+            logo: '/operators/airtel-money.png',
             description: 'Airtel Money Kenya'
           }
         )
@@ -291,7 +291,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 1,
-            logo: '/images/operators/mtn-momo.png',
+            logo: '/operators/mtn-momo.png',
             description: 'MTN Mobile Money Uganda'
           },
           {
@@ -302,7 +302,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 2,
-            logo: '/images/operators/airtel-money.png',
+            logo: '/operators/airtel-money.png',
             description: 'Airtel Money Uganda'
           }
         )
@@ -318,7 +318,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 1,
-            logo: '/images/operators/orange-money.png',
+            logo: '/operators/orange-money.png',
             description: 'Orange Money Senegal'
           },
           {
@@ -329,7 +329,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 2,
-            logo: '/images/operators/mtn-momo.png',
+            logo: '/operators/mtn-momo.png',
             description: 'MTN Mobile Money Senegal'
           }
         )
@@ -345,7 +345,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 1,
-            logo: '/images/operators/m-pesa.png',
+            logo: '/operators/m-pesa.png',
             description: 'Vodacom M-Pesa Tanzania'
           },
           {
@@ -356,7 +356,7 @@ export class MockPaymentGatewayService extends PaymentGatewayService {
             gatewayProvider: 'mock',
             isActive: true,
             priority: 2,
-            logo: '/images/operators/tigo-pesa.png',
+            logo: '/operators/tigo-pesa.png',
             description: 'Tigo Pesa Tanzania'
           }
         )

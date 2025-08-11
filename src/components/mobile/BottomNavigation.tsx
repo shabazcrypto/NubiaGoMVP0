@@ -83,7 +83,7 @@ export default function BottomNavigation() {
   ]
 
   return (
-    <nav className="mobile-bottom-navigation fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 safe-area-bottom">
+    <nav className="mobile-bottom-navigation md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 safe-area-bottom">
       <div className="flex items-center justify-around px-2 py-2">
         {navigationItems.map((item) => {
           const Icon = item.icon

@@ -18,7 +18,6 @@ import {
 } from 'lucide-react'
 import PullToRefresh from '@/components/mobile/PullToRefresh'
 import MobileHomepage from '@/components/mobile/MobileHomepage'
-import { mobileDetector } from '@/lib/mobile-detection'
 import { useEffect, useState } from 'react'
 
 // ============================================================================
@@ -878,12 +877,10 @@ function NewsletterSection() {
 // ============================================================================
 
 export default function HomePage() {
-  const [isMobile, setIsMobile] = useState(false)
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
-    setIsMobile(mobileDetector.isMobile())
   }, [])
 
   // Handle search functionality
@@ -913,27 +910,29 @@ export default function HomePage() {
     )
   }
 
-  // Render mobile homepage for mobile devices
-  if (isMobile) {
-    return (
-      <MobileHomepage 
-        onSearch={handleSearch}
-        onCategorySelect={handleCategorySelect}
-      />
-    )
-  }
-
-  // Render desktop homepage for larger screens
   return (
-    <PullToRefresh onRefresh={() => Promise.resolve(window.location.reload())}>
-      <HeroSection />
-      <NewArrivalsSection />
-      <ShopByCategoriesSection />
-      <FashionCollectionSection />
-      <ShopOurOffersSection />
-      <TestimonialsSection />
-      <FeaturedDealsSection />
-      <NewsletterSection />
-    </PullToRefresh>
+    <>
+      {/* Mobile homepage - only visible on mobile devices */}
+      <div className="md:hidden">
+        <MobileHomepage 
+          onSearch={handleSearch}
+          onCategorySelect={handleCategorySelect}
+        />
+      </div>
+
+      {/* Desktop homepage - only visible on desktop devices */}
+      <div className="hidden md:block">
+        <PullToRefresh onRefresh={() => Promise.resolve(window.location.reload())}>
+          <HeroSection />
+          <NewArrivalsSection />
+          <ShopByCategoriesSection />
+          <FashionCollectionSection />
+          <ShopOurOffersSection />
+          <TestimonialsSection />
+          <FeaturedDealsSection />
+          <NewsletterSection />
+        </PullToRefresh>
+      </div>
+    </>
   )
 } 

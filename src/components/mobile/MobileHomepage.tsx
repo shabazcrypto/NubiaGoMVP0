@@ -96,12 +96,32 @@ export default function MobileHomepage({
   }
 
   return (
-    <div className="mobile-homepage min-h-screen bg-gray-50">
+    <div className="mobile-homepage md:hidden min-h-screen bg-gray-50">
       {/* Mobile Header */}
-      <MobileHeader
-        onMenuToggle={handleMenuToggle}
-        onSearch={handleSearch}
-      />
+      <header className="mobile-header bg-white shadow-sm px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xl">N</span>
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">NubiaGo</h1>
+              <p className="text-sm text-gray-600">Your Shopping Partner</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={handleMenuToggle}
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
 
       {/* Mobile Menu */}
       <MobileMenu

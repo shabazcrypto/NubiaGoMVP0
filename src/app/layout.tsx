@@ -231,7 +231,9 @@ export default function RootLayout({
                     </main>
                     
                     {/* Mobile bottom navigation */}
-                    <BottomNavigation />
+                    <div className="md:hidden">
+                      <BottomNavigation />
+                    </div>
                     
                     {/* Desktop footer */}
                     <div className="hidden md:block">

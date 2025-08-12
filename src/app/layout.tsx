@@ -10,7 +10,7 @@ import { RoleChangeHandler } from '@/components/auth/role-change-handler'
 import ConditionalNavigation from '@/components/layout/conditional-navigation'
 import StoreProvider from '@/components/providers/store-provider'
 import { Footer } from '@/components/ui/footer'
-import { Loading } from '@/components/ui/loading'
+import { SimpleLoading } from '@/components/ui/simple-loading'
 import BottomNavigation from '@/components/mobile/BottomNavigation'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import { MobileOptimizationProvider } from '@/components/providers/mobile-optimization-provider'
@@ -25,24 +25,24 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nubiago-aa411.web.app'),
-  title: 'NubiaGo - Find what you need, faster!',
+  metadataBase: new URL('https://home-base-one.vercel.app'),
+  title: 'HomeBase - Find what you need, faster!',
   description: 'Shop everyday essentials from trusted sellers across Africa — simple, quick, and reliable.',
-  authors: [{ name: 'NubiaGo Team' }],
-  keywords: ['ecommerce', 'africa', 'online shopping', 'nubiaGo'],
+  authors: [{ name: 'HomeBase Team' }],
+  keywords: ['ecommerce', 'africa', 'online shopping', 'homebase'],
   robots: 'index, follow',
   openGraph: {
-    title: 'NubiaGo - Find what you need, faster!',
+    title: 'HomeBase - Find what you need, faster!',
     description: 'Shop everyday essentials from trusted sellers across Africa — simple, quick, and reliable.',
-    url: 'https://nubiago-aa411.web.app/',
-    siteName: 'NubiaGo',
+    url: 'https://home-base-one.vercel.app/',
+    siteName: 'HomeBase',
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    creator: '@nubiaGo',
-    title: 'NubiaGo - Find what you need, faster!',
+    creator: '@homebase',
+    title: 'HomeBase - Find what you need, faster!',
     description: 'Shop everyday essentials from trusted sellers across Africa — simple, quick, and reliable.',
   },
   icons: {
@@ -55,12 +55,12 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/manifest.json',
-  other: {
-    'theme-color': '#0F52BA',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'default',
-    'apple-mobile-web-app-title': 'NubiaGo',
-  },
+     other: {
+     'theme-color': '#0F52BA',
+     'apple-mobile-web-app-capable': 'yes',
+     'apple-mobile-web-app-status-bar-style': 'default',
+     'apple-mobile-web-app-title': 'HomeBase',
+   },
 }
 
 // Loading fallback component
@@ -77,7 +77,7 @@ function AppLoadingFallback() {
 
         <div className="space-y-4">
           <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
-            Loading NubiaGo...
+            Loading HomeBase...
           </h2>
           <p className="text-xl text-gray-600 max-w-md mx-auto leading-relaxed">
             Please wait while we prepare your shopping experience
@@ -112,15 +112,15 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="//firebasestorage.googleapis.com" />
         <link rel="dns-prefetch" href="//images.unsplash.com" />
-        <link rel="dns-prefetch" href="//api.nubiago.com" />
+                 <link rel="dns-prefetch" href="//api.homebase.com" />
 
-        {/* Preconnect to critical origins */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://api.nubiago.com" crossOrigin="anonymous" />
+         {/* Preconnect to critical origins */}
+         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
+         <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
+         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+         <link rel="preconnect" href="https://api.homebase.com" crossOrigin="anonymous" />
 
         {/* ============================================================================
         CRITICAL RESOURCE PRELOADING
@@ -206,7 +206,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0F52BA" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="NubiaGo" />
+                 <meta name="apple-mobile-web-app-title" content="HomeBase" />
 
         {/* Performance optimization meta tags */}
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
@@ -236,44 +236,44 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} dark:bg-gray-900 dark:text-gray-100`}>
-        <ErrorBoundary>
-          <Suspense fallback={<AppLoadingFallback />}>
-            <FirebaseAuthProvider>
-              <ToastProvider>
-                <StoreProvider>
-                  <RoleChangeHandler>
-                    <MobileOptimizationProvider>
-                      {/* Mobile-first navigation */}
-                      <div className="md:hidden">
-                        <MobileHeader />
-                      </div>
+                 <ErrorBoundary>
+           <Suspense fallback={<SimpleLoading timeout={15000} />}>
+             <FirebaseAuthProvider>
+               <ToastProvider>
+                 <StoreProvider>
+                   <RoleChangeHandler>
+                     <MobileOptimizationProvider>
+                       {/* Mobile-first navigation */}
+                       <div className="md:hidden">
+                         <MobileHeader />
+                       </div>
 
-                      {/* Desktop navigation */}
-                      <div className="hidden md:block">
-                        <ConditionalNavigation />
-                      </div>
+                       {/* Desktop navigation */}
+                       <div className="hidden md:block">
+                         <ConditionalNavigation />
+                       </div>
 
-                      {/* Main content with mobile-optimized spacing */}
-                      <main className="min-h-screen pb-20 md:pb-0">
-                        {children}
-                      </main>
+                       {/* Main content with mobile-optimized spacing */}
+                       <main className="min-h-screen pb-20 md:pb-0">
+                         {children}
+                       </main>
 
-                      {/* Mobile bottom navigation */}
-                      <div className="md:hidden">
-                        <BottomNavigation />
-                      </div>
+                       {/* Mobile bottom navigation */}
+                       <div className="md:hidden">
+                         <BottomNavigation />
+                       </div>
 
-                      {/* Desktop footer */}
-                      <div className="hidden md:block">
-                        <Footer />
-                      </div>
-                    </MobileOptimizationProvider>
-                  </RoleChangeHandler>
-                </StoreProvider>
-              </ToastProvider>
-            </FirebaseAuthProvider>
-          </Suspense>
-        </ErrorBoundary>
+                       {/* Desktop footer */}
+                       <div className="hidden md:block">
+                         <Footer />
+                       </div>
+                     </MobileOptimizationProvider>
+                   </RoleChangeHandler>
+                 </StoreProvider>
+               </ToastProvider>
+             </FirebaseAuthProvider>
+           </Suspense>
+         </ErrorBoundary>
         <SpeedInsights />
 
         {/* ============================================================================

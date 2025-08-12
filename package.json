@@ -1,5 +1,5 @@
 {
-  "name": "nubiaGo-ecommerce",
+  "name": "homebase-ecommerce",
   "version": "1.0.0",
   "description": "A modern, responsive ecommerce website built with Next.js 14",
   "private": true,
@@ -116,6 +116,6 @@
     "sentry",
     "sendgrid"
   ],
-  "author": "NubiaGo Team",
+  "author": "HomeBase Team",
   "license": "MIT"
 }

@@ -1,80 +1,7 @@
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
-  runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'google-fonts',
-        expiration: {
-          maxEntries: 4,
-          maxAgeSeconds: 365 * 24 * 60 * 60, // 365 days
-        },
-      },
-    },
-    {
-      urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'google-fonts-static',
-        expiration: {
-          maxEntries: 4,
-          maxAgeSeconds: 365 * 24 * 60 * 60, // 365 days
-        },
-      },
-    },
-    {
-      urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
-      handler: 'StaleWhileRevalidate',
-      options: {
-        cacheName: 'static-image-assets',
-        expiration: {
-          maxEntries: 64,
-          maxAgeSeconds: 24 * 60 * 60, // 24 hours
-        },
-      },
-    },
-    {
-      urlPattern: /\.(?:js|css)$/i,
-      handler: 'StaleWhileRevalidate',
-      options: {
-        cacheName: 'static-resources',
-        expiration: {
-          maxEntries: 32,
-          maxAgeSeconds: 24 * 60 * 60, // 24 hours
-        },
-      },
-    },
-    {
-      urlPattern: /\/api\/.*$/i,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'api-cache',
-        networkTimeoutSeconds: 10,
-        expiration: {
-          maxEntries: 16,
-          maxAgeSeconds: 24 * 60 * 60, // 24 hours
-        },
-        cacheableResponse: {
-          statuses: [0, 200],
-        },
-      },
-    },
-  ],
-})
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ============================================================================
   // VERCEL HOSTING CONFIGURATION
-  // ============================================================================
-  // Removed static export settings for full Next.js hosting
-  
-  // ============================================================================
-  // PWA & MOBILE OPTIMIZATION
   // ============================================================================
   compress: true,
   poweredByHeader: false,
@@ -83,14 +10,11 @@ const nextConfig = {
   // IMAGE OPTIMIZATION FOR VERCEL
   // ============================================================================
   images: {
-    // Enable Vercel's image optimization
     unoptimized: false,
     formats: ['image/webp', 'image/avif'],
-    // Mobile-first device sizes optimized for African mobile networks
     deviceSizes: [320, 480, 640, 750, 828, 1080, 1200],
     imageSizes: [16, 24, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
-    // Use Vercel's image loader
     loader: 'default',
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -107,40 +31,21 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
-        port: '',
-        pathname: '/o/**',
-      },
     ],
-
   },
 
   // ============================================================================
-  // PERFORMANCE OPTIMIZATION CONFIGURATION
-  // ============================================================================
-  // Optimized for maximum performance and minimal bundle size
-  // ============================================================================
-  // PWA & MOBILE OPTIMIZATION
-  // ============================================================================
-  compress: true,
-  poweredByHeader: false,
-  
-  // ============================================================================
-  // IMAGE OPTIMIZATION
+  // COMPILER OPTIMIZATION
   // ============================================================================
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
-    styledComponents: true,
   },
 
   // ============================================================================
-  // EXPERIMENTAL FEATURES (PERFORMANCE FOCUSED)
+  // EXPERIMENTAL FEATURES
   // ============================================================================
   experimental: {
     optimizeCss: true,
-    // Mobile-optimized package imports
     optimizePackageImports: [
       '@headlessui/react', 
       '@heroicons/react', 
@@ -161,17 +66,6 @@ const nextConfig = {
       '@hookform/resolvers',
       'zod'
     ],
-    webpackBuildWorker: true,
-    // Aggressive code splitting for mobile
-    serverComponentsExternalPackages: ['sharp', 'onnxruntime-node'],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
   },
 
   // ============================================================================
@@ -241,101 +135,11 @@ const nextConfig = {
       }
     }
 
-    // Advanced bundle optimization for production
-    if (!dev && !isServer) {
-      // Split chunks optimization with enhanced granularity
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        minSize: 10000, // Smaller chunks for mobile
-        maxSize: 150000, // Reduced max size for 2G/3G networks
-        cacheGroups: {
-          // React ecosystem (highest priority)
-          react: {
-            test: /[\\/]node_modules[\\/](react|react-dom|react-router)[\\/]/,
-            name: 'react',
-            chunks: 'all',
-            priority: 40,
-            reuseExistingChunk: true,
-            enforce: true,
-          },
-          // Firebase ecosystem
-          firebase: {
-            test: /[\\/]node_modules[\\/](firebase|@firebase)[\\/]/,
-            name: 'firebase',
-            chunks: 'all',
-            priority: 35,
-            reuseExistingChunk: true,
-            enforce: true,
-          },
-          // UI libraries
-          ui: {
-            test: /[\\/]node_modules[\\/](@headlessui|@heroicons|lucide-react|framer-motion)[\\/]/,
-            name: 'ui',
-            chunks: 'all',
-            priority: 30,
-            reuseExistingChunk: true,
-          },
-          // Form and validation libraries
-          forms: {
-            test: /[\\/]node_modules[\\/](react-hook-form|@hookform|zod)[\\/]/,
-            name: 'forms',
-            chunks: 'all',
-            priority: 25,
-            reuseExistingChunk: true,
-          },
-          // Date and utility libraries
-          utils: {
-            test: /[\\/]node_modules[\\/](date-fns|lodash|uuid)[\\/]/,
-            name: 'utils',
-            chunks: 'all',
-            priority: 20,
-            reuseExistingChunk: true,
-          },
-          // Remaining vendor code
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
-            priority: 10,
-            reuseExistingChunk: true,
-          },
-          // Common application code
-          common: {
-            name: 'common',
-            minChunks: 2,
-            chunks: 'all',
-            priority: 5,
-            reuseExistingChunk: true,
-          },
-        },
-      }
-      
-      // Tree shaking optimization
-      config.optimization.usedExports = true
-      config.optimization.sideEffects = false
-      
-      // Minimization optimization
-      config.optimization.minimize = true
-      config.optimization.minimizer = config.optimization.minimizer || []
-    }
-
-    // Handle SVG files with optimization
+    // Handle SVG files
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
-
-    // Bundle analyzer (only in development)
-    if (dev && process.env.ANALYZE === 'true') {
-      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: 'server',
-          analyzerPort: 8888,
-          openAnalyzer: true,
-        })
-      )
-    }
 
     return config
   },
@@ -396,4 +200,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withPWA(nextConfig) 
+module.exports = nextConfig 

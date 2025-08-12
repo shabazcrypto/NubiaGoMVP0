@@ -42,7 +42,7 @@ export default function UserProfile({ onClose }: UserProfileProps) {
   const [activeTab, setActiveTab] = useState<'profile' | 'preferences'>('profile')
   const [isLoading, setIsLoading] = useState(false)
   
-  const { user, updateProfile, signOut } = useFirebaseAuth()
+  const { user, updateUserProfile, signOut } = useFirebaseAuth()
   
   const {
     register,
@@ -54,7 +54,7 @@ export default function UserProfile({ onClose }: UserProfileProps) {
     defaultValues: {
       name: user?.displayName || '',
       email: user?.email || '',
-      phone: user?.phone || '',
+      phone: '', // Phone not available in Firebase User type
     },
   })
 
@@ -77,7 +77,7 @@ export default function UserProfile({ onClose }: UserProfileProps) {
     setIsLoading(true)
     
     try {
-      await updateProfile(data)
+      await updateUserProfile(data.name)
       toast.success('Profile updated', 'Your profile has been updated successfully')
       setIsEditing(false)
     } catch (error) {

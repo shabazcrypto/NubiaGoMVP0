@@ -11,7 +11,7 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   
-  const { sendPasswordReset } = useFirebaseAuth()
+  const { resetPassword } = useFirebaseAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
     setError('')
 
     try {
-      await sendPasswordReset(email)
+      await resetPassword(email)
       setSuccess(true)
     } catch (err: any) {
       setError(err.message || 'Failed to send password reset email')

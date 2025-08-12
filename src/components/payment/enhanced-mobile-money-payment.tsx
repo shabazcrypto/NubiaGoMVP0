@@ -36,7 +36,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
     clearError
   } = useMobileMoneyStore()
 
-  const [phoneNumber, setPhoneNumber] = useState(user?.phone || '')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [customerName, setCustomerName] = useState(user?.displayName || '')
   const [customerEmail, setCustomerEmail] = useState(user?.email || '')
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'initiating' | 'pending' | 'completed' | 'failed'>('idle')

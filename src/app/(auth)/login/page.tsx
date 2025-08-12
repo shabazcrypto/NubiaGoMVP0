@@ -17,7 +17,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   
   const router = useRouter()
-  const { signInWithEmail, loading, error: authError, clearError } = useFirebaseAuth()
+  const { signIn, loading, error: authError, clearError } = useFirebaseAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,7 +25,7 @@ export default function LoginPage() {
     clearError()
 
     try {
-      await signInWithEmail(formData.email, formData.password)
+      await signIn(formData.email, formData.password)
       router.push('/customer')
     } catch (err: any) {
       setError(err.message || 'Invalid email or password')

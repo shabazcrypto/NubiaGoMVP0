@@ -40,7 +40,7 @@ interface UserProfile {
 }
 
 export default function CustomerProfile() {
-  const { user, updateProfile } = useFirebaseAuth()
+  const { user, updateUserProfile } = useFirebaseAuth()
   const [profile, setProfile] = useState<UserProfile>({
     firstName: 'John',
     lastName: 'Doe',
@@ -78,11 +78,7 @@ export default function CustomerProfile() {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
-      updateProfile({
-        displayName: `${profile.firstName} ${profile.lastName}`,
-        email: profile.email,
-        phone: profile.phone || '',
-      })
+      updateUserProfile(`${profile.firstName} ${profile.lastName}`)
       setIsEditing(false)
     } catch (error) {
       console.error('Error updating profile:', error)

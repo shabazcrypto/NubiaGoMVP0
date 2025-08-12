@@ -342,11 +342,19 @@ class AuthService {
       case 'auth/too-many-requests':
         return new Error('Too many failed attempts. Please try again later.')
       case 'auth/popup-closed-by-user':
-        return new Error('Sign-in popup was closed before completion.')
+        return new Error('Sign-in popup was closed before completion. Please try again or use email/password sign-in.')
       case 'auth/popup-blocked':
-        return new Error('Sign-in popup was blocked by the browser.')
+        return new Error('Sign-in popup was blocked by your browser. Please allow popups for this site or use email/password sign-in.')
       case 'auth/cancelled-popup-request':
-        return new Error('Sign-in was cancelled.')
+        return new Error('Sign-in was cancelled. You can try again or use email/password sign-in instead.')
+      case 'auth/account-exists-with-different-credential':
+        return new Error('An account already exists with the same email address but different sign-in credentials. Please use email/password sign-in.')
+      case 'auth/network-request-failed':
+        return new Error('Network error occurred. Please check your internet connection and try again.')
+      case 'auth/operation-not-allowed':
+        return new Error('This sign-in method is not enabled. Please contact support or use email/password sign-in.')
+      case 'auth/requires-recent-login':
+        return new Error('This operation requires recent authentication. Please sign in again.')
       default:
         return new Error(error.message || 'An authentication error occurred.')
     }

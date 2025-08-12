@@ -47,7 +47,7 @@ export function PaymentForm({
     defaultValues: {
       customerName: user?.displayName || '',
       customerEmail: user?.email || '',
-      customerPhone: user?.phone || '',
+      customerPhone: '',
       paymentMethod: 'mobile_money',
       mobileMoneyNumber: ''
     }

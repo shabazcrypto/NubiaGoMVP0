@@ -339,7 +339,7 @@ export default function Navigation() {
                     className="flex items-center space-x-2 p-2 text-gray-700 hover:text-primary-600 transition-colors"
                   >
                     <User className="h-5 w-5" />
-                    <span className="text-sm font-medium">{user?.displayName || user?.firstName || 'User'}</span>
+                    <span className="text-sm font-medium">{user?.displayName || 'User'}</span>
                     <ChevronDown className={`h-4 w-4 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
 

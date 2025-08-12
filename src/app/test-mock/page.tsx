@@ -8,7 +8,7 @@ import { Product } from '@/types'
 export default function TestMockPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  const { user, signInWithEmail, signOut } = useFirebaseAuth()
+  const { user, signIn, signOut } = useFirebaseAuth()
 
   useEffect(() => {
     loadProducts()
@@ -28,7 +28,7 @@ export default function TestMockPage() {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmail('john.doe@example.com', 'password')
+      await signIn('john.doe@example.com', 'password')
       alert('Login successful!')
     } catch (error) {
       alert('Login failed: ' + error)
@@ -56,7 +56,7 @@ export default function TestMockPage() {
             <div>
               <p className="text-gray-600">Current User: {user ? user.displayName : 'None'}</p>
               <p className="text-gray-600">Email: {user ? user.email : 'None'}</p>
-              <p className="text-gray-600">Role: {user ? user.role : 'None'}</p>
+              <p className="text-gray-600">Role: Customer (Default)</p>
             </div>
             <div className="flex space-x-4">
               <button

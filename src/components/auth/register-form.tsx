@@ -43,7 +43,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
   const [isLoading, setIsLoading] = useState(false)
   const [includeAddress, setIncludeAddress] = useState(false)
   
-  const { registerWithEmail } = useFirebaseAuth()
+  const { signUp } = useFirebaseAuth()
   
   const {
     register,
@@ -74,13 +74,10 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
         address: includeAddress ? data.address : undefined,
       }
       
-      await registerWithEmail(
+      await signUp(
         data.email, 
         data.password, 
-        data.name.split(' ')[0] || 'User', 
-        data.name.split(' ').slice(1).join(' ') || '', 
-        data.role as 'customer' | 'supplier',
-        data.phone
+        data.name
       )
       toast.success('Registration successful', 'Welcome to our platform!')
       onSuccess?.()

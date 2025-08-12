@@ -27,7 +27,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   
-  const { signInWithEmail } = useFirebaseAuth()
+  const { signIn } = useFirebaseAuth()
   
   const {
     register,
@@ -41,7 +41,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
     setIsLoading(true)
     
     try {
-      await signInWithEmail(data.email, data.password)
+      await signIn(data.email, data.password)
       toast.success('Login successful', 'Welcome back!')
       onSuccess?.()
     } catch (err) {

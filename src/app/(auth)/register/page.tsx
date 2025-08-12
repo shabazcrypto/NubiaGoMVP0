@@ -22,7 +22,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('')
   
   const router = useRouter()
-  const { registerWithEmail, loading, error: authError, clearError } = useFirebaseAuth()
+  const { signUp, loading, error: authError, clearError } = useFirebaseAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,13 +35,10 @@ export default function RegisterPage() {
     }
 
     try {
-      await registerWithEmail(
+      await signUp(
         formData.email, 
         formData.password, 
-        formData.firstName, 
-        formData.lastName,
-        'customer',
-        formData.phone
+        `${formData.firstName} ${formData.lastName}`
       )
       router.push('/customer')
     } catch (err: any) {

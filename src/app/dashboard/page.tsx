@@ -18,22 +18,9 @@ export default function DashboardPage() {
         return
       }
 
-      // Route to appropriate dashboard based on user role
-      switch (user.role) {
-        case 'customer':
-          router.push('/customer')
-          break
-        case 'supplier':
-          router.push('/supplier')
-          break
-        case 'admin':
-          router.push('/admin')
-          break
-        default:
-          // Default to customer dashboard
-          router.push('/customer')
-          break
-      }
+      // For now, default to customer dashboard
+      // In a real app, you'd get the role from custom claims or user profile
+      router.push('/customer')
     }
   }, [user, loading, router])
 

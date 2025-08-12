@@ -9,6 +9,8 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
   updateProfile,
+  signInWithPopup,
+  GoogleAuthProvider,
   UserCredential
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase/config'
@@ -18,6 +20,7 @@ interface AuthContextType {
   loading: boolean
   signIn: (email: string, password: string) => Promise<UserCredential>
   signUp: (email: string, password: string, displayName?: string) => Promise<UserCredential>
+  signInWithGoogle: () => Promise<UserCredential>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<void>
   updateUserProfile: (displayName: string) => Promise<void>
@@ -163,6 +166,40 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
     }
   }
 
+  const signInWithGoogle = async () => {
+    try {
+      setError(null)
+      const provider = new GoogleAuthProvider()
+      // Add custom parameters for better UX
+      provider.setCustomParameters({
+        prompt: 'select_account'
+      })
+      
+      const result = await signInWithPopup(auth, provider)
+      return result
+    } catch (error: any) {
+      console.error('Google sign in error:', error)
+      let errorMessage = 'Google sign in failed'
+      
+      switch (error.code) {
+        case 'auth/popup-closed-by-user':
+          errorMessage = 'Sign in was cancelled'
+          break
+        case 'auth/popup-blocked':
+          errorMessage = 'Pop-up was blocked. Please allow pop-ups for this site'
+          break
+        case 'auth/account-exists-with-different-credential':
+          errorMessage = 'An account already exists with this email using a different sign-in method'
+          break
+        default:
+          errorMessage = error.message || 'Google sign in failed'
+      }
+      
+      setError(errorMessage)
+      throw error
+    }
+  }
+
   const clearError = () => setError(null)
 
   const value: AuthContextType = {
@@ -170,6 +207,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
     loading,
     signIn,
     signUp,
+    signInWithGoogle,
     signOut,
     resetPassword,
     updateUserProfile,

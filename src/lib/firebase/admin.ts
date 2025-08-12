@@ -1,21 +1,45 @@
-import { initializeApp, getApps, cert } from 'firebase-admin/app'
+import { initializeApp, getApps, cert, applicationDefault } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
 import { getStorage } from 'firebase-admin/storage'
 
-// Initialize Firebase Admin
-const adminApp = getApps().length === 0 
-  ? initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_PROJECT_ID || 'nubiago-aa411',
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL || '',
-        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n') || '',
-      }),
-      storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'nubiago-aa411.firebasestorage.app',
-    })
-  : getApps()[0]
+// Initialize Firebase Admin with fallback options
+let adminApp
 
-// Initialize Admin services
+try {
+  if (getApps().length === 0) {
+    // Try to use service account credentials first
+    if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
+      adminApp = initializeApp({
+        credential: cert({
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        }),
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET || `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,
+      })
+    } else {
+      // For client-side only apps, create a minimal admin app
+      // This won't interfere with client-side authentication
+      adminApp = initializeApp({
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiagolatest-9438e',
+        storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiagolatest-9438e'}.appspot.com`,
+      }, 'admin-app')
+    }
+  } else {
+    adminApp = getApps()[0]
+  }
+} catch (error) {
+  console.error('Firebase Admin initialization failed:', error)
+  
+  // Create a minimal app for build time or fallback
+  adminApp = initializeApp({
+    projectId: 'fallback-project',
+    storageBucket: 'fallback-project.appspot.com',
+  }, 'fallback-admin')
+}
+
+// Initialize Admin services with error handling
 export const adminAuth = getAuth(adminApp)
 export const adminDb = getFirestore(adminApp)
 export const adminStorage = getStorage(adminApp)

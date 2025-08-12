@@ -61,7 +61,17 @@ export const storage = getStorage(app)
 // Add connection timeout and retry settings
 if (typeof window !== 'undefined') {
   try {
+    // Configure auth settings for better error handling
     auth.settings.appVerificationDisabledForTesting = false
+    
+    // Add error listener for better debugging
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log('User authenticated:', user.email)
+      }
+    }, (error) => {
+      console.error('Auth state change error:', error)
+    })
   } catch (error) {
     console.warn('Failed to configure auth settings:', error)
   }

@@ -1,196 +1,191 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
-import { authService, UserProfile } from '@/lib/firebase/auth-service'
+import { useState, useEffect, createContext, useContext } from 'react'
+import { 
+  User, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  updateProfile,
+  UserCredential
+} from 'firebase/auth'
+import { auth } from '@/lib/firebase/config'
 
-// Create the context
-const FirebaseAuthContext = createContext<UseFirebaseAuthReturn | undefined>(undefined)
-
-interface UseFirebaseAuthReturn {
-  user: UserProfile | null
+interface AuthContextType {
+  user: User | null
   loading: boolean
-  error: string | null
-  
-  // Authentication methods
-  signInWithEmail: (email: string, password: string) => Promise<void>
-  signInWithGoogle: () => Promise<void>
-  signInWithFacebook: () => Promise<void>
-  registerWithEmail: (
-    email: string, 
-    password: string, 
-    firstName: string, 
-    lastName: string,
-    role?: 'customer' | 'supplier',
-    phone?: string
-  ) => Promise<void>
+  signIn: (email: string, password: string) => Promise<UserCredential>
+  signUp: (email: string, password: string, displayName?: string) => Promise<UserCredential>
   signOut: () => Promise<void>
-  sendPasswordReset: (email: string) => Promise<void>
-  
-  // Utility methods
+  resetPassword: (email: string) => Promise<void>
+  updateUserProfile: (displayName: string) => Promise<void>
+  error: string | null
   clearError: () => void
-  updateProfile: (updates: Partial<UserProfile>) => Promise<void>
 }
 
-function useFirebaseAuthInternal(): UseFirebaseAuthReturn {
-  const [user, setUser] = useState<UserProfile | null>(null)
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+export function FirebaseAuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Initialize auth state listener
   useEffect(() => {
-    const unsubscribe = authService.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
       setLoading(false)
-      if (user) {
-        setError(null)
-      }
+    }, (error) => {
+      console.error('Auth state change error:', error)
+      setError('Authentication error occurred')
+      setLoading(false)
     })
 
-    return () => {
-      unsubscribe()
-      authService.cleanupListeners()
-    }
+    return unsubscribe
   }, [])
 
-  // Clear error
-  const clearError = useCallback(() => {
-    setError(null)
-  }, [])
-
-  // Email/Password sign in
-  const signInWithEmail = useCallback(async (email: string, password: string) => {
-    setLoading(true)
-    setError(null)
+  const signIn = async (email: string, password: string) => {
     try {
-      await authService.signInWithEmail(email, password)
+      setError(null)
+      const result = await signInWithEmailAndPassword(auth, email, password)
+      return result
     } catch (error: any) {
-      setError(error.message)
-      throw error
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // Google sign in
-  const signInWithGoogle = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      await authService.signInWithGoogle()
-    } catch (error: any) {
-      setError(error.message)
-      setLoading(false)
-      throw error
-    }
-  }, [])
-
-  // Facebook sign in
-  const signInWithFacebook = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      await authService.signInWithFacebook()
-    } catch (error: any) {
-      setError(error.message)
-      setLoading(false)
+      console.error('Sign in error:', error)
+      let errorMessage = 'Sign in failed'
+      
+      switch (error.code) {
+        case 'auth/user-not-found':
+          errorMessage = 'No account found with this email'
+          break
+        case 'auth/wrong-password':
+          errorMessage = 'Incorrect password'
+          break
+        case 'auth/invalid-email':
+          errorMessage = 'Invalid email address'
+          break
+        case 'auth/too-many-requests':
+          errorMessage = 'Too many failed attempts. Please try again later'
+          break
+        case 'auth/internal-error':
+          errorMessage = 'Authentication service error. Please try again'
+          break
+        default:
+          errorMessage = error.message || 'Sign in failed'
+      }
+      
+      setError(errorMessage)
       throw error
     }
-  }, [])
+  }
 
-  // Email registration
-  const registerWithEmail = useCallback(async (
-    email: string, 
-    password: string, 
-    firstName: string, 
-    lastName: string,
-    role: 'customer' | 'supplier' = 'customer',
-    phone?: string
-  ) => {
-    setLoading(true)
-    setError(null)
+  const signUp = async (email: string, password: string, displayName?: string) => {
     try {
-      await authService.registerWithEmail(email, password, firstName, lastName, role, phone)
+      setError(null)
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+      
+      if (displayName && result.user) {
+        await updateProfile(result.user, { displayName })
+      }
+      
+      return result
     } catch (error: any) {
-      setError(error.message)
-      throw error
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // Sign out
-  const signOut = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      await authService.signOut()
-      setUser(null)
-    } catch (error: any) {
-      setError(error.message)
-      throw error
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // Send password reset
-  const sendPasswordReset = useCallback(async (email: string) => {
-    setError(null)
-    try {
-      await authService.sendPasswordResetEmail(email)
-    } catch (error: any) {
-      setError(error.message)
+      console.error('Sign up error:', error)
+      let errorMessage = 'Account creation failed'
+      
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = 'An account with this email already exists'
+          break
+        case 'auth/weak-password':
+          errorMessage = 'Password is too weak. Use at least 6 characters'
+          break
+        case 'auth/invalid-email':
+          errorMessage = 'Invalid email address'
+          break
+        case 'auth/internal-error':
+          errorMessage = 'Authentication service error. Please try again'
+          break
+        default:
+          errorMessage = error.message || 'Account creation failed'
+      }
+      
+      setError(errorMessage)
       throw error
     }
-  }, [])
+  }
 
-  // Update profile
-  const updateProfile = useCallback(async (updates: Partial<UserProfile>) => {
-    if (!user) return
-    
-    setError(null)
+  const signOut = async () => {
     try {
-      await authService.updateUserProfile(user.uid, updates)
-      // The profile will be updated through the auth state listener
+      setError(null)
+      await firebaseSignOut(auth)
     } catch (error: any) {
-      setError(error.message)
+      console.error('Sign out error:', error)
+      setError('Sign out failed')
       throw error
     }
-  }, [user])
+  }
 
-  return {
+  const resetPassword = async (email: string) => {
+    try {
+      setError(null)
+      await sendPasswordResetEmail(auth, email)
+    } catch (error: any) {
+      console.error('Password reset error:', error)
+      let errorMessage = 'Password reset failed'
+      
+      switch (error.code) {
+        case 'auth/user-not-found':
+          errorMessage = 'No account found with this email'
+          break
+        case 'auth/invalid-email':
+          errorMessage = 'Invalid email address'
+          break
+        default:
+          errorMessage = error.message || 'Password reset failed'
+      }
+      
+      setError(errorMessage)
+      throw error
+    }
+  }
+
+  const updateUserProfile = async (displayName: string) => {
+    try {
+      setError(null)
+      if (user) {
+        await updateProfile(user, { displayName })
+      }
+    } catch (error: any) {
+      console.error('Profile update error:', error)
+      setError('Profile update failed')
+      throw error
+    }
+  }
+
+  const clearError = () => setError(null)
+
+  const value: AuthContextType = {
     user,
     loading,
-    error,
-    signInWithEmail,
-    signInWithGoogle,
-    signInWithFacebook,
-    registerWithEmail,
+    signIn,
+    signUp,
     signOut,
-    sendPasswordReset,
-    clearError,
-    updateProfile
+    resetPassword,
+    updateUserProfile,
+    error,
+    clearError
   }
-}
 
-// Provider component
-interface FirebaseAuthProviderProps {
-  children: ReactNode
-}
-
-export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
-  const auth = useFirebaseAuthInternal()
-  
   return (
-    <FirebaseAuthContext.Provider value={auth}>
+    <AuthContext.Provider value={value}>
       {children}
-    </FirebaseAuthContext.Provider>
+    </AuthContext.Provider>
   )
 }
 
-// Hook to use the auth context
-export function useFirebaseAuth(): UseFirebaseAuthReturn {
-  const context = useContext(FirebaseAuthContext)
+export function useFirebaseAuth() {
+  const context = useContext(AuthContext)
   if (context === undefined) {
     throw new Error('useFirebaseAuth must be used within a FirebaseAuthProvider')
   }

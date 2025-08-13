@@ -249,8 +249,19 @@ export default function ProductFormBase({
 
   // Copy SKU to clipboard
   const copySKU = () => {
-    navigator.clipboard.writeText(formData.sku)
-    success('SKU copied to clipboard!')
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(formData.sku)
+      success('SKU copied to clipboard!')
+    } else {
+      // Fallback for browsers without clipboard API
+      const textArea = document.createElement('textarea')
+      textArea.value = formData.sku
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      success('SKU copied to clipboard!')
+    }
   }
 
   // Search categories

@@ -61,8 +61,9 @@ const nextConfig = {
   // EXPERIMENTAL FEATURES
   // ============================================================================
   experimental: {
-    webpackBuildWorker: true,
-    optimizeCss: true,
+    // Temporarily disabled to fix router error
+    // webpackBuildWorker: true,
+    // optimizeCss: true,
     optimizePackageImports: [
       '@headlessui/react', 
       '@heroicons/react', 

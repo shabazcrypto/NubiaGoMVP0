@@ -34,13 +34,15 @@ export function useNetworkStatus(): NetworkStatusHook {
 
   useEffect(() => {
     const updateNetworkInfo = () => {
+      if (typeof window === 'undefined') return
+      
       const navigator = window.navigator as any
       const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
 
       let quality: NetworkQuality = 'unknown'
-      let effectiveType = connection?.effectiveType
-      let downlink = connection?.downlink
-      let rtt = connection?.rtt
+      let effectiveType = connection?.effectiveType || undefined
+      let downlink = connection?.downlink || undefined
+      let rtt = connection?.rtt || undefined
       let saveData = connection?.saveData || false
 
       // Determine network quality
@@ -90,31 +92,53 @@ export function useNetworkStatus(): NetworkStatusHook {
     const navigator = window.navigator as any
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
     
-    if (connection) {
-      connection.addEventListener('change', updateNetworkInfo)
+    if (connection && typeof connection.addEventListener === 'function') {
+      try {
+        connection.addEventListener('change', updateNetworkInfo)
+      } catch (error) {
+        console.warn('Failed to add connection change listener:', error)
+      }
     }
 
     return () => {
-      window.removeEventListener('online', updateNetworkInfo)
-      window.removeEventListener('offline', updateNetworkInfo)
-      if (connection) {
-        connection.removeEventListener('change', updateNetworkInfo)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('online', updateNetworkInfo)
+        window.removeEventListener('offline', updateNetworkInfo)
+      }
+      if (connection && typeof connection.removeEventListener === 'function') {
+        try {
+          connection.removeEventListener('change', updateNetworkInfo)
+        } catch (error) {
+          console.warn('Failed to remove connection change listener:', error)
+        }
       }
     }
   }, [])
 
   // Load data saver preference from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('dataSaverMode')
-    if (saved && ['off', 'auto', 'aggressive'].includes(saved)) {
-      setDataSaverMode(saved as DataSaverMode)
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('dataSaverMode')
+        if (saved && ['off', 'auto', 'aggressive'].includes(saved)) {
+          setDataSaverMode(saved as DataSaverMode)
+        }
+      } catch (error) {
+        console.warn('Failed to load data saver mode from localStorage:', error)
+      }
     }
   }, [])
 
   // Save data saver preference
   const handleSetDataSaverMode = (mode: DataSaverMode) => {
     setDataSaverMode(mode)
-    localStorage.setItem('dataSaverMode', mode)
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      try {
+        localStorage.setItem('dataSaverMode', mode)
+      } catch (error) {
+        console.warn('Failed to save data saver mode to localStorage:', error)
+      }
+    }
   }
 
   // Derived states

@@ -30,8 +30,14 @@ export function useCSRF() {
       const signedToken = CSRFProtection.generateSignedToken(sessionToken, secret)
 
       // Store token in localStorage with expiry
-      localStorage.setItem('csrf-token', signedToken)
-      localStorage.setItem('csrf-expires', tokenData.expiresAt.toString())
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        try {
+          localStorage.setItem('csrf-token', signedToken)
+          localStorage.setItem('csrf-expires', tokenData.expiresAt.toString())
+        } catch (error) {
+          console.warn('Failed to store CSRF token in localStorage:', error)
+        }
+      }
 
       setCsrfToken(signedToken)
       return signedToken
@@ -66,8 +72,17 @@ export function useCSRF() {
    */
   const refreshTokenIfNeeded = useCallback(async (): Promise<string | null> => {
     try {
-      const storedToken = localStorage.getItem('csrf-token')
-      const expiresAt = localStorage.getItem('csrf-expires')
+      let storedToken: string | null = null
+      let expiresAt: string | null = null
+      
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        try {
+          storedToken = localStorage.getItem('csrf-token')
+          expiresAt = localStorage.getItem('csrf-expires')
+        } catch (error) {
+          console.warn('Failed to read CSRF token from localStorage:', error)
+        }
+      }
 
       if (!storedToken || !expiresAt) {
         return await generateToken()
@@ -113,8 +128,14 @@ export function useCSRF() {
    * Clear CSRF token
    */
   const clearToken = useCallback(() => {
-    localStorage.removeItem('csrf-token')
-    localStorage.removeItem('csrf-expires')
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      try {
+        localStorage.removeItem('csrf-token')
+        localStorage.removeItem('csrf-expires')
+      } catch (error) {
+        console.warn('Failed to clear CSRF token from localStorage:', error)
+      }
+    }
     setCsrfToken(null)
   }, [])
 
@@ -161,9 +182,14 @@ function getSessionToken(): string | null {
   }
 
   // Fallback to localStorage
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('session-token') || 
-           localStorage.getItem('auth-token')
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      return localStorage.getItem('session-token') || 
+             localStorage.getItem('auth-token')
+    } catch (error) {
+      console.warn('Failed to read session token from localStorage:', error)
+      return null
+    }
   }
 
   return null

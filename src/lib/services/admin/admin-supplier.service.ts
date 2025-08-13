@@ -13,7 +13,8 @@ import {
   onSnapshot,
   writeBatch,
   serverTimestamp,
-  addDoc
+  addDoc,
+  FieldValue
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
 import { logger } from '@/lib/utils/logger'
@@ -47,12 +48,13 @@ export interface AdminSupplier {
   approvalStatus: 'pending' | 'approved' | 'rejected'
   approvalNotes?: string
   submittedAt: Date
-  approvedAt?: Date
+  approvedAt?: Date | FieldValue
   approvedBy?: string
   rejectionReason?: string
   suspendedReason?: string
-  suspendedAt?: Date
+  suspendedAt?: Date | FieldValue
   suspendedBy?: string
+  suspensionEndDate?: Date | FieldValue
   documents: {
     businessLicense?: string
     taxCertificate?: string
@@ -90,7 +92,7 @@ export interface AdminSupplier {
   isFeatured: boolean
   isVerified: boolean
   createdAt: Date
-  updatedAt: Date
+  updatedAt: Date | FieldValue
   lastModifiedBy?: string
 }
 
@@ -177,7 +179,7 @@ export class AdminSupplierService {
         })
       }
       
-      if (filters.dateRange) {
+      if (filters.dateRange?.start && filters.dateRange?.end) {
         suppliers = suppliers.filter(s => {
           const submitDate = new Date(s.submittedAt)
           return submitDate >= filters.dateRange!.start && submitDate <= filters.dateRange!.end
@@ -600,7 +602,7 @@ export class AdminSupplierService {
           })
         }
         
-        if (filters.dateRange) {
+        if (filters.dateRange?.start && filters.dateRange?.end) {
           suppliers = suppliers.filter(s => {
             const submitDate = new Date(s.submittedAt)
             return submitDate >= filters.dateRange!.start && submitDate <= filters.dateRange!.end

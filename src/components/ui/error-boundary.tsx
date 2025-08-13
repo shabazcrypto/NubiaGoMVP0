@@ -127,7 +127,7 @@ export class ErrorBoundary extends Component<Props, State> {
           },
           errorId: this.state.errorId,
           timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent,
+          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
           url: window.location.href
         })
       }).catch((error) => logger.error('Failed to send error to logging service:', error))

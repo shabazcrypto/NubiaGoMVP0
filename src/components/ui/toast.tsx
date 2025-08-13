@@ -314,28 +314,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 }
 
 // ============================================================================
-// TOAST UTILITIES
+// TOAST UTILITIES - REMOVED DUE TO HOOK RULES VIOLATION
 // ============================================================================
-
-export function showSuccessToast(title: string, message?: string) {
-  const { success } = useToast()
-  success(title, message)
-}
-
-export function showErrorToast(title: string, message?: string) {
-  const { error } = useToast()
-  error(title, message)
-}
-
-export function showWarningToast(title: string, message?: string) {
-  const { warning } = useToast()
-  warning(title, message)
-}
-
-export function showInfoToast(title: string, message?: string) {
-  const { info } = useToast()
-  info(title, message)
-}
+// Note: These utility functions were removed because they violate React Hook rules.
+// Use the useToast hook directly in your components instead.
 
 // ============================================================================
 // TOAST COMPONENTS FOR COMMON USE CASES

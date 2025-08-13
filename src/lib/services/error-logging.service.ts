@@ -284,7 +284,15 @@ export class ErrorLoggingService {
   async getErrorById(errorId: string): Promise<ErrorLogEntry | null> {
     try {
       // Try to get from local storage first
-      const stored = localStorage.getItem(`error_${errorId}`)
+      let stored: string | null = null
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        try {
+          stored = localStorage.getItem(`error_${errorId}`)
+        } catch (error) {
+          console.warn('Failed to read error from localStorage:', error)
+        }
+      }
+      
       if (stored) {
         return JSON.parse(stored)
       }

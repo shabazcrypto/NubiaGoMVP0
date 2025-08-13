@@ -242,12 +242,16 @@ class OfflineStorageManager {
 
   // Storage management
   async getStorageUsage(): Promise<{ used: number; quota: number; available: number }> {
-    if ('storage' in navigator && 'estimate' in navigator.storage) {
-      const estimate = await navigator.storage.estimate()
-      return {
-        used: estimate.usage || 0,
-        quota: estimate.quota || 0,
-        available: (estimate.quota || 0) - (estimate.usage || 0),
+    if (typeof navigator !== 'undefined' && 'storage' in navigator && 'estimate' in navigator.storage) {
+      try {
+        const estimate = await navigator.storage.estimate()
+        return {
+          used: estimate.usage || 0,
+          quota: estimate.quota || 0,
+          available: (estimate.quota || 0) - (estimate.usage || 0),
+        }
+      } catch (error) {
+        console.warn('Failed to get storage estimate:', error)
       }
     }
     return { used: 0, quota: 0, available: 0 }
@@ -325,7 +329,7 @@ export async function getProductOfflineFirst(id: string): Promise<any | null> {
   if (cached) return cached
 
   // Fallback to network if available
-  if (navigator.onLine) {
+  if (typeof navigator !== 'undefined' && navigator.onLine) {
     try {
       const response = await fetch(`/api/products/${id}`)
       if (response.ok) {
@@ -338,7 +342,7 @@ export async function getProductOfflineFirst(id: string): Promise<any | null> {
     }
   }
 
-  return null
+  return cached
 }
 
 export async function searchProductsOfflineFirst(query: string): Promise<any[]> {
@@ -347,7 +351,7 @@ export async function searchProductsOfflineFirst(query: string): Promise<any[]> 
   if (cached.length > 0) return cached
 
   // Fallback to network if available
-  if (navigator.onLine) {
+  if (typeof navigator !== 'undefined' && navigator.onLine) {
     try {
       const response = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`)
       if (response.ok) {

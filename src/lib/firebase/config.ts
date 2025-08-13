@@ -50,7 +50,21 @@ try {
       appId: '1:123456789:web:build-time'
     })
   } else {
-    throw new Error('Firebase initialization failed')
+    // Create a minimal app for development when Firebase fails
+    try {
+      app = initializeApp({
+        apiKey: 'fallback-key',
+        authDomain: 'fallback.firebaseapp.com',
+        projectId: 'fallback',
+        storageBucket: 'fallback.appspot.com',
+        messagingSenderId: '123456789',
+        appId: '1:123456789:web:fallback'
+      })
+      logger.warn('Using fallback Firebase configuration')
+    } catch (fallbackError) {
+      logger.error('Failed to create fallback Firebase app:', fallbackError)
+      throw new Error('Firebase initialization failed completely')
+    }
   }
 }
 

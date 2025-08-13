@@ -36,10 +36,20 @@ export default function MobileHomepage({
   const loadProducts = async () => {
     try {
       setIsLoading(true)
-      const featuredProducts = await productService.getFeaturedProducts(12)
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      )
+      
+      const featuredProductsPromise = productService.getFeaturedProducts(12)
+      
+      const featuredProducts = await Promise.race([featuredProductsPromise, timeoutPromise]) as Product[]
       setProducts(featuredProducts)
     } catch (error) {
       console.error('Error loading products:', error)
+      // Set empty products array to prevent infinite loading
+      setProducts([])
     } finally {
       setIsLoading(false)
     }
@@ -47,22 +57,24 @@ export default function MobileHomepage({
 
   const loadRecentlyViewed = () => {
     try {
-      const recent = localStorage.getItem('recentlyViewedProducts')
-      if (recent) {
-        const recentIds = JSON.parse(recent)
-        if (recentIds.length > 0) {
-          // Load recently viewed products
-          const loadRecent = async () => {
-            try {
-              const recentProducts = await Promise.all(
-                recentIds.slice(0, 6).map((id: string) => productService.getProduct(id))
-              )
-              setRecentlyViewed(recentProducts.filter(Boolean))
-            } catch (error) {
-              console.error('Error loading recently viewed products:', error)
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        const recent = localStorage.getItem('recentlyViewedProducts')
+        if (recent) {
+          const recentIds = JSON.parse(recent)
+          if (recentIds.length > 0) {
+            // Load recently viewed products
+            const loadRecent = async () => {
+              try {
+                const recentProducts = await Promise.all(
+                  recentIds.slice(0, 6).map((id: string) => productService.getProduct(id))
+                )
+                setRecentlyViewed(recentProducts.filter(Boolean))
+              } catch (error) {
+                console.error('Error loading recently viewed products:', error)
+              }
             }
+            loadRecent()
           }
-          loadRecent()
         }
       }
     } catch (error) {
@@ -86,10 +98,12 @@ export default function MobileHomepage({
   const handleProductClick = (product: Product) => {
     // Save to recently viewed
     try {
-      const recent = localStorage.getItem('recentlyViewedProducts') || '[]'
-      const recentIds = JSON.parse(recent)
-      const newRecent = [product.id, ...recentIds.filter((id: string) => id !== product.id)]
-      localStorage.setItem('recentlyViewedProducts', JSON.stringify(newRecent.slice(0, 10)))
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        const recent = localStorage.getItem('recentlyViewedProducts') || '[]'
+        const recentIds = JSON.parse(recent)
+        const newRecent = [product.id, ...recentIds.filter((id: string) => id !== product.id)]
+        localStorage.setItem('recentlyViewedProducts', JSON.stringify(newRecent.slice(0, 10)))
+      }
     } catch (error) {
       console.error('Error saving recently viewed product:', error)
     }

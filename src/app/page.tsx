@@ -19,6 +19,7 @@ import {
 import PullToRefresh from '@/components/mobile/PullToRefresh'
 import MobileHomepage from '@/components/mobile/MobileHomepage'
 import { useEffect, useState } from 'react'
+import TestConnection from './test-connection'
 
 // ============================================================================
 // HERO SECTION
@@ -878,9 +879,34 @@ function NewsletterSection() {
 
 export default function HomePage() {
   const [isClient, setIsClient] = useState(false)
+  const [loadingTimeout, setLoadingTimeout] = useState(false)
+  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'fallback' | 'error'>('connecting')
 
   useEffect(() => {
     setIsClient(true)
+    
+    // Check Firebase connection status
+    const checkConnection = async () => {
+      try {
+        // Test Firebase connection
+        const { db } = await import('@/lib/firebase/config')
+        if (db) {
+          setConnectionStatus('connected')
+        }
+      } catch (error) {
+        console.log('Firebase connection failed, using fallback data')
+        setConnectionStatus('fallback')
+      }
+    }
+    
+    checkConnection()
+    
+    // Add timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setLoadingTimeout(true)
+    }, 8000) // 8 seconds timeout
+    
+    return () => clearTimeout(timeout)
   }, [])
 
   // Handle search functionality
@@ -904,7 +930,22 @@ export default function HomePage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-gray-300 border-t-primary-600 rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <p className="mt-4 text-gray-600">
+            {loadingTimeout ? 'Loading taking longer than expected...' : 'Loading...'}
+          </p>
+          {connectionStatus === 'fallback' && (
+            <p className="mt-2 text-sm text-yellow-600">
+              Using offline mode - some features may be limited
+            </p>
+          )}
+          {loadingTimeout && (
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+            >
+              Reload Page
+            </button>
+          )}
         </div>
       </div>
     )
@@ -912,6 +953,11 @@ export default function HomePage() {
 
   return (
     <>
+      {/* Test Connection Status */}
+      <div className="fixed top-4 right-4 z-50">
+        <TestConnection />
+      </div>
+
       {/* Mobile homepage - only visible on mobile devices */}
       <div className="md:hidden">
         <MobileHomepage 

@@ -208,9 +208,14 @@ export function MobileOptimizationProvider({ children }: MobileOptimizationProvi
         if ('indexedDB' in window) {
           // This is a simplified check - in a real app you'd check actual data
           setOfflineDataAvailable(true)
-        } else if ('localStorage' in window) {
-          const cachedProducts = localStorage.getItem('cached_products')
-          setOfflineDataAvailable(!!cachedProducts)
+        } else if (typeof window !== 'undefined' && 'localStorage' in window) {
+          try {
+            const cachedProducts = localStorage.getItem('cached_products')
+            setOfflineDataAvailable(!!cachedProducts)
+          } catch (error) {
+            console.warn('Error accessing localStorage:', error)
+            setOfflineDataAvailable(false)
+          }
         }
       } catch (error) {
         console.warn('Error checking offline data:', error)

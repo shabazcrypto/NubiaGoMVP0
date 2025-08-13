@@ -18,7 +18,7 @@ interface PWAOptions {
 export function usePWA(options: PWAOptions = {}) {
   const [state, setState] = useState<PWAState>({
     isInstalled: false,
-    isOnline: navigator.onLine,
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     isUpdateAvailable: false,
     registration: null,
     pushSubscription: null,
@@ -35,7 +35,7 @@ export function usePWA(options: PWAOptions = {}) {
 
   // Register service worker
   const registerServiceWorker = useCallback(async () => {
-    if ('serviceWorker' in navigator) {
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
       try {
         const registration = await navigator.serviceWorker.register('/sw.js')
         logger.log('Service Worker registered:', registration)
@@ -47,7 +47,7 @@ export function usePWA(options: PWAOptions = {}) {
           const newWorker = registration.installing
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              if (newWorker.state === 'installed' && navigator.serviceWorker?.controller) {
                 setState(prev => ({ ...prev, isUpdateAvailable: true }))
                 options.onUpdate?.()
               }
@@ -56,10 +56,14 @@ export function usePWA(options: PWAOptions = {}) {
         })
 
         // Handle service worker updates
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          logger.log('Service Worker updated')
-          window.location.reload()
-        })
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            logger.log('Service Worker updated')
+            if (typeof window !== 'undefined') {
+              window.location.reload()
+            }
+          })
+        }
 
         return registration
       } catch (error) {

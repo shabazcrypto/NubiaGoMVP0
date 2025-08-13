@@ -50,7 +50,7 @@ export class MobileDetector {
 
     const screenWidth = window.innerWidth
     const screenHeight = window.innerHeight
-    const userAgent = navigator.userAgent
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : ''
 
     // Check if device is mobile based on screen width and user agent
     const isMobile = screenWidth < this.breakpoints.mobile && 
@@ -64,8 +64,8 @@ export class MobileDetector {
 
     // Detect touch support
     const touchSupport = 'ontouchstart' in window || 
-      navigator.maxTouchPoints > 0 || 
-      (navigator as any).msMaxTouchPoints > 0
+      (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0) || 
+      (typeof navigator !== 'undefined' && (navigator as any).msMaxTouchPoints > 0)
 
     // Estimate network speed based on connection API
     const networkSpeed = this.estimateNetworkSpeed()
@@ -86,12 +86,12 @@ export class MobileDetector {
    * Estimate network speed using available APIs
    */
   private estimateNetworkSpeed(): 'slow' | 'medium' | 'fast' {
-    if (typeof window === 'undefined') return 'medium'
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') return 'medium'
 
     // Check for Network Information API
     if ('connection' in navigator) {
       const connection = (navigator as any).connection
-      if (connection.effectiveType) {
+      if (connection?.effectiveType) {
         switch (connection.effectiveType) {
           case 'slow-2g':
           case '2g':
@@ -250,7 +250,7 @@ export class MobileDetector {
     // Consider devices with low resolution or small screens as low-end
     return totalPixels < 480 * 800 || // Small mobile screens
            this.deviceInfo.networkSpeed === 'slow' ||
-           (navigator as any).deviceMemory < 2
+           (typeof navigator !== 'undefined' && (navigator as any).deviceMemory < 2)
   }
 
   /**

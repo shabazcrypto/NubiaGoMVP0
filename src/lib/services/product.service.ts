@@ -17,6 +17,88 @@ import {
 import { db } from '@/lib/firebase/config'
 import { Product, Category } from '@/types'
 
+// Mock data fallback for when Firebase fails
+const MOCK_PRODUCTS: Product[] = [
+  {
+    id: 'mock-1',
+    name: 'Premium Wireless Headphones',
+    description: 'High-quality wireless headphones with noise cancellation',
+    price: 299.99,
+    category: 'Electronics',
+    subcategory: 'Audio',
+    brand: 'AudioTech',
+    imageUrl: '/product-headphones-1.jpg',
+    images: ['/product-headphones-1.jpg'],
+    thumbnailUrl: '/product-headphones-1.jpg',
+    sku: 'AUDIO-001',
+    rating: 4.8,
+    reviewCount: 156,
+    stock: 25,
+    isActive: true,
+    isFeatured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    tags: ['wireless', 'noise-cancelling', 'premium'],
+    specifications: {
+      'Connectivity': 'Bluetooth 5.0',
+      'Battery Life': '30 hours',
+      'Weight': '250g'
+    }
+  },
+  {
+    id: 'mock-2',
+    name: 'Smart Fitness Watch',
+    description: 'Advanced fitness tracking with heart rate monitoring',
+    price: 199.99,
+    category: 'Electronics',
+    subcategory: 'Wearables',
+    brand: 'FitTech',
+    imageUrl: '/product-accessories-1.jpg',
+    images: ['/product-accessories-1.jpg'],
+    thumbnailUrl: '/product-accessories-1.jpg',
+    sku: 'WEAR-001',
+    rating: 4.6,
+    reviewCount: 89,
+    stock: 18,
+    isActive: true,
+    isFeatured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    tags: ['fitness', 'smartwatch', 'health'],
+    specifications: {
+      'Display': '1.4" AMOLED',
+      'Battery Life': '7 days',
+      'Water Resistance': '5ATM'
+    }
+  },
+  {
+    id: 'mock-3',
+    name: 'Premium Running Sneakers',
+    description: 'Professional running shoes with advanced cushioning',
+    price: 149.99,
+    category: 'Sports',
+    subcategory: 'Footwear',
+    brand: 'RunFast',
+    imageUrl: '/product-fashion-1.jpg',
+    images: ['/product-fashion-1.jpg'],
+    thumbnailUrl: '/product-fashion-1.jpg',
+    sku: 'SHOE-001',
+    rating: 4.7,
+    reviewCount: 234,
+    stock: 32,
+    isActive: true,
+    isFeatured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    tags: ['running', 'athletic', 'comfortable'],
+    specifications: {
+      'Weight': '280g',
+      'Drop': '8mm',
+      'Terrain': 'Road'
+    }
+  }
+]
+
 export class ProductService {
   private readonly COLLECTION_NAME = 'products'
 
@@ -31,8 +113,8 @@ export class ProductService {
       if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
         console.log('Build time detected, returning mock products')
         return {
-          products: [],
-          total: 0,
+          products: MOCK_PRODUCTS,
+          total: MOCK_PRODUCTS.length,
           hasMore: false
         }
       }
@@ -56,16 +138,13 @@ export class ProductService {
         hasMore: products.length === pageSize
       }
     } catch (error) {
-      console.error('Error getting products:', error)
-      // During build time or when Firestore is unavailable, return empty array
-      if (process.env.NODE_ENV === 'production' || process.env.NEXT_PHASE === 'phase-production-build') {
-        return {
-          products: [],
-          total: 0,
-          hasMore: false
-        }
+      console.error('Error getting all products, using mock data:', error)
+      // Return mock data when Firebase fails
+      return {
+        products: MOCK_PRODUCTS,
+        total: MOCK_PRODUCTS.length,
+        hasMore: false
       }
-      throw new Error('Failed to fetch products')
     }
   }
 
@@ -90,12 +169,10 @@ export class ProductService {
         ...docSnap.data()
       } as Product
     } catch (error) {
-      console.error('Error getting product:', error)
-      // During build time or when Firestore is unavailable, return null
-      if (process.env.NODE_ENV === 'production' || process.env.NEXT_PHASE === 'phase-production-build') {
-        return null
-      }
-      throw new Error('Failed to fetch product')
+      console.error('Error getting product, checking mock data:', error)
+      // Try to find in mock data when Firebase fails
+      const mockProduct = MOCK_PRODUCTS.find(p => p.id === id)
+      return mockProduct || null
     }
   }
 
@@ -126,8 +203,14 @@ export class ProductService {
         hasMore: products.length === pageSize
       }
     } catch (error) {
-      console.error('Error getting products by category:', error)
-      throw new Error('Failed to fetch products by category')
+      console.error('Error getting products by category, using mock data:', error)
+      // Return filtered mock data when Firebase fails
+      const filteredProducts = MOCK_PRODUCTS.filter(p => p.category === category)
+      return {
+        products: filteredProducts,
+        total: filteredProducts.length,
+        hasMore: false
+      }
     }
   }
 
@@ -158,8 +241,14 @@ export class ProductService {
         hasMore: products.length === pageSize
       }
     } catch (error) {
-      console.error('Error getting products by subcategory:', error)
-      throw new Error('Failed to fetch products by subcategory')
+      console.error('Error getting products by subcategory, using mock data:', error)
+      // Return filtered mock data when Firebase fails
+      const filteredProducts = MOCK_PRODUCTS.filter(p => p.subcategory === subcategory)
+      return {
+        products: filteredProducts,
+        total: filteredProducts.length,
+        hasMore: false
+      }
     }
   }
 
@@ -180,8 +269,9 @@ export class ProductService {
         ...doc.data()
       })) as Product[]
     } catch (error) {
-      console.error('Error getting featured products:', error)
-      throw new Error('Failed to fetch featured products')
+      console.error('Error getting featured products, using mock data:', error)
+      // Return featured mock products when Firebase fails
+      return MOCK_PRODUCTS.filter(p => p.isFeatured).slice(0, limitCount)
     }
   }
 

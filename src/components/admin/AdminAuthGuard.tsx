@@ -8,7 +8,7 @@ import { Loader2, Shield, AlertTriangle } from 'lucide-react'
 
 interface AdminAuthGuardProps {
   children: React.ReactNode
-  requiredRole?: 'admin' | 'super-admin'
+  requiredRole?: 'admin'
   fallback?: React.ReactNode
 }
 
@@ -30,14 +30,8 @@ export default function AdminAuthGuard({
         return
       }
 
-      if (user.role !== 'admin' && user.role !== 'super-admin') {
+      if (user.role !== 'admin') {
         // User exists but not admin, redirect to unauthorized
-        router.push('/unauthorized')
-        return
-      }
-
-      if (requiredRole === 'super-admin' && user.role !== 'super-admin') {
-        // User is admin but not super-admin, redirect to unauthorized
         router.push('/unauthorized')
         return
       }

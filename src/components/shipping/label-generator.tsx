@@ -123,7 +123,7 @@ export function LabelGenerator({ orderId, className = '' }: LabelGeneratorProps)
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Authorization': `Bearer ${typeof window !== 'undefined' && typeof localStorage !== 'undefined' ? localStorage.getItem('authToken') : ''}`,
         },
         body: JSON.stringify({
           ...data,

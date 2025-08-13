@@ -11,19 +11,8 @@ import { useToast } from '@/components/ui/toast'
 import { useAdminDashboardStore } from '@/store/admin/admin-dashboard.store'
 import AdminAuthGuard from '@/components/admin/AdminAuthGuard'
 
-interface Supplier {
-  id: string
-  businessName: string
-  ownerName: string
-  email: string
-  phone: string
-  status: 'approved' | 'pending' | 'rejected' | 'suspended'
-  totalOrders: number
-  totalRevenue: number
-  rating: number
-  joinedAt: string
-  category: string
-}
+// Use the actual AdminSupplier type from the store
+type Supplier = import('@/lib/services/admin/admin-supplier.service').AdminSupplier
 
 export default function AdminSuppliersPage() {
   const router = useRouter()
@@ -40,7 +29,7 @@ export default function AdminSuppliersPage() {
   const {
     suppliers,
     supplierStats,
-    loading,
+    loading: supplierLoading,
     fetchSuppliers,
     updateSupplierApproval,
     suspendSupplier,
@@ -50,21 +39,76 @@ export default function AdminSuppliersPage() {
     setSupplierFilters
   } = useAdminDashboardStore()
 
+  // Local loading state for better UX
+  const [localLoading, setLocalLoading] = useState(true)
+  const [localError, setLocalError] = useState<string | null>(null)
+  const loading = supplierLoading || localLoading
+
+  // Debug information
+  useEffect(() => {
+    console.log('Admin Suppliers Debug:', {
+      supplierLoading,
+      localLoading,
+      loading,
+      suppliersCount: suppliers?.length || 0,
+      supplierStats: supplierStats,
+      localError
+    })
+  }, [supplierLoading, localLoading, loading, suppliers, supplierStats, localError])
+
+  // Fallback data to prevent crashes
+  const safeSupplierStats = supplierStats || {
+    totalSuppliers: 0,
+    approvedSuppliers: 0,
+    pendingSuppliers: 0,
+    rejectedSuppliers: 0,
+    suspendedSuppliers: 0,
+    totalRevenue: 0,
+    averageRating: 0,
+    totalProducts: 0,
+    activeCategories: 0,
+    newSuppliersThisMonth: 0,
+    topPerformingSuppliers: 0
+  }
+
+  const safeSuppliers = suppliers || []
+
   // Filter suppliers based on search and filters
-  const filteredSuppliers = suppliers.filter(supplier => {
+  const filteredSuppliers = safeSuppliers.filter(supplier => {
     const matchesSearch = supplier.businessName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         supplier.ownerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         supplier.ownerEmail?.toLowerCase().includes(searchQuery.toLowerCase())
     
     const matchesStatus = filterStatus === 'all' || supplier.status === filterStatus
-    const matchesCategory = filterCategory === 'all' || supplier.categories?.some(cat => cat === filterCategory)
+    const matchesCategory = filterCategory === 'all' || supplier.categories?.includes(filterCategory)
     
     return matchesSearch && matchesStatus && matchesCategory
   })
 
   // Fetch suppliers on component mount
   useEffect(() => {
-    fetchSuppliers()
+    const loadSuppliers = async () => {
+      try {
+        setLocalLoading(true)
+        setLocalError(null)
+        
+        // Add timeout to prevent infinite loading
+        const timeoutId = setTimeout(() => {
+          setLocalError('Request timeout - please refresh the page')
+          setLocalLoading(false)
+        }, 30000) // 30 seconds timeout
+        
+        await fetchSuppliers()
+        clearTimeout(timeoutId)
+      } catch (err) {
+        console.error('Failed to fetch suppliers:', err)
+        setLocalError(err instanceof Error ? err.message : 'Failed to fetch suppliers')
+      } finally {
+        setLocalLoading(false)
+      }
+    }
+    
+    loadSuppliers()
   }, [fetchSuppliers])
 
   // Update filters when they change
@@ -149,7 +193,7 @@ export default function AdminSuppliersPage() {
 
   const handleSelectAllSuppliers = (checked: boolean) => {
     if (checked) {
-      setSelectedSuppliers(suppliers.map(supplier => supplier.id))
+      setSelectedSuppliers(safeSuppliers.map(supplier => supplier.id))
     } else {
       setSelectedSuppliers([])
     }
@@ -159,7 +203,13 @@ export default function AdminSuppliersPage() {
     return (
       <AdminAuthGuard>
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600 text-lg">Loading your data...</p>
+            {localError && (
+              <p className="text-red-500 text-sm mt-2">Error: {localError}</p>
+            )}
+          </div>
         </div>
       </AdminAuthGuard>
     )
@@ -197,13 +247,13 @@ export default function AdminSuppliersPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Total Suppliers</p>
-                    <p className="text-2xl font-bold text-gray-900">{supplierStats.totalSuppliers.toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-gray-900">{safeSupplierStats.totalSuppliers.toLocaleString()}</p>
                   </div>
                   <Store className="h-8 w-8 text-blue-600" />
                 </div>
                 <div className="mt-4 flex items-center text-sm text-green-600">
                   <TrendingUp className="h-4 w-4 mr-1" />
-                  <span>{supplierStats.newSuppliersThisMonth} new this month</span>
+                  <span>{safeSupplierStats.newSuppliersThisMonth} new this month</span>
                 </div>
               </div>
 
@@ -211,7 +261,7 @@ export default function AdminSuppliersPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Approved</p>
-                    <p className="text-2xl font-bold text-gray-900">{supplierStats.approvedSuppliers.toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-gray-900">{safeSupplierStats.approvedSuppliers.toLocaleString()}</p>
                   </div>
                   <CheckCircle className="h-8 w-8 text-green-600" />
                 </div>
@@ -225,7 +275,7 @@ export default function AdminSuppliersPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Pending</p>
-                    <p className="text-2xl font-bold text-gray-900">{supplierStats.pendingSuppliers.toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-gray-900">{safeSupplierStats.pendingSuppliers.toLocaleString()}</p>
                   </div>
                   <Clock className="h-8 w-8 text-yellow-600" />
                 </div>
@@ -239,7 +289,7 @@ export default function AdminSuppliersPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                    <p className="text-2xl font-bold text-gray-900">${supplierStats.totalRevenue.toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-gray-900">${safeSupplierStats.totalRevenue.toLocaleString()}</p>
                   </div>
                   <TrendingUp className="h-8 w-8 text-green-600" />
                 </div>
@@ -304,7 +354,7 @@ export default function AdminSuppliersPage() {
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Suppliers</h3>
                       <div className="space-y-3">
-                        {suppliers.slice(0, 5).map((supplier) => (
+                        {safeSuppliers.slice(0, 5).map((supplier) => (
                           <div key={supplier.id} className="flex items-center justify-between text-sm">
                             <div className="flex items-center space-x-3">
                               <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
@@ -413,7 +463,7 @@ export default function AdminSuppliersPage() {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                               <input
                                 type="checkbox"
-                                checked={selectedSuppliers.length === suppliers.length}
+                                checked={selectedSuppliers.length === safeSuppliers.length}
                                 onChange={(e) => handleSelectAllSuppliers(e.target.checked)}
                                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                               />
@@ -456,7 +506,7 @@ export default function AdminSuppliersPage() {
                                   </div>
                                   <div className="ml-4">
                                     <div className="text-sm font-medium text-gray-900">{supplier.businessName}</div>
-                                    <div className="text-sm text-gray-500">{supplier.category}</div>
+                                    <div className="text-sm text-gray-500">{supplier.categories?.[0] || 'No category'}</div>
                                   </div>
                                 </div>
                               </td>
@@ -470,11 +520,11 @@ export default function AdminSuppliersPage() {
                                 <div className="space-y-1">
                                   <div className="flex items-center text-sm text-gray-900">
                                     <Mail className="h-3 w-3 text-gray-400 mr-1" />
-                                    {supplier.email}
+                                    {supplier.ownerEmail}
                                   </div>
                                   <div className="flex items-center text-sm text-gray-500">
                                     <Phone className="h-3 w-3 text-gray-400 mr-1" />
-                                    {supplier.phone}
+                                    {supplier.ownerPhone}
                                   </div>
                                 </div>
                               </td>
@@ -491,14 +541,14 @@ export default function AdminSuppliersPage() {
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="space-y-1">
                                   <div className="text-sm text-gray-900">
-                                    {supplier.totalOrders} orders
+                                    {supplier.businessMetrics?.totalOrders || 0} orders
                                   </div>
                                   <div className="text-sm text-gray-500">
-                                    ${supplier.totalRevenue.toLocaleString()}
+                                    ${(supplier.businessMetrics?.totalRevenue || 0).toLocaleString()}
                                   </div>
                                   <div className="flex items-center">
                                     <Star className="h-3 w-3 text-yellow-400 mr-1" />
-                                    <span className="text-xs text-gray-600">{supplier.rating}</span>
+                                    <span className="text-xs text-gray-600">{supplier.businessMetrics?.averageRating || 'N/A'}</span>
                                   </div>
                                 </div>
                               </td>
@@ -588,7 +638,7 @@ export default function AdminSuppliersPage() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {suppliers.filter(s => s.status === 'pending').map((supplier) => (
+                                                     {safeSuppliers.filter(s => s.status === 'pending').map((supplier) => (
                             <tr key={supplier.id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">{supplier.businessName}</div>
@@ -597,12 +647,12 @@ export default function AdminSuppliersPage() {
                                 {supplier.ownerName}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">{supplier.email}</div>
-                                <div className="text-sm text-gray-500">{supplier.phone}</div>
+                                <div className="text-sm text-gray-900">{supplier.ownerEmail}</div>
+                                <div className="text-sm text-gray-500">{supplier.ownerPhone}</div>
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {supplier.category}
-                              </td>
+                                                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {supplier.categories?.[0] || supplier.businessType || 'N/A'}
+                                </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div className="flex space-x-2">
                                   <button
@@ -648,21 +698,21 @@ export default function AdminSuppliersPage() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {suppliers.filter(s => s.status === 'approved').map((supplier) => (
+                                                     {safeSuppliers.filter(s => s.status === 'approved').map((supplier) => (
                             <tr key={supplier.id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">{supplier.businessName}</div>
-                                <div className="text-sm text-gray-500">{supplier.category}</div>
+                                <div className="text-sm text-gray-500">{supplier.categories?.[0] || supplier.businessType || 'N/A'}</div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {supplier.ownerName}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900">
-                                  {supplier.totalOrders} orders • ${supplier.totalRevenue.toLocaleString()}
+                                  {supplier.businessMetrics?.totalOrders || 0} orders • ${(supplier.businessMetrics?.totalRevenue || 0).toLocaleString()}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                  Rating: {supplier.rating}
+                                  Rating: {supplier.businessMetrics?.averageRating || 'N/A'}
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -689,9 +739,9 @@ export default function AdminSuppliersPage() {
                       <div className="bg-white p-6 rounded-lg shadow-sm">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Top Performing Suppliers</h3>
                         <div className="space-y-3">
-                          {suppliers
+                          {safeSuppliers
                             .filter(s => s.status === 'approved')
-                            .sort((a, b) => b.totalRevenue - a.totalRevenue)
+                            .sort((a, b) => (b.businessMetrics?.totalRevenue || 0) - (a.businessMetrics?.totalRevenue || 0))
                             .slice(0, 5)
                             .map((supplier, index) => (
                               <div key={supplier.id} className="flex items-center justify-between">
@@ -700,7 +750,7 @@ export default function AdminSuppliersPage() {
                                   <span className="text-sm text-gray-900">{supplier.businessName}</span>
                                 </div>
                                 <span className="text-sm font-medium text-gray-900">
-                                  ${supplier.totalRevenue.toLocaleString()}
+                                  ${(supplier.businessMetrics?.totalRevenue || 0).toLocaleString()}
                                 </span>
                               </div>
                             ))}
@@ -709,12 +759,13 @@ export default function AdminSuppliersPage() {
                       <div className="bg-white p-6 rounded-lg shadow-sm">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Category Distribution</h3>
                         <div className="space-y-3">
-                          {Object.entries(
-                            suppliers.reduce((acc, supplier) => {
-                              acc[supplier.category] = (acc[supplier.category] || 0) + 1
-                              return acc
-                            }, {} as Record<string, number>)
-                          )
+                                                     {Object.entries(
+                             safeSuppliers.reduce((acc, supplier) => {
+                               const category = supplier.categories?.[0] || supplier.businessType || 'Other'
+                               acc[category] = (acc[category] || 0) + 1
+                               return acc
+                             }, {} as Record<string, number>)
+                           )
                             .sort(([, a], [, b]) => b - a)
                             .map(([category, count]) => (
                               <div key={category} className="flex items-center justify-between">

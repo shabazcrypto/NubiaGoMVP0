@@ -13,7 +13,8 @@ import {
   onSnapshot,
   writeBatch,
   serverTimestamp,
-  addDoc
+  addDoc,
+  FieldValue
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
 import { logger } from '@/lib/utils/logger'
@@ -70,14 +71,14 @@ export interface AdminOrder {
   adminNotes?: string
   trackingNumber?: string
   estimatedDelivery?: Date
-  actualDelivery?: Date
+  actualDelivery?: Date | FieldValue
   createdAt: Date
-  updatedAt: Date
+  updatedAt: Date | FieldValue
   lastModifiedBy?: string
   cancellationReason?: string
   refundReason?: string
   refundAmount?: number
-  refundDate?: Date
+  refundDate?: Date | FieldValue
 }
 
 export interface OrderStats {

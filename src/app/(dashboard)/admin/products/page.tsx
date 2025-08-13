@@ -59,7 +59,7 @@ export default function AdminProductsPage() {
   // Filter products based on search and filters
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        product.supplier?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        product.supplier?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         product.id?.toLowerCase().includes(searchQuery.toLowerCase())
     
     const matchesStatus = filterStatus === 'all' || product.status === filterStatus
@@ -340,7 +340,7 @@ export default function AdminProductsPage() {
                               </div>
                               <div>
                                 <p className="font-medium text-gray-900">{product.name}</p>
-                                <p className="text-gray-500">{product.supplier} • ${product.price}</p>
+                                <p className="text-gray-500">{product.supplier?.name || 'Unknown Supplier'} • ${product.price}</p>
                               </div>
                             </div>
                             <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -504,7 +504,7 @@ export default function AdminProductsPage() {
                                   </div>
                                   <div className="ml-4">
                                     <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                                    <div className="text-sm text-gray-500">{product.supplier}</div>
+                                    <div className="text-sm text-gray-500">{product.supplier?.name || 'Unknown Supplier'}</div>
                                   </div>
                                 </div>
                               </td>
@@ -618,10 +618,14 @@ export default function AdminProductsPage() {
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {product.supplier}
+                                {product.supplier?.name || 'Unknown Supplier'}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {product.submittedAt}
+                                {product.submittedAt ? 
+                                  (product.submittedAt instanceof Date ? 
+                                    product.submittedAt.toLocaleDateString() : 
+                                    'Date format error') 
+                                  : 'Unknown date'}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div className="flex space-x-2">

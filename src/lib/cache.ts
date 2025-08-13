@@ -395,7 +395,7 @@ export class EnhancedCache {
    * Persist cache to localStorage
    */
   private persistToStorage(): void {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') return
     
     try {
       const data = {
@@ -413,7 +413,7 @@ export class EnhancedCache {
    * Load cache from localStorage
    */
   private loadFromStorage(): void {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') return
     
     try {
       const stored = localStorage.getItem(this.namespace)
@@ -424,7 +424,11 @@ export class EnhancedCache {
       
       // Don't load cache older than 1 hour
       if (age > 60 * 60 * 1000) {
-        localStorage.removeItem(this.namespace)
+        try {
+          localStorage.removeItem(this.namespace)
+        } catch (error) {
+          console.warn('Failed to remove expired cache from localStorage:', error)
+        }
         return
       }
       
@@ -436,7 +440,11 @@ export class EnhancedCache {
       }
     } catch (error) {
       console.warn('Failed to load cache from localStorage:', error)
-      localStorage.removeItem(this.namespace)
+      try {
+        localStorage.removeItem(this.namespace)
+      } catch (removeError) {
+        console.warn('Failed to remove corrupted cache from localStorage:', removeError)
+      }
     }
   }
 }

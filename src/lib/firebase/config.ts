@@ -2,15 +2,16 @@ import { initializeApp, getApps, FirebaseApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
+import { logger } from '@/lib/utils/logger'
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'mock-api-key',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'mock.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'mock-project',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'mock.appspot.com',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '123456789',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:123456789:web:mock',
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-MOCK'
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBOkKPN3viR75p4BLuXrmqR_4zlc0X_qL0',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'nubiago-aa411.firebaseapp.com',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiago-aa411',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'nubiago-aa411.firebasestorage.app',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '618017989773',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:618017989773:web:2b1d1c14c2b9e086b52ec4',
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-JMQ8GT6003'
 }
 
 // Validate required environment variables only in production runtime
@@ -27,7 +28,7 @@ const requiredEnvVars = [
 if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PHASE) {
   for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
-      console.warn(`Missing required environment variable: ${envVar}`)
+      logger.warn(`Missing required environment variable: ${envVar}`)
     }
   }
 }
@@ -37,7 +38,7 @@ let app: FirebaseApp
 try {
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
 } catch (error) {
-  console.error('Failed to initialize Firebase:', error)
+  logger.error('Failed to initialize Firebase:', error)
   // During build time, create a minimal app
   if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
     app = initializeApp({
@@ -67,13 +68,13 @@ if (typeof window !== 'undefined') {
     // Add error listener for better debugging
     auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log('User authenticated:', user.email)
+        logger.log('User authenticated:', user.email)
       }
     }, (error) => {
-      console.error('Auth state change error:', error)
+      logger.error('Auth state change error:', error)
     })
   } catch (error) {
-    console.warn('Failed to configure auth settings:', error)
+    logger.warn('Failed to configure auth settings:', error)
   }
 }
 

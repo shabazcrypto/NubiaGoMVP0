@@ -1,5 +1,4 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
 import { Button } from '@/components/ui/button'
 
 describe('Button Component', () => {
@@ -41,11 +40,12 @@ describe('Button Component', () => {
     render(<Button loading>Loading</Button>)
     const button = screen.getByRole('button')
     expect(button).toBeDisabled()
-    expect(button).toHaveClass('opacity-50')
+    // The button is disabled when loading, so it should have disabled:opacity-50 class
+    expect(button).toHaveClass('disabled:opacity-50')
   })
 
   it('handles click events', () => {
-    const handleClick = vi.fn()
+    const handleClick = jest.fn()
     render(<Button onClick={handleClick}>Click me</Button>)
     
     fireEvent.click(screen.getByRole('button'))

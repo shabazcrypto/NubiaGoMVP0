@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { logger } from '@/lib/utils/logger'
 
 interface PWAState {
   isInstalled: boolean
@@ -37,7 +38,7 @@ export function usePWA(options: PWAOptions = {}) {
     if ('serviceWorker' in navigator) {
       try {
         const registration = await navigator.serviceWorker.register('/sw.js')
-        console.log('Service Worker registered:', registration)
+        logger.log('Service Worker registered:', registration)
 
         setState(prev => ({ ...prev, registration }))
 
@@ -56,13 +57,13 @@ export function usePWA(options: PWAOptions = {}) {
 
         // Handle service worker updates
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-          console.log('Service Worker updated')
+          logger.log('Service Worker updated')
           window.location.reload()
         })
 
         return registration
       } catch (error) {
-        console.error('Service Worker registration failed:', error)
+        logger.error('Service Worker registration failed:', error)
       }
     }
   }, [options.onUpdate])
@@ -83,7 +84,7 @@ export function usePWA(options: PWAOptions = {}) {
         return subscription
       }
     } catch (error) {
-      console.error('Push notification permission failed:', error)
+              logger.error('Push notification permission failed:', error)
     }
 
     return null
@@ -100,7 +101,7 @@ export function usePWA(options: PWAOptions = {}) {
         ...options
       })
     } catch (error) {
-      console.error('Failed to show notification:', error)
+              logger.error('Failed to show notification:', error)
     }
   }, [state.registration])
 
@@ -118,7 +119,7 @@ export function usePWA(options: PWAOptions = {}) {
     if (deferredPrompt) {
       deferredPrompt.prompt()
       const { outcome } = await deferredPrompt.userChoice
-      console.log('Install prompt outcome:', outcome)
+              logger.log('Install prompt outcome:', outcome)
       setDeferredPrompt(null)
       return outcome === 'accepted'
     }

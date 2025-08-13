@@ -54,6 +54,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
 import { CartService } from '@/lib/services/cart.service'
 import { WishlistService } from '@/lib/services/wishlist.service'
+import { logger } from '@/lib/utils/logger'
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -119,7 +120,7 @@ export default function Navigation() {
         setCartItemCount(cart.itemCount)
         setWishlistItemCount(wishlist.items.length)
       } catch (error) {
-        console.error('Error fetching counts:', error)
+        logger.error('Error fetching counts:', error)
       }
     }
 
@@ -133,7 +134,7 @@ export default function Navigation() {
       try {
         setIsScrolled(window.scrollY > 10)
       } catch (error) {
-        console.error('Scroll handler error:', error)
+        logger.error('Scroll handler error:', error)
       }
     }
 
@@ -155,7 +156,7 @@ export default function Navigation() {
           setIsCategoriesOpen(false)
         }
       } catch (error) {
-        console.error('Click outside handler error:', error)
+        logger.error('Click outside handler error:', error)
       }
     }
 
@@ -169,7 +170,7 @@ export default function Navigation() {
       setIsUserMenuOpen(false)
       router.push('/')
     } catch (error) {
-      console.error('Logout error:', error)
+              logger.error('Logout error:', error)
       setHasError(true)
     }
   }
@@ -181,7 +182,7 @@ export default function Navigation() {
         router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`)
       }
     } catch (error) {
-      console.error('Search error:', error)
+              logger.error('Search error:', error)
     }
   }
 
@@ -190,9 +191,9 @@ export default function Navigation() {
     e.stopPropagation()
     
     try {
-      console.log('Categories toggle clicked, current state:', isCategoriesOpen)
+      logger.log('Categories toggle clicked, current state:', isCategoriesOpen)
       const newState = !isCategoriesOpen
-      console.log('Setting categories state to:', newState)
+      logger.log('Setting categories state to:', newState)
       
       if (newState) {
         // Calculate button position for dropdown
@@ -209,7 +210,7 @@ export default function Navigation() {
       
       setIsCategoriesOpen(newState)
     } catch (error) {
-      console.error('Categories toggle error:', error)
+              logger.error('Categories toggle error:', error)
     }
   }
 
@@ -218,11 +219,11 @@ export default function Navigation() {
     e.stopPropagation()
     
     try {
-      console.log('Subcategory clicked:', href)
+              logger.log('Subcategory clicked:', href)
       setIsCategoriesOpen(false)
       router.push(href)
     } catch (error) {
-      console.error('Subcategory click error:', error)
+              logger.error('Subcategory click error:', error)
     }
   }
 

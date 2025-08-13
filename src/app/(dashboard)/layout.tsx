@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Home } from 'lucide-react'
-import { ErrorBoundary } from '@/components/ui/error-boundary'
+import { ErrorBoundaryProvider } from '@/components/providers/error-boundary-provider'
 import { Logo } from '@/components/ui/Logo'
 import { ToastProvider } from '@/components/ui/toast'
 import { FirebaseAuthProvider } from '@/hooks/useFirebaseAuth'
@@ -14,7 +14,7 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <ErrorBoundary>
+            <ErrorBoundaryProvider>
       <FirebaseAuthProvider>
         <ToastProvider>
           <RoleChangeHandler>
@@ -49,6 +49,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </RoleChangeHandler>
         </ToastProvider>
       </FirebaseAuthProvider>
-    </ErrorBoundary>
+            </ErrorBoundaryProvider>
   )
 }

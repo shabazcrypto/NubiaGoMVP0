@@ -90,11 +90,13 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "14.0.0",
+    "jest-environment-jsdom": "^30.0.5",
     "lighthouse": "^12.8.1",
     "null-loader": "^4.0.1",
     "pa11y": "^9.0.0",
     "puppeteer": "^24.16.1",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "engines": {
     "node": "22.x"

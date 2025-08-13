@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { logisticsService, ShippingRate, ShippingAddress, ShippingPackage, TrackingInfo } from '@/lib/services/logistics.service'
+import { logger } from '@/lib/utils/logger'
 
 export interface ShippingMethod {
   id: string
@@ -167,7 +168,7 @@ export const useShippingStore = create<ShippingState & ShippingActions>()(
           set({ rates, ratesLoading: false })
           return true
         } catch (error: any) {
-          console.error('Failed to get shipping rates:', error)
+          logger.error('Failed to get shipping rates:', error)
           set({ ratesError: error.message || 'Failed to calculate rates', ratesLoading: false })
           return false
         }
@@ -195,8 +196,8 @@ export const useShippingStore = create<ShippingState & ShippingActions>()(
           set({ trackingInfo, trackingLoading: false })
           return true
         } catch (error: any) {
-          console.error('Failed to get tracking info:', error)
-          set({ trackingError: error.message || 'Failed to get tracking info', trackingLoading: false })
+          logger.error('Failed to get tracking info:', error)
+          set({ ratesError: error.message || 'Failed to get tracking info', trackingLoading: false })
           return false
         }
       },

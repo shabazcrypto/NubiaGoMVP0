@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { logger } from '@/lib/utils/logger'
 
 export interface SearchHistoryItem {
   id: string
@@ -32,7 +33,7 @@ const getSafeStorage = () => {
     window.localStorage.removeItem(testKey)
     return window.localStorage
   } catch (error) {
-    console.warn('localStorage access blocked, using memory storage:', error)
+    logger.warn('localStorage access blocked, using memory storage:', error)
     return undefined
   }
 }
@@ -107,7 +108,7 @@ export const useSearchHistoryStore = create<SearchHistoryState>()(
         popularSearches: state.popularSearches,
       }) as unknown as SearchHistoryState,
       onRehydrateStorage: () => (state) => {
-        console.log('Search history store rehydrated:', state)
+        logger.log('Search history store rehydrated:', state)
       },
     }
   )

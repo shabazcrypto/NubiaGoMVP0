@@ -14,6 +14,7 @@ import {
   UserCredential
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase/config'
+import { logger } from '@/lib/utils/logger'
 
 interface AuthContextType {
   user: User | null
@@ -40,7 +41,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       setUser(user)
       setLoading(false)
     }, (error) => {
-      console.error('Auth state change error:', error)
+      logger.error('Auth state change error:', error)
       setError('Authentication error occurred')
       setLoading(false)
     })
@@ -54,7 +55,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       const result = await signInWithEmailAndPassword(auth, email, password)
       return result
     } catch (error: any) {
-      console.error('Sign in error:', error)
+      logger.error('Sign in error:', error)
       let errorMessage = 'Sign in failed'
       
       switch (error.code) {
@@ -93,7 +94,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       
       return result
     } catch (error: any) {
-      console.error('Sign up error:', error)
+      logger.error('Sign up error:', error)
       let errorMessage = 'Account creation failed'
       
       switch (error.code) {
@@ -123,7 +124,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       setError(null)
       await firebaseSignOut(auth)
     } catch (error: any) {
-      console.error('Sign out error:', error)
+      logger.error('Sign out error:', error)
       setError('Sign out failed')
       throw error
     }
@@ -134,7 +135,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       setError(null)
       await sendPasswordResetEmail(auth, email)
     } catch (error: any) {
-      console.error('Password reset error:', error)
+      logger.error('Password reset error:', error)
       let errorMessage = 'Password reset failed'
       
       switch (error.code) {
@@ -160,7 +161,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
         await updateProfile(user, { displayName })
       }
     } catch (error: any) {
-      console.error('Profile update error:', error)
+      logger.error('Profile update error:', error)
       setError('Profile update failed')
       throw error
     }
@@ -178,7 +179,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       const result = await signInWithPopup(auth, provider)
       return result
     } catch (error: any) {
-      console.error('Google sign in error:', error)
+      logger.error('Google sign in error:', error)
       let errorMessage = 'Google sign in failed'
       
       switch (error.code) {

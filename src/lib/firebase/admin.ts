@@ -2,6 +2,7 @@ import { initializeApp, getApps, cert, applicationDefault } from 'firebase-admin
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
 import { getStorage } from 'firebase-admin/storage'
+import { logger } from '@/lib/utils/logger'
 
 // Initialize Firebase Admin with fallback options
 let adminApp
@@ -22,15 +23,15 @@ try {
       // For client-side only apps, create a minimal admin app
       // This won't interfere with client-side authentication
       adminApp = initializeApp({
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiagolatest-9438e',
-        storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiagolatest-9438e'}.appspot.com`,
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiago-aa411',
+        storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiago-aa411'}.appspot.com`,
       }, 'admin-app')
     }
   } else {
     adminApp = getApps()[0]
   }
 } catch (error) {
-  console.error('Firebase Admin initialization failed:', error)
+  logger.error('Firebase Admin initialization failed:', error)
   
   // Create a minimal app for build time or fallback
   adminApp = initializeApp({

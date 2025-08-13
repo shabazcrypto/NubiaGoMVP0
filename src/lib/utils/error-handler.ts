@@ -1,270 +1,267 @@
-export interface AppError extends Error {
-  code?: string
-  statusCode?: number
-  details?: any
-  isOperational?: boolean
+import { logger } from './logger'
+
+// Error types for better error handling
+export class AppError extends Error {
+  public readonly code: string
+  public readonly statusCode: number
+  public readonly isOperational: boolean
+  public readonly context?: Record<string, any>
+
+  constructor(
+    message: string,
+    code: string = 'UNKNOWN_ERROR',
+    statusCode: number = 500,
+    isOperational: boolean = true,
+    context?: Record<string, any>
+  ) {
+    super(message)
+    this.name = 'AppError'
+    this.code = code
+    this.statusCode = statusCode
+    this.isOperational = isOperational
+    this.context = context
+
+    // Maintains proper stack trace for where our error was thrown (only available on V8)
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, AppError)
+    }
+  }
 }
 
+export class ValidationError extends AppError {
+  constructor(message: string, context?: Record<string, any>) {
+    super(message, 'VALIDATION_ERROR', 400, true, context)
+    this.name = 'ValidationError'
+  }
+}
+
+export class AuthenticationError extends AppError {
+  constructor(message: string = 'Authentication required', context?: Record<string, any>) {
+    super(message, 'AUTHENTICATION_ERROR', 401, true, context)
+    this.name = 'AuthenticationError'
+  }
+}
+
+export class AuthorizationError extends AppError {
+  constructor(message: string = 'Insufficient permissions', context?: Record<string, any>) {
+    super(message, 'AUTHORIZATION_ERROR', 403, true, context)
+    this.name = 'AuthorizationError'
+  }
+}
+
+export class NotFoundError extends AppError {
+  constructor(message: string = 'Resource not found', context?: Record<string, any>) {
+    super(message, 'NOT_FOUND_ERROR', 404, true, context)
+    this.name = 'NotFoundError'
+  }
+}
+
+export class ConflictError extends AppError {
+  constructor(message: string = 'Resource conflict', context?: Record<string, any>) {
+    super(message, 'CONFLICT_ERROR', 409, true, context)
+    this.name = 'ConflictError'
+  }
+}
+
+export class RateLimitError extends AppError {
+  constructor(message: string = 'Rate limit exceeded', context?: Record<string, any>) {
+    super(message, 'RATE_LIMIT_ERROR', 429, true, context)
+    this.name = 'RateLimitError'
+  }
+}
+
+export class ApiError extends AppError {
+  constructor(message: string, statusCode: number = 500, context?: Record<string, any>) {
+    super(message, 'API_ERROR', statusCode, true, context)
+    this.name = 'ApiError'
+  }
+}
+
+// Error handler utility
 export class ErrorHandler {
   /**
-   * Create a standardized application error
+   * Handle and log errors with appropriate context
    */
-  static createError(
-    message: string,
-    code?: string,
-    statusCode: number = 500,
-    details?: any
-  ): AppError {
-    const error = new Error(message) as AppError
-    error.code = code || 'INTERNAL_ERROR'
-    error.statusCode = statusCode
-    error.details = details
-    error.isOperational = true
-    return error
+  static handle(error: unknown, context?: Record<string, any>): AppError {
+    let appError: AppError
+
+    if (error instanceof AppError) {
+      appError = error
+    } else if (error instanceof Error) {
+      appError = new AppError(
+        error.message,
+        'UNKNOWN_ERROR',
+        500,
+        true,
+        { originalError: error, ...context }
+      )
+    } else {
+      appError = new AppError(
+        String(error),
+        'UNKNOWN_ERROR',
+        500,
+        true,
+        { originalError: error, ...context }
+      )
+    }
+
+    // Log the error
+    this.logError(appError, context)
+
+    return appError
   }
 
   /**
-   * Handle and log errors
+   * Log error with structured information
    */
-  static handleError(error: Error | AppError, context?: string): void {
-    const appError = error as AppError
+  private static logError(error: AppError, context?: Record<string, any>): void {
     const errorInfo = {
-      message: appError.message,
-      code: appError.code || 'UNKNOWN_ERROR',
-      statusCode: appError.statusCode || 500,
-      details: appError.details,
-      context,
+      name: error.name,
+      message: error.message,
+      code: error.code,
+      statusCode: error.statusCode,
+      stack: error.stack,
+      context: { ...error.context, ...context },
       timestamp: new Date().toISOString(),
-      stack: appError.stack
+      userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'server',
+      url: typeof window !== 'undefined' ? window.location.href : 'server'
     }
 
-    // Log error based on severity
-    if (appError.statusCode && appError.statusCode >= 500) {
-      console.error('❌ CRITICAL ERROR:', errorInfo)
-    } else if (appError.statusCode && appError.statusCode >= 400) {
-      console.warn('⚠️ CLIENT ERROR:', errorInfo)
+    if (error.statusCode >= 500) {
+      logger.error('❌ CRITICAL ERROR:', errorInfo)
+    } else if (error.statusCode >= 400) {
+      logger.warn('⚠️ CLIENT ERROR:', errorInfo)
     } else {
-      console.log('ℹ️ INFO ERROR:', errorInfo)
-    }
-
-    // In production, you might want to send errors to a monitoring service
-    if (process.env.NODE_ENV === 'production') {
-      // Send to monitoring service (e.g., Sentry, LogRocket, etc.)
-      this.sendToMonitoring(errorInfo)
+      logger.info('ℹ️ INFO ERROR:', errorInfo)
     }
   }
 
   /**
    * Send error to monitoring service
    */
-  private static sendToMonitoring(errorInfo: any): void {
-    // Implementation for monitoring service integration
-    // This is a placeholder - implement based on your monitoring solution
+  static async sendToMonitoring(error: AppError, context?: Record<string, any>): Promise<void> {
+    if (process.env.NODE_ENV !== 'production') {
+      return
+    }
+
     try {
-      // Example: Sentry.captureException(errorInfo)
-      console.log('📊 Error sent to monitoring service:', errorInfo.code)
+      // Send to your monitoring service (e.g., Sentry, LogRocket, etc.)
+      if (typeof window !== 'undefined' && (window as any).Sentry) {
+        (window as any).Sentry.captureException(error, {
+          contexts: {
+            app: {
+              errorCode: error.code,
+              statusCode: error.statusCode,
+              isOperational: error.isOperational,
+              ...context
+            }
+          },
+          tags: {
+            errorType: error.name,
+            errorCode: error.code,
+            statusCode: error.statusCode.toString()
+          }
+        })
+      }
+
+      // Send to custom monitoring endpoint
+      await fetch('/api/monitoring/error', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          error: {
+            name: error.name,
+            message: error.message,
+            code: error.code,
+            statusCode: error.statusCode,
+            stack: error.stack
+          },
+          context: { ...error.context, ...context },
+          timestamp: new Date().toISOString()
+        })
+      })
     } catch (monitoringError) {
-      console.error('❌ Failed to send error to monitoring:', monitoringError)
+      logger.error('❌ Failed to send error to monitoring:', monitoringError)
     }
   }
 
   /**
-   * Format error for API response
+   * Check if error is operational (expected) or programming (unexpected)
    */
-  static formatErrorForResponse(error: Error | AppError, includeDetails: boolean = false): {
-    error: string
-    code?: string
-    details?: any
-  } {
-    const appError = error as AppError
-    const response: any = {
-      error: appError.message || 'An unexpected error occurred'
+  static isOperational(error: unknown): boolean {
+    if (error instanceof AppError) {
+      return error.isOperational
     }
-
-    if (appError.code) {
-      response.code = appError.code
-    }
-
-    if (includeDetails && appError.details) {
-      response.details = appError.details
-    }
-
-    return response
+    return false
   }
 
   /**
-   * Validate required fields
+   * Create user-friendly error message
    */
-  static validateRequiredFields(data: any, requiredFields: string[]): void {
-    const missingFields = requiredFields.filter(field => !data[field])
-    
-    if (missingFields.length > 0) {
-      throw this.createError(
-        `Missing required fields: ${missingFields.join(', ')}`,
-        'VALIDATION_ERROR',
-        400,
-        { missingFields }
-      )
-    }
-  }
-
-  /**
-   * Validate email format
-   */
-  static validateEmail(email: string): void {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      throw this.createError(
-        'Invalid email address format',
-        'VALIDATION_ERROR',
-        400,
-        { field: 'email', value: email }
-      )
-    }
-  }
-
-  /**
-   * Validate password strength
-   */
-  static validatePassword(password: string): void {
-    if (password.length < 8) {
-      throw this.createError(
-        'Password must be at least 8 characters long',
-        'VALIDATION_ERROR',
-        400,
-        { field: 'password', requirement: 'minLength' }
-      )
-    }
-
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-      throw this.createError(
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number',
-        'VALIDATION_ERROR',
-        400,
-        { field: 'password', requirement: 'complexity' }
-      )
-    }
-  }
-
-  /**
-   * Handle async errors
-   */
-  static async handleAsyncError<T>(
-    promise: Promise<T>,
-    context?: string
-  ): Promise<T> {
-    try {
-      return await promise
-    } catch (error) {
-      this.handleError(error as Error, context)
-      throw error
-    }
-  }
-
-  /**
-   * Wrap async functions with error handling
-   */
-  static withErrorHandling<T extends any[], R>(
-    fn: (...args: T) => Promise<R>,
-    context?: string
-  ): (...args: T) => Promise<R> {
-    return async (...args: T): Promise<R> => {
-      try {
-        return await fn(...args)
-      } catch (error) {
-        this.handleError(error as Error, context)
-        throw error
+  static getUserFriendlyMessage(error: unknown): string {
+    if (error instanceof AppError) {
+      switch (error.code) {
+        case 'VALIDATION_ERROR':
+          return 'Please check your input and try again.'
+        case 'AUTHENTICATION_ERROR':
+          return 'Please log in to continue.'
+        case 'AUTHORIZATION_ERROR':
+          return 'You don\'t have permission to perform this action.'
+        case 'NOT_FOUND_ERROR':
+          return 'The requested resource was not found.'
+        case 'CONFLICT_ERROR':
+          return 'This action conflicts with existing data.'
+        case 'RATE_LIMIT_ERROR':
+          return 'Too many requests. Please try again later.'
+        case 'API_ERROR':
+          return 'A service error occurred. Please try again.'
+        default:
+          return 'An unexpected error occurred. Please try again.'
       }
     }
+    return 'An unexpected error occurred. Please try again.'
   }
-
-  /**
-   * Common error codes
-   */
-  static readonly ErrorCodes = {
-    VALIDATION_ERROR: 'VALIDATION_ERROR',
-    AUTHENTICATION_ERROR: 'AUTHENTICATION_ERROR',
-    AUTHORIZATION_ERROR: 'AUTHORIZATION_ERROR',
-    NOT_FOUND_ERROR: 'NOT_FOUND_ERROR',
-    CONFLICT_ERROR: 'CONFLICT_ERROR',
-    RATE_LIMIT_ERROR: 'RATE_LIMIT_ERROR',
-    INTERNAL_ERROR: 'INTERNAL_ERROR',
-    NETWORK_ERROR: 'NETWORK_ERROR',
-    DATABASE_ERROR: 'DATABASE_ERROR',
-    EXTERNAL_SERVICE_ERROR: 'EXTERNAL_SERVICE_ERROR'
-  } as const
-
-  /**
-   * Common error messages
-   */
-  static readonly ErrorMessages = {
-    VALIDATION_ERROR: 'Validation failed',
-    AUTHENTICATION_ERROR: 'Authentication required',
-    AUTHORIZATION_ERROR: 'Insufficient permissions',
-    NOT_FOUND_ERROR: 'Resource not found',
-    CONFLICT_ERROR: 'Resource conflict',
-    RATE_LIMIT_ERROR: 'Rate limit exceeded',
-    INTERNAL_ERROR: 'Internal server error',
-    NETWORK_ERROR: 'Network error',
-    DATABASE_ERROR: 'Database error',
-    EXTERNAL_SERVICE_ERROR: 'External service error'
-  } as const
 }
 
-/**
- * Utility function to create validation errors
- */
-export function createValidationError(message: string, field?: string, value?: any): AppError {
-  return ErrorHandler.createError(
-    message,
-    ErrorHandler.ErrorCodes.VALIDATION_ERROR,
-    400,
-    { field, value }
-  )
+// Utility functions for common error scenarios
+export const handleAsyncError = async <T>(
+  asyncFn: () => Promise<T>,
+  context?: Record<string, any>
+): Promise<T> => {
+  try {
+    return await asyncFn()
+  } catch (error) {
+    throw ErrorHandler.handle(error, context)
+  }
 }
 
-/**
- * Utility function to create authentication errors
- */
-export function createAuthenticationError(message?: string): AppError {
-  return ErrorHandler.createError(
-    message || ErrorHandler.ErrorMessages.AUTHENTICATION_ERROR,
-    ErrorHandler.ErrorCodes.AUTHENTICATION_ERROR,
-    401
-  )
+export const handleSyncError = <T>(
+  syncFn: () => T,
+  context?: Record<string, any>
+): T => {
+  try {
+    return syncFn()
+  } catch (error) {
+    throw ErrorHandler.handle(error, context)
+  }
 }
 
-/**
- * Utility function to create authorization errors
- */
-export function createAuthorizationError(message?: string): AppError {
-  return ErrorHandler.createError(
-    message || ErrorHandler.ErrorMessages.AUTHORIZATION_ERROR,
-    ErrorHandler.ErrorCodes.AUTHORIZATION_ERROR,
-    403
-  )
+// Error boundary error handler
+export const handleErrorBoundaryError = (error: Error, errorInfo: React.ErrorInfo): void => {
+  const appError = ErrorHandler.handle(error, {
+    componentStack: errorInfo.componentStack,
+    errorBoundary: true
+  })
+
+  // Send to monitoring
+  ErrorHandler.sendToMonitoring(appError, {
+    componentStack: errorInfo.componentStack,
+    errorBoundary: true
+  })
 }
 
-/**
- * Utility function to create not found errors
- */
-export function createNotFoundError(resource?: string): AppError {
-  const message = resource ? `${resource} not found` : ErrorHandler.ErrorMessages.NOT_FOUND_ERROR
-  return ErrorHandler.createError(
-    message,
-    ErrorHandler.ErrorCodes.NOT_FOUND_ERROR,
-    404,
-    { resource }
-  )
-}
+// Export default instance
+export default ErrorHandler
 
-/**
- * Utility function to create conflict errors
- */
-export function createConflictError(message?: string): AppError {
-  return ErrorHandler.createError(
-    message || ErrorHandler.ErrorMessages.CONFLICT_ERROR,
-    ErrorHandler.ErrorCodes.CONFLICT_ERROR,
-    409
-  )
-}

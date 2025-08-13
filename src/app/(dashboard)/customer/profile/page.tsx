@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react'
-import { ArrowLeft, Camera, Save, User, Mail, Phone, MapPin } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { ArrowLeft, Camera, Save, User, Mail, Phone, MapPin, AlertCircle } from 'lucide-react'
 import { ImageUpload } from '@/components/ui/image-upload'
 import { ImageMetadata } from '@/lib/image-utils'
+import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
 
 interface UserProfile {
   id: string
@@ -16,33 +17,66 @@ interface UserProfile {
 }
 
 export default function CustomerProfilePage() {
+  const { user } = useFirebaseAuth()
+  
   const [profile, setProfile] = useState<UserProfile>({
-    id: 'user-123',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 (555) 123-4567',
-    address: '123 Main St, New York, NY 10001',
-    avatar: 'https://firebasestorage.googleapis.com/v0/b/nubiago-a000f.firebasestorage.app/o/avatars%2Favatar-user-2.jpg?alt=media&token=25c37b6f-5150-4fce-90b3-54fd01731a8b',
-    bio: 'Passionate shopper and fashion enthusiast. Love discovering new trends and quality products.'
+    id: '',
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    avatar: '',
+    bio: ''
   })
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Mock user ID for demo
-  const userId = 'user-123'
+  // Use real user ID from Firebase auth
+  const userId = user?.uid || ''
+
+  // Load real user data when component mounts
+  useEffect(() => {
+    if (user) {
+      try {
+        setProfile({
+          id: user.uid,
+          name: user.displayName || 'User',
+          email: user.email || '',
+          phone: '', // Will be loaded from user profile if available
+          address: '',
+          avatar: user.photoURL || '/default-avatar.png',
+          bio: ''
+        })
+        setError(null)
+      } catch (err) {
+        setError('Failed to load user profile')
+        console.error('Error loading user profile:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    } else {
+      setIsLoading(false)
+    }
+  }, [user])
 
   // Handle avatar upload completion
   const handleAvatarUploadComplete = (metadata: ImageMetadata | ImageMetadata[]) => {
-    if (Array.isArray(metadata)) {
-      // Multiple images uploaded - take the first one
-      setProfile(prev => ({
-        ...prev,
-        avatar: metadata[0].urls.original
-      }))
-    } else {
-      // Single image uploaded
-      setProfile(prev => ({
-        ...prev,
-        avatar: metadata.urls.original
-      }))
+    try {
+      if (Array.isArray(metadata)) {
+        // Multiple images uploaded - take the first one
+        setProfile(prev => ({
+          ...prev,
+          avatar: metadata[0].urls.original
+        }))
+      } else {
+        // Single image uploaded
+        setProfile(prev => ({
+          ...prev,
+          avatar: metadata.urls.original
+        }))
+      }
+    } catch (error) {
+      console.error('Error updating profile with new avatar:', error)
     }
   }
 
@@ -57,6 +91,60 @@ export default function CustomerProfilePage() {
     e.preventDefault()
     console.log('Profile updated:', profile)
     // Add your form submission logic here
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading profile...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-600 mb-4">
+            <AlertCircle className="h-12 w-12 mx-auto" />
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Profile</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Show login required state
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-gray-600 mb-4">
+            <User className="h-12 w-12 mx-auto" />
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Login Required</h2>
+          <p className="text-gray-600 mb-4">Please log in to view your profile</p>
+          <a 
+            href="/login" 
+            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+          >
+            Go to Login
+          </a>
+        </div>
+      </div>
+    )
   }
 
   return (

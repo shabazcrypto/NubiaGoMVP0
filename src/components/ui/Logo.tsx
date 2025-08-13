@@ -13,8 +13,12 @@ export const Logo = ({ size = 'md', className = '' }: LogoProps) => {
   }
 
   return (
-    <div className={`${sizeClasses[size]} bg-primary-600 rounded-lg flex items-center justify-center overflow-hidden shadow-sm ${className}`}>
+    <div 
+      data-testid="logo-container"
+      className={`${sizeClasses[size]} bg-primary-600 rounded-lg flex items-center justify-center overflow-hidden shadow-sm ${className}`}
+    >
       <svg
+        data-testid="logo-svg"
         viewBox="0 0 512 512"
         className="w-4/5 h-4/5"
         xmlns="http://www.w3.org/2000/svg"

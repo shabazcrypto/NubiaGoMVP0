@@ -42,18 +42,18 @@ interface UserProfile {
 export default function CustomerProfile() {
   const { user, updateUserProfile } = useFirebaseAuth()
   const [profile, setProfile] = useState<UserProfile>({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '+1234567890',
-    dateOfBirth: '1990-01-01',
-    gender: 'male',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    dateOfBirth: '',
+    gender: '',
     address: {
-      street: '123 Main St',
-      city: 'New York',
-      state: 'NY',
-      zipCode: '10001',
-      country: 'USA'
+      street: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: ''
     },
     preferences: {
       emailNotifications: true,
@@ -65,10 +65,23 @@ export default function CustomerProfile() {
     },
     security: {
       twoFactorEnabled: false,
-      lastPasswordChange: '2024-01-15',
-      lastLogin: '2024-01-22T10:30:00Z'
+      lastPasswordChange: '',
+      lastLogin: ''
     }
   })
+
+  // Load real user data when component mounts
+  useEffect(() => {
+    if (user) {
+      setProfile(prev => ({
+        ...prev,
+        firstName: user.displayName?.split(' ')[0] || '',
+        lastName: user.displayName?.split(' ').slice(1).join(' ') || '',
+        email: user.email || '',
+        lastLogin: new Date().toISOString()
+      }))
+    }
+  }, [user])
   const [isEditing, setIsEditing] = useState(false)
   const [activeTab, setActiveTab] = useState('profile')
   const [loading, setLoading] = useState(false)

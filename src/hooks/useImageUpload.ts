@@ -48,7 +48,7 @@ export function useImageUpload(): UseImageUploadReturn {
     return true
   }, [])
 
-  const uploadImage = useCallback(async (file: File): Promise<string> => {
+  const uploadImage = useCallback(async (file: File): Promise<any> => {
     setIsUploading(true)
     setUploadProgress(0)
     setError(null)
@@ -71,10 +71,11 @@ export function useImageUpload(): UseImageUploadReturn {
         })
       }, 100)
 
-      // For now, return a local path since we're using local images
-      // In a real app, this would upload to Firebase Storage
+      // Create a mock upload result that matches the expected ImageMetadata format
+      // In a real app, this would upload to Firebase Storage and return the actual metadata
       const fileName = file.name
-      const imagePath = getImagePath(fileName)
+      const timestamp = Date.now()
+      const mockUrl = `https://firebasestorage.googleapis.com/v0/b/nubiago-aa411.appspot.com/o/avatars%2F${timestamp}_${fileName}?alt=media`
       
       // Simulate upload delay
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -82,7 +83,20 @@ export function useImageUpload(): UseImageUploadReturn {
       clearInterval(progressInterval)
       setUploadProgress(100)
       
-      return imagePath
+      // Return mock metadata that matches ImageMetadata interface
+      return {
+        urls: {
+          original: mockUrl,
+          thumbnail: mockUrl,
+          medium: mockUrl
+        },
+        metadata: {
+          filename: fileName,
+          size: file.size,
+          type: file.type,
+          uploadedAt: new Date().toISOString()
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed')
       throw err

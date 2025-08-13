@@ -3,8 +3,6 @@ const nextConfig = {
   // ============================================================================
   // VERCEL HOSTING CONFIGURATION
   // ============================================================================
-  compress: true,
-  poweredByHeader: false,
   
   // ============================================================================
   // IMAGE OPTIMIZATION FOR VERCEL
@@ -42,9 +40,28 @@ const nextConfig = {
   },
 
   // ============================================================================
+  // PERFORMANCE OPTIMIZATIONS
+  // ============================================================================
+  // Enable output file tracing for better bundle analysis
+  outputFileTracing: true,
+  
+  // Enable static optimization
+  trailingSlash: false,
+  
+  // Optimize bundle generation
+  generateEtags: false,
+  
+  // Enable compression
+  compress: true,
+  
+  // Optimize powered by header
+  poweredByHeader: false,
+
+  // ============================================================================
   // EXPERIMENTAL FEATURES
   // ============================================================================
   experimental: {
+    webpackBuildWorker: true,
     optimizeCss: true,
     optimizePackageImports: [
       '@headlessui/react', 
@@ -66,12 +83,14 @@ const nextConfig = {
       '@hookform/resolvers',
       'zod'
     ],
+    // Enable SWC minification for better performance
+    swcMinify: true,
   },
 
   // ============================================================================
   // WEBPACK OPTIMIZATION
   // ============================================================================
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { dev, isServer, webpack }) => {
     // Handle Node.js modules for server-side code
     if (isServer) {
       config.externals = config.externals || []
@@ -140,6 +159,31 @@ const nextConfig = {
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
+
+    // Production optimizations
+    if (!dev) {
+      // Add webpack bundle analyzer in production builds (optional)
+      if (process.env.ANALYZE === 'true') {
+        const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+        config.plugins.push(
+          new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            openAnalyzer: false,
+            reportFilename: 'bundle-analysis.html',
+          })
+        )
+      }
+    }
+
+    // Development optimizations
+    if (dev) {
+      // Enable fast refresh for better development experience
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react-dom$': 'react-dom/profiling',
+        'scheduler/tracing': 'scheduler/tracing-profiling',
+      }
+    }
 
     return config
   },

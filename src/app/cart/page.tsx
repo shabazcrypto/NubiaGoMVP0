@@ -7,6 +7,7 @@ import ShoppingCart from '@/components/cart/shopping-cart'
 import { CartService } from '@/lib/services/cart.service'
 import { useAuth } from '@/hooks/useAuth'
 import { Product } from '@/types'
+import { logger } from '@/lib/utils/logger'
 
 interface CartItem {
   id: string
@@ -77,7 +78,7 @@ export default function CartPage() {
         setCartTotal(cart.total)
       } catch (error: any) {
         setError(error)
-        console.error('Error fetching cart:', error)
+        logger.error('Error fetching cart:', error)
       } finally {
         setIsLoading(false)
       }
@@ -96,7 +97,7 @@ export default function CartPage() {
       setCartTotal(cart.total)
     } catch (error: any) {
       setError(error)
-      console.error('Error updating quantity:', error)
+              logger.error('Error updating quantity:', error)
     }
   }
 
@@ -110,7 +111,7 @@ export default function CartPage() {
       setCartTotal(cart.total)
     } catch (error: any) {
       setError(error)
-      console.error('Error removing item:', error)
+              logger.error('Error removing item:', error)
     }
   }
 
@@ -123,7 +124,7 @@ export default function CartPage() {
       setCartTotal(0)
     } catch (error: any) {
       setError(error)
-      console.error('Error clearing cart:', error)
+              logger.error('Error clearing cart:', error)
     }
   }
 
@@ -166,13 +167,13 @@ export default function CartPage() {
       setCartTotal(cart.total)
     } catch (error: any) {
       setError(error)
-      console.error('Error adding to cart:', error)
+              logger.error('Error adding to cart:', error)
     }
   }
 
   const handleAddToWishlist = (item: RecommendedItem) => {
     // This would typically add to wishlist store
-    console.log('Added to wishlist:', item.name)
+            logger.log('Added to wishlist:', item.name)
     // You could implement wishlist functionality here
   }
 

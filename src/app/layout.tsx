@@ -4,7 +4,7 @@ import './globals.css'
 import '@/lib/asset-preloader' // Initialize asset preloading
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ToastProvider } from '@/components/ui/toast'
-import { ErrorBoundary } from '@/components/ui/error-boundary'
+import { ErrorBoundaryProvider } from '@/components/providers/error-boundary-provider'
 import { FirebaseAuthProvider } from '@/hooks/useFirebaseAuth'
 import { RoleChangeHandler } from '@/components/auth/role-change-handler'
 import ConditionalNavigation from '@/components/layout/conditional-navigation'
@@ -236,7 +236,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} dark:bg-gray-900 dark:text-gray-100`}>
-                 <ErrorBoundary>
+                 <ErrorBoundaryProvider>
            <Suspense fallback={<SimpleLoading timeout={15000} />}>
              <FirebaseAuthProvider>
                <ToastProvider>
@@ -273,7 +273,7 @@ export default function RootLayout({
                </ToastProvider>
              </FirebaseAuthProvider>
            </Suspense>
-         </ErrorBoundary>
+         </ErrorBoundaryProvider>
         <SpeedInsights />
 
         {/* ============================================================================

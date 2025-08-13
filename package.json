@@ -26,7 +26,8 @@
     "vercel:build": "vercel build",
     "vercel:logs": "vercel logs",
     "vercel:env:pull": "vercel env pull",
-    "vercel:env:push": "vercel env push"
+    "vercel:env:push": "vercel env push",
+    "populate-admin-data": "node scripts/populate-admin-data.js"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.0",

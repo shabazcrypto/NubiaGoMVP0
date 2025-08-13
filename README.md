@@ -262,10 +262,20 @@ npm run test:coverage
 
 ## 📚 Documentation
 
-- [API Documentation](./docs/api.md)
-- [Deployment Guide](./docs/deployment.md)
-- [Contributing Guidelines](./docs/contributing.md)
-- [Security Policy](./docs/security.md)
+Our comprehensive documentation is organized into focused guides for easy navigation:
+
+### 🛠️ Development & Operations
+- **[Development Guide](./DEVELOPMENT.md)** - Complete development setup, testing, and workflow
+- **[Deployment Guide](./DEPLOYMENT.md)** - Firebase, Vercel, and infrastructure setup
+- **[Security Guide](./SECURITY.md)** - Authentication, authorization, and security best practices
+- **[Performance Guide](./PERFORMANCE.md)** - Optimization, caching, and monitoring
+
+### 🔌 Integration & Features
+- **[API Documentation](./API.md)** - Complete API reference and integration examples
+- **[Features Guide](./FEATURES.md)** - Platform features, backend implementation, and roadmap
+
+### 📝 Project History & Status
+- **[Changelog](./CHANGELOG.md)** - Version history, fixes, improvements, and known issues
 
 ## 🤝 Contributing
 

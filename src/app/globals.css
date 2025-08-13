@@ -7,8 +7,8 @@ MOBILE-FIRST RESPONSIVE DESIGN & OPTIMIZATIONS
 ============================================================================ */
 
 /* Base mobile optimizations */
-  * {
-    -webkit-tap-highlight-color: transparent;
+* {
+  -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
@@ -50,21 +50,16 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
 .mobile-product-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 16px;
   padding: 16px;
 }
 
 .mobile-product-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
+  border: 1px solid #e5e5e5;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-}
-
-.mobile-product-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
 }
 
 .mobile-product-image {
@@ -97,13 +92,12 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
   align-items: center;
   padding: 8px 16px;
   background: white;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e5e5e5;
   border-radius: 20px;
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: #404040;
   white-space: nowrap;
-  transition: all 0.2s ease;
   cursor: pointer;
 }
 
@@ -111,11 +105,6 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
   background: #0f52ba;
   color: white;
   border-color: #0f52ba;
-}
-
-.mobile-category-pill:hover {
-  background: #f3f4f6;
-  border-color: #d1d5db;
 }
 
 /* Mobile bottom navigation */
@@ -137,19 +126,14 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
   }
 }
   
-  .mobile-nav-item {
+.mobile-nav-item {
   min-height: 60px;
   min-width: 60px;
-  transition: all 0.2s ease;
-}
-
-.mobile-nav-item:active {
-  transform: scale(0.95);
 }
 
 /* Mobile homepage sections */
 .mobile-homepage {
-  background: #f9fafb;
+  background: #fafafa;
 }
 
 /* Mobile search styles */
@@ -175,12 +159,6 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
 
 /* Mobile performance optimizations */
 @media (max-width: 768px) {
-  /* Reduce animations on mobile for better performance */
-  * {
-    animation-duration: 0.2s !important;
-    transition-duration: 0.2s !important;
-  }
-  
   /* Optimize scrolling */
   .mobile-smooth-scroll {
     -webkit-overflow-scrolling: touch;
@@ -211,10 +189,6 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
   /* Touch device specific styles */
   .mobile-touch-optimized {
     cursor: pointer;
-  }
-  
-  .mobile-touch-optimized:active {
-    transform: scale(0.98);
   }
 }
 
@@ -265,9 +239,6 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
   display: grid !important;
 }
 
-/* Mobile-first responsive utilities */
-/* Removed conflicting .md\:mobile-hidden rule that was interfering with Tailwind responsive classes */
-
 /* Mobile loading states */
 .mobile-loading-skeleton {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -285,14 +256,14 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
 }
 
 /* Mobile scrollbar hiding */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
   
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
   
 /* Mobile focus styles */
 .mobile-focus-visible:focus-visible {
@@ -317,7 +288,7 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
 /* Mobile safe area utilities */
 .mobile-safe-area-inset {
   padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+  padding-right: env(safe-area-inset-right);
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -385,4 +356,133 @@ p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
   .mobile-portrait-optimized .mobile-product-grid {
     gap: 8px;
   }
+}
+
+/* ============================================================================
+PROFESSIONAL DESIGN SYSTEM UTILITIES
+============================================================================ */
+
+/* Professional color utilities */
+.text-brand-blue {
+  color: #0f52ba;
+}
+
+.text-brand-yellow {
+  color: #f59e0b;
+}
+
+.text-brand-black {
+  color: #171717;
+}
+
+.bg-brand-blue {
+  background-color: #0f52ba;
+}
+
+.bg-brand-yellow {
+  background-color: #f59e0b;
+}
+
+.bg-brand-black {
+  background-color: #171717;
+}
+
+/* Professional spacing utilities */
+.section-padding {
+  padding: 5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .section-padding {
+    padding: 5rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding: 5rem 2rem;
+  }
+}
+
+/* Professional typography utilities */
+.heading-xl {
+  font-size: 3rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #171717;
+}
+
+.heading-lg {
+  font-size: 2.25rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #171717;
+}
+
+.heading-md {
+  font-size: 1.875rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #171717;
+}
+
+.heading-sm {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  font-weight: 600;
+  color: #171717;
+}
+
+.body-lg {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #404040;
+}
+
+.body-md {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #404040;
+}
+
+.body-sm {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #525252;
+}
+
+/* Professional component utilities */
+.card-elevated {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+}
+
+.button-primary {
+  background-color: #0f52ba;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.button-secondary {
+  background-color: #f59e0b;
+  color: #171717;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.button-outline {
+  background-color: transparent;
+  color: #0f52ba;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #0f52ba;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
 } 

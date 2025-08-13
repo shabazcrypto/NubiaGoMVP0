@@ -28,47 +28,47 @@ import TestConnection from './test-connection'
 function HeroSection() {
   return (
     <section className="bg-primary-600 text-white">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-16">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid lg:grid-cols-3 gap-12 items-start">
           {/* Categories Sidebar */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl">
-            <h3 className="text-xl font-semibold text-gray-900 mb-8">Browse Categories</h3>
+          <div className="bg-white rounded-2xl p-8 shadow-elevated">
+            <h3 className="text-xl font-semibold text-neutral-900 mb-8">Browse Categories</h3>
             <div className="space-y-4">
-              <Link href="/products?category=Electronics" className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Laptop className="h-4 w-4 text-gray-600" />
+              <Link href="/products?category=Electronics" className="flex items-center space-x-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200 cursor-pointer">
+                <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+                  <Laptop className="h-5 w-5 text-primary-600" />
                 </div>
-                <span className="text-gray-700 font-medium">Electronics</span>
+                <span className="text-neutral-700 font-medium">Electronics</span>
               </Link>
-              <Link href="/products?category=Fashion" className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Shirt className="h-4 w-4 text-gray-600" />
+              <Link href="/products?category=Fashion" className="flex items-center space-x-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200 cursor-pointer">
+                <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
+                  <Shirt className="h-5 w-5 text-yellow-600" />
                 </div>
-                <span className="text-gray-700 font-medium">Fashion</span>
+                <span className="text-neutral-700 font-medium">Fashion</span>
               </Link>
-              <Link href="/products?category=Home & Living" className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Home className="h-4 w-4 text-gray-600" />
+              <Link href="/products?category=Home & Living" className="flex items-center space-x-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200 cursor-pointer">
+                <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center">
+                  <Home className="h-5 w-5 text-neutral-600" />
                 </div>
-                <span className="text-gray-700 font-medium">Home & Living</span>
+                <span className="text-neutral-700 font-medium">Home & Living</span>
               </Link>
-              <Link href="/products?category=Health & Beauty" className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <HealthIcon className="h-4 w-4 text-gray-600" />
+              <Link href="/products?category=Health & Beauty" className="flex items-center space-x-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200 cursor-pointer">
+                <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
+                  <HealthIcon className="h-5 w-5 text-yellow-600" />
                 </div>
-                <span className="text-gray-700 font-medium">Health & Beauty</span>
+                <span className="text-neutral-700 font-medium">Health & Beauty</span>
               </Link>
-              <Link href="/products?category=Sports" className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Dumbbell className="h-4 w-4 text-gray-600" />
+              <Link href="/products?category=Sports" className="flex items-center space-x-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200 cursor-pointer">
+                <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+                  <Dumbbell className="h-5 w-5 text-primary-600" />
                 </div>
-                <span className="text-gray-700 font-medium">Sports</span>
+                <span className="text-neutral-700 font-medium">Sports</span>
               </Link>
-              <Link href="/products?category=Books" className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <BookOpen className="h-4 w-4 text-gray-600" />
+              <Link href="/products?category=Books" className="flex items-center space-x-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200 cursor-pointer">
+                <div className="w-10 h-10 bg-neutral-100 rounded-xl flex items-center justify-center">
+                  <BookOpen className="h-5 w-5 text-neutral-600" />
                 </div>
-                <span className="text-gray-700 font-medium">Books</span>
+                <span className="text-neutral-700 font-medium">Books</span>
               </Link>
             </div>
           </div>
@@ -79,7 +79,7 @@ function HeroSection() {
               <span className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium">
                 Global 34+ Countries in Africa
               </span>
-              <span className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium">
+              <span className="bg-yellow-500/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-yellow-800">
                 Star Best Quality Products
               </span>
             </div>
@@ -97,51 +97,25 @@ function HeroSection() {
             <div className="relative max-w-2xl mb-8">
               <input type="text" 
                      placeholder="e.g., smartphone, lipstick, washing machine..." 
-                     className="w-full px-6 py-4 pr-16 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/20" />
-              <Link href="/products" className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-primary-600 hover:bg-primary-700 text-white p-3 rounded-full transition-colors">
-                <Search className="h-4 w-4" />
-              </Link>
+                     className="w-full px-6 py-4 pr-16 rounded-full text-neutral-900 placeholder-neutral-500 focus:outline-none focus:ring-4 focus:ring-white/20" />
+              <button className="absolute right-2 top-2 bg-primary-600 text-white p-2 rounded-full">
+                <Search className="h-5 w-5" />
+              </button>
             </div>
 
-            {/* Category Pills */}
-            <div className="flex flex-wrap gap-3 mb-8">
-              <Link href="/products?category=Electronics" className="bg-white/15 hover:bg-white/25 px-6 py-3 rounded-full text-sm font-medium transition-all hover:scale-105">
-                Electronics
-              </Link>
-              <Link href="/products?category=Fashion" className="bg-white/15 hover:bg-white/25 px-6 py-3 rounded-full text-sm font-medium transition-all hover:scale-105">
-                Fashion
-              </Link>
-              <Link href="/products?category=Home & Living" className="bg-white/15 hover:bg-white/25 px-6 py-3 rounded-full text-sm font-medium transition-all hover:scale-105">
-                Home & Living
-              </Link>
-              <Link href="/products?category=Health & Beauty" className="bg-white/15 hover:bg-white/25 px-6 py-3 rounded-full text-sm font-medium transition-all hover:scale-105">
-                Health & Beauty
-              </Link>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 mb-8">
-              <Link href="/products" className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 px-8 py-4 rounded-full font-semibold transition-all hover:scale-105 shadow-lg">
-                Browse Products
-              </Link>
-              <Link href="/become-supplier" className="bg-white/15 hover:bg-white/25 border border-white/30 px-8 py-4 rounded-full font-semibold transition-all hover:scale-105">
-                Become a Seller
-              </Link>
-            </div>
-
-            {/* Features */}
+            {/* Stats */}
             <div className="flex flex-wrap gap-8">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                <span className="text-sm">Fast Delivery</span>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-400">10M+</div>
+                <div className="text-white/80 text-sm">Happy Customers</div>
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                <span className="text-sm">Secure Payment</span>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-400">500K+</div>
+                <div className="text-white/80 text-sm">Products</div>
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                <span className="text-sm">24/7 Support</span>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-400">34+</div>
+                <div className="text-white/80 text-sm">Countries</div>
               </div>
             </div>
           </div>
@@ -159,72 +133,69 @@ function NewArrivalsSection() {
   const products = [
     {
       id: '1',
-      name: 'Premium Running Sneakers',
-      price: '$45K',
-              image: '/product-fashion-1.jpg',
+      name: 'Wireless Bluetooth Headphones',
+      price: '$85K',
+      image: '/product-tech-1.jpg',
       badge: 'New'
     },
     {
       id: '2',
-      name: 'Wireless Bluetooth Headphones',
-      price: '$75K',
-              image: '/product-headphones-1.jpg',
-      badge: 'New'
+      name: 'Organic Cotton T-Shirt',
+      price: '$45K',
+      image: '/product-fashion-1.jpg',
+      badge: 'Hot'
     },
     {
       id: '3',
       name: 'Complete Skincare Set',
       price: '$32K',
-              image: '/product-tech-1.jpg',
+      image: '/product-tech-1.jpg',
       badge: 'Hot'
     },
     {
       id: '4',
       name: 'Smart Fitness Watch',
       price: '$120K',
-              image: '/product-accessories-1.jpg',
+      image: '/product-accessories-1.jpg',
       badge: 'New'
     },
     {
       id: '5',
       name: 'Modern Wall Art',
       price: '$28K',
-              image: '/product-lifestyle-1.jpg',
+      image: '/product-lifestyle-1.jpg',
       badge: 'Hot'
     },
     {
       id: '6',
       name: 'Designer Sunglasses',
       price: '$65K',
-              image: '/product-home-1.jpg',
+      image: '/product-home-1.jpg',
       badge: 'New'
     }
   ]
 
   return (
-    <section className="relative py-16 bg-gradient-to-br from-slate-50 via-white to-slate-50 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23f1f5f9%22%20fill-opacity%3D%220.4%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
-      
-      <div className="relative w-full px-4 sm:px-6 lg:px-8">
-        {/* Premium Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white text-sm font-semibold rounded-full mb-4 shadow-lg">
-            <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+    <section className="relative py-20 bg-neutral-50 overflow-hidden">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-full mb-4">
+            <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
             Fresh Arrivals
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4">
+          <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4">
             New Arrivals
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
             Curated selection of premium products, handpicked for discerning customers
           </p>
         </div>
 
-        {/* Premium Product Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6">
+        {/* Product Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           {products.map((product) => (
-            <div key={product.id} className="group relative bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgb(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-3 overflow-hidden">
+            <div key={product.id} className="bg-white rounded-2xl border border-neutral-200 shadow-soft overflow-hidden">
               <div className="relative aspect-[4/5] overflow-hidden">
                 <Link href={`/products/${product.id}`}>
                   <ImageWithFallback
@@ -232,43 +203,41 @@ function NewArrivalsSection() {
                     alt={product.name}
                     width={400}
                     height={500}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover"
                   />
                 </Link>
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
                 {/* Badge */}
-                <div className={`absolute top-3 left-3 ${product.badge === 'New' ? 'bg-gradient-to-r from-primary-600 to-secondary-600' : 'bg-gradient-to-r from-green-500 to-emerald-600'} text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm`}>
+                <div className={`absolute top-3 left-3 ${product.badge === 'New' ? 'bg-primary-600' : 'bg-yellow-500'} text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-medium`}>
                   {product.badge}
                 </div>
                 
                 {/* Quick Actions */}
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                  <Link href="/wishlist" className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors">
-                    <Heart className="h-4 w-4 text-gray-700" />
+                <div className="absolute top-3 right-3">
+                  <Link href="/wishlist" className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-medium">
+                    <Heart className="h-4 w-4 text-neutral-700" />
                   </Link>
                 </div>
               </div>
               
               {/* Product Info */}
               <div className="p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <Link href={`/products/${product.id}`} className="text-sm font-semibold text-gray-900 line-clamp-2 leading-tight hover:text-primary-600 transition-colors">
+                <div className="flex items-start justify-between mb-3">
+                  <Link href={`/products/${product.id}`} className="text-sm font-semibold text-neutral-900 line-clamp-2 leading-tight">
                     {product.name}
                   </Link>
                   <div className="text-sm font-bold text-primary-600 ml-2">{product.price}</div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1">
-                    <div className="flex text-yellow-400">
+                    <div className="flex text-yellow-500">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} className="h-3 w-3 fill-current" />
                       ))}
                     </div>
-                    <span className="text-xs text-gray-500 ml-1">(24)</span>
+                    <span className="text-xs text-neutral-500 ml-1">(24)</span>
                   </div>
-                  <Link href={`/products/${product.id}`} className="text-xs text-gray-500 hover:text-primary-600 transition-colors">
+                  <Link href={`/products/${product.id}`} className="text-xs text-neutral-500">
                     Quick View
                   </Link>
                 </div>
@@ -277,9 +246,9 @@ function NewArrivalsSection() {
           ))}
         </div>
 
-        {/* Premium CTA */}
-        <div className="text-center mt-12">
-          <Link href="/products" className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+        {/* CTA */}
+        <div className="text-center mt-16">
+          <Link href="/products" className="inline-flex items-center px-8 py-4 bg-primary-600 text-white font-semibold rounded-2xl shadow-medium">
             View All New Arrivals
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -880,31 +849,18 @@ function NewsletterSection() {
 export default function HomePage() {
   const [isClient, setIsClient] = useState(false)
   const [loadingTimeout, setLoadingTimeout] = useState(false)
-  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'fallback' | 'error'>('connecting')
+  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'fallback' | 'error'>('fallback')
 
   useEffect(() => {
     setIsClient(true)
     
-    // Check Firebase connection status
-    const checkConnection = async () => {
-      try {
-        // Test Firebase connection
-        const { db } = await import('@/lib/firebase/config')
-        if (db) {
-          setConnectionStatus('connected')
-        }
-      } catch (error) {
-        console.log('Firebase connection failed, using fallback data')
-        setConnectionStatus('fallback')
-      }
-    }
-    
-    checkConnection()
+    // Temporarily skip Firebase connection check to fix loading issue
+    setConnectionStatus('fallback')
     
     // Add timeout to prevent infinite loading
     const timeout = setTimeout(() => {
       setLoadingTimeout(true)
-    }, 8000) // 8 seconds timeout
+    }, 3000) // Reduced to 3 seconds timeout
     
     return () => clearTimeout(timeout)
   }, [])
@@ -927,10 +883,10 @@ export default function HomePage() {
   // Show loading state while detecting device
   if (!isClient) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-gray-300 border-t-primary-600 rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">
+          <div className="w-8 h-8 border-2 border-neutral-300 border-t-primary-600 rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-neutral-600">
             {loadingTimeout ? 'Loading taking longer than expected...' : 'Loading...'}
           </p>
           {connectionStatus === 'fallback' && (
@@ -941,7 +897,7 @@ export default function HomePage() {
           {loadingTimeout && (
             <button 
               onClick={() => window.location.reload()} 
-              className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+              className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg"
             >
               Reload Page
             </button>

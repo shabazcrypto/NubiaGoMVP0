@@ -10,13 +10,13 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#eff6ff',
+          50: '#f0f9ff',
           100: '#dbeafe',
           200: '#bfdbfe',
           300: '#93c5fd',
           400: '#60a5fa',
           500: '#3b82f6',
-          600: '#0F52BA',
+          600: '#0F52BA', // Your existing brand color
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
@@ -33,9 +33,53 @@ module.exports = {
           800: '#1e293b',
           900: '#0f172a',
         },
+        // Balanced yellow palette
+        yellow: {
+          50: '#fefce8',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+        },
+        // Balanced black/gray palette
+        neutral: {
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+        },
+        // Semantic colors using your palette
+        success: {
+          50: '#f0fdf4',
+          500: '#22c55e',
+          900: '#14532d',
+        },
+        warning: {
+          50: '#fefce8',
+          500: '#f59e0b', // Using your yellow
+          900: '#78350f',
+        },
+        error: {
+          50: '#fef2f2',
+          500: '#ef4444',
+          900: '#7f1d1d',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Inter', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
@@ -60,6 +104,8 @@ module.exports = {
       },
       spacing: {
         '18': '4.5rem',
+        '72': '18rem',
+        '84': '21rem',
         '88': '22rem',
         '128': '32rem',
       },
@@ -71,6 +117,7 @@ module.exports = {
         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
         'medium': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
         'strong': '0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05)',
+        'elevated': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       },
       borderRadius: {
         '4xl': '2rem',

@@ -47,7 +47,7 @@ export default function CustomerProfile() {
     email: '',
     phone: '',
     dateOfBirth: '',
-    gender: '',
+    gender: 'other',
     address: {
       street: '',
       city: '',

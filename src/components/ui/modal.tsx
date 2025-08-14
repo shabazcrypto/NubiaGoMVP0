@@ -83,9 +83,9 @@ const modalColors = {
     border: 'border-yellow-200',
   },
   info: {
-    icon: 'text-blue-600',
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
+    icon: 'text-primary-600',
+    bg: 'bg-primary-50',
+    border: 'border-primary-200',
   },
   danger: {
     icon: 'text-red-600',
@@ -273,7 +273,7 @@ export function ConfirmModal({
                 : type === 'warning'
                 ? 'bg-yellow-600 hover:bg-yellow-700'
                 : type === 'info'
-                ? 'bg-blue-600 hover:bg-blue-700'
+                ? 'bg-primary-600 hover:bg-primary-700'
                 : 'bg-green-600 hover:bg-green-700'
             }`}
           >
@@ -342,7 +342,7 @@ export function AlertModal({
                 ? 'bg-red-600 hover:bg-red-700'
                 : type === 'warning'
                 ? 'bg-yellow-600 hover:bg-yellow-700'
-                : 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-primary-600 hover:bg-primary-700'
             }`}
           >
             {actionText || 'OK'}

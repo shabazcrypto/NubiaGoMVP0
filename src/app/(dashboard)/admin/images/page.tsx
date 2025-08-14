@@ -210,7 +210,7 @@ export default function ImagesPage() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'Product':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-primary-100 text-primary-800'
       case 'Logo':
         return 'bg-purple-100 text-purple-800'
       case 'Banner':
@@ -256,8 +256,8 @@ export default function ImagesPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <ImageIcon className="h-6 w-6 text-blue-600" />
+              <div className="p-2 bg-primary-100 rounded-lg">
+                <ImageIcon className="h-6 w-6 text-primary-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Images</p>

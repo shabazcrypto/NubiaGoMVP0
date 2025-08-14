@@ -80,7 +80,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         onChange={(e) => setMessage(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100"
       />
       
       {onFileUpload && (
@@ -88,7 +88,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={disabled}
-          className="p-2 text-gray-500 hover:text-blue-500 disabled:opacity-50"
+          className="p-2 text-gray-500 hover:text-primary-600 disabled:opacity-50"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -107,7 +107,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       <button
         type="submit"
         disabled={disabled || !message.trim()}
-        className="p-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="p-2 text-white bg-primary-600 rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <PaperAirplaneIcon className="w-5 h-5" />
       </button>
@@ -161,7 +161,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         <div
           className={`px-4 py-2 rounded-lg ${
             isOwnMessage
-              ? 'bg-blue-500 text-white'
+              ? 'bg-primary-600 text-white'
               : 'bg-gray-100 text-gray-900'
           }`}
         >
@@ -306,7 +306,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       {!isOpen && (
         <button
           onClick={() => onToggle?.(true)}
-          className={`relative p-4 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors ${
+          className={`relative p-4 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-600 transition-colors ${
             theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : ''
           }`}
         >
@@ -350,7 +350,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
           <div className="flex-1 h-64 overflow-y-auto p-4">
             {isLoading ? (
               <div className="flex items-center justify-center h-full">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
               </div>
             ) : error ? (
               <div className="text-center text-red-500 p-4">

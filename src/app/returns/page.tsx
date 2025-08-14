@@ -81,7 +81,7 @@ export default function ReturnsPage() {
                 Return Window
               </h3>
               <div className="flex items-center mb-4">
-                <Calendar className="h-5 w-5 text-blue-600 mr-2" />
+                <Calendar className="h-5 w-5 text-primary-600 mr-2" />
                 <span className="text-gray-700">
                   {returnPolicy.timeLimit}
                 </span>
@@ -123,11 +123,11 @@ export default function ReturnsPage() {
             {returnSteps.map((step, index) => (
               <div key={index} className="bg-white p-6 rounded-lg border">
                 <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">
+                  <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">
                     {step.step}
                   </div>
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <step.icon className="h-5 w-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                    <step.icon className="h-5 w-5 text-primary-600" />
                   </div>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -161,8 +161,8 @@ export default function ReturnsPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Package className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Package className="h-8 w-8 text-primary-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Shipping Cost
@@ -198,7 +198,7 @@ export default function ReturnsPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/customer/orders"
-              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
             >
               View My Orders
             </Link>

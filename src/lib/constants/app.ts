@@ -55,14 +55,18 @@ export const FEATURE_FLAGS = {
 } as const
 
 export const UI_CONFIG = {
-  // UI Configuration
+  // NubiaGo Brand Theme Configuration
   THEME: {
-    PRIMARY_COLOR: '#0F52BA',
-    SECONDARY_COLOR: '#FF6B35',
+    PRIMARY_COLOR: '#2563eb',    // NubiaGo Brand Primary Blue
+    ACCENT_COLOR: '#f59e0b',     // NubiaGo Brand Accent Orange
+    TEXT_PRIMARY: '#000000',     // NubiaGo Text Black
+    TEXT_SECONDARY: '#666666',   // NubiaGo Text Gray
+    BACKGROUND_LIGHT: '#f8f9fa', // NubiaGo Background Light
+    WHITE: '#ffffff',            // NubiaGo White
     SUCCESS_COLOR: '#10B981',
-    WARNING_COLOR: '#F59E0B',
+    WARNING_COLOR: '#f59e0b',    // Using NubiaGo Accent Orange
     ERROR_COLOR: '#EF4444',
-    INFO_COLOR: '#3B82F6',
+    INFO_COLOR: '#2563eb',       // Using NubiaGo Primary Blue
   },
   
   // Layout

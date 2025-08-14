@@ -278,14 +278,14 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="h-2 rounded-full transition-all duration-300 bg-blue-500"
+                  className="h-2 rounded-full transition-all duration-300 bg-primary-600"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
             </div>
             
             <div className="flex-shrink-0">
-              <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
             </div>
           </div>
           {error && (

@@ -104,7 +104,7 @@ export default function ProductsPage() {
         <div className="mb-6">
           <Link 
             href="/" 
-            className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors mb-4"
+            className="inline-flex items-center text-gray-600 hover:text-primary-600 transition-colors mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             <span>Back to Home</span>
@@ -142,7 +142,7 @@ export default function ProductsPage() {
                 <input
                   type="text"
                   placeholder="Search products..."
-                  className="w-full sm:w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full sm:w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-600"
                 />
               </div>
               
@@ -161,7 +161,7 @@ export default function ProductsPage() {
                 onClick={() => setViewMode('grid')}
                 className={`p-2 rounded-md transition-colors ${
                   viewMode === 'grid' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-primary-600 text-white' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -171,7 +171,7 @@ export default function ProductsPage() {
                 onClick={() => setViewMode('list')}
                 className={`p-2 rounded-md transition-colors ${
                   viewMode === 'list' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-primary-600 text-white' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -211,7 +211,7 @@ export default function ProductsPage() {
               </p>
               <Link 
                 href="/products" 
-                className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+                className="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-md transition-colors"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 View All Products

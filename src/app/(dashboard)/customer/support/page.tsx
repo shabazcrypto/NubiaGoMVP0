@@ -106,7 +106,7 @@ export default function CustomerSupportPage() {
     switch (status) {
       case 'resolved': return 'text-green-600 bg-green-100'
       case 'in-progress': return 'text-yellow-600 bg-yellow-100'
-      case 'open': return 'text-blue-600 bg-blue-100'
+      case 'open': return 'text-primary-600 bg-primary-100'
       default: return 'text-gray-600 bg-gray-100'
     }
   }

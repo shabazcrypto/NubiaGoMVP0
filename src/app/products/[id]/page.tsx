@@ -71,7 +71,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
           <p className="text-gray-600 mb-6">The product you're looking for doesn't exist.</p>
           <Link 
             href="/products" 
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+            className="inline-flex items-center text-primary-600 hover:text-primary-700 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             <span>Back to Products</span>
@@ -120,7 +120,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
         <div className="mb-6">
           <Link 
             href="/products" 
-            className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors mb-4"
+            className="inline-flex items-center text-gray-600 hover:text-primary-600 transition-colors mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             <span>Back to Products</span>
@@ -201,15 +201,15 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
               {/* Trust Indicators */}
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="text-center p-2 bg-gray-50 rounded-md">
-                  <Truck className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+                  <Truck className="h-5 w-5 text-primary-600 mx-auto mb-1" />
                   <div className="text-xs text-gray-600">Free Shipping</div>
                 </div>
                 <div className="text-center p-2 bg-gray-50 rounded-md">
-                  <Shield className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+                  <Shield className="h-5 w-5 text-primary-600 mx-auto mb-1" />
                   <div className="text-xs text-gray-600">2 Year Warranty</div>
                 </div>
                 <div className="text-center p-2 bg-gray-50 rounded-md">
-                  <CheckCircle className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+                  <CheckCircle className="h-5 w-5 text-primary-600 mx-auto mb-1" />
                   <div className="text-xs text-gray-600">Premium Quality</div>
                 </div>
               </div>
@@ -230,11 +230,11 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
               {/* Action Buttons */}
               <div className="space-y-3">
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-medium transition-colors flex items-center justify-center">
+                <button className="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-md font-medium transition-colors flex items-center justify-center">
                   <ShoppingCart className="h-4 w-4 mr-2" />
                   Add to Cart
                 </button>
-                <button className="w-full bg-white border border-blue-600 text-blue-600 py-3 rounded-md font-medium hover:bg-blue-50 transition-colors flex items-center justify-center">
+                <button className="w-full bg-white border border-primary-600 text-primary-600 py-3 rounded-md font-medium hover:bg-primary-50 transition-colors flex items-center justify-center">
                   <Eye className="h-4 w-4 mr-2" />
                   Quick View
                 </button>
@@ -266,7 +266,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
         <div className="bg-white border border-gray-200 rounded-lg p-6 mt-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Customer Reviews</h2>
-            <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors">
+            <button className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-md font-medium hover:bg-primary-700 transition-colors">
               <MessageCircle className="h-4 w-4 mr-2" />
               Write Review
             </button>
@@ -277,7 +277,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
               <div key={review.id} className="border border-gray-100 rounded-lg p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                    <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                       {review.userName.charAt(0)}
                     </div>
                     <div>
@@ -307,7 +307,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <button className="flex items-center space-x-1 hover:text-blue-600 transition-colors">
+                    <button className="flex items-center space-x-1 hover:text-primary-600 transition-colors">
                       <ThumbsUp className="h-3 w-3" />
                       <span>{review.helpful}</span>
                     </button>

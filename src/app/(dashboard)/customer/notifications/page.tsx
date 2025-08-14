@@ -100,7 +100,7 @@ export default function CustomerNotificationsPage() {
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'order': return 'text-blue-600 bg-blue-100'
+      case 'order': return 'text-primary-600 bg-primary-100'
       case 'payment': return 'text-green-600 bg-green-100'
       case 'message': return 'text-purple-600 bg-purple-100'
       case 'system': return 'text-gray-600 bg-gray-100'
@@ -183,7 +183,7 @@ export default function CustomerNotificationsPage() {
               {filteredNotifications.map((notification) => (
                 <div 
                   key={notification.id} 
-                  className={`p-6 ${!notification.isRead ? 'bg-blue-50' : ''}`}
+                  className={`p-6 ${!notification.isRead ? 'bg-primary-50' : ''}`}
                 >
                   <div className="flex items-start space-x-4">
                     <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${getNotificationColor(notification.type)}`}>
@@ -251,7 +251,7 @@ export default function CustomerNotificationsPage() {
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <Package className="h-8 w-8 text-blue-600" />
+              <Package className="h-8 w-8 text-primary-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Orders</p>
                 <p className="text-2xl font-semibold text-gray-900">

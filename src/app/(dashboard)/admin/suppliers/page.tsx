@@ -249,7 +249,7 @@ export default function AdminSuppliersPage() {
                     <p className="text-sm font-medium text-gray-600">Total Suppliers</p>
                     <p className="text-2xl font-bold text-gray-900">{safeSupplierStats.totalSuppliers.toLocaleString()}</p>
                   </div>
-                  <Store className="h-8 w-8 text-blue-600" />
+                  <Store className="h-8 w-8 text-primary-600" />
                 </div>
                 <div className="mt-4 flex items-center text-sm text-green-600">
                   <TrendingUp className="h-4 w-4 mr-1" />
@@ -426,9 +426,9 @@ export default function AdminSuppliersPage() {
 
                     {/* Bulk Actions */}
                     {selectedSuppliers.length > 0 && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
                         <div className="flex items-center justify-between">
-                          <p className="text-sm text-blue-800">
+                          <p className="text-sm text-primary-800">
                             {selectedSuppliers.length} supplier(s) selected
                           </p>
                           <div className="flex space-x-2">
@@ -592,14 +592,14 @@ export default function AdminSuppliersPage() {
                                   )}
                                   <button
                                     onClick={() => router.push(`/admin/suppliers/${supplier.id}`)}
-                                    className="text-blue-600 hover:text-blue-900"
+                                    className="text-primary-600 hover:text-primary-900"
                                     title="View"
                                   >
                                     <Eye className="h-4 w-4" />
                                   </button>
                                   <button
                                     onClick={() => router.push(`/admin/suppliers/${supplier.id}/edit`)}
-                                    className="text-indigo-600 hover:text-indigo-900"
+                                    className="text-primary-600 hover:text-primary-900"
                                     title="Edit"
                                   >
                                     <Edit className="h-4 w-4" />

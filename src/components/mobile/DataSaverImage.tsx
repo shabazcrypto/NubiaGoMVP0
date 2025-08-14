@@ -212,7 +212,7 @@ export default function DataSaverImage({
       {!isLoaded && (inView || priority) && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
           <div className="flex flex-col items-center space-y-2">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
             <p className="text-xs text-gray-500">
               {networkSpeed === 'slow' ? 'Loading (slow network)...' :
                networkSpeed === 'medium' ? 'Loading...' : 'Loading image...'}

@@ -195,7 +195,7 @@ const ProductSearch = React.memo(function ProductSearch({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-600 text-sm"
           >
             <option value="newest">Newest First</option>
             <option value="name-asc">Name A-Z</option>
@@ -222,7 +222,7 @@ const ProductSearch = React.memo(function ProductSearch({
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-600 text-sm"
                 >
                   {categories.map(category => (
                     <option key={category} value={category}>
@@ -263,7 +263,7 @@ const ProductSearch = React.memo(function ProductSearch({
                 <select
                   value={minRating}
                   onChange={(e) => setMinRating(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-600 text-sm"
                 >
                   <option value={0}>Any Rating</option>
                   <option value={1}>1+ Stars</option>
@@ -301,7 +301,7 @@ const ProductSearch = React.memo(function ProductSearch({
           <Link
             key={product.id}
             href={`/products/${product.id}`}
-            className="bg-white border border-gray-200 rounded-lg hover:border-blue-300 transition-colors cursor-pointer group block"
+            className="bg-white border border-gray-200 rounded-lg hover:border-primary-300 transition-colors cursor-pointer group block"
           >
             {/* Product Image */}
             <div className="relative aspect-square overflow-hidden rounded-t-lg">

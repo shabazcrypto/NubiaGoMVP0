@@ -127,7 +127,7 @@ export default function SupplierProductForm({
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Add New Product</h1>
-            <p className="text-blue-100 mt-1">Submit a new product for admin approval</p>
+            <p className="text-primary-100 mt-1">Submit a new product for admin approval</p>
           </div>
           <div className="flex items-center space-x-2">
             <Store className="h-6 w-6" />
@@ -314,26 +314,26 @@ export default function SupplierProductForm({
             </div>
 
             {/* Guidelines */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="text-md font-medium text-blue-900 mb-3 flex items-center">
+            <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+              <h4 className="text-md font-medium text-primary-900 mb-3 flex items-center">
                 <Info className="h-4 w-4 mr-2" />
                 Submission Guidelines
               </h4>
-              <ul className="text-sm text-blue-800 space-y-2">
+              <ul className="text-sm text-primary-800 space-y-2">
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">•</span>
+                  <span className="text-primary-600 mr-2">•</span>
                   Ensure all product information is accurate and complete
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">•</span>
+                  <span className="text-primary-600 mr-2">•</span>
                   High-quality images are required for approval
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">•</span>
+                  <span className="text-primary-600 mr-2">•</span>
                   Pricing should be competitive and include commission
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">•</span>
+                  <span className="text-primary-600 mr-2">•</span>
                   Lead time should reflect actual fulfillment capability
                 </li>
               </ul>
@@ -407,13 +407,13 @@ export default function SupplierProductForm({
                         {supplierFormData.metaKeywords.map((keyword, index) => (
                           <span
                             key={index}
-                            className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                            className="inline-flex items-center px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm"
                           >
                             {keyword}
                             <button
                               type="button"
                               onClick={() => handleSupplierFieldChange('metaKeywords', supplierFormData.metaKeywords?.filter((_, i) => i !== index) || [])}
-                              className="ml-2 text-blue-600 hover:text-blue-800"
+                              className="ml-2 text-primary-600 hover:text-primary-800"
                             >
                               ×
                             </button>
@@ -450,7 +450,7 @@ export default function SupplierProductForm({
                       <div className="space-y-2">
                         {supplierFormData.productHighlights.map((highlight, index) => (
                           <div key={index} className="flex items-center space-x-2">
-                            <span className="text-blue-600">•</span>
+                            <span className="text-primary-600">•</span>
                             <span className="flex-1 text-sm text-gray-700">{highlight}</span>
                             <button
                               type="button"
@@ -477,7 +477,7 @@ export default function SupplierProductForm({
                   <span className="text-sm text-gray-600">Pending Approval</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Store className="h-4 w-4 text-blue-500" />
+                  <Store className="h-4 w-4 text-primary-600" />
                   <span className="text-sm text-gray-600">Supplier Product</span>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -520,8 +520,8 @@ export default function SupplierProductForm({
               </div>
               
               <div className="text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-blue-600 font-bold">2</span>
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-primary-600 font-bold">2</span>
                 </div>
                 <h4 className="font-medium text-gray-900 mb-1">Review</h4>
                 <p className="text-sm text-gray-600">Admin team reviews your product</p>

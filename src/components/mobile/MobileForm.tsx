@@ -65,7 +65,7 @@ export function MobileInput({
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
               : success
               ? 'border-green-500 focus:border-green-500 focus:ring-green-500'
-              : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+              : 'border-gray-300 focus:border-primary-600 focus:ring-primary-500'
           } ${
             isFloatingLabel ? 'pt-6 pb-2' : 'py-4'
           }`}
@@ -91,7 +91,7 @@ export function MobileInput({
               : success
               ? 'text-green-500'
               : isFocused
-              ? 'text-blue-500'
+              ? 'text-primary-600'
               : 'text-gray-500'
           }`}
           onClick={() => inputRef.current?.focus()}
@@ -188,7 +188,7 @@ export function MobileSelect({
           } ${
             error 
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
-              : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+              : 'border-gray-300 focus:border-primary-600 focus:ring-primary-500'
           }`}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -214,7 +214,7 @@ export function MobileSelect({
             error
               ? 'text-red-500'
               : isFocused
-              ? 'text-blue-500'
+              ? 'text-primary-600'
               : 'text-gray-500'
           }`}
         >
@@ -279,7 +279,7 @@ export function MobileTextarea({
           } ${
             error 
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
-              : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+              : 'border-gray-300 focus:border-primary-600 focus:ring-primary-500'
           }`}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -300,7 +300,7 @@ export function MobileTextarea({
             error
               ? 'text-red-500'
               : isFocused
-              ? 'text-blue-500'
+              ? 'text-primary-600'
               : 'text-gray-500'
           }`}
         >

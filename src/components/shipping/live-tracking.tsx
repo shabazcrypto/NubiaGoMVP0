@@ -207,9 +207,9 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
         return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'in-transit':
       case 'out-for-delivery':
-        return <Truck className="w-5 h-5 text-blue-500" />
+        return <Truck className="w-5 h-5 text-primary-600" />
       case 'shipped':
-        return <Package className="w-5 h-5 text-blue-500" />
+        return <Package className="w-5 h-5 text-primary-600" />
       default:
         return <Clock className="w-5 h-5 text-gray-500" />
     }
@@ -223,9 +223,9 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
         return 'text-red-600 bg-red-50 border-red-200'
       case 'in-transit':
       case 'out-for-delivery':
-        return 'text-blue-600 bg-blue-50 border-blue-200'
+        return 'text-primary-600 bg-primary-50 border-primary-200'
       case 'shipped':
-        return 'text-blue-600 bg-blue-50 border-blue-200'
+        return 'text-primary-600 bg-primary-50 border-primary-200'
       default:
         return 'text-gray-600 bg-gray-50 border-gray-200'
     }
@@ -286,11 +286,11 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
         </div>
 
         {/* Estimated Delivery */}
-        <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+        <div className="mt-4 p-4 bg-primary-50 rounded-lg">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-blue-600 font-medium">Estimated Delivery</p>
-              <p className="text-lg font-semibold text-blue-900">
+              <p className="text-sm text-primary-600 font-medium">Estimated Delivery</p>
+              <p className="text-lg font-semibold text-primary-900">
                 {tracking.estimatedDelivery.toLocaleDateString('en-US', {
                   weekday: 'long',
                   year: 'numeric',
@@ -300,8 +300,8 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-blue-600">Last Updated</p>
-              <p className="text-sm text-blue-900">
+              <p className="text-sm text-primary-600">Last Updated</p>
+              <p className="text-sm text-primary-900">
                 {lastUpdate.toLocaleTimeString('en-US', {
                   hour: '2-digit',
                   minute: '2-digit'
@@ -321,7 +321,7 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
                 type="checkbox"
                 checked={isRealTime}
                 onChange={(e) => setIsRealTime(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
               <span className="ml-2 text-sm text-gray-700">Real-time updates</span>
             </label>
@@ -334,7 +334,7 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
           </div>
           <button
             onClick={() => setShowMap(!showMap)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
             {showMap ? 'Hide Map' : 'Show Map'}
           </button>
@@ -393,7 +393,7 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
               <div className="flex flex-col items-center">
                 <div className={`w-4 h-4 rounded-full border-2 ${
                   index === tracking.events.length - 1
-                    ? 'bg-blue-500 border-blue-500'
+                    ? 'bg-primary-600 border-primary-600'
                     : 'bg-gray-200 border-gray-300'
                 }`}></div>
                 {index < tracking.events.length - 1 && (

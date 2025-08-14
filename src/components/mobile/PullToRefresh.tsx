@@ -175,7 +175,7 @@ export default function PullToRefresh({
         >
           <div className="bg-white rounded-full shadow-lg p-3 flex items-center space-x-2">
             <motion.div
-              className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full"
+              className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full"
               style={{ rotate, scale }}
               animate={isRefreshing ? { rotate: 360 } : {}}
               transition={{ duration: 1, repeat: isRefreshing ? Infinity : 0, ease: "linear" }}
@@ -201,7 +201,7 @@ export default function PullToRefresh({
           exit={{ opacity: 0 }}
         >
           <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center space-y-4">
-            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
             <p className="text-gray-700 font-medium">Refreshing...</p>
           </div>
         </motion.div>

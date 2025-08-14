@@ -63,8 +63,8 @@ export default function PressPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <stat.icon className="h-8 w-8 text-blue-600" />
+                <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <stat.icon className="h-8 w-8 text-primary-600" />
                 </div>
                 <div className="text-3xl font-bold text-gray-900 mb-2">
                   {stat.value}
@@ -90,7 +90,7 @@ export default function PressPage() {
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                      <span className="px-3 py-1 bg-primary-100 text-primary-800 text-sm font-medium rounded-full">
                         {release.category}
                       </span>
                       <div className="flex items-center text-gray-500 text-sm">
@@ -109,7 +109,7 @@ export default function PressPage() {
                 <div className="flex items-center space-x-4">
                   <Link 
                     href={`/press/${release.title.toLowerCase().replace(/\s+/g, '-')}`}
-                    className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
+                    className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
                   >
                     Read Full Release
                     <ExternalLink className="h-4 w-4 ml-1" />
@@ -207,7 +207,7 @@ export default function PressPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/contact"
-              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
             >
               Contact Media Team
             </Link>

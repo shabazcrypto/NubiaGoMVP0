@@ -574,7 +574,7 @@ export function ShippingCalculator({ onRateSelect, className = '' }: ShippingCal
                     <div className="flex-1">
                       <div className="flex items-center space-x-2">
                         <h4 className="font-medium text-gray-900">{rate.serviceName}</h4>
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
                           {rate.carrier}
                         </span>
                         {rate.guaranteedDelivery && (

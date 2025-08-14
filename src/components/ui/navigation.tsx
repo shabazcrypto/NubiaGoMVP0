@@ -174,7 +174,7 @@ function SearchBar() {
             placeholder="Search products..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
       </form>
@@ -211,7 +211,7 @@ function UserDropdown({ user, onLogout }: UserDropdownProps) {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
       >
-        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+        <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
           <User className="h-4 w-4 text-white" />
         </div>
         <span className="hidden md:block text-sm font-medium text-gray-700">
@@ -407,8 +407,7 @@ export default function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Logo size="md" />
-              <span className="text-xl font-bold text-gray-900">NubiaGo</span>
+              <Logo variant="horizontal" size="md" />
             </Link>
           </div>
 
@@ -420,8 +419,8 @@ export default function Navigation() {
                 href={item.href}
                 className={`text-sm font-medium transition-colors ${
                   pathname === item.href
-                    ? 'text-blue-600'
-                    : 'text-gray-700 hover:text-blue-600'
+                    ? 'text-primary-600'
+                    : 'text-nubia-gray hover:text-primary-600'
                 }`}
               >
                 {item.label}
@@ -456,13 +455,13 @@ export default function Navigation() {
               <div className="flex items-center space-x-2">
                 <Link
                   href="/auth/login"
-                  className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+                  className="text-sm font-medium text-nubia-gray hover:text-primary-600 transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                  className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
                 >
                   Sign Up
                 </Link>

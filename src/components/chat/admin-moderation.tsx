@@ -556,7 +556,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
           onClick={() => setActiveTab('queue')}
           className={`flex-1 px-4 py-2 text-sm font-medium ${
             activeTab === 'queue'
-              ? 'border-b-2 border-blue-500 text-blue-600'
+              ? 'border-b-2 border-primary-600 text-primary-600'
               : theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
           }`}
         >
@@ -566,7 +566,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
           onClick={() => setActiveTab('users')}
           className={`flex-1 px-4 py-2 text-sm font-medium ${
             activeTab === 'users'
-              ? 'border-b-2 border-blue-500 text-blue-600'
+              ? 'border-b-2 border-primary-600 text-primary-600'
               : theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
           }`}
         >

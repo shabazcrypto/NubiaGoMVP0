@@ -16,7 +16,7 @@ export function SkipToMainContent() {
     <>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded z-50"
         onClick={handleSkip}
       >
         Skip to main content
@@ -170,7 +170,7 @@ export function Announcement({ message }: { message: string }) {
 // Focus indicator component
 export function FocusIndicator({ children }: { children: React.ReactNode }) {
   return (
-    <div className="focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 rounded">
+    <div className="focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 rounded">
       {children}
     </div>
   )

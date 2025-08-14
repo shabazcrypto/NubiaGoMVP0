@@ -70,11 +70,11 @@ const toastColors = {
     message: 'text-yellow-700',
   },
   info: {
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
-    icon: 'text-blue-600',
-    title: 'text-blue-800',
-    message: 'text-blue-700',
+    bg: 'bg-primary-50',
+    border: 'border-primary-200',
+    icon: 'text-primary-600',
+    title: 'text-primary-800',
+    message: 'text-primary-700',
   },
 }
 

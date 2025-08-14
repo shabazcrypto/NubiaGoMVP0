@@ -97,7 +97,7 @@ export default function SupplierShippingPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered': return 'text-green-600 bg-green-100'
-      case 'shipped': return 'text-blue-600 bg-blue-100'
+      case 'shipped': return 'text-primary-600 bg-primary-100'
       case 'pending': return 'text-yellow-600 bg-yellow-100'
       case 'cancelled': return 'text-red-600 bg-red-100'
       default: return 'text-gray-600 bg-gray-100'
@@ -128,7 +128,7 @@ export default function SupplierShippingPage() {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <Package className="h-8 w-8 text-blue-600" />
+                <Package className="h-8 w-8 text-primary-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Total Orders</p>

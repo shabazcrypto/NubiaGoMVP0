@@ -292,14 +292,14 @@ export function MobileMoneyForm(props: MobileMoneyFormProps) {
 
         {/* Provider Information */}
         {watchedProvider && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
             <div className="flex items-start space-x-3">
               <span className="text-lg">{getProviderIcon(watchedProvider)}</span>
               <div className="flex-1">
-                <h4 className="font-medium text-blue-900">
+                <h4 className="font-medium text-primary-900">
                   {getProviderInfo(watchedProvider)?.name}
                 </h4>
-                <p className="text-sm text-blue-700 mt-1">
+                <p className="text-sm text-primary-700 mt-1">
                   You will receive a payment prompt on your phone. Please follow the instructions to complete the payment.
                 </p>
               </div>

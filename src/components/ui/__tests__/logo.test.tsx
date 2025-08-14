@@ -7,19 +7,22 @@ describe('Logo Component', () => {
     render(<Logo />)
     const logo = screen.getByTestId('logo-container')
     expect(logo).toBeInTheDocument()
-    expect(logo).toHaveClass('w-10', 'h-10')
+    // Default horizontal md size is now w-44 h-12, but we test the icon size which is w-10 h-10
+    expect(logo).toContainHTML('w-10 h-10')
   })
 
   it('renders with custom size', () => {
     render(<Logo size="lg" />)
     const logo = screen.getByTestId('logo-container')
-    expect(logo).toHaveClass('w-16', 'h-16')
+    // Large size icon within horizontal layout is w-14 h-14
+    expect(logo).toContainHTML('w-14 h-14')
   })
 
   it('renders with custom size small', () => {
     render(<Logo size="sm" />)
     const logo = screen.getByTestId('logo-container')
-    expect(logo).toHaveClass('w-8', 'h-8')
+    // Small size icon within horizontal layout is w-8 h-8
+    expect(logo).toContainHTML('w-8 h-8')
   })
 
   it('renders with custom className', () => {
@@ -31,7 +34,8 @@ describe('Logo Component', () => {
   it('renders with default size when no size specified', () => {
     render(<Logo />)
     const logo = screen.getByTestId('logo-container')
-    expect(logo).toHaveClass('w-10', 'h-10')
+    // Default is horizontal md with icon size w-10 h-10
+    expect(logo).toContainHTML('w-10 h-10')
   })
 
   it('renders SVG icon', () => {
@@ -55,6 +59,7 @@ describe('Logo Component', () => {
       />
     )
     const logo = screen.getByTestId('logo-container')
-    expect(logo).toHaveClass('w-16', 'h-16', 'combined-logo')
+    expect(logo).toHaveClass('combined-logo')
+    expect(logo).toContainHTML('w-14 h-14')
   })
 })

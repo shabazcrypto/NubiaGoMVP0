@@ -104,7 +104,7 @@ export default function SupplierProductsPage() {
       case 'active': return 'text-green-600 bg-green-100'
       case 'inactive': return 'text-gray-600 bg-gray-100'
       case 'draft': return 'text-yellow-600 bg-yellow-100'
-      case 'pending': return 'text-blue-600 bg-blue-100'
+      case 'pending': return 'text-primary-600 bg-primary-100'
       case 'rejected': return 'text-red-600 bg-red-100'
       default: return 'text-gray-600 bg-gray-100'
     }
@@ -165,8 +165,8 @@ export default function SupplierProductsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Package className="w-6 h-6 text-blue-600" />
+              <div className="p-2 bg-primary-100 rounded-lg">
+                <Package className="w-6 h-6 text-primary-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Products</p>
@@ -345,7 +345,7 @@ export default function SupplierProductsPage() {
                   </button>
                   <button
                     onClick={() => handleEditProduct(product.id)}
-                    className="flex-1 bg-blue-100 text-blue-700 px-3 py-2 rounded-lg hover:bg-blue-200 flex items-center justify-center"
+                    className="flex-1 bg-primary-100 text-primary-700 px-3 py-2 rounded-lg hover:bg-primary-200 flex items-center justify-center"
                   >
                     <Edit className="w-4 h-4 mr-1" />
                     Edit

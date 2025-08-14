@@ -124,8 +124,8 @@ export default function GDPRPage() {
               return (
                 <div key={index} className="bg-white p-6 rounded-lg border hover:shadow-lg transition-shadow">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                      <IconComponent className="h-6 w-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
+                      <IconComponent className="h-6 w-6 text-primary-600" />
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900">{right.title}</h3>
                   </div>
@@ -187,7 +187,7 @@ export default function GDPRPage() {
               <p className="text-gray-600 mb-4">
                 Access your account settings to view, update, or delete your personal information.
               </p>
-              <Link href="/dashboard" className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium">
+              <Link href="/dashboard" className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium">
                 Go to Dashboard
                 <ArrowRight className="h-4 w-4 ml-1" />
               </Link>
@@ -195,15 +195,15 @@ export default function GDPRPage() {
 
             <div className="bg-white p-6 rounded-lg border">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <Shield className="h-6 w-6 text-blue-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
+                  <Shield className="h-6 w-6 text-primary-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900">Contact Us</h3>
               </div>
               <p className="text-gray-600 mb-4">
                 Send us a request for data access, correction, or deletion.
               </p>
-              <Link href="/contact" className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium">
+              <Link href="/contact" className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium">
                 Contact Privacy Team
                 <ArrowRight className="h-4 w-4 ml-1" />
               </Link>
@@ -220,8 +220,8 @@ export default function GDPRPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Lock className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Lock className="h-8 w-8 text-primary-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Encryption</h3>
               <p className="text-gray-600 text-sm">

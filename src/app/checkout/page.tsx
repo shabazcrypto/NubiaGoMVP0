@@ -293,7 +293,7 @@ export default function CheckoutPage() {
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-2 mb-8">
-            <Link href="/cart" className="text-gray-400 hover:text-blue-600 transition-colors">
+            <Link href="/cart" className="text-gray-400 hover:text-primary-600 transition-colors">
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <h1 className="text-2xl font-bold text-gray-900">
@@ -317,7 +317,7 @@ export default function CheckoutPage() {
         <div className="mb-8">
           <Link 
             href="/cart" 
-            className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors mb-4"
+            className="inline-flex items-center text-gray-600 hover:text-primary-600 transition-colors mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             <span className="font-medium">Back to Cart</span>
@@ -331,7 +331,7 @@ export default function CheckoutPage() {
           <div className="flex items-center justify-center space-x-8 mt-6">
             <div className="flex items-center space-x-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                step >= 1 ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-500'
               }`}>
                 1
               </div>
@@ -344,7 +344,7 @@ export default function CheckoutPage() {
             
             <div className="flex items-center space-x-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                step >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                step >= 2 ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-500'
               }`}>
                 2
               </div>
@@ -361,7 +361,7 @@ export default function CheckoutPage() {
             {/* Shipping Information */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex items-center space-x-3 mb-6">
-                <MapPin className="h-5 w-5 text-blue-600" />
+                <MapPin className="h-5 w-5 text-primary-600" />
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900">Shipping Information</h2>
                   <p className="text-sm text-gray-500">Where should we deliver your order?</p>
@@ -376,7 +376,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={formData.firstName}
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                         formErrors.firstName ? 'border-red-500' : 'border-gray-300'
                       }`}
                       required
@@ -391,7 +391,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={formData.lastName}
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                         formErrors.lastName ? 'border-red-500' : 'border-gray-300'
                       }`}
                       required
@@ -409,7 +409,7 @@ export default function CheckoutPage() {
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                         formErrors.email ? 'border-red-500' : 'border-gray-300'
                       }`}
                       required
@@ -424,7 +424,7 @@ export default function CheckoutPage() {
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                         formErrors.phone ? 'border-red-500' : 'border-gray-300'
                       }`}
                       required
@@ -441,7 +441,7 @@ export default function CheckoutPage() {
                     type="text"
                     value={formData.address.street}
                     onChange={(e) => handleInputChange('address.street', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                       formErrors['address.street'] ? 'border-red-500' : 'border-gray-300'
                     }`}
                     required
@@ -458,7 +458,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={formData.address.city}
                       onChange={(e) => handleInputChange('address.city', e.target.value)}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                         formErrors['address.city'] ? 'border-red-500' : 'border-gray-300'
                       }`}
                       required
@@ -473,7 +473,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={formData.address.state}
                       onChange={(e) => handleInputChange('address.state', e.target.value)}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                         formErrors['address.state'] ? 'border-red-500' : 'border-gray-300'
                       }`}
                       required
@@ -488,7 +488,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={formData.address.zipCode}
                       onChange={(e) => handleInputChange('address.zipCode', e.target.value)}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                         formErrors['address.zipCode'] ? 'border-red-500' : 'border-gray-300'
                       }`}
                       required
@@ -504,7 +504,7 @@ export default function CheckoutPage() {
                   <select
                     value={formData.address.country}
                     onChange={(e) => handleInputChange('address.country', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                       formErrors['address.country'] ? 'border-red-500' : 'border-gray-300'
                     }`}
                     required
@@ -527,7 +527,7 @@ export default function CheckoutPage() {
             {rates.length > 0 && (
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="flex items-center space-x-3 mb-6">
-                  <Truck className="h-5 w-5 text-blue-600" />
+                  <Truck className="h-5 w-5 text-primary-600" />
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900">Shipping Options</h2>
                     <p className="text-sm text-gray-500">Choose your preferred shipping method</p>
@@ -536,7 +536,7 @@ export default function CheckoutPage() {
                 
                 {ratesLoading ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+                    <Loader2 className="h-6 w-6 animate-spin text-primary-600" />
                     <span className="ml-2 text-gray-600">Calculating shipping rates...</span>
                   </div>
                 ) : ratesError ? (
@@ -553,7 +553,7 @@ export default function CheckoutPage() {
                         key={index}
                         className={`border rounded-lg p-4 cursor-pointer transition-colors ${
                           selectedRate?.id === rate.id
-                            ? 'border-blue-500 bg-blue-50'
+                            ? 'border-primary-600 bg-primary-50'
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                         onClick={() => setSelectedRate(rate)}
@@ -562,7 +562,7 @@ export default function CheckoutPage() {
                           <div className="flex items-center space-x-3">
                             <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                               selectedRate?.id === rate.id
-                                ? 'border-blue-500 bg-blue-500'
+                                ? 'border-primary-600 bg-primary-600'
                                 : 'border-gray-300'
                             }`}>
                               {selectedRate?.id === rate.id && (
@@ -591,7 +591,7 @@ export default function CheckoutPage() {
             {step >= 2 && (
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="flex items-center space-x-3 mb-6">
-                  <CreditCard className="h-5 w-5 text-blue-600" />
+                  <CreditCard className="h-5 w-5 text-primary-600" />
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900">Payment Information</h2>
                     <p className="text-sm text-gray-500">Secure payment processing</p>
@@ -625,7 +625,7 @@ export default function CheckoutPage() {
                 <button
                   onClick={handleContinueToPayment}
                   disabled={loading}
-                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-md font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full bg-primary-600 text-white py-3 px-6 rounded-md font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {loading ? 'Creating Order...' : 'Continue to Payment'}
                 </button>
@@ -710,7 +710,7 @@ export default function CheckoutPage() {
             {/* Delivery Info */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex items-center space-x-3 mb-4">
-                <Truck className="h-5 w-5 text-blue-600" />
+                <Truck className="h-5 w-5 text-primary-600" />
                 <h3 className="text-sm font-semibold text-gray-900">Delivery Information</h3>
               </div>
               

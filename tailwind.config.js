@@ -9,17 +9,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // NubiaGo Brand Primary Blue (#2563eb)
         primary: {
-          50: '#f0f9ff',
+          50: '#eff6ff',
           100: '#dbeafe',
           200: '#bfdbfe',
           300: '#93c5fd',
           400: '#60a5fa',
           500: '#3b82f6',
-          600: '#0F52BA', // Your existing brand color
+          600: '#2563eb', // NubiaGo Brand Primary Blue
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
+        },
+        // NubiaGo Brand Accent Orange (#f59e0b)
+        accent: {
+          50: '#fefce8',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b', // NubiaGo Brand Accent Orange
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
         },
         secondary: {
           50: '#f8fafc',
@@ -33,7 +47,17 @@ module.exports = {
           800: '#1e293b',
           900: '#0f172a',
         },
-        // Balanced yellow palette
+        // NubiaGo Brand Text Colors
+        'brand-text': {
+          primary: '#000000',   // NubiaGo Text Black
+          secondary: '#666666', // NubiaGo Text Gray
+        },
+        // NubiaGo Brand Background Colors
+        'brand-bg': {
+          light: '#f8f9fa',     // NubiaGo Background Light
+          white: '#ffffff',     // NubiaGo White
+        },
+        // Balanced yellow palette (keeping for compatibility)
         yellow: {
           50: '#fefce8',
           100: '#fef3c7',
@@ -46,7 +70,7 @@ module.exports = {
           800: '#92400e',
           900: '#78350f',
         },
-        // Balanced black/gray palette
+        // Enhanced neutral palette with NubiaGo brand colors
         neutral: {
           50: '#fafafa',
           100: '#f5f5f5',
@@ -54,12 +78,12 @@ module.exports = {
           300: '#d4d4d4',
           400: '#a3a3a3',
           500: '#737373',
-          600: '#525252',
+          600: '#525252',     
           700: '#404040',
           800: '#262626',
-          900: '#171717',
+          900: '#171717',     // NubiaGo Text Black
         },
-        // Semantic colors using your palette
+        // Semantic colors using NubiaGo brand palette
         success: {
           50: '#f0fdf4',
           500: '#22c55e',
@@ -67,7 +91,7 @@ module.exports = {
         },
         warning: {
           50: '#fefce8',
-          500: '#f59e0b', // Using your yellow
+          500: '#f59e0b', // NubiaGo Brand Accent Orange
           900: '#78350f',
         },
         error: {
@@ -75,6 +99,13 @@ module.exports = {
           500: '#ef4444',
           900: '#7f1d1d',
         },
+        // NubiaGo Brand Aliases for easy usage
+        'nubia-blue': '#2563eb',
+        'nubia-orange': '#f59e0b', 
+        'nubia-black': '#000000',
+        'nubia-gray': '#666666',
+        'nubia-light': '#f8f9fa',
+        'nubia-white': '#ffffff',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

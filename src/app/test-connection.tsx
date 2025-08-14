@@ -16,7 +16,7 @@ export default function TestConnection() {
 
   if (status === 'testing') {
     return (
-      <div className="p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded">
+      <div className="p-4 bg-primary-100 border border-primary-400 text-primary-700 rounded">
         Testing connection... (2 seconds)
       </div>
     )

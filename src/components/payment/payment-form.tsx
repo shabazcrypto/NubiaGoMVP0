@@ -131,7 +131,7 @@ export function PaymentForm({
                 key={method.id}
                 className={`relative flex items-start p-4 border rounded-lg cursor-pointer transition-colors ${
                   selectedPaymentMethod === method.id
-                    ? 'border-blue-500 bg-blue-50'
+                    ? 'border-primary-600 bg-primary-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
@@ -144,7 +144,7 @@ export function PaymentForm({
                 <div className="flex items-center h-5">
                   <div className={`w-4 h-4 border-2 rounded-full flex items-center justify-center ${
                     selectedPaymentMethod === method.id
-                      ? 'border-blue-500 bg-blue-500'
+                      ? 'border-primary-600 bg-primary-600'
                       : 'border-gray-300'
                   }`}>
                     {selectedPaymentMethod === method.id && (
@@ -188,7 +188,7 @@ export function PaymentForm({
             type="text"
             {...register('customerName')}
             placeholder="Enter your full name"
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
               errors.customerName ? 'border-red-500' : 'border-gray-300'
             }`}
           />
@@ -206,7 +206,7 @@ export function PaymentForm({
             type="email"
             {...register('customerEmail')}
             placeholder="Enter your email address"
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
               errors.customerEmail ? 'border-red-500' : 'border-gray-300'
             }`}
           />
@@ -224,7 +224,7 @@ export function PaymentForm({
             type="tel"
             {...register('customerPhone')}
             placeholder="Enter your phone number"
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
               errors.customerPhone ? 'border-red-500' : 'border-gray-300'
             }`}
           />
@@ -244,7 +244,7 @@ export function PaymentForm({
               type="tel"
               {...register('mobileMoneyNumber')}
               placeholder="Enter your mobile money number"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             <p className="text-xs text-gray-500 mt-1">
               We'll send payment instructions to this number
@@ -254,12 +254,12 @@ export function PaymentForm({
       </div>
 
       {/* Security Notice */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
         <div className="flex items-start space-x-3">
-          <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+          <CheckCircle className="h-5 w-5 text-primary-600 mt-0.5" />
           <div>
-            <h4 className="text-sm font-medium text-blue-900">Secure Payment</h4>
-            <p className="text-sm text-blue-700 mt-1">
+            <h4 className="text-sm font-medium text-primary-900">Secure Payment</h4>
+            <p className="text-sm text-primary-700 mt-1">
               Your payment information is encrypted and secure. We never store your payment details.
             </p>
           </div>
@@ -270,7 +270,7 @@ export function PaymentForm({
       <button
         type="submit"
         disabled={isLoading || isProcessing}
-        className="w-full bg-blue-600 text-white py-3 px-6 rounded-md font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full bg-primary-600 text-white py-3 px-6 rounded-md font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {isLoading || isProcessing ? 'Processing...' : `Pay ${amount.toLocaleString()} ${currency}`}
       </button>

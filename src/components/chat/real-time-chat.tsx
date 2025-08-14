@@ -164,7 +164,7 @@ export function RealTimeChat() {
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
@@ -176,7 +176,7 @@ export function RealTimeChat() {
               key={room.id}
               onClick={() => handleRoomSelect(room)}
               className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
-                currentRoom?.id === room.id ? 'bg-blue-50' : ''
+                currentRoom?.id === room.id ? 'bg-primary-50' : ''
               }`}
             >
               <div className="flex items-center space-x-3">
@@ -199,7 +199,7 @@ export function RealTimeChat() {
                       {room.lastMessage?.content || 'No messages yet'}
                     </p>
                     {room.unreadCount > 0 && (
-                      <span className="ml-2 bg-blue-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
+                      <span className="ml-2 bg-primary-600 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
                         {room.unreadCount}
                       </span>
                     )}
@@ -255,7 +255,7 @@ export function RealTimeChat() {
                   <div
                     className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                       message.senderId === user?.uid
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-primary-600 text-white'
                         : 'bg-gray-200 text-gray-900'
                     }`}
                   >
@@ -272,7 +272,7 @@ export function RealTimeChat() {
                           </div>
                         )}
                       </div>
-                      <div className={`text-xs ${message.senderId === user?.uid ? 'text-blue-100' : 'text-gray-500'}`}>
+                      <div className={`text-xs ${message.senderId === user?.uid ? 'text-primary-100' : 'text-gray-500'}`}>
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -302,7 +302,7 @@ export function RealTimeChat() {
                     onChange={handleTyping}
                     onKeyPress={handleKeyPress}
                     placeholder="Type a message..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500"
                     rows={1}
                   />
                 </div>
@@ -322,7 +322,7 @@ export function RealTimeChat() {
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
-                    className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 bg-primary-600 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Send className="w-4 h-4" />
                   </button>

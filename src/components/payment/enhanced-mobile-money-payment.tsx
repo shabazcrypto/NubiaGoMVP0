@@ -206,7 +206,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
       case 'pending':
         return <Clock className="h-6 w-6 text-yellow-600" />
       case 'initiating':
-        return <Clock className="h-6 w-6 text-blue-600 animate-pulse" />
+        return <Clock className="h-6 w-6 text-primary-600 animate-pulse" />
       default:
         return <Smartphone className="h-6 w-6 text-gray-600" />
     }
@@ -238,10 +238,10 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
       </div>
 
       {/* Payment Summary */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg mb-6 border border-blue-200">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg mb-6 border border-primary-200">
         <div className="flex justify-between items-center">
           <span className="text-gray-700 font-medium">Amount:</span>
-          <span className="text-2xl font-bold text-blue-900">
+          <span className="text-2xl font-bold text-primary-900">
             {currency} {amount.toLocaleString()}
           </span>
         </div>
@@ -254,7 +254,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
           paymentStatus === 'completed' ? 'bg-green-50 border-green-200' :
           paymentStatus === 'failed' ? 'bg-red-50 border-red-200' :
           paymentStatus === 'pending' ? 'bg-yellow-50 border-yellow-200' :
-          'bg-blue-50 border-blue-200'
+          'bg-primary-50 border-primary-200'
         }`}>
           <div className="flex items-center space-x-3">
             {getStatusIcon()}
@@ -290,7 +290,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
           value={selectedCountry}
           onChange={(e) => handleCountryChange(e.target.value)}
           disabled={isLoading || paymentStatus !== 'idle'}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-600 disabled:bg-gray-100"
         >
           <option value="">Select Country</option>
           <option value="CM">🇨🇲 Cameroon</option>
@@ -316,7 +316,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
                 key={operator.operatorCode}
                 className={`relative p-4 border rounded-lg cursor-pointer transition-all ${
                   selectedOperator === operator.operatorCode
-                    ? 'border-blue-500 bg-blue-50 shadow-md'
+                    ? 'border-primary-600 bg-primary-50 shadow-md'
                     : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                 }`}
                 onClick={() => handleOperatorSelect(operator.operatorCode)}
@@ -346,7 +346,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
                   </div>
                 </div>
                 {selectedOperator === operator.operatorCode && (
-                  <div className="absolute top-2 right-2 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                  <div className="absolute top-2 right-2 w-5 h-5 bg-primary-600 rounded-full flex items-center justify-center">
                     <CheckCircle className="w-3 h-3 text-white" />
                   </div>
                 )}
@@ -368,7 +368,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
             disabled={paymentStatus !== 'idle'}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-600 disabled:bg-gray-100"
             placeholder="Enter your full name"
           />
         </div>
@@ -383,7 +383,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
             value={customerEmail}
             onChange={(e) => setCustomerEmail(e.target.value)}
             disabled={paymentStatus !== 'idle'}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-600 disabled:bg-gray-100"
             placeholder="your@email.com"
           />
         </div>
@@ -398,7 +398,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
             value={phoneNumber}
             onChange={handlePhoneNumberChange}
             disabled={paymentStatus !== 'idle'}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-600 disabled:bg-gray-100"
             placeholder="Enter your mobile money number"
           />
           <p className="text-xs text-gray-500 mt-1">
@@ -427,7 +427,7 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
         disabled={!isFormValid || isLoading || paymentStatus !== 'idle'}
         className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
           isFormValid && paymentStatus === 'idle'
-            ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+            ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl'
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
         }`}
       >
@@ -449,23 +449,23 @@ export const EnhancedMobileMoneyPayment: React.FC<EnhancedMobileMoneyPaymentProp
         <h4 className="font-medium text-gray-900 mb-3">How it works:</h4>
         <ol className="text-sm text-gray-600 space-y-2">
           <li className="flex items-start space-x-2">
-            <span className="bg-blue-100 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">1</span>
+            <span className="bg-primary-100 text-primary-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">1</span>
             <span>Select your country and mobile money operator</span>
           </li>
           <li className="flex items-start space-x-2">
-            <span className="bg-blue-100 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">2</span>
+            <span className="bg-primary-100 text-primary-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">2</span>
             <span>Enter your details and mobile money number</span>
           </li>
           <li className="flex items-start space-x-2">
-            <span className="bg-blue-100 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">3</span>
+            <span className="bg-primary-100 text-primary-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">3</span>
             <span>Click "Pay" to initiate the payment</span>
           </li>
           <li className="flex items-start space-x-2">
-            <span className="bg-blue-100 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">4</span>
+            <span className="bg-primary-100 text-primary-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">4</span>
             <span>You'll receive a payment prompt on your phone</span>
           </li>
           <li className="flex items-start space-x-2">
-            <span className="bg-blue-100 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">5</span>
+            <span className="bg-primary-100 text-primary-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">5</span>
             <span>Enter your PIN to complete the payment</span>
           </li>
         </ol>

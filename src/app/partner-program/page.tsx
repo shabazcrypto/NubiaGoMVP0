@@ -74,8 +74,8 @@ export default function PartnerProgramPage() {
             {benefits.map((benefit, index) => (
               <div key={index} className="bg-gray-50 p-6 rounded-lg border">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <benefit.icon className="h-6 w-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
+                    <benefit.icon className="h-6 w-6 text-primary-600" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900">
                     {benefit.title}
@@ -100,8 +100,8 @@ export default function PartnerProgramPage() {
             {partnerTypes.map((partner, index) => (
               <div key={index} className="bg-white p-6 rounded-lg border">
                 <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Users2 className="h-8 w-8 text-blue-600" />
+                  <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Users2 className="h-8 w-8 text-primary-600" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {partner.type}
@@ -109,7 +109,7 @@ export default function PartnerProgramPage() {
                   <p className="text-gray-600 text-sm mb-4">
                     {partner.description}
                   </p>
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-2xl font-bold text-primary-600">
                     {partner.commission}
                   </div>
                   <div className="text-sm text-gray-500">Commission Rate</div>
@@ -119,7 +119,7 @@ export default function PartnerProgramPage() {
                   <ul className="space-y-2">
                     {partner.requirements.map((requirement, reqIndex) => (
                       <li key={reqIndex} className="flex items-start text-sm text-gray-600">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-2 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 mr-2 flex-shrink-0"></div>
                         {requirement}
                       </li>
                     ))}
@@ -157,8 +157,8 @@ export default function PartnerProgramPage() {
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-blue-600 font-bold">K</span>
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-primary-600 font-bold">K</span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Kemi's Tech Solutions</h3>
@@ -184,7 +184,7 @@ export default function PartnerProgramPage() {
           </h2>
           <div className="grid md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
+              <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
                 1
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Submit Application</h3>
@@ -193,7 +193,7 @@ export default function PartnerProgramPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
+              <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
                 2
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Review Process</h3>
@@ -202,7 +202,7 @@ export default function PartnerProgramPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
+              <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
                 3
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Onboarding</h3>
@@ -211,7 +211,7 @@ export default function PartnerProgramPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
+              <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
                 4
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Start Earning</h3>
@@ -235,7 +235,7 @@ export default function PartnerProgramPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/contact"
-              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
             >
               Apply Now
               <ArrowRight className="h-4 w-4 ml-2" />

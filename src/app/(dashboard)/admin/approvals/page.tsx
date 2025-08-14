@@ -241,7 +241,7 @@ export default function ApprovalsPage() {
       case 'pending':
         return 'bg-yellow-100 text-yellow-800'
       case 'under_review':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-primary-100 text-primary-800'
       default:
         return 'bg-gray-100 text-gray-800'
     }
@@ -340,8 +340,8 @@ export default function ApprovalsPage() {
 
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Eye className="h-6 w-6 text-blue-600" />
+              <div className="p-2 bg-primary-100 rounded-lg">
+                <Eye className="h-6 w-6 text-primary-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Under Review</p>
@@ -477,7 +477,7 @@ export default function ApprovalsPage() {
                   </button>
                   <button
                     onClick={() => handleBulkAction('under_review')}
-                    className="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+                    className="px-3 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700"
                   >
                     Mark Review
                   </button>
@@ -574,7 +574,7 @@ export default function ApprovalsPage() {
                           approval.status === 'approved' ? 'bg-green-500' :
                           approval.status === 'rejected' ? 'bg-red-500' :
                           approval.status === 'pending' ? 'bg-yellow-500' :
-                          'bg-blue-500'
+                          'bg-primary-600'
                         }`} />
                         {approval.status.replace('_', ' ').charAt(0).toUpperCase() + approval.status.replace('_', ' ').slice(1)}
                       </span>
@@ -615,7 +615,7 @@ export default function ApprovalsPage() {
                             </button>
                             <button 
                               onClick={() => handleApprovalAction('under_review', approval.id)}
-                              className="text-blue-600 hover:text-blue-900"
+                              className="text-primary-600 hover:text-primary-900"
                               title="Mark for Review"
                             >
                               <Eye className="h-4 w-4" />

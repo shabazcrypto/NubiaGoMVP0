@@ -206,7 +206,7 @@ export default function EnhancedImage({
         <div className="absolute top-2 left-2 z-10">
           <span className={`px-2 py-1 text-xs rounded-full text-white ${
             optimalFormat === 'avif' ? 'bg-purple-500' :
-            optimalFormat === 'webp' ? 'bg-blue-500' : 'bg-green-500'
+            optimalFormat === 'webp' ? 'bg-primary-600' : 'bg-green-500'
           }`}>
             {optimalFormat.toUpperCase()}
           </span>
@@ -273,7 +273,7 @@ export default function EnhancedImage({
       {!isLoaded && (inView || priority) && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
           <div className="flex flex-col items-center space-y-2">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
             <p className="text-xs text-gray-500">
               {networkSpeed === 'slow' ? 'Loading (slow network)...' :
                networkSpeed === 'medium' ? 'Loading...' : 'Loading image...'}

@@ -1,5 +1,6 @@
 import { Home, ArrowLeft, Search, MapPin, Compass, Users, ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
+import { Logo } from '@/components/ui/Logo'
 
 export default function NotFound() {
   return (
@@ -7,6 +8,11 @@ export default function NotFound() {
       <div className="max-w-2xl w-full text-center">
         {/* Premium 404 Header */}
         <div className="mb-12">
+          {/* NubiaGo Logo */}
+          <div className="mb-8">
+            <Logo variant="horizontal" size="lg" />
+          </div>
+          
           <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-600 to-red-600 text-white text-sm font-semibold rounded-full mb-6 shadow-lg">
             <Search className="w-4 h-4 mr-2" />
             Page Not Found
@@ -118,7 +124,7 @@ export default function NotFound() {
             <input
               type="text"
               placeholder="Search our website..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </div>

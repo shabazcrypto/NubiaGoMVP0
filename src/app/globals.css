@@ -367,25 +367,53 @@ PROFESSIONAL DESIGN SYSTEM UTILITIES
   color: #0f52ba;
 }
 
-.text-brand-yellow {
-  color: #f59e0b;
+/* ============================================================================
+NUBIAGO BRAND SYSTEM - BILLION USER SCALE
+============================================================================ */
+
+/* NubiaGo Brand Color Utilities */
+.text-nubia-blue {
+  color: #2563eb; /* NubiaGo Primary Blue */
 }
 
-.text-brand-black {
-  color: #171717;
+.text-nubia-orange {
+  color: #f59e0b; /* NubiaGo Accent Orange */
 }
 
-.bg-brand-blue {
-  background-color: #0f52ba;
+.text-nubia-black {
+  color: #000000; /* NubiaGo Text Black */
 }
 
-.bg-brand-yellow {
-  background-color: #f59e0b;
+.text-nubia-gray {
+  color: #666666; /* NubiaGo Text Gray */
 }
 
-.bg-brand-black {
-  background-color: #171717;
+.bg-nubia-blue {
+  background-color: #2563eb; /* NubiaGo Primary Blue */
 }
+
+.bg-nubia-orange {
+  background-color: #f59e0b; /* NubiaGo Accent Orange */
+}
+
+.bg-nubia-black {
+  background-color: #000000; /* NubiaGo Text Black */
+}
+
+.bg-nubia-light {
+  background-color: #f8f9fa; /* NubiaGo Background Light */
+}
+
+.bg-nubia-white {
+  background-color: #ffffff; /* NubiaGo White */
+}
+
+/* Legacy brand classes (for backward compatibility) */
+.text-brand-yellow { color: #f59e0b; }
+.text-brand-black { color: #000000; }
+.bg-brand-blue { background-color: #2563eb; }
+.bg-brand-yellow { background-color: #f59e0b; }
+.bg-brand-black { background-color: #000000; }
 
 /* Professional spacing utilities */
 .section-padding {
@@ -404,85 +432,159 @@ PROFESSIONAL DESIGN SYSTEM UTILITIES
   }
 }
 
-/* Professional typography utilities */
-.heading-xl {
-  font-size: 3rem;
+/* NubiaGo Brand Typography System */
+.nubia-heading-1 {
+  font-size: 3rem;        /* 48px - Page titles, hero headings */
   line-height: 1.2;
   font-weight: 700;
-  color: #171717;
+  color: #000000;         /* NubiaGo Text Black */
 }
 
-.heading-lg {
-  font-size: 2.25rem;
-  line-height: 1.3;
+.nubia-heading-2 {
+  font-size: 2.25rem;     /* 36px - Section headers */
+  line-height: 1.2;
   font-weight: 700;
-  color: #171717;
+  color: #000000;         /* NubiaGo Text Black */
 }
 
-.heading-md {
-  font-size: 1.875rem;
-  line-height: 1.4;
+.nubia-heading-3 {
+  font-size: 1.875rem;    /* 30px - Subsection titles */
+  line-height: 1.2;
   font-weight: 600;
-  color: #171717;
+  color: #000000;         /* NubiaGo Text Black */
 }
 
-.heading-sm {
-  font-size: 1.5rem;
-  line-height: 1.5;
+.nubia-heading-4 {
+  font-size: 1.5rem;      /* 24px - Component headings */
+  line-height: 1.2;
   font-weight: 600;
-  color: #171717;
+  color: #000000;         /* NubiaGo Text Black */
 }
 
-.body-lg {
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: #404040;
+.nubia-heading-5 {
+  font-size: 1.25rem;     /* 20px - Small headings */
+  line-height: 1.2;
+  font-weight: 600;
+  color: #000000;         /* NubiaGo Text Black */
 }
 
-.body-md {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #404040;
-}
-
-.body-sm {
-  font-size: 0.875rem;
+.nubia-body-large {
+  font-size: 1.125rem;    /* 18px - Introductions, important content */
   line-height: 1.5;
-  color: #525252;
+  font-weight: 400;
+  color: #666666;         /* NubiaGo Text Gray */
 }
 
-/* Professional component utilities */
-.card-elevated {
-  background: white;
+.nubia-body-regular {
+  font-size: 1rem;        /* 16px - Standard body text, paragraphs */
+  line-height: 1.5;
+  font-weight: 400;
+  color: #666666;         /* NubiaGo Text Gray */
+}
+
+.nubia-body-small {
+  font-size: 0.875rem;    /* 14px - Captions, helper text, labels */
+  line-height: 1.5;
+  font-weight: 400;
+  color: #666666;         /* NubiaGo Text Gray */
+}
+
+.nubia-body-xs {
+  font-size: 0.75rem;     /* 12px - Legal text, metadata, footnotes */
+  line-height: 1.5;
+  font-weight: 400;
+  color: #666666;         /* NubiaGo Text Gray */
+}
+
+/* Legacy typography classes (for backward compatibility) */
+.heading-xl { font-size: 3rem; line-height: 1.2; font-weight: 700; color: #000000; }
+.heading-lg { font-size: 2.25rem; line-height: 1.3; font-weight: 700; color: #000000; }
+.heading-md { font-size: 1.875rem; line-height: 1.4; font-weight: 600; color: #000000; }
+.heading-sm { font-size: 1.5rem; line-height: 1.5; font-weight: 600; color: #000000; }
+.body-lg { font-size: 1.125rem; line-height: 1.6; color: #666666; }
+.body-md { font-size: 1rem; line-height: 1.6; color: #666666; }
+.body-sm { font-size: 0.875rem; line-height: 1.5; color: #666666; }
+
+/* NubiaGo Brand Component System */
+.nubia-card {
+  background: #ffffff;    /* NubiaGo White */
   border-radius: 16px;
   border: 1px solid #e5e5e5;
   box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
 }
 
-.button-primary {
-  background-color: #0f52ba;
-  color: white;
+.nubia-card:hover {
+  box-shadow: 0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 20px 40px -7px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.nubia-button-primary {
+  background-color: #2563eb; /* NubiaGo Primary Blue */
+  color: #ffffff;            /* NubiaGo White */
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.button-secondary {
-  background-color: #f59e0b;
-  color: #171717;
+.nubia-button-primary:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.nubia-button-accent {
+  background-color: #f59e0b; /* NubiaGo Accent Orange */
+  color: #000000;            /* NubiaGo Text Black */
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.button-outline {
+.nubia-button-accent:hover {
+  background-color: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.nubia-button-outline {
   background-color: transparent;
-  color: #0f52ba;
+  color: #2563eb;            /* NubiaGo Primary Blue */
   padding: 0.75rem 1.5rem;
-  border: 2px solid #0f52ba;
+  border: 2px solid #2563eb; /* NubiaGo Primary Blue */
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.875rem;
-} 
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nubia-button-outline:hover {
+  background-color: #2563eb; /* NubiaGo Primary Blue */
+  color: #ffffff;            /* NubiaGo White */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* Legacy component classes (for backward compatibility) */
+.card-elevated { background: white; border-radius: 16px; border: 1px solid #e5e5e5; box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04); }
+.button-primary { background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; font-size: 0.875rem; }
+.button-secondary { background-color: #f59e0b; color: #000000; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; font-size: 0.875rem; }
+.button-outline { background-color: transparent; color: #2563eb; padding: 0.75rem 1.5rem; border: 2px solid #2563eb; border-radius: 12px; font-weight: 600; font-size: 0.875rem; } 

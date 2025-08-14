@@ -86,8 +86,8 @@ export default function EnterprisePage() {
             {features.map((feature, index) => (
               <div key={index} className="bg-gray-50 p-6 rounded-lg border">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <feature.icon className="h-6 w-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
+                    <feature.icon className="h-6 w-6 text-primary-600" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900">
                     {feature.title}
@@ -141,8 +141,8 @@ export default function EnterprisePage() {
             {testimonials.map((testimonial, index) => (
               <div key={index} className="bg-gray-50 p-6 rounded-lg">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                    <span className="text-blue-600 font-bold">
+                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-primary-600 font-bold">
                       {testimonial.name.charAt(0)}
                     </span>
                   </div>
@@ -170,7 +170,7 @@ export default function EnterprisePage() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg border">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Starter</h3>
-              <div className="text-3xl font-bold text-blue-600 mb-4">Custom</div>
+              <div className="text-3xl font-bold text-primary-600 mb-4">Custom</div>
               <p className="text-gray-600 mb-6">Perfect for growing businesses</p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-center text-sm">
@@ -187,14 +187,14 @@ export default function EnterprisePage() {
                 </li>
               </ul>
             </div>
-            <div className="bg-white p-6 rounded-lg border border-blue-500 relative">
+            <div className="bg-white p-6 rounded-lg border border-primary-600 relative">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                <span className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                   Most Popular
                 </span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Professional</h3>
-              <div className="text-3xl font-bold text-blue-600 mb-4">Custom</div>
+              <div className="text-3xl font-bold text-primary-600 mb-4">Custom</div>
               <p className="text-gray-600 mb-6">For established enterprises</p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-center text-sm">
@@ -217,7 +217,7 @@ export default function EnterprisePage() {
             </div>
             <div className="bg-white p-6 rounded-lg border">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Enterprise</h3>
-              <div className="text-3xl font-bold text-blue-600 mb-4">Custom</div>
+              <div className="text-3xl font-bold text-primary-600 mb-4">Custom</div>
               <p className="text-gray-600 mb-6">For large organizations</p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-center text-sm">
@@ -254,7 +254,7 @@ export default function EnterprisePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/contact"
-              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
             >
               Schedule a Demo
               <ArrowRight className="h-4 w-4 ml-2" />

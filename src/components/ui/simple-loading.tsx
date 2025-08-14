@@ -39,7 +39,7 @@ export function SimpleLoading({ timeout = 10000, onTimeout }: SimpleLoadingProps
           
           <button
             onClick={() => window.location.reload()}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
           >
             Refresh Page
           </button>
@@ -72,9 +72,9 @@ export function SimpleLoading({ timeout = 10000, onTimeout }: SimpleLoadingProps
         </div>
 
         <div className="flex justify-center space-x-2 mt-8">
-          <div className="w-3 h-3 bg-blue-600 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-primary-600 rounded-full animate-bounce"></div>
           <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-          <div className="w-3 h-3 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          <div className="w-3 h-3 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
         </div>
       </div>
     </div>

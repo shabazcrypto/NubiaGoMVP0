@@ -208,7 +208,7 @@ export default function MobileHomepage({
           <div className="px-4">
             <div className="grid grid-cols-2 gap-3">
               {[
-                { name: 'Electronics', icon: '📱', count: '2.5k+', color: 'bg-blue-100' },
+                { name: 'Electronics', icon: '📱', count: '2.5k+', color: 'bg-primary-100' },
                 { name: 'Fashion', icon: '👗', count: '1.8k+', color: 'bg-pink-100' },
                 { name: 'Home & Living', icon: '🏠', count: '1.2k+', color: 'bg-green-100' },
                 { name: 'Beauty', icon: '💄', count: '900+', color: 'bg-purple-100' }

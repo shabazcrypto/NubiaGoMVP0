@@ -30,10 +30,10 @@ export default function TermsPage() {
         </div>
 
         {/* Last Updated */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-3xl p-6 mb-12">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-primary-200 rounded-3xl p-6 mb-12">
           <div className="flex items-center space-x-3">
-            <Calendar className="h-5 w-5 text-blue-600" />
-            <p className="text-blue-800 font-semibold">
+            <Calendar className="h-5 w-5 text-primary-600" />
+            <p className="text-primary-800 font-semibold">
               <strong>Last updated:</strong> December 15, 2024
             </p>
           </div>

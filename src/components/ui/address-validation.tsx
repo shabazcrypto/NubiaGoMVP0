@@ -330,19 +330,19 @@ export function AddressValidation({
 
           {/* Suggestions */}
           {validationResult.suggestions && validationResult.suggestions.length > 0 && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-medium text-blue-900 mb-3">Address Suggestions</h4>
+            <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+              <h4 className="font-medium text-primary-900 mb-3">Address Suggestions</h4>
               <div className="space-y-2">
                 {validationResult.suggestions.map((suggestion, index) => (
                   <button
                     key={index}
                     onClick={() => applySuggestion(suggestion)}
-                    className="w-full text-left p-3 bg-white rounded border border-blue-200 hover:border-blue-300 transition-colors"
+                    className="w-full text-left p-3 bg-white rounded border border-primary-200 hover:border-primary-300 transition-colors"
                   >
-                    <div className="text-sm text-blue-800">
+                    <div className="text-sm text-primary-800">
                       {suggestion.address1}, {suggestion.city}, {suggestion.state} {suggestion.postalCode}
                     </div>
-                    <div className="text-xs text-blue-600 mt-1">
+                    <div className="text-xs text-primary-600 mt-1">
                       Click to apply this suggestion
                     </div>
                   </button>

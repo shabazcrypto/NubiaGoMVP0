@@ -130,7 +130,7 @@ export function PaymentMethodSelector({
               key={method.id}
               className={`relative flex items-start p-4 border rounded-lg cursor-pointer transition-all ${
                 selectedMethod === method.id
-                  ? 'border-blue-500 bg-blue-50 shadow-md'
+                  ? 'border-primary-600 bg-primary-50 shadow-md'
                   : method.available
                     ? 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                     : 'border-gray-200 bg-gray-100 cursor-not-allowed opacity-60'
@@ -147,7 +147,7 @@ export function PaymentMethodSelector({
               />
               <div className="flex items-center space-x-3">
                 <div className={`p-2 rounded-lg ${
-                  selectedMethod === method.id ? 'bg-blue-100' : 'bg-gray-100'
+                  selectedMethod === method.id ? 'bg-primary-100' : 'bg-gray-100'
                 }`}>
                   {method.icon}
                 </div>
@@ -160,7 +160,7 @@ export function PaymentMethodSelector({
                 </div>
               </div>
               {selectedMethod === method.id && (
-                <div className="absolute top-2 right-2 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                <div className="absolute top-2 right-2 w-4 h-4 bg-primary-600 rounded-full flex items-center justify-center">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
                 </div>
               )}

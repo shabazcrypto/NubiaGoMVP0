@@ -309,12 +309,12 @@ export function CreditCardForm({
         </div>
 
         {/* Security Notice */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
           <div className="flex items-start space-x-2">
-            <Shield className="h-4 w-4 text-blue-600 mt-0.5" />
-            <div className="text-sm text-blue-800">
+            <Shield className="h-4 w-4 text-primary-600 mt-0.5" />
+            <div className="text-sm text-primary-800">
               <p className="font-medium">Secure Payment</p>
-              <p className="text-blue-600 mt-1">
+              <p className="text-primary-600 mt-1">
                 Your payment information is encrypted and secure. We never store your full card details.
               </p>
             </div>

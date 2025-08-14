@@ -80,8 +80,7 @@ export default function MobileHeader({ onMenuToggle, onSearch }: MobileHeaderPro
         <div className="flex items-center justify-between mb-3">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Logo size="md" />
-            <span className="text-xl font-bold text-gray-900">NubiaGo</span>
+            <Logo variant="horizontal" size="md" />
           </Link>
 
           {/* Right Actions */}

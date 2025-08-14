@@ -73,7 +73,7 @@ export default function CustomerOrdersPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered': return 'text-green-600 bg-green-100'
-      case 'shipped': return 'text-blue-600 bg-blue-100'
+      case 'shipped': return 'text-primary-600 bg-primary-100'
       case 'processing': return 'text-yellow-600 bg-yellow-100'
       case 'pending': return 'text-gray-600 bg-gray-100'
       case 'cancelled': return 'text-red-600 bg-red-100'
@@ -243,7 +243,7 @@ export default function CustomerOrdersPage() {
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <Truck className="h-8 w-8 text-blue-600" />
+              <Truck className="h-8 w-8 text-primary-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">In Transit</p>
                 <p className="text-2xl font-semibold text-gray-900">

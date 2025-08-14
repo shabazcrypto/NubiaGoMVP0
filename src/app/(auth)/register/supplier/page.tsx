@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, FileText, ArrowRight, AlertCircle, CheckCircle, Upload } from 'lucide-react'
+import { Logo } from '@/components/ui/Logo'
 
 export default function RegisterSupplierPage() {
   const router = useRouter()
@@ -86,6 +87,11 @@ export default function RegisterSupplierPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        {/* NubiaGo Logo */}
+        <div className="text-center mb-8">
+          <Logo variant="horizontal" size="lg" />
+        </div>
+        
         <div className="bg-primary-600 text-white p-4 rounded-lg mb-6">
           <h2 className="text-center text-3xl font-bold">Register as Supplier</h2>
           <p className="text-center text-primary-100 mt-2">Join our marketplace and start selling</p>

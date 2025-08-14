@@ -137,7 +137,7 @@ export default function OrderTrackingPage({ params }: { params: { id: string } }
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered': return 'text-green-600 bg-green-100'
-      case 'shipped': return 'text-blue-600 bg-blue-100'
+      case 'shipped': return 'text-primary-600 bg-primary-100'
       case 'processing': return 'text-yellow-600 bg-yellow-100'
       case 'pending': return 'text-gray-600 bg-gray-100'
       case 'cancelled': return 'text-red-600 bg-red-100'

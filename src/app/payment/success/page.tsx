@@ -134,7 +134,7 @@ export default function PaymentSuccessPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Checking payment status...</p>
         </div>
       </div>
@@ -150,7 +150,7 @@ export default function PaymentSuccessPage() {
           <p className="text-gray-600 mb-6">{error}</p>
           <Link
             href="/checkout"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
           >
             Return to Checkout
           </Link>
@@ -244,7 +244,7 @@ export default function PaymentSuccessPage() {
             <>
               <Link
                 href="/checkout"
-                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
               >
                 Try Again
               </Link>
@@ -259,7 +259,7 @@ export default function PaymentSuccessPage() {
             <>
               <button
                 onClick={checkPaymentStatus}
-                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
               >
                 <Clock className="h-5 w-5 mr-2" />
                 Check Status Again
@@ -278,7 +278,7 @@ export default function PaymentSuccessPage() {
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>
             If you have any questions about your payment, please contact our support team at{' '}
-            <a href="mailto:support@nubiago.com" className="text-blue-600 hover:text-blue-800">
+            <a href="mailto:support@nubiago.com" className="text-primary-600 hover:text-primary-800">
               support@nubiago.com
             </a>
           </p>

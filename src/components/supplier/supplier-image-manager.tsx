@@ -198,23 +198,23 @@ export const SupplierImageManager: React.FC<SupplierImageManagerProps> = ({
 
       {/* Replace Progress */}
       {replaceProgress && (
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="p-4 bg-primary-50 border border-primary-200 rounded-lg">
           <div className="flex items-center space-x-3">
             <div className="flex-1">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-blue-700 truncate">
+                <span className="text-sm text-primary-700 truncate">
                   Replacing: {replaceProgress.file.name}
                 </span>
-                <span className="text-xs text-blue-500">
+                <span className="text-xs text-primary-600">
                   {replaceProgress.progress}%
                 </span>
               </div>
-              <div className="w-full bg-blue-200 rounded-full h-2">
+              <div className="w-full bg-primary-200 rounded-full h-2">
                 <div
                   className={`
                     h-2 rounded-full transition-all duration-300
                     ${replaceProgress.status === 'completed' ? 'bg-green-500' :
-                      replaceProgress.status === 'error' ? 'bg-red-500' : 'bg-blue-500'}
+                      replaceProgress.status === 'error' ? 'bg-red-500' : 'bg-primary-600'}
                   `}
                   style={{ width: `${replaceProgress.progress}%` }}
                 />
@@ -229,7 +229,7 @@ export const SupplierImageManager: React.FC<SupplierImageManagerProps> = ({
                 <AlertCircle className="w-5 h-5 text-red-500" />
               )}
               {replaceProgress.status === 'uploading' && (
-                <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />
+                <RefreshCw className="w-5 h-5 text-primary-600 animate-spin" />
               )}
             </div>
           </div>

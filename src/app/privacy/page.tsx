@@ -20,10 +20,10 @@ export default function PrivacyPage() {
         </div>
 
         {/* Last Updated */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-3xl p-6 mb-12">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-primary-200 rounded-3xl p-6 mb-12">
           <div className="flex items-center space-x-3">
-            <Calendar className="h-5 w-5 text-blue-600" />
-            <p className="text-blue-800 font-semibold">
+            <Calendar className="h-5 w-5 text-primary-600" />
+            <p className="text-primary-800 font-semibold">
               <strong>Last updated:</strong> December 15, 2024
             </p>
           </div>
@@ -99,7 +99,7 @@ export default function PrivacyPage() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8">
               <div className="flex items-center space-x-4 mb-4">
-                <CheckCircle className="h-6 w-6 text-blue-600" />
+                <CheckCircle className="h-6 w-6 text-primary-600" />
                 <h3 className="text-lg font-semibold text-gray-900">Service Provision</h3>
               </div>
               <p className="text-gray-600">

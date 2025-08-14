@@ -79,9 +79,9 @@ export default function VerifyEmailPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="text-center">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-primary-100">
                 <svg
-                  className="h-6 w-6 text-blue-600"
+                  className="h-6 w-6 text-primary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

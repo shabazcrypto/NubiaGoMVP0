@@ -286,29 +286,29 @@ export default function BecomeSupplierPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <ul className="space-y-4 text-gray-700">
                       <li className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
                         <span>Quality products that meet our enterprise standards</span>
                       </li>
                       <li className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
                         <span>Reliable shipping and fulfillment capabilities</span>
                       </li>
                       <li className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
                         <span>Excellent customer service commitment</span>
                       </li>
                     </ul>
                     <ul className="space-y-4 text-gray-700">
                       <li className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
                         <span>Competitive pricing and market knowledge</span>
                       </li>
                       <li className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
                         <span>Willingness to grow and adapt</span>
                       </li>
                       <li className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
                         <span>Compliance with enterprise policies</span>
                       </li>
                     </ul>

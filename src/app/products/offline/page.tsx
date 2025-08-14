@@ -16,7 +16,7 @@ export default function OfflineProductsPage() {
       <div className="min-h-screen bg-gray-50">
         {/* Header for no-JS fallback */}
         <noscript>
-          <div className="bg-blue-600 text-white p-4 text-center">
+          <div className="bg-primary-600 text-white p-4 text-center">
             <h1 className="text-xl font-bold">NubiaGo - Offline Product Catalog</h1>
             <p className="text-sm mt-1">Browse our products optimized for your connection</p>
           </div>

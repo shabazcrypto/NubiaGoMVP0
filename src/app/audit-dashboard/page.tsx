@@ -302,15 +302,15 @@ export default function AuditDashboard() {
             <p className="text-sm text-yellow-600">Address within 2 weeks</p>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+          <div className="bg-primary-50 border border-primary-200 rounded-xl p-6">
             <div className="flex items-center mb-3">
-              <CheckCircle className="h-8 w-8 text-blue-600 mr-3" />
+              <CheckCircle className="h-8 w-8 text-primary-600 mr-3" />
               <div>
-                <div className="text-2xl font-bold text-blue-900">{metrics.lowIssues}</div>
-                <div className="text-sm text-blue-700">Low Priority</div>
+                <div className="text-2xl font-bold text-primary-900">{metrics.lowIssues}</div>
+                <div className="text-sm text-primary-700">Low Priority</div>
               </div>
             </div>
-            <p className="text-sm text-blue-600">Address within 1 month</p>
+            <p className="text-sm text-primary-600">Address within 1 month</p>
           </div>
         </div>
 
@@ -385,7 +385,7 @@ export default function AuditDashboard() {
                           issue.priority === 'CRITICAL' ? 'bg-red-100 text-red-800' :
                           issue.priority === 'HIGH' ? 'bg-orange-100 text-orange-800' :
                           issue.priority === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-blue-100 text-blue-800'
+                          'bg-primary-100 text-primary-800'
                         }`}>
                           {issue.priority}
                         </span>
@@ -413,9 +413,9 @@ export default function AuditDashboard() {
                         </div>
                       </div>
                       
-                      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                        <span className="font-medium text-blue-800">💡 Recommendation:</span>
-                        <span className="text-blue-700 ml-2">{issue.recommendation}</span>
+                      <div className="mt-3 p-3 bg-primary-50 rounded-lg">
+                        <span className="font-medium text-primary-800">💡 Recommendation:</span>
+                        <span className="text-primary-700 ml-2">{issue.recommendation}</span>
                       </div>
                     </div>
                     

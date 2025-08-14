@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
+import { Logo } from '@/components/ui/Logo'
 
 export function Footer() {
   return (
@@ -10,9 +11,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">NubiaGo</h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-              Your trusted marketplace for everyday essentials across Africa.
+            <div className="flex items-center space-x-2 mb-4">
+              <Logo variant="icon-only" size="sm" />
+              <h3 className="text-lg font-semibold text-nubia-black dark:text-white">NubiaGo</h3>
+            </div>
+            <p className="text-nubia-gray dark:text-gray-400 text-sm mb-4">
+              Africa's Premier Marketplace. Trusted sellers across 34+ African countries.
             </p>
             <div className="flex items-center space-x-4">
               <Link 

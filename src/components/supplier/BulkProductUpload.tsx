@@ -234,18 +234,18 @@ export default function BulkProductUpload() {
       </div>
 
       {/* Template Download */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Info className="w-5 h-5 text-blue-600" />
+            <Info className="w-5 h-5 text-primary-600" />
             <div>
-              <h4 className="text-sm font-medium text-blue-900">Download Template</h4>
-              <p className="text-sm text-blue-700">Use our CSV template to ensure proper formatting</p>
+              <h4 className="text-sm font-medium text-primary-900">Download Template</h4>
+              <p className="text-sm text-primary-700">Use our CSV template to ensure proper formatting</p>
             </div>
           </div>
           <button
             onClick={downloadTemplate}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+            className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 flex items-center"
           >
             <Download className="w-4 h-4 mr-2" />
             Download Template
@@ -416,7 +416,7 @@ export default function BulkProductUpload() {
             <div className="text-sm text-gray-600">Valid Products</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-primary-600">
               {previewData.reduce((sum, p) => sum + p.stock, 0)}
             </div>
             <div className="text-sm text-gray-600">Total Stock</div>
@@ -490,9 +490,9 @@ export default function BulkProductUpload() {
       </div>
 
       {/* Next Steps */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
-        <h4 className="text-sm font-medium text-blue-900 mb-2">Next Steps</h4>
-        <ul className="text-sm text-blue-700 space-y-1 text-left">
+      <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 max-w-md mx-auto">
+        <h4 className="text-sm font-medium text-primary-900 mb-2">Next Steps</h4>
+        <ul className="text-sm text-primary-700 space-y-1 text-left">
           <li>• Review your products in the catalog</li>
           <li>• Set up pricing and inventory</li>
           <li>• Add product images and descriptions</li>

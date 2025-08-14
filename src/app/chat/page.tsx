@@ -273,8 +273,8 @@ export default function ChatPage() {
             </div>
             
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <CheckCircle className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                <CheckCircle className="h-6 w-6 text-primary-600" />
               </div>
               <div>
                 <div className="font-semibold text-gray-900">Enterprise Grade</div>

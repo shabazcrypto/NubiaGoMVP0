@@ -215,8 +215,8 @@ export function PWAInstallPrompt() {
     <div className="fixed bottom-4 left-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-            <span className="text-blue-600 text-lg">📱</span>
+          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+            <span className="text-primary-600 text-lg">📱</span>
           </div>
           <div>
             <h3 className="font-semibold text-gray-900">Install NubiaGo</h3>
@@ -226,7 +226,7 @@ export function PWAInstallPrompt() {
         <div className="flex space-x-2">
           <button
             onClick={showInstallPrompt}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-primary-600 text-white rounded-md text-sm font-medium hover:bg-primary-700 transition-colors"
           >
             Install
           </button>

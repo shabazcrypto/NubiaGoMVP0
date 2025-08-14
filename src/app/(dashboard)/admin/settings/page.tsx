@@ -715,12 +715,12 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* Info Section */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="mt-8 bg-primary-50 border border-primary-200 rounded-lg p-4">
           <div className="flex items-start space-x-3">
-            <Info className="h-5 w-5 text-blue-600 mt-0.5" />
+            <Info className="h-5 w-5 text-primary-600 mt-0.5" />
             <div>
-              <h4 className="font-medium text-blue-900">Settings Information</h4>
-              <p className="text-sm text-blue-700 mt-1">
+              <h4 className="font-medium text-primary-900">Settings Information</h4>
+              <p className="text-sm text-primary-700 mt-1">
                 Your settings are automatically saved when you make changes. Some settings may require a system restart to take effect. 
                 For security reasons, password changes require your current password verification.
               </p>

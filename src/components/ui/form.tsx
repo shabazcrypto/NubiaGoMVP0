@@ -151,9 +151,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     }
 
     const variantClasses = {
-      default: 'border-gray-300 focus:border-blue-500 focus:ring-blue-500',
-      filled: 'bg-gray-50 border-gray-300 focus:bg-white focus:border-blue-500 focus:ring-blue-500',
-      outlined: 'border-2 border-gray-300 focus:border-blue-500 focus:ring-blue-500',
+      default: 'border-gray-300 focus:border-primary-500 focus:ring-primary-500',
+      filled: 'bg-gray-50 border-gray-300 focus:bg-white focus:border-primary-500 focus:ring-primary-500',
+      outlined: 'border-2 border-gray-300 focus:border-primary-500 focus:ring-primary-500',
     }
 
     const inputType = type === 'password' && showPassword ? 'text' : type
@@ -227,9 +227,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     }
 
     const variantClasses = {
-      default: 'border-gray-300 focus:border-blue-500 focus:ring-blue-500',
-      filled: 'bg-gray-50 border-gray-300 focus:bg-white focus:border-blue-500 focus:ring-blue-500',
-      outlined: 'border-2 border-gray-300 focus:border-blue-500 focus:ring-blue-500',
+      default: 'border-gray-300 focus:border-primary-500 focus:ring-primary-500',
+      filled: 'bg-gray-50 border-gray-300 focus:bg-white focus:border-primary-500 focus:ring-primary-500',
+      outlined: 'border-2 border-gray-300 focus:border-primary-500 focus:ring-primary-500',
     }
 
     return (
@@ -277,9 +277,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     }
 
     const variantClasses = {
-      default: 'border-gray-300 focus:border-blue-500 focus:ring-blue-500',
-      filled: 'bg-gray-50 border-gray-300 focus:bg-white focus:border-blue-500 focus:ring-blue-500',
-      outlined: 'border-2 border-gray-300 focus:border-blue-500 focus:ring-blue-500',
+      default: 'border-gray-300 focus:border-primary-500 focus:ring-primary-500',
+      filled: 'bg-gray-50 border-gray-300 focus:bg-white focus:border-primary-500 focus:ring-primary-500',
+      outlined: 'border-2 border-gray-300 focus:border-primary-500 focus:ring-primary-500',
     }
 
     return (
@@ -343,7 +343,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             ref={ref}
             type="checkbox"
             className={`
-              rounded border-gray-300 text-blue-600 focus:ring-blue-500
+              rounded border-gray-300 text-primary-600 focus:ring-primary-500
               ${sizeClasses[checkboxSize]}
               ${error ? 'border-red-500' : ''}
               ${className}
@@ -389,7 +389,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
             ref={ref}
             type="radio"
             className={`
-              border-gray-300 text-blue-600 focus:ring-blue-500
+              border-gray-300 text-primary-600 focus:ring-primary-500
               ${sizeClasses[radioSize]}
               ${error ? 'border-red-500' : ''}
               ${className}

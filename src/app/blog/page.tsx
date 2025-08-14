@@ -96,7 +96,7 @@ export default function BlogPage() {
                 key={index}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   index === 0 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-primary-600 text-white' 
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -112,7 +112,7 @@ export default function BlogPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gray-50 rounded-lg p-8">
             <div className="flex items-center space-x-2 mb-4">
-              <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+              <span className="px-3 py-1 bg-primary-100 text-primary-800 text-sm font-medium rounded-full">
                 Featured
               </span>
               <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
@@ -142,7 +142,7 @@ export default function BlogPage() {
               </div>
               <Link 
                 href={`/blog/${blogPosts[0].title.toLowerCase().replace(/\s+/g, '-')}`}
-                className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
+                className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
               >
                 Read Full Article
                 <ArrowRight className="h-4 w-4 ml-1" />
@@ -186,7 +186,7 @@ export default function BlogPage() {
                     </div>
                     <Link 
                       href={`/blog/${post.title.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="inline-flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium"
+                      className="inline-flex items-center text-primary-600 hover:text-primary-700 text-sm font-medium"
                     >
                       Read More
                       <ArrowRight className="h-3 w-3 ml-1" />
@@ -213,9 +213,9 @@ export default function BlogPage() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
-              <button className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+              <button className="px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
                 Subscribe
               </button>
             </div>

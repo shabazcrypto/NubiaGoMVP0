@@ -463,13 +463,13 @@ export default function MonitoringPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <BarChart3 className="h-6 w-6 text-blue-600" />
+              <div className="p-2 bg-primary-100 rounded-lg">
+                <BarChart3 className="h-6 w-6 text-primary-600" />
               </div>
               <h3 className="text-lg font-medium text-gray-900">Performance Reports</h3>
             </div>
             <p className="text-gray-600 mb-4">Generate detailed performance reports and analytics</p>
-            <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="w-full px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
               View Reports
             </button>
           </div>

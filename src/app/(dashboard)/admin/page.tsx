@@ -87,7 +87,7 @@ export default function AdminDashboard() {
   const getRoleBadgeClass = (role: string) => {
     switch (role) {
       case 'admin': return 'text-purple-600 bg-purple-100'
-      case 'supplier': return 'text-blue-600 bg-blue-100'
+      case 'supplier': return 'text-primary-600 bg-primary-100'
       case 'customer': return 'text-green-600 bg-green-100'
       default: return 'text-gray-600 bg-gray-100'
     }
@@ -236,8 +236,8 @@ export default function AdminDashboard() {
                           <p className="text-sm font-medium text-gray-600">Total Users</p>
                           <p className="text-3xl font-bold text-gray-900">{userStats.totalUsers}</p>
                         </div>
-                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <Users className="h-6 w-6 text-blue-600" />
+                        <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                          <Users className="h-6 w-6 text-primary-600" />
                         </div>
                       </div>
                       <div className="mt-4 flex items-center text-sm">
@@ -345,10 +345,10 @@ export default function AdminDashboard() {
             </div>
             <div className="space-y-3">
               {messages.map((message) => (
-                <div key={message.id} className={`p-3 rounded-lg border ${!message.read ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
+                <div key={message.id} className={`p-3 rounded-lg border ${!message.read ? 'bg-primary-50 border-primary-200' : 'bg-gray-50 border-gray-200'}`}>
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium text-gray-900">{message.title}</h4>
-                    {!message.read && <div className="w-2 h-2 bg-blue-500 rounded-full"></div>}
+                    {!message.read && <div className="w-2 h-2 bg-primary-600 rounded-full"></div>}
                   </div>
                   <p className="text-sm text-gray-600 mt-1">{message.content}</p>
                   <p className="text-xs text-gray-500 mt-2">{message.date}</p>

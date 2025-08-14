@@ -58,8 +58,8 @@ export default function ProfilePage() {
         {/* Profile Features */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <User className="h-6 w-6 text-blue-600" />
+            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <User className="h-6 w-6 text-primary-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">Personal Information</h3>
             <p className="text-sm text-gray-600">Update your profile details</p>
@@ -109,7 +109,7 @@ export default function ProfilePage() {
             
             <div className="bg-gray-50 rounded-lg p-6">
               <h3 className="font-semibold text-gray-900 mb-2">Security Level</h3>
-              <p className="text-sm text-blue-600 font-semibold">Standard</p>
+              <p className="text-sm text-primary-600 font-semibold">Standard</p>
             </div>
           </div>
         </div>

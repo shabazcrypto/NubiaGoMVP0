@@ -444,7 +444,7 @@ const ApiDocsPage: React.FC = () => {
   const getMethodColor = (method: string) => {
     const colors = {
       GET: 'bg-green-100 text-green-800',
-      POST: 'bg-blue-100 text-blue-800',
+      POST: 'bg-primary-100 text-primary-800',
       PUT: 'bg-yellow-100 text-yellow-800',
       DELETE: 'bg-red-100 text-red-800',
       PATCH: 'bg-purple-100 text-purple-800',
@@ -494,7 +494,7 @@ const ApiDocsPage: React.FC = () => {
                   className={({ selected }) =>
                     `w-full rounded-lg py-2.5 text-sm font-medium leading-5 ${
                       selected
-                        ? 'bg-white text-blue-700 shadow'
+                        ? 'bg-white text-primary-700 shadow'
                         : 'text-gray-600 hover:text-gray-800'
                     }`
                   }
@@ -514,7 +514,7 @@ const ApiDocsPage: React.FC = () => {
                       <div key={endpointKey} className="border border-gray-200 rounded-lg">
                         <button
                           onClick={() => toggleEndpoint(endpointKey)}
-                          className="w-full px-6 py-4 text-left hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                          className="w-full px-6 py-4 text-left hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset"
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">

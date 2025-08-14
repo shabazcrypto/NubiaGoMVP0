@@ -662,8 +662,8 @@ export default function ComponentAuditor() {
               {componentAnalysis.recommendations.map((recommendation, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-blue-600 font-semibold">{index + 1}</span>
+                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-primary-600 font-semibold">{index + 1}</span>
                     </div>
                     <div>
                       <p className="text-gray-700">{recommendation}</p>
@@ -704,8 +704,8 @@ export default function ComponentAuditor() {
       {!componentAnalysis && (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
-            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Eye className="h-10 w-10 text-blue-600" />
+            <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Eye className="h-10 w-10 text-primary-600" />
             </div>
             
             <h2 className="text-2xl font-bold text-gray-900 mb-4">

@@ -541,7 +541,7 @@ export default function ApiManagementPage() {
                     </button>
                     <button
                       onClick={() => handleTestApi(api)}
-                      className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                       title="Test API"
                     >
                       <TestTube className="h-4 w-4" />
@@ -811,7 +811,7 @@ export default function ApiManagementPage() {
               <button
                 onClick={handleTestConnection}
                 disabled={testing}
-                className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                className="inline-flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
               >
                 {testing ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

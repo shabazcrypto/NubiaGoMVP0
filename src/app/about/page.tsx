@@ -23,8 +23,8 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gray-50 p-8 rounded-lg border">
             <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Award className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                <Award className="h-6 w-6 text-primary-600" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
@@ -60,8 +60,8 @@ export default function AboutPage() {
             </div>
 
             <div className="bg-white p-6 rounded-lg border">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <Zap className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+                <Zap className="h-6 w-6 text-primary-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Fast & Reliable</h3>
               <p className="text-gray-600">
@@ -88,8 +88,8 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Our Impact</h2>
           <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="h-8 w-8 text-primary-600" />
               </div>
               <div className="text-3xl font-bold text-gray-900 mb-2">10K+</div>
               <div className="text-gray-600">Active Sellers</div>

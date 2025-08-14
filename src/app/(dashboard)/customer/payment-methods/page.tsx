@@ -68,7 +68,7 @@ export default function CustomerPaymentMethodsPage() {
   const getPaymentColor = (type: string) => {
     switch (type) {
       case 'mobile_money': return 'text-green-600 bg-green-100'
-      case 'card': return 'text-blue-600 bg-blue-100'
+      case 'card': return 'text-primary-600 bg-primary-100'
       default: return 'text-gray-600 bg-gray-100'
     }
   }
@@ -173,12 +173,12 @@ export default function CustomerPaymentMethodsPage() {
         </div>
 
         {/* Security Notice */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div className="mt-8 bg-primary-50 border border-primary-200 rounded-lg p-6">
           <div className="flex items-start space-x-3">
-            <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
+            <Shield className="h-5 w-5 text-primary-600 mt-0.5" />
             <div>
-              <h3 className="text-sm font-medium text-blue-900">Security</h3>
-              <p className="text-sm text-blue-700 mt-1">
+              <h3 className="text-sm font-medium text-primary-900">Security</h3>
+              <p className="text-sm text-primary-700 mt-1">
                 Your payment information is encrypted and stored securely. We never store your 
                 full card details on our servers.
               </p>

@@ -97,7 +97,7 @@ export default function AuditPage() {
 
   // 📱 RESPONSIVE BREAKPOINTS
   const breakpoints = [
-    { name: 'Mobile', width: 320, icon: Phone, color: 'bg-blue-100' },
+    { name: 'Mobile', width: 320, icon: Phone, color: 'bg-primary-100' },
     { name: 'Tablet', width: 768, icon: Tab, color: 'bg-green-100' },
     { name: 'Desktop', width: 1024, icon: Desktop, color: 'bg-purple-100' },
     { name: 'Large', width: 1440, icon: Laptop, color: 'bg-orange-100' }
@@ -274,7 +274,7 @@ export default function AuditPage() {
                       <div className="text-sm text-gray-600">Items</div>
                       <div className="mt-3">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          status === 'excellent' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                          status === 'excellent' ? 'bg-green-100 text-green-800' : 'bg-primary-100 text-primary-800'
                         }`}>
                           {status === 'excellent' ? <CheckCircle className="h-3 w-3 mr-1" /> : <Star className="h-3 w-3 mr-1" />}
                           {status === 'excellent' ? 'Excellent' : 'Good'}
@@ -409,7 +409,7 @@ export default function AuditPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { title: 'Getting Started', icon: Play, color: 'bg-blue-100', description: 'Begin your audit journey' },
+                  { title: 'Getting Started', icon: Play, color: 'bg-primary-100', description: 'Begin your audit journey' },
                   { title: 'Accessibility Guide', icon: Accessibility, color: 'bg-green-100', description: 'WCAG 2.1 AA compliance' },
                   { title: 'Mobile Optimization', icon: Mobile, color: 'bg-orange-100', description: 'Touch-friendly design' },
                   { title: 'Design System', icon: Design, color: 'bg-purple-100', description: 'Component consistency' },
@@ -440,7 +440,7 @@ export default function AuditPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { title: 'WCAG Guidelines', icon: Shield, color: 'bg-blue-100', url: 'https://www.w3.org/WAI/WCAG21/quickref/' },
+                  { title: 'WCAG Guidelines', icon: Shield, color: 'bg-primary-100', url: 'https://www.w3.org/WAI/WCAG21/quickref/' },
                   { title: 'Material Design', icon: Design, color: 'bg-green-100', url: 'https://m3.material.io/' },
                   { title: 'Apple HIG', icon: Monitor, color: 'bg-purple-100', url: 'https://developer.apple.com/design/human-interface-guidelines/' },
                   { title: 'WebAIM Tools', icon: Accessibility, color: 'bg-orange-100', url: 'https://webaim.org/resources/' },

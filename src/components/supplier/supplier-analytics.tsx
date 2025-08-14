@@ -210,7 +210,7 @@ export default function SupplierAnalytics() {
           change={data.orders.change}
           trend={data.orders.trend}
           icon={<ShoppingBag className="h-6 w-6 text-white" />}
-          color="bg-blue-500"
+          color="bg-primary-600"
         />
         <KPICard
           title="Active Products"
@@ -372,7 +372,7 @@ export default function SupplierAnalytics() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">New Customers</span>
-              <span className="text-lg font-semibold text-blue-600">{data.customers.new}</span>
+              <span className="text-lg font-semibold text-primary-600">{data.customers.new}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Repeat Customers</span>
@@ -396,7 +396,7 @@ export default function SupplierAnalytics() {
             <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
               View Orders
             </button>
-            <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="w-full px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
               Manage Inventory
             </button>
           </div>

@@ -68,7 +68,7 @@ export function TrackingWidget({
         return 'text-green-600 bg-green-100'
       case 'in_transit':
       case 'in transit':
-        return 'text-blue-600 bg-blue-100'
+        return 'text-primary-600 bg-primary-100'
       case 'out_for_delivery':
       case 'out for delivery':
         return 'text-orange-600 bg-orange-100'
@@ -219,7 +219,7 @@ export function TrackingWidget({
 
           {/* Delivery Information */}
           {trackingInfo.estimatedDelivery && (
-            <div className="bg-blue-50 rounded-lg p-4">
+            <div className="bg-primary-50 rounded-lg p-4">
               <h4 className="font-medium text-gray-900 mb-2">Delivery Information</h4>
               <div className="space-y-2 text-sm">
                 <p>
@@ -241,7 +241,7 @@ export function TrackingWidget({
                       <div className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"></div>
                     )}
                     <div className="relative flex items-start space-x-3">
-                      <div className="relative flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-blue-500">
+                      <div className="relative flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-primary-600">
                         <Package className="h-4 w-4 text-white" />
                       </div>
                       <div className="min-w-0 flex-1">

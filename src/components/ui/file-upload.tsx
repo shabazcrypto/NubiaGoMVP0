@@ -39,7 +39,7 @@ export default function FileUpload({
     const type = file.type.split('/')[0]
     switch (type) {
       case 'image':
-        return <Image className="h-6 w-6 text-blue-500" />
+        return <Image className="h-6 w-6 text-primary-600" />
       case 'video':
         return <Video className="h-6 w-6 text-purple-500" />
       case 'audio':

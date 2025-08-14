@@ -44,7 +44,7 @@ export default function FAQSearch({ faqs, categories }: FAQSearchProps) {
             placeholder="Search for answers..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -55,7 +55,7 @@ export default function FAQSearch({ faqs, categories }: FAQSearchProps) {
           onClick={() => setSearchTerm('')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             searchTerm === '' 
-              ? 'bg-blue-600 text-white' 
+              ? 'bg-primary-600 text-white' 
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
@@ -67,7 +67,7 @@ export default function FAQSearch({ faqs, categories }: FAQSearchProps) {
             onClick={() => setSearchTerm(category)}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               searchTerm === category 
-                ? 'bg-blue-600 text-white' 
+                ? 'bg-primary-600 text-white' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -93,12 +93,12 @@ export default function FAQSearch({ faqs, categories }: FAQSearchProps) {
                   className="flex items-start justify-between w-full text-left focus:outline-none"
                 >
                   <div className="flex items-start space-x-4 flex-1">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <HelpCircle className="h-4 w-4 text-blue-600" />
+                    <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <HelpCircle className="h-4 w-4 text-primary-600" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                        <span className="px-2 py-1 bg-primary-100 text-primary-800 text-xs font-medium rounded">
                           {faq.category}
                         </span>
                       </div>
@@ -140,7 +140,7 @@ export default function FAQSearch({ faqs, categories }: FAQSearchProps) {
               <p className="text-gray-600 mb-6">Try adjusting your search terms or browse all categories.</p>
               <button 
                 onClick={() => setSearchTerm('')}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
               >
                 View All Questions
               </button>

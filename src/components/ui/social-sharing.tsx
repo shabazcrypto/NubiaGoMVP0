@@ -101,7 +101,7 @@ export function SocialSharing({
       <div className="relative">
         <button
           onClick={handleNativeShare}
-          className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
         >
           <Share2 className="w-4 h-4" />
           <span>Share</span>
@@ -120,7 +120,7 @@ export function SocialSharing({
                   onClick={() => handleShare('facebook')}
                   className="flex items-center space-x-2 p-2 text-gray-700 hover:bg-gray-100 rounded"
                 >
-                  <Facebook className="w-4 h-4 text-blue-600" />
+                  <Facebook className="w-4 h-4 text-primary-600" />
                   <span className="text-sm">Facebook</span>
                 </button>
               )}
@@ -129,7 +129,7 @@ export function SocialSharing({
                   onClick={() => handleShare('twitter')}
                   className="flex items-center space-x-2 p-2 text-gray-700 hover:bg-gray-100 rounded"
                 >
-                  <Twitter className="w-4 h-4 text-blue-400" />
+                  <Twitter className="w-4 h-4 text-primary-400" />
                   <span className="text-sm">Twitter</span>
                 </button>
               )}
@@ -215,7 +215,7 @@ export function SocialSharing({
                     onClick={() => handleShare('facebook')}
                     className="w-full flex items-center space-x-3 p-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                   >
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
                       <Facebook className="w-4 h-4 text-white" />
                     </div>
                     <span>Share on Facebook</span>
@@ -227,7 +227,7 @@ export function SocialSharing({
                     onClick={() => handleShare('twitter')}
                     className="w-full flex items-center space-x-3 p-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                   >
-                    <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-primary-400 rounded-lg flex items-center justify-center">
                       <Twitter className="w-4 h-4 text-white" />
                     </div>
                     <span>Share on Twitter</span>
@@ -299,7 +299,7 @@ export function SocialSharing({
         <div className="relative">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+            className="w-14 h-14 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-colors flex items-center justify-center"
           >
             <Share2 className="w-6 h-6" />
           </button>
@@ -315,7 +315,7 @@ export function SocialSharing({
                       onClick={() => handleShare('facebook')}
                       className="flex flex-col items-center space-y-1 p-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                     >
-                      <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
                         <Facebook className="w-5 h-5 text-white" />
                       </div>
                       <span className="text-xs">Facebook</span>
@@ -327,7 +327,7 @@ export function SocialSharing({
                       onClick={() => handleShare('twitter')}
                       className="flex flex-col items-center space-y-1 p-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                     >
-                      <div className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-primary-400 rounded-lg flex items-center justify-center">
                         <Twitter className="w-5 h-5 text-white" />
                       </div>
                       <span className="text-xs">Twitter</span>

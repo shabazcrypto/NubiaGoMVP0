@@ -207,7 +207,7 @@ export default function AdminUsersPage() {
                     <p className="text-sm font-medium text-gray-600">Total Users</p>
                     <p className="text-2xl font-bold text-gray-900">{userStats.totalUsers.toLocaleString()}</p>
                   </div>
-                  <Users className="h-8 w-8 text-blue-600" />
+                  <Users className="h-8 w-8 text-primary-600" />
                 </div>
                 <div className="mt-4 flex items-center text-sm text-green-600">
                   <ArrowUpRight className="h-4 w-4 mr-1" />
@@ -223,7 +223,7 @@ export default function AdminUsersPage() {
                   </div>
                   <UserCheck className="h-8 w-8 text-green-600" />
                 </div>
-                <div className="mt-4 flex items-center text-sm text-blue-600">
+                <div className="mt-4 flex items-center text-sm text-primary-600">
                   <Activity className="h-4 w-4 mr-1" />
                   <span>{userStats.activeUsers} online</span>
                 </div>
@@ -376,9 +376,9 @@ export default function AdminUsersPage() {
 
                     {/* Bulk Actions */}
                     {selectedUsers.length > 0 && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
                         <div className="flex items-center justify-between">
-                          <p className="text-sm text-blue-800">
+                          <p className="text-sm text-primary-800">
                             {selectedUsers.length} user(s) selected
                           </p>
                           <div className="flex space-x-2">
@@ -465,7 +465,7 @@ export default function AdminUsersPage() {
                                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                   user.role === 'admin' ? 'bg-red-100 text-red-800' :
                                   user.role === 'supplier' ? 'bg-purple-100 text-purple-800' :
-                                  'bg-blue-100 text-blue-800'
+                                  'bg-primary-100 text-primary-800'
                                 }`}>
                                   {user.role || 'customer'}
                                 </span>
@@ -486,13 +486,13 @@ export default function AdminUsersPage() {
                                 <div className="flex space-x-2">
                                   <button
                                     onClick={() => router.push(`/admin/users/${user.uid}`)}
-                                    className="text-blue-600 hover:text-blue-900"
+                                    className="text-primary-600 hover:text-primary-900"
                                   >
                                     <Eye className="h-4 w-4" />
                                   </button>
                                   <button
                                     onClick={() => router.push(`/admin/users/${user.uid}/edit`)}
-                                    className="text-indigo-600 hover:text-indigo-900"
+                                    className="text-primary-600 hover:text-primary-900"
                                   >
                                     <Edit className="h-4 w-4" />
                                   </button>
@@ -589,7 +589,7 @@ export default function AdminUsersPage() {
                                   )}
                                   <button
                                     onClick={() => setShowSupplierDetails(supplier.uid)}
-                                    className="text-blue-600 hover:text-blue-900"
+                                    className="text-primary-600 hover:text-primary-900"
                                   >
                                     <Eye className="h-4 w-4" />
                                   </button>
@@ -662,7 +662,7 @@ export default function AdminUsersPage() {
                                 <div className="flex space-x-2">
                                   <button
                                     onClick={() => router.push(`/admin/users/${admin.uid}/edit`)}
-                                    className="text-indigo-600 hover:text-indigo-900"
+                                    className="text-primary-600 hover:text-primary-900"
                                   >
                                     <Edit className="h-4 w-4" />
                                   </button>

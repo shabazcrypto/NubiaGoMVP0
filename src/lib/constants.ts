@@ -161,14 +161,25 @@ export const DATE_FORMATS = {
   DATETIME: 'MMM dd, yyyy HH:mm',
 }
 
-// Colors
+// NubiaGo Brand Colors
 export const COLORS = {
-  PRIMARY: '#0F52BA',
-  SECONDARY: '#64748b',
+  // Primary Brand Colors
+  PRIMARY: '#2563eb',      // NubiaGo Brand Primary Blue
+  ACCENT: '#f59e0b',       // NubiaGo Brand Accent Orange
+  
+  // Text Colors
+  TEXT_PRIMARY: '#000000',   // NubiaGo Text Black
+  TEXT_SECONDARY: '#666666', // NubiaGo Text Gray
+  
+  // Background Colors
+  BACKGROUND_LIGHT: '#f8f9fa', // NubiaGo Background Light
+  WHITE: '#ffffff',            // NubiaGo White
+  
+  // Semantic Colors (keeping existing)
   SUCCESS: '#10b981',
-  WARNING: '#f59e0b',
+  WARNING: '#f59e0b',      // Using NubiaGo Accent Orange
   ERROR: '#ef4444',
-  INFO: '#3b82f6',
+  INFO: '#2563eb',         // Using NubiaGo Primary Blue
 }
 
 // Breakpoints

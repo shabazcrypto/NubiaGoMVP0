@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'yellow' | 'black'
+  variant?: 'primary' | 'accent' | 'outline' | 'ghost' | 'danger' | 'secondary' | 'yellow' | 'black'
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   loading?: boolean
   leftIcon?: React.ReactNode
@@ -35,13 +35,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
     
     const variantClasses = {
-      primary: 'bg-primary-600 text-white focus:ring-primary-500',
-      secondary: 'bg-neutral-100 text-neutral-900 focus:ring-neutral-500',
-      outline: 'border border-neutral-300 bg-white text-neutral-700 focus:ring-primary-500',
-      ghost: 'text-neutral-700 bg-transparent focus:ring-neutral-500',
-      danger: 'bg-error-500 text-white focus:ring-error-500',
-      yellow: 'bg-yellow-500 text-neutral-900 focus:ring-yellow-500',
-      black: 'bg-neutral-900 text-white focus:ring-neutral-500',
+      primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 focus:ring-offset-2',
+      accent: 'bg-accent-500 text-black hover:bg-accent-600 focus:ring-accent-500 focus:ring-offset-2',
+      secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus:ring-neutral-500 focus:ring-offset-2',
+      outline: 'border border-primary-600 bg-white text-primary-600 hover:bg-primary-600 hover:text-white focus:ring-primary-500 focus:ring-offset-2',
+      ghost: 'text-neutral-700 bg-transparent hover:bg-neutral-100 focus:ring-neutral-500 focus:ring-offset-2',
+      danger: 'bg-error-500 text-white hover:bg-error-600 focus:ring-error-500 focus:ring-offset-2',
+      yellow: 'bg-yellow-500 text-neutral-900 hover:bg-yellow-600 focus:ring-yellow-500 focus:ring-offset-2',
+      black: 'bg-neutral-900 text-white hover:bg-neutral-800 focus:ring-neutral-500 focus:ring-offset-2',
     }
 
     return (

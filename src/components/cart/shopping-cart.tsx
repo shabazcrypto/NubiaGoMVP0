@@ -368,10 +368,10 @@ const ShoppingCart = React.memo(function ShoppingCart({
 
             {/* Shipping Info */}
             {subtotal < 50 && (
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <div className="mt-4 p-3 bg-primary-50 rounded-lg">
                 <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4 text-blue-600" />
-                  <p className="text-sm text-blue-800">
+                  <Truck className="h-4 w-4 text-primary-600" />
+                  <p className="text-sm text-primary-800">
                     Add ${(50 - subtotal).toFixed(2)} more to get free shipping!
                   </p>
                 </div>

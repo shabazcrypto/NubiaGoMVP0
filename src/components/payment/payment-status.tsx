@@ -107,7 +107,7 @@ export function PaymentStatus({ paymentId, onStatusChange }: PaymentStatusProps)
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center justify-center space-x-3">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
           <span className="text-gray-600">Checking payment status...</span>
         </div>
       </div>
@@ -124,7 +124,7 @@ export function PaymentStatus({ paymentId, onStatusChange }: PaymentStatusProps)
             <p className="text-red-700 mt-1">{error}</p>
             <button 
               onClick={handleRefresh}
-              className="mt-4 inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              className="mt-4 inline-flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
             >
               <ArrowPathIcon className="h-4 w-4" />
               <span>Try Again</span>
@@ -188,9 +188,9 @@ export function PaymentStatus({ paymentId, onStatusChange }: PaymentStatusProps)
 
         {/* Transaction Fees */}
         {fees && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-blue-900 mb-2">Transaction Fees</h4>
-            <p className="text-lg font-semibold text-blue-900">
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+            <h4 className="text-sm font-medium text-primary-900 mb-2">Transaction Fees</h4>
+            <p className="text-lg font-semibold text-primary-900">
               {fees.toFixed(2)} {currency}
             </p>
           </div>
@@ -204,7 +204,7 @@ export function PaymentStatus({ paymentId, onStatusChange }: PaymentStatusProps)
               id="autoRefresh"
               checked={autoRefresh}
               onChange={(e) => setAutoRefresh(e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
             <label htmlFor="autoRefresh" className="text-sm text-gray-600">
               Auto-refresh status

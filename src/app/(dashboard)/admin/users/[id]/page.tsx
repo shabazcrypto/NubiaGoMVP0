@@ -39,7 +39,7 @@ export default function AdminUserDetailPage({ params }: { params: { id: string }
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'admin': return 'text-purple-600 bg-purple-100'
-      case 'supplier': return 'text-blue-600 bg-blue-100'
+      case 'supplier': return 'text-primary-600 bg-primary-100'
       case 'customer': return 'text-green-600 bg-green-100'
       default: return 'text-gray-600 bg-gray-100'
     }

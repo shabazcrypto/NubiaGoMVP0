@@ -192,7 +192,7 @@ export default function CartPage() {
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
           >
             Try Again
           </button>
@@ -265,8 +265,8 @@ export default function CartPage() {
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Truck className="h-5 w-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <Truck className="h-5 w-5 text-primary-600" />
               </div>
               <div>
                 <div className="font-semibold text-gray-900 text-sm">Free Shipping</div>
@@ -357,18 +357,18 @@ export default function CartPage() {
 
               {/* Shipping Progress */}
               {cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) < 50 && (
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <div className="mt-6 p-4 bg-primary-50 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Truck className="h-4 w-4 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-800">Free Shipping Progress</span>
+                    <Truck className="h-4 w-4 text-primary-600" />
+                    <span className="text-sm font-medium text-primary-800">Free Shipping Progress</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-primary-600 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${Math.min((cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) / 50) * 100, 100)}%` }}
                     ></div>
                   </div>
-                  <p className="text-xs text-blue-700">
+                  <p className="text-xs text-primary-700">
                     Add ${(50 - cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)).toFixed(2)} more to get free shipping!
                   </p>
                 </div>

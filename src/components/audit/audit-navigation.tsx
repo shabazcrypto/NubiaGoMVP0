@@ -239,7 +239,7 @@ export default function AuditNavigation() {
   // 🎨 GET CATEGORY COLOR
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'core': return 'bg-blue-100 text-blue-800'
+      case 'core': return 'bg-primary-100 text-primary-800'
       case 'advanced': return 'bg-purple-100 text-purple-800'
       case 'experimental': return 'bg-orange-100 text-orange-800'
       default: return 'bg-gray-100 text-gray-800'
@@ -295,8 +295,8 @@ export default function AuditNavigation() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <CheckCircle className="h-6 w-6 text-blue-600" />
+              <div className="p-3 bg-primary-100 rounded-xl">
+                <CheckCircle className="h-6 w-6 text-primary-600" />
               </div>
               <span className="text-sm font-medium text-gray-500">Active Tools</span>
             </div>
@@ -433,13 +433,13 @@ export default function AuditNavigation() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-6 shadow-lg text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BarChart3 className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="h-8 w-8 text-primary-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Start Full Audit</h3>
               <p className="text-gray-600 mb-4">Run comprehensive platform analysis</p>
               <Link href="/audit-dashboard">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                <Button className="w-full bg-primary-600 hover:bg-primary-700">
                   Launch Dashboard
                 </Button>
               </Link>
@@ -479,8 +479,8 @@ export default function AuditNavigation() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <HelpCircle className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <HelpCircle className="h-6 w-6 text-primary-600" />
               </div>
               <h3 className="font-medium text-gray-900 mb-2">Documentation</h3>
               <p className="text-sm text-gray-600">Learn how to use each tool</p>

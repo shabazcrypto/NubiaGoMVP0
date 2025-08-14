@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react'
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
+import { Logo } from '@/components/ui/Logo'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -72,6 +73,11 @@ export default function ForgotPasswordPage() {
         </Link>
         
         <div className="text-center">
+          {/* NubiaGo Logo */}
+          <div className="mb-8">
+            <Logo variant="horizontal" size="lg" />
+          </div>
+          
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Forgot your password?</h2>
           <p className="text-gray-600">
             Enter your email address and we'll send you a link to reset your password

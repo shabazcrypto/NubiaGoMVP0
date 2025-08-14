@@ -70,10 +70,10 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
           <div className={`p-2 rounded-full ${
-            theme === 'dark' ? 'bg-blue-600' : 'bg-blue-100'
+            theme === 'dark' ? 'bg-primary-600' : 'bg-primary-100'
           }`}>
             <ChatBubbleLeftRightIcon className={`w-4 h-4 ${
-              theme === 'dark' ? 'text-white' : 'text-blue-600'
+              theme === 'dark' ? 'text-white' : 'text-primary-600'
             }`} />
           </div>
           

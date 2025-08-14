@@ -71,15 +71,37 @@ export const ACCESSIBILITY_STANDARDS = {
   }
 }
 
-// 🎨 DESIGN SYSTEM STANDARDS
+// 🎨 NUBIAGO BRAND DESIGN STANDARDS
 export const DESIGN_STANDARDS = {
   SPACING: {
     UNIT: 4, // base unit in pixels
     SCALE: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128, 160, 192, 224, 256]
   },
   COLORS: {
-    PRIMARY: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#0F52BA', '#1d4ed8', '#1e40af', '#1e3a8a'],
-    SECONDARY: ['#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155', '#1e293b', '#0f172a']
+    PRIMARY: '#2563eb',      // NubiaGo Brand Primary Blue
+    ACCENT: '#f59e0b',       // NubiaGo Brand Accent Orange
+    TEXT_PRIMARY: '#000000',   // NubiaGo Text Black
+    TEXT_SECONDARY: '#666666', // NubiaGo Text Gray
+    BACKGROUND_LIGHT: '#f8f9fa', // NubiaGo Background Light
+    WHITE: '#ffffff',            // NubiaGo White
+    // Legacy color arrays for compatibility
+    PRIMARY_SCALE: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a'],
+    SECONDARY_SCALE: ['#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155', '#1e293b', '#0f172a']
+  },
+  TYPOGRAPHY: {
+    HEADINGS: {
+      H1: { size: '3rem', weight: 700, lineHeight: 1.2 },
+      H2: { size: '2.25rem', weight: 700, lineHeight: 1.2 },
+      H3: { size: '1.875rem', weight: 600, lineHeight: 1.2 },
+      H4: { size: '1.5rem', weight: 600, lineHeight: 1.2 },
+      H5: { size: '1.25rem', weight: 600, lineHeight: 1.2 }
+    },
+    BODY: {
+      LARGE: { size: '1.125rem', weight: 400, lineHeight: 1.5 },
+      REGULAR: { size: '1rem', weight: 400, lineHeight: 1.5 },
+      SMALL: { size: '0.875rem', weight: 400, lineHeight: 1.5 },
+      XS: { size: '0.75rem', weight: 400, lineHeight: 1.5 }
+    }
   },
   BREAKPOINTS: {
     MOBILE: 320,

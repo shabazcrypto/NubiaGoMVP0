@@ -52,18 +52,18 @@ export default function SupplierBulkUploadPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-primary-50 border border-primary-200 rounded-lg">
             <div className="flex items-center space-x-3">
-              <FileText className="w-5 h-5 text-blue-600" />
+              <FileText className="w-5 h-5 text-primary-600" />
               <div>
-                <p className="font-medium text-blue-900">Clothing Collection</p>
-                <p className="text-sm text-blue-700">40 products uploaded successfully</p>
-                <p className="text-xs text-blue-600">3 days ago</p>
+                <p className="font-medium text-primary-900">Clothing Collection</p>
+                <p className="text-sm text-primary-700">40 products uploaded successfully</p>
+                <p className="text-xs text-primary-600">3 days ago</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium text-blue-900">40/40</p>
-              <p className="text-xs text-blue-600">100% Success</p>
+              <p className="text-sm font-medium text-primary-900">40/40</p>
+              <p className="text-xs text-primary-600">100% Success</p>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function SupplierBulkUploadPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="border border-gray-200 rounded-lg p-4">
             <div className="flex items-center space-x-3 mb-3">
-              <Package className="w-8 h-8 text-blue-600" />
+              <Package className="w-8 h-8 text-primary-600" />
               <div>
                 <h4 className="font-medium text-gray-900">Basic Product Template</h4>
                 <p className="text-sm text-gray-600">Essential fields for quick uploads</p>
@@ -90,7 +90,7 @@ export default function SupplierBulkUploadPage() {
               <li>• Category, stock, SKU</li>
               <li>• Basic product information</li>
             </ul>
-            <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            <button className="w-full bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700">
               Download CSV
             </button>
           </div>
@@ -115,9 +115,9 @@ export default function SupplierBulkUploadPage() {
         </div>
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="text-sm font-medium text-blue-900 mb-2">Template Guidelines</h4>
-        <ul className="text-sm text-blue-700 space-y-1">
+      <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+        <h4 className="text-sm font-medium text-primary-900 mb-2">Template Guidelines</h4>
+        <ul className="text-sm text-primary-700 space-y-1">
           <li>• Use the provided CSV templates for best results</li>
           <li>• Ensure all required fields are filled</li>
           <li>• Use consistent formatting for dates and numbers</li>

@@ -392,7 +392,7 @@ export default function AdminProductForm({
                   <span className="text-sm text-gray-600">Direct Publishing</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Shield className="h-4 w-4 text-blue-500" />
+                  <Shield className="h-4 w-4 text-primary-600" />
                   <span className="text-sm text-gray-600">Admin Privileges</span>
                 </div>
                 <div className="flex items-center space-x-2">

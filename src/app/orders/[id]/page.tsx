@@ -100,7 +100,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
       case 'delivered':
         return <CheckCircle className="h-6 w-6 text-green-600" />
       case 'shipped':
-        return <Truck className="h-6 w-6 text-blue-600" />
+        return <Truck className="h-6 w-6 text-primary-600" />
       case 'processing':
         return <Package className="h-6 w-6 text-yellow-600" />
       default:
@@ -113,7 +113,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
       case 'delivered':
         return 'bg-green-100 text-green-800'
       case 'shipped':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-primary-100 text-primary-800'
       case 'processing':
         return 'bg-yellow-100 text-yellow-800'
       default:
@@ -217,7 +217,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
               <div className="px-6 py-4">
                 {trackingLoading ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+                    <Loader2 className="h-6 w-6 animate-spin text-primary-600" />
                     <span className="ml-2 text-gray-600">Loading tracking information...</span>
                   </div>
                 ) : trackingError ? (
@@ -254,7 +254,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                           {trackingInfo.events.map((event, index) => (
                             <div key={index} className="flex items-start space-x-3">
                               <div className="flex-shrink-0">
-                                <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                                <div className="w-2 h-2 bg-primary-600 rounded-full mt-2"></div>
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-gray-900">{event.status}</p>

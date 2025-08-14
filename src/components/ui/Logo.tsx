@@ -1,29 +1,30 @@
+'use client'
+
 import React from 'react'
 
 interface LogoProps {
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  variant?: 'horizontal' | 'vertical' | 'icon-only'
   className?: string
 }
 
-export const Logo = ({ size = 'md', className = '' }: LogoProps) => {
+export const Logo = ({ size = 'md', variant = 'horizontal', className = '' }: LogoProps) => {
   const sizeClasses = {
-    sm: 'w-8 h-8',    // Increased from w-6 h-6 (33% larger)
-    md: 'w-10 h-10',  // Increased from w-8 h-8 (25% larger)
-    lg: 'w-16 h-16'   // Increased from w-12 h-12 (33% larger)
+    sm: variant === 'horizontal' ? 'w-32 h-10' : variant === 'vertical' ? 'w-20 h-24' : 'w-10 h-10',
+    md: variant === 'horizontal' ? 'w-44 h-12' : variant === 'vertical' ? 'w-24 h-32' : 'w-12 h-12',
+    lg: variant === 'horizontal' ? 'w-56 h-16' : variant === 'vertical' ? 'w-32 h-40' : 'w-16 h-16',
+    xl: variant === 'horizontal' ? 'w-72 h-20' : variant === 'vertical' ? 'w-40 h-48' : 'w-20 h-20',
   }
 
-  return (
-    <div 
-      data-testid="logo-container"
-      className={`${sizeClasses[size]} bg-primary-600 rounded-lg flex items-center justify-center overflow-hidden shadow-sm ${className}`}
-    >
+  // Icon SVG component
+  const IconSVG = ({ iconSize }: { iconSize: string }) => (
+    <div className={`${iconSize} bg-primary-600 rounded-lg flex items-center justify-center overflow-hidden shadow-sm`}>
       <svg
         data-testid="logo-svg"
         viewBox="0 0 512 512"
         className="w-4/5 h-4/5"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Main logo shape */}
         <g fill="white">
           {/* Center tall arrow */}
           <path d="M256 128 C256 128, 238 128, 238 146 L238 302 C238 320, 256 320, 256 320 C256 320, 274 320, 274 302 L274 146 C274 128, 256 128, 256 128 Z" />
@@ -46,4 +47,44 @@ export const Logo = ({ size = 'md', className = '' }: LogoProps) => {
       </svg>
     </div>
   )
+
+  // Icon-only variant
+  if (variant === 'icon-only') {
+    return (
+      <div data-testid="logo-container" className={className}>
+        <IconSVG iconSize={sizeClasses[size]} />
+      </div>
+    )
+  }
+
+  // Horizontal variant
+  if (variant === 'horizontal') {
+    const iconSize = size === 'sm' ? 'w-8 h-8' : size === 'md' ? 'w-10 h-10' : size === 'lg' ? 'w-14 h-14' : 'w-18 h-18'
+    const textSize = size === 'sm' ? 'text-lg' : size === 'md' ? 'text-xl' : size === 'lg' ? 'text-3xl' : 'text-4xl'
+    
+    return (
+      <div data-testid="logo-container" className={`flex items-center space-x-3 ${className}`}>
+        <IconSVG iconSize={iconSize} />
+        <span className={`font-bold text-nubia-black ${textSize}`}>NubiaGo</span>
+      </div>
+    )
+  }
+
+  // Vertical variant
+  if (variant === 'vertical') {
+    const iconSize = size === 'sm' ? 'w-8 h-8' : size === 'md' ? 'w-10 h-10' : size === 'lg' ? 'w-14 h-14' : 'w-18 h-18'
+    const textSize = size === 'sm' ? 'text-sm' : size === 'md' ? 'text-lg' : size === 'lg' ? 'text-2xl' : 'text-3xl'
+    
+    return (
+      <div data-testid="logo-container" className={`flex flex-col items-center space-y-2 ${className}`}>
+        <IconSVG iconSize={iconSize} />
+        <span className={`font-bold text-nubia-black ${textSize}`}>NubiaGo</span>
+      </div>
+    )
+  }
+
+  return null
 }
+
+// Legacy export for backward compatibility
+export default Logo

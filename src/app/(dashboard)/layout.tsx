@@ -25,8 +25,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <div className="flex items-center space-x-2">
-                      <Logo size="md" />
-                      <span className="text-xl font-bold text-gray-900">NubiaGo</span>
+                      <Logo variant="horizontal" size="md" />
                     </div>
                     
                     {/* Return to Homepage Button */}

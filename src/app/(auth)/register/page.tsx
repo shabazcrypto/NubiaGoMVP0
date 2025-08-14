@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from 'lucide-react'
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
+import { Logo } from '@/components/ui/Logo'
 import { OAuthButtons } from '@/components/auth/oauth-buttons'
 
 export default function RegisterPage() {
@@ -62,6 +63,11 @@ export default function RegisterPage() {
         </Link>
         
         <div className="text-center">
+          {/* NubiaGo Logo */}
+          <div className="mb-8">
+            <Logo variant="horizontal" size="lg" />
+          </div>
+          
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Create your account</h2>
           <p className="text-gray-600">Join millions of customers across Africa</p>
         </div>

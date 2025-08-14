@@ -8,8 +8,8 @@ export default function SupplierPendingApprovalPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
-            <Clock className="h-6 w-6 text-blue-600" />
+          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-primary-100 mb-4">
+            <Clock className="h-6 w-6 text-primary-600" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Pending Approval</h2>
           <p className="text-gray-600 mb-8">
@@ -40,8 +40,8 @@ export default function SupplierPendingApprovalPage() {
 
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Clock className="h-5 w-5 text-blue-600" />
+                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                      <Clock className="h-5 w-5 text-primary-600" />
                     </div>
                   </div>
                   <div className="ml-4">
@@ -65,9 +65,9 @@ export default function SupplierPendingApprovalPage() {
             </div>
 
             {/* What happens next */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="text-sm font-medium text-blue-900 mb-2">What happens next?</h4>
-              <ul className="text-sm text-blue-800 space-y-1">
+            <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+              <h4 className="text-sm font-medium text-primary-900 mb-2">What happens next?</h4>
+              <ul className="text-sm text-primary-800 space-y-1">
                 <li>• Our admin team reviews your business documents</li>
                 <li>• We verify your business information</li>
                 <li>• Background checks are performed</li>

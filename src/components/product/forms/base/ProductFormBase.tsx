@@ -282,7 +282,7 @@ export default function ProductFormBase({
             <button
               type="button"
               onClick={() => setShowPreview(!showPreview)}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Eye className="h-4 w-4 mr-2" />
               {showPreview ? 'Hide Preview' : 'Show Preview'}
@@ -464,8 +464,8 @@ export default function ProductFormBase({
               {currentStep === 2 && (
                 <div className="space-y-8">
                   <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Edit3 className="h-8 w-8 text-blue-600" />
+                    <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Edit3 className="h-8 w-8 text-primary-600" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">Enhanced Product Details</h3>
                     <p className="text-gray-600">Add detailed specifications to help customers make informed decisions</p>
@@ -648,8 +648,8 @@ export default function ProductFormBase({
                           <div className="text-xs text-gray-500">Base price</div>
                         </div>
                         
-                        <div className="text-center p-4 bg-white rounded-lg border border-blue-200">
-                          <div className="text-2xl font-bold text-blue-600 mb-2">10-49</div>
+                        <div className="text-center p-4 bg-white rounded-lg border border-primary-200">
+                          <div className="text-2xl font-bold text-primary-600 mb-2">10-49</div>
                           <div className="text-sm text-gray-600 mb-1">units</div>
                           <div className="text-lg font-semibold text-gray-900">
                             ${formData.price ? (formData.price * 0.95).toFixed(2) : '0.00'}
@@ -667,8 +667,8 @@ export default function ProductFormBase({
                         </div>
                       </div>
                       
-                      <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-sm text-blue-800 text-center">
+                      <div className="mt-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
+                        <p className="text-sm text-primary-800 text-center">
                           <strong>💡 Pro Tip:</strong> Quantity discounts are automatically calculated and displayed to customers. 
                           This encourages bulk purchases and increases your average order value.
                         </p>
@@ -1031,7 +1031,7 @@ export default function ProductFormBase({
                 <button
                   type="button"
                   onClick={() => setShowPreview(!showPreview)}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors"
                 >
                   <Eye className="h-4 w-4 mr-2" />
                   Preview Product
@@ -1056,9 +1056,9 @@ export default function ProductFormBase({
             </div>
 
             {/* Help & Tips */}
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-blue-900 mb-4">💡 Tips</h3>
-              <div className="space-y-3 text-sm text-blue-800">
+            <div className="bg-primary-50 border border-primary-200 rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-primary-900 mb-4">💡 Tips</h3>
+              <div className="space-y-3 text-sm text-primary-800">
                 <p>• Use clear, descriptive product names</p>
                 <p>• Upload high-quality images with white backgrounds</p>
                 <p>• Include detailed descriptions and specifications</p>

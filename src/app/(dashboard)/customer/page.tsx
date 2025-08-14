@@ -312,7 +312,7 @@ export default function CustomerDashboard() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered': return 'text-green-600 bg-green-100'
-      case 'shipped': return 'text-blue-600 bg-blue-100'
+      case 'shipped': return 'text-primary-600 bg-primary-100'
       case 'processing': return 'text-yellow-600 bg-yellow-100'
       case 'pending': return 'text-gray-600 bg-gray-100'
       case 'cancelled': return 'text-red-600 bg-red-100'
@@ -566,7 +566,7 @@ export default function CustomerDashboard() {
                     
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-primary-600 rounded-full"></div>
                         <span className="text-sm font-medium text-gray-900">Average Rating</span>
               </div>
                       <span className="text-sm text-gray-600">{stats.averageRating}★</span>

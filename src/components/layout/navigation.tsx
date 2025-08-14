@@ -284,8 +284,7 @@ export default function Navigation() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
-              <Logo size="md" />
-              <span className="text-xl font-bold text-gray-900">NubiaGo</span>
+              <Logo variant="horizontal" size="md" />
             </Link>
 
             {/* Search Bar */}

@@ -253,7 +253,7 @@ export default function SwipeableGallery({
               onClick={() => goToImage(index)}
               className={`flex-shrink-0 relative rounded-lg overflow-hidden transition-all duration-200 ${
                 index === currentIndex
-                  ? 'ring-2 ring-blue-500 ring-offset-2'
+                  ? 'ring-2 ring-primary-500 ring-offset-2'
                   : 'hover:opacity-80'
               }`}
               aria-label={`Go to image ${index + 1}`}
@@ -270,7 +270,7 @@ export default function SwipeableGallery({
               
               {/* Active indicator */}
               {index === currentIndex && (
-                <div className="absolute inset-0 bg-blue-500 bg-opacity-20" />
+                <div className="absolute inset-0 bg-primary-600 bg-opacity-20" />
               )}
             </button>
           ))}

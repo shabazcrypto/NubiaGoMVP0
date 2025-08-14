@@ -518,8 +518,8 @@ export default function ApiManagementPage() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Mode:</span>
-                    <span className={`font-medium ${api.isTestMode ? 'text-yellow-600' : 'text-green-600'}`}>
-                      {api.isTestMode ? 'Test' : 'Live'}
+                    <span className={`font-medium ${(api as any).isTestMode ? 'text-yellow-600' : 'text-green-600'}`}>
+                      {(api as any).isTestMode ? 'Test' : 'Live'}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">

@@ -525,7 +525,7 @@ export default function ApiManagementPage() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Last Tested:</span>
                     <span className="font-medium">
-                      {api.lastTested ? new Date(api.lastTested).toLocaleDateString() : 'Never'}
+                      {(api as any).lastTested ? new Date((api as any).lastTested).toLocaleDateString() : 'Never'}
                     </span>
                   </div>
                 </div>

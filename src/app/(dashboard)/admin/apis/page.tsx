@@ -238,7 +238,7 @@ export default function ApiManagementPage() {
       webhookUrl: (api as any).webhookUrl || '',
       isActive: (api as any).isActive || false,
       isTestMode: (api as any).isTestMode || false,
-      config: api.config
+      config: (api as any).config || {}
     })
     setShowEditModal(true)
   }

@@ -231,7 +231,7 @@ export default function ApiManagementPage() {
     setFormData({
       name: api.name,
       type: api.type,
-      provider: api.provider,
+      provider: api.provider || '',
       apiKey: api.apiKey || '',
       apiSecret: api.apiSecret || '',
       baseUrl: api.baseUrl || '',

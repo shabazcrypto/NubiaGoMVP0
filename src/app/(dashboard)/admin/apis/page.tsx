@@ -397,7 +397,7 @@ export default function ApiManagementPage() {
 
   const filteredApis = apis.filter(api => {
     const matchesSearch = api.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        api.provider.toLowerCase().includes(searchQuery.toLowerCase())
+                        (api.provider || '').toLowerCase().includes(searchQuery.toLowerCase())
     const matchesType = filterType === 'all' || api.type === filterType
     const matchesStatus = filterStatus === 'all' || api.status === filterStatus
     return matchesSearch && matchesType && matchesStatus

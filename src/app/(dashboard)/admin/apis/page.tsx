@@ -348,7 +348,7 @@ export default function ApiManagementPage() {
           api.id === selectedApi.id 
             ? { 
                 ...api, 
-                status: testResult.success ? 'active' : 'error',
+                status: testResult.success ? 'active' as const : 'inactive' as const,
                 lastTested: new Date(),
                 errorMessage: testResult.error
               }

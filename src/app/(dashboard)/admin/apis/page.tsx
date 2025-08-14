@@ -235,7 +235,7 @@ export default function ApiManagementPage() {
       apiKey: api.apiKey || '',
       apiSecret: api.apiSecret || '',
       baseUrl: api.baseUrl || '',
-      webhookUrl: api.webhookUrl || '',
+      webhookUrl: (api as any).webhookUrl || '',
       isActive: api.isActive,
       isTestMode: api.isTestMode,
       config: api.config

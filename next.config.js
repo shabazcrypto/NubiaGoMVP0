@@ -1,46 +1,32 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ============================================================================
-  // ULTRA-FAST DEVELOPMENT CONFIGURATION
-  // ============================================================================
+  // Basic configuration
+  reactStrictMode: false,
   
-  // Disable image optimization in development for speed
+  // Image optimization
   images: {
     unoptimized: true,
     dangerouslyAllowSVG: true,
     domains: ['localhost'],
   },
 
-  // ============================================================================
-  // COMPILER OPTIMIZATION - MINIMAL FOR SPEED
-  // ============================================================================
+  // Compiler options
   compiler: {
-    removeConsole: false, // Keep console in dev
+    removeConsole: false,
   },
 
-  // ============================================================================
-  // PERFORMANCE OPTIMIZATIONS - MAXIMUM SPEED
-  // ============================================================================
+  // Performance settings
   trailingSlash: false,
   generateEtags: false,
   compress: false,
   poweredByHeader: false,
-  
-  // Disable slower features
-  reactStrictMode: false,
 
-  // ============================================================================
-  // EXPERIMENTAL FEATURES - SPEED FOCUSED
-  // ============================================================================
+  // Experimental features (minimal)
   experimental: {
-    webpackBuildWorker: false,
-    optimizeCss: false,
     optimizePackageImports: [],
   },
 
-  // ============================================================================
-  // TURBOPACK CONFIGURATION (Stable in Next.js 15+)
-  // ============================================================================
+  // Turbopack configuration
   turbopack: {
     rules: {
       '*.svg': {
@@ -50,16 +36,11 @@ const nextConfig = {
     },
   },
 
-  // ============================================================================
-  // WEBPACK OPTIMIZATION - ULTRA-FAST DEVELOPMENT
-  // ============================================================================
+  // Webpack configuration
   webpack: (config, { dev, isServer }) => {
-    // Aggressive development optimizations
+    // Development optimizations
     if (dev) {
-      // Use fastest source maps
       config.devtool = 'eval'
-      
-      // Disable all optimizations in development
       config.optimization = {
         ...config.optimization,
         removeAvailableModules: false,
@@ -71,18 +52,16 @@ const nextConfig = {
         sideEffects: false,
       }
       
-      // Fastest possible file watching
       config.watchOptions = {
         poll: false,
         aggregateTimeout: 50,
         ignored: ['**/node_modules/**', '**/.next/**', '**/.git/**', '**/public/**'],
       }
-
-      // Disable cache for faster initial compilation
+      
       config.cache = false
     }
 
-    // Handle Node.js modules for server-side code
+    // Handle Node.js modules for server-side
     if (isServer) {
       config.externals = config.externals || []
       config.externals.push({
@@ -94,7 +73,7 @@ const nextConfig = {
       })
     }
 
-    // Handle node: protocol and Node.js modules for client-side
+    // Handle client-side fallbacks
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -110,37 +89,6 @@ const nextConfig = {
         assert: false,
         os: false,
         path: false,
-        'node:process': false,
-        'node:fs': false,
-        'node:path': false,
-        'node:crypto': false,
-        'node:stream': false,
-        'node:util': false,
-        'node:buffer': false,
-        'node:events': false,
-        'node:querystring': false,
-        'node:url': false,
-        'node:http': false,
-        'node:https': false,
-        'node:zlib': false,
-        'node:child_process': false,
-        'node:cluster': false,
-        'node:dgram': false,
-        'node:dns': false,
-        'node:domain': false,
-        'node:module': false,
-        'node:net': false,
-        'node:os': false,
-        'node:punycode': false,
-        'node:readline': false,
-        'node:repl': false,
-        'node:string_decoder': false,
-        'node:sys': false,
-        'node:timers': false,
-        'node:tls': false,
-        'node:tty': false,
-        'node:vm': false,
-        'node:worker_threads': false,
         process: false,
       }
     }
@@ -151,27 +99,10 @@ const nextConfig = {
       use: ['@svgr/webpack'],
     })
 
-    // Production optimizations
-    if (!dev) {
-      // Add webpack bundle analyzer in production builds (optional)
-      if (process.env.ANALYZE === 'true') {
-        const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-        config.plugins.push(
-          new BundleAnalyzerPlugin({
-            analyzerMode: 'static',
-            openAnalyzer: false,
-            reportFilename: 'bundle-analysis.html',
-          })
-        )
-      }
-    }
-
     return config
   },
 
-  // ============================================================================
-  // HEADERS & CACHING OPTIMIZATION
-  // ============================================================================
+  // Headers for production
   async headers() {
     if (process.env.NODE_ENV === 'development') return []
     return [
@@ -213,12 +144,9 @@ const nextConfig = {
     ]
   },
 
-  // ============================================================================
-  // REWRITES FOR PERFORMANCE
-  // ============================================================================
+  // Rewrites
   async rewrites() {
     return [
-      // Keep API passthrough
       { source: '/api/:path*', destination: '/api/:path*' },
     ]
   },

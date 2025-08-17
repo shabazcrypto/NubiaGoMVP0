@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Tab } from '@headlessui/react'
+import * as Tabs from '@radix-ui/react-tabs'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 
 // ============================================================================
@@ -486,26 +486,24 @@ const ApiDocsPage: React.FC = () => {
 
         {/* API Endpoints */}
         <div className="bg-white rounded-lg shadow-sm">
-          <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
-            <Tab.List className="flex space-x-1 rounded-xl bg-gray-100 p-1">
+          <Tabs.Root value={Object.keys(API_ENDPOINTS)[selectedTab]} onValueChange={(value) => {
+            const index = Object.keys(API_ENDPOINTS).indexOf(value);
+            setSelectedTab(index);
+          }}>
+            <Tabs.List className="flex space-x-1 rounded-xl bg-gray-100 p-1">
               {Object.keys(API_ENDPOINTS).map((category) => (
-                <Tab
+                <Tabs.Trigger
                   key={category}
-                  className={({ selected }) =>
-                    `w-full rounded-lg py-2.5 text-sm font-medium leading-5 ${
-                      selected
-                        ? 'bg-white text-primary-700 shadow'
-                        : 'text-gray-600 hover:text-gray-800'
-                    }`
-                  }
+                  value={category}
+                  className="w-full rounded-lg py-2.5 text-sm font-medium leading-5 data-[state=active]:bg-white data-[state=active]:text-primary-700 data-[state=active]:shadow text-gray-600 hover:text-gray-800"
                 >
                   {category}
-                </Tab>
+                </Tabs.Trigger>
               ))}
-            </Tab.List>
-            <Tab.Panels className="mt-6">
+            </Tabs.List>
+            <div className="mt-6">
               {Object.entries(API_ENDPOINTS).map(([category, endpoints]) => (
-                <Tab.Panel key={category} className="space-y-4">
+                <Tabs.Content key={category} value={category} className="space-y-4">
                   {endpoints.map((endpoint, index) => {
                     const endpointKey = `${category}-${index}`
                     const isExpanded = expandedEndpoints.has(endpointKey)
@@ -643,10 +641,10 @@ const ApiDocsPage: React.FC = () => {
                       </div>
                     )
                   })}
-                </Tab.Panel>
+                </Tabs.Content>
               ))}
-            </Tab.Panels>
-          </Tab.Group>
+            </div>
+          </Tabs.Root>
         </div>
 
         {/* Rate Limiting */}

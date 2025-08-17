@@ -46,3 +46,10 @@ export function truncate(str: string, length: number): string {
   if (str.length <= length) return str
   return str.substring(0, length) + '...'
 }
+
+// Toast utility function
+export function toast(message: string, type: 'success' | 'error' | 'info' = 'info') {
+  // Simple toast implementation
+  console.log(`[${type.toUpperCase()}] ${message}`)
+  // In a real implementation, this would trigger a toast notification
+}

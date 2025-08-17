@@ -12,6 +12,12 @@ import {
 } from 'lucide-react'
 // useToastStore removed - using shadcn/ui toast system
 
+// Simple toast function for compatibility
+export function toast(message: string, type: ToastType = 'info') {
+  console.log(`[${type.toUpperCase()}] ${message}`)
+  // In a real implementation, this would trigger a toast notification
+}
+
 // ============================================================================
 // TYPES
 // ============================================================================

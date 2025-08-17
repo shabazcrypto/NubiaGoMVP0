@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { Logo } from '@/components/ui/Logo'
 import { CartService } from '@/lib/services/cart.service'
 import { WishlistService } from '@/lib/services/wishlist.service'
+import { MobileCategoriesMenu } from '@/components/navigation/MobileCategoriesMenu'
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -255,7 +256,9 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             <h3 className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Shop by Category
             </h3>
-            {categoryMenuItems.map(renderMenuItem)}
+            <div className="px-4">
+              <MobileCategoriesMenu onClose={onClose} />
+            </div>
           </div>
 
           {/* Support */}

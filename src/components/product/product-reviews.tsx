@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { Star, ThumbsUp, ThumbsDown, MessageCircle, User, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { TextArea } from '@/components/ui/form'
 import EnhancedImage from '@/components/mobile/EnhancedImage'
 

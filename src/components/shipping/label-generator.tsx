@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { CheckCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 // Button and Input components replaced with standard HTML elements

@@ -73,7 +73,7 @@ export default function AuditPage() {
       name: 'Component Auditor',
       description: 'Deep-dive analysis of individual components',
       icon: Eye,
-      href: '/component-auditor',
+      href: '/audit-dashboard',
       color: 'from-green-500 to-green-600',
       status: 'active'
     },
@@ -133,7 +133,7 @@ export default function AuditPage() {
                   🚀 Start Full Audit
                 </Button>
               </Link>
-              <Link href="/component-auditor">
+              <Link href="/audit-dashboard">
                 <Button variant="outline" className="border-white text-white hover:bg-white hover:text-primary-700 px-8 py-4 text-lg font-semibold">
                   <Eye className="h-5 w-5 mr-2" />
                   🔍 Component Analysis
@@ -479,7 +479,7 @@ export default function AuditPage() {
                 🚀 Start Your Audit Journey
               </Button>
             </Link>
-            <Link href="/component-auditor">
+            <Link href="/audit-dashboard">
               <Button variant="outline" className="px-8 py-4 text-lg font-semibold">
                 🔍 Analyze Components
               </Button>

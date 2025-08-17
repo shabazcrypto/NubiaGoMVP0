@@ -3,17 +3,21 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import '@/lib/asset-preloader' // Initialize asset preloading
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { ToastProvider } from '@/components/ui/toast'
+// import { ToastProvider } from '@/components/ui/toast' // Disabled to prevent infinite loops
+// import { Toaster } from '@/components/ui/toaster' // Temporarily disabled due to infinite loop
 import { ErrorBoundaryProvider } from '@/components/providers/error-boundary-provider'
+import { performanceMonitor } from '@/lib/utils/performance-monitor'
 import { FirebaseAuthProvider } from '@/hooks/useFirebaseAuth'
 import { RoleChangeHandler } from '@/components/auth/role-change-handler'
 import ConditionalNavigation from '@/components/layout/conditional-navigation'
 import StoreProvider from '@/components/providers/store-provider'
 import { Footer } from '@/components/ui/footer'
 import { SimpleLoading } from '@/components/ui/simple-loading'
-import BottomNavigation from '@/components/mobile/BottomNavigation'
-import MobileHeader from '@/components/mobile/MobileHeader'
+import { UnifiedHeader } from '@/components/navigation/UnifiedHeader'
+import { UnifiedBottomNav } from '@/components/navigation/UnifiedBottomNav'
 import { MobileOptimizationProvider } from '@/components/providers/mobile-optimization-provider'
+import { MobileMenuProvider } from '@/components/providers/mobile-menu-provider'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { Suspense } from 'react'
 
 // Optimize font loading
@@ -111,7 +115,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="//firebasestorage.googleapis.com" />
-        <link rel="dns-prefetch" href="//images.unsplash.com" />
                  <link rel="dns-prefetch" href="//api.homebase.com" />
 
          {/* Preconnect to critical origins */}
@@ -119,7 +122,7 @@ export default function RootLayout({
          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
          <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
          <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
-         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+         {/* Removed Unsplash preconnect to avoid failing DNS/requests */}
          <link rel="preconnect" href="https://api.homebase.com" crossOrigin="anonymous" />
 
         {/* ============================================================================
@@ -163,15 +166,22 @@ export default function RootLayout({
 
         {/* Product listing and detail patterns */}
         <link rel="prefetch" href="/products?category=electronics" as="document" />
-        <link rel="prefetch" href="/products?category=clothing" as="document" />
-        <link rel="prefetch" href="/products?category=home" as="document" />
+        <link rel="prefetch" href="/products?category=fashion" as="document" />
+        <link rel="prefetch" href="/products?category=home-living" as="document" />
 
         {/* ============================================================================
         MOBILE-OPTIMIZED RESOURCE HINTS
         ============================================================================ */}
 
-                 {/* Touch icons for mobile */}
-         <link rel="preload" href="/apple-touch-icon.png" as="image" type="image/png" />
+                 {/* Favicon and Touch Icons */}
+        <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" type="image/x-icon" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+        <meta name="theme-color" content="#2563eb" />
+        <meta name="msapplication-TileColor" content="#2563eb" />
+        <link rel="manifest" href="/manifest.json" />
 
         {/* Mobile-specific CSS */}
         <link rel="preload" href="/mobile.css" as="style" media="(max-width: 768px)" />
@@ -239,41 +249,42 @@ export default function RootLayout({
                  <ErrorBoundaryProvider>
            <Suspense fallback={<SimpleLoading timeout={15000} />}>
              <FirebaseAuthProvider>
-               <ToastProvider>
+               {/* <ToastProvider> */}
                  <StoreProvider>
                    <RoleChangeHandler>
                      <MobileOptimizationProvider>
-                       {/* Mobile-first navigation */}
-                       <div className="md:hidden">
-                         <MobileHeader />
-                       </div>
+                                               <MobileMenuProvider>
+                          {/* Unified Header with Top Utility Bar, Main Header, and Categories */}
+                          <ErrorBoundary>
+                            <UnifiedHeader />
+                          </ErrorBoundary>
 
-                       {/* Desktop navigation */}
-                       <div className="hidden md:block">
-                         <ConditionalNavigation />
-                       </div>
+                          {/* Desktop navigation - DISABLED - UnifiedHeader handles all navigation */}
+                          {/* <ConditionalNavigation /> */}
 
-                       {/* Main content with mobile-optimized spacing */}
-                       <main className="min-h-screen pb-20 md:pb-0">
-                         {children}
-                       </main>
+                          {/* Main content with proper spacing */}
+                          <main className="min-h-screen pb-20 lg:pb-0">
+                            {children}
+                          </main>
 
-                       {/* Mobile bottom navigation */}
-                       <div className="md:hidden">
-                         <BottomNavigation />
-                       </div>
+                          {/* Unified bottom navigation */}
+                          <ErrorBoundary>
+                            <UnifiedBottomNav />
+                          </ErrorBoundary>
 
-                       {/* Desktop footer */}
-                       <div className="hidden md:block">
-                         <Footer />
-                       </div>
+                          {/* Desktop footer */}
+                          <div className="hidden lg:block">
+                            <Footer />
+                          </div>
+                        </MobileMenuProvider>
                      </MobileOptimizationProvider>
                    </RoleChangeHandler>
                  </StoreProvider>
-               </ToastProvider>
+               {/* </ToastProvider> */}
              </FirebaseAuthProvider>
            </Suspense>
          </ErrorBoundaryProvider>
+        {/* <Toaster /> */}
         <SpeedInsights />
 
         {/* ============================================================================

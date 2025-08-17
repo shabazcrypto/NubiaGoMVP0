@@ -17,6 +17,8 @@ import {
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
 import { logger } from '@/lib/utils/logger'
+// import { AuthenticatedUser } from '@/lib/types/auth'
+type AuthenticatedUser = any // Temporary fix
 
 export interface AdminProduct {
   id: string
@@ -63,6 +65,12 @@ export interface AdminProduct {
   createdAt: Date
   updatedAt: Date
   lastModifiedBy?: string
+  // New fields for secure IDOR
+  costPrice?: number
+  profitMargin?: number
+  wholesalePrice?: number
+  adminNotes?: string
+  internalRating?: number
 }
 
 export interface ProductStats {
@@ -102,12 +110,32 @@ export class AdminProductService {
   async getProducts(
     filters: ProductFilters = {},
     pageSize: number = 20,
-    lastDoc?: any
+    lastDoc?: any,
+    currentUser?: AuthenticatedUser // SECURITY: Add user context
   ): Promise<{ products: AdminProduct[]; lastDoc: any; hasMore: boolean }> {
     try {
+      // SECURITY: Enforce access control based on user role
+      if (!currentUser) {
+        throw new Error('Authentication required')
+      }
+
       let q = query(this.productsCollection, orderBy('createdAt', 'desc'), limit(pageSize))
       
-      // Apply filters
+      // CRITICAL SECURITY FIX: Enforce ownership - Suppliers can only see their own products
+      if (currentUser.role === 'supplier') {
+        q = query(q, where('supplier.id', '==', currentUser.uid))
+        // Remove supplier filter for suppliers (they can only see their own)
+        delete filters.supplier
+      }
+      
+      // Admins can see all products and apply supplier filters
+      if (currentUser.role === 'admin') {
+        if (filters.supplier) {
+          q = query(q, where('supplier.id', '==', filters.supplier))
+        }
+      }
+      
+      // Apply other filters
       if (filters.status) {
         q = query(q, where('status', '==', filters.status))
       }
@@ -118,10 +146,6 @@ export class AdminProductService {
       
       if (filters.category) {
         q = query(q, where('category', '==', filters.category))
-      }
-      
-      if (filters.supplier) {
-        q = query(q, where('supplier.id', '==', filters.supplier))
       }
       
       if (filters.isFeatured !== undefined) {
@@ -173,6 +197,9 @@ export class AdminProductService {
         )
       }
 
+      // SECURITY: Sanitize sensitive data based on user role
+      products = this.sanitizeProductsForUser(products, currentUser)
+
       const hasMore = snapshot.docs.length === pageSize
       const lastVisible = snapshot.docs[snapshot.docs.length - 1]
 
@@ -181,6 +208,31 @@ export class AdminProductService {
       logger.error('Error fetching products:', error)
       throw new Error('Failed to fetch products')
     }
+  }
+
+  // SECURITY: Sanitize products to remove sensitive information based on user role
+  private sanitizeProductsForUser(products: AdminProduct[], user: AuthenticatedUser): AdminProduct[] {
+    if (user.role === 'supplier') {
+      return products.map(product => ({
+        ...product,
+        // Remove sensitive supplier information for suppliers
+        supplier: { 
+          id: product.supplier.id, 
+          name: product.supplier.name,
+          email: product.supplier.email || ''
+        },
+        // Hide cost and profit information
+        costPrice: undefined,
+        profitMargin: undefined,
+        wholesalePrice: undefined,
+        // Hide internal admin fields
+        adminNotes: undefined,
+        internalRating: undefined
+      }))
+    }
+    
+    // Admins can see all data
+    return products
   }
 
   // Get product by ID

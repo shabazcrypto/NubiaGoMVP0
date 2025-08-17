@@ -30,7 +30,7 @@ export function useRoleChange(options: UseRoleChangeOptions = {}) {
     return () => {
       unsubscribe()
     }
-  }, [options.uid, options.onRoleChange])
+  }, [options.uid])
 
   // Function to change user role
   const changeRole = useCallback(async (

@@ -72,28 +72,28 @@ export default function StoreProvider({ children }: StoreProviderProps) {
 
   if (!isHydrated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative mb-8">
-            <div className="w-24 h-24 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl flex items-center justify-center mx-auto animate-pulse">
-              <div className="w-16 h-16 bg-white rounded-2xl animate-spin"></div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center max-w-sm">
+          {/* Simple, clean logo/icon */}
+          <div className="mb-6">
+            <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center mx-auto">
+              <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
-            <div className="absolute inset-0 w-24 h-24 border-4 border-transparent border-t-primary-600 border-r-secondary-600 rounded-3xl animate-spin mx-auto"></div>
           </div>
           
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
-              Initializing...
+          {/* Clean, simple text */}
+          <div className="space-y-2">
+            <h2 className="text-lg font-medium text-gray-900">
+              Loading...
             </h2>
-            <p className="text-xl text-gray-600 max-w-md mx-auto leading-relaxed">
-              Setting up your shopping experience
+            <p className="text-sm text-gray-500">
+              Please wait while we prepare your dashboard
             </p>
           </div>
           
-          <div className="flex justify-center space-x-2 mt-8">
-            <div className="w-3 h-3 bg-primary-600 rounded-full animate-bounce"></div>
-            <div className="w-3 h-3 bg-secondary-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-            <div className="w-3 h-3 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          {/* Simple progress bar */}
+          <div className="mt-6 w-full bg-gray-200 rounded-full h-1">
+            <div className="bg-gray-900 h-1 rounded-full animate-pulse" style={{ width: '60%' }}></div>
           </div>
         </div>
       </div>

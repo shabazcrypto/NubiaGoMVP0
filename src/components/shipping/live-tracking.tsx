@@ -189,7 +189,7 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
         clearInterval(intervalRef.current)
       }
     }
-  }, [isRealTime, tracking])
+  }, [isRealTime])
 
   // Initialize map
   useEffect(() => {
@@ -430,4 +430,6 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
       </div>
     </div>
   )
-} 
+}
+
+export { LiveOrderTracking as LiveTracking }

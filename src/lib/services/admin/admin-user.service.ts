@@ -19,6 +19,8 @@ import { User } from '@/types'
 import { logger } from '@/lib/utils/logger'
 
 export interface AdminUser extends User {
+  uid: string
+  displayName?: string
   lastLoginAt?: Date
   loginCount?: number
   isOnline?: boolean
@@ -317,11 +319,14 @@ export class AdminUserService {
         // Apply search filter if specified
         if (filters.search) {
           const searchLower = filters.search.toLowerCase()
-          const filteredUsers = users.filter(user => 
-            user.displayName?.toLowerCase().includes(searchLower) ||
-            user.email.toLowerCase().includes(searchLower) ||
-            user.uid.toLowerCase().includes(searchLower)
-          )
+          const filteredUsers = users.filter(user => {
+            const nameLower = (user.displayName ?? (user as any).name ?? '').toLowerCase()
+            return (
+              nameLower.includes(searchLower) ||
+              user.email.toLowerCase().includes(searchLower) ||
+              (user.uid ?? '').toLowerCase().includes(searchLower)
+            )
+          })
           callback(filteredUsers)
         } else {
           callback(users)

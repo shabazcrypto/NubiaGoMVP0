@@ -1,9 +1,128 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import { AdminUserService, AdminUser, UserStats, UserFilters } from '@/lib/services/admin/admin-user.service'
-import { AdminProductService, AdminProduct, ProductStats, ProductFilters } from '@/lib/services/admin/admin-product.service'
-import { AdminOrderService, AdminOrder, OrderStats, OrderFilters } from '@/lib/services/admin/admin-order.service'
-import { AdminSupplierService, AdminSupplier, SupplierStats, SupplierFilters } from '@/lib/services/admin/admin-supplier.service'
+
+// TEMPORARY: Mock types since Firebase is disabled
+interface AdminUser {
+  uid: string
+  displayName: string
+  name?: string
+  email: string
+  role: 'customer' | 'supplier' | 'admin'
+  status: 'active' | 'pending' | 'suspended'
+  phoneNumber?: string
+  createdAt: Date
+  lastLoginAt?: Date
+  updatedAt?: Date
+}
+
+interface AdminProduct {
+  id: string
+  name: string
+  description?: string
+  price: number
+  status: 'active' | 'inactive' | 'draft'
+  approvalStatus: 'approved' | 'pending' | 'rejected'
+  supplierId: string
+  supplier?: { name: string }
+  category: string
+  stock?: number
+  submittedAt?: Date
+}
+
+interface AdminOrder {
+  id: string
+  customer: { name: string; email: string }
+  totalAmount: number
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  items?: Array<{ productName: string }>
+  supplier?: { name: string }
+  paymentMethod?: string
+  createdAt: Date
+}
+
+interface AdminSupplier {
+  id: string
+  name: string
+  businessName?: string
+  email: string
+  ownerName?: string
+  ownerEmail?: string
+  ownerPhone?: string
+  businessType?: string
+  categories?: string[]
+  status: 'active' | 'pending' | 'suspended' | 'approved' | 'rejected'
+  approvalStatus: 'approved' | 'pending' | 'rejected'
+  verificationStatus: {
+    email: boolean
+    phone: boolean
+    business: boolean
+  }
+  businessMetrics?: {
+    totalOrders: number
+    totalRevenue: number
+    averageRating: number
+  }
+}
+
+interface UserStats {
+  totalUsers: number
+  activeUsers: number
+  pendingUsers: number
+  suspendedUsers: number
+  totalSuppliers: number
+  totalAdmins: number
+  totalCustomers: number
+  newUsersThisMonth: number
+  activeUsersThisWeek: number
+}
+
+interface ProductStats {
+  totalProducts: number
+  activeProducts: number
+  pendingApproval: number
+  lowStockProducts: number
+  outOfStockProducts: number
+  totalCategories: number
+  totalSuppliers: number
+  averagePrice: number
+  totalSales: number
+  featuredProducts: number
+}
+
+interface OrderStats {
+  totalOrders: number
+  pendingOrders: number
+  processingOrders: number
+  shippedOrders: number
+  deliveredOrders: number
+  cancelledOrders: number
+  totalRevenue: number
+  averageOrderValue: number
+  totalCommission: number
+  ordersThisMonth: number
+  revenueThisMonth: number
+  ordersThisWeek: number
+  revenueThisWeek: number
+}
+
+interface SupplierStats {
+  totalSuppliers: number
+  approvedSuppliers: number
+  pendingSuppliers: number
+  rejectedSuppliers: number
+  suspendedSuppliers: number
+  totalRevenue: number
+  averageRating: number
+  totalProducts: number
+  activeCategories: number
+  newSuppliersThisMonth: number
+  topPerformingSuppliers: number
+}
+
+type UserFilters = Record<string, any>
+type ProductFilters = Record<string, any>
+type OrderFilters = Record<string, any>
+type SupplierFilters = Record<string, any>
 
 interface AdminDashboardState {
   // User Management
@@ -98,17 +217,146 @@ interface AdminDashboardState {
   unsubscribeFromRealTimeUpdates: () => void
 }
 
-// Service instances
-const userService = new AdminUserService()
-const productService = new AdminProductService()
-const orderService = new AdminOrderService()
-const supplierService = new AdminSupplierService()
+// TEMPORARY: Mock data since Firebase is disabled
+const mockUsers: AdminUser[] = [
+  {
+    uid: '1',
+    displayName: 'John Doe',
+    name: 'John Doe',
+    email: 'john@example.com',
+    role: 'customer',
+    status: 'active',
+    phoneNumber: '+1234567890',
+    createdAt: new Date('2024-01-01'),
+    lastLoginAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-15')
+  },
+  {
+    uid: '2',
+    displayName: 'Jane Smith',
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    role: 'supplier',
+    status: 'active',
+    phoneNumber: '+1234567891',
+    createdAt: new Date('2024-01-02'),
+    lastLoginAt: new Date('2024-01-14'),
+    updatedAt: new Date('2024-01-14')
+  },
+  {
+    uid: '3',
+    displayName: 'Admin User',
+    name: 'Admin User',
+    email: 'admin@example.com',
+    role: 'admin',
+    status: 'active',
+    phoneNumber: '+1234567892',
+    createdAt: new Date('2024-01-01'),
+    lastLoginAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-15')
+  }
+]
 
-// Subscription cleanup functions
-let userSubscription: (() => void) | null = null
-let productSubscription: (() => void) | null = null
-let orderSubscription: (() => void) | null = null
-let supplierSubscription: (() => void) | null = null
+const mockProducts: AdminProduct[] = [
+  {
+    id: '1',
+    name: 'Sample Product 1',
+    description: 'High-quality electronics product',
+    price: 29.99,
+    status: 'active',
+    approvalStatus: 'approved',
+    supplierId: '2',
+    supplier: { name: 'GreenTech Solutions' },
+    category: 'Electronics',
+    stock: 50,
+    submittedAt: new Date('2024-01-05')
+  },
+  {
+    id: '2',
+    name: 'Sample Product 2',
+    description: 'Premium home and garden item',
+    price: 49.99,
+    status: 'active',
+    approvalStatus: 'approved',
+    supplierId: '2',
+    supplier: { name: 'GreenTech Solutions' },
+    category: 'Home & Garden',
+    stock: 25,
+    submittedAt: new Date('2024-01-06')
+  }
+]
+
+const mockOrders: AdminOrder[] = [
+  {
+    id: '1',
+    customer: { name: 'John Doe', email: 'john@example.com' },
+    totalAmount: 79.98,
+    status: 'delivered',
+    items: [{ productName: 'Sample Product 1' }],
+    supplier: { name: 'GreenTech Solutions' },
+    paymentMethod: 'Credit Card',
+    createdAt: new Date('2024-01-10')
+  },
+  {
+    id: '2',
+    customer: { name: 'Jane Smith', email: 'jane@example.com' },
+    totalAmount: 29.99,
+    status: 'processing',
+    items: [{ productName: 'Sample Product 2' }],
+    supplier: { name: 'GreenTech Solutions' },
+    paymentMethod: 'PayPal',
+    createdAt: new Date('2024-01-12')
+  }
+]
+
+const mockSuppliers: AdminSupplier[] = [
+  {
+    id: '1',
+    name: 'TechCorp Ltd',
+    businessName: 'TechCorp Ltd',
+    email: 'contact@techcorp.com',
+    ownerName: 'John Tech',
+    ownerEmail: 'john@techcorp.com',
+    ownerPhone: '+1234567893',
+    businessType: 'Technology',
+    categories: ['Electronics', 'Software'],
+    status: 'approved',
+    approvalStatus: 'approved',
+    verificationStatus: {
+      email: true,
+      phone: true,
+      business: true
+    },
+    businessMetrics: {
+      totalOrders: 150,
+      totalRevenue: 25000,
+      averageRating: 4.8
+    }
+  },
+  {
+    id: '2',
+    name: 'GreenTech Solutions',
+    businessName: 'GreenTech Solutions',
+    email: 'info@greentech.com',
+    ownerName: 'Sarah Green',
+    ownerEmail: 'sarah@greentech.com',
+    ownerPhone: '+1234567894',
+    businessType: 'Home & Garden',
+    categories: ['Home & Garden', 'Electronics'],
+    status: 'approved',
+    approvalStatus: 'approved',
+    verificationStatus: {
+      email: true,
+      phone: true,
+      business: true
+    },
+    businessMetrics: {
+      totalOrders: 75,
+      totalRevenue: 15000,
+      averageRating: 4.5
+    }
+  }
+]
 
 export const useAdminDashboardStore = create<AdminDashboardState>()(
   devtools(
@@ -117,15 +365,15 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         // Initial State
         users: [],
         userStats: {
-          totalUsers: 0,
-          activeUsers: 0,
+          totalUsers: 3,
+          activeUsers: 3,
           pendingUsers: 0,
           suspendedUsers: 0,
-          totalSuppliers: 0,
-          totalAdmins: 0,
-          totalCustomers: 0,
-          newUsersThisMonth: 0,
-          activeUsersThisWeek: 0
+          totalSuppliers: 1,
+          totalAdmins: 1,
+          totalCustomers: 1,
+          newUsersThisMonth: 1,
+          activeUsersThisWeek: 2
         },
         userFilters: {},
         selectedUsers: [],
@@ -134,16 +382,16 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         products: [],
         productStats: {
-          totalProducts: 0,
-          activeProducts: 0,
+          totalProducts: 2,
+          activeProducts: 2,
           pendingApproval: 0,
           lowStockProducts: 0,
           outOfStockProducts: 0,
-          totalCategories: 0,
-          totalSuppliers: 0,
-          averagePrice: 0,
-          totalSales: 0,
-          featuredProducts: 0
+          totalCategories: 2,
+          totalSuppliers: 1,
+          averagePrice: 39.99,
+          totalSales: 79.98,
+          featuredProducts: 2
         },
         productFilters: {},
         selectedProducts: [],
@@ -152,19 +400,19 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         orders: [],
         orderStats: {
-          totalOrders: 0,
+          totalOrders: 2,
           pendingOrders: 0,
-          processingOrders: 0,
+          processingOrders: 1,
           shippedOrders: 0,
-          deliveredOrders: 0,
+          deliveredOrders: 1,
           cancelledOrders: 0,
-          totalRevenue: 0,
-          averageOrderValue: 0,
-          totalCommission: 0,
-          ordersThisMonth: 0,
-          revenueThisMonth: 0,
-          ordersThisWeek: 0,
-          revenueThisWeek: 0
+          totalRevenue: 109.97,
+          averageOrderValue: 54.99,
+          totalCommission: 10.99,
+          ordersThisMonth: 2,
+          revenueThisMonth: 109.97,
+          ordersThisWeek: 1,
+          revenueThisWeek: 29.99
         },
         orderFilters: {},
         selectedOrders: [],
@@ -173,17 +421,17 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         suppliers: [],
         supplierStats: {
-          totalSuppliers: 0,
-          approvedSuppliers: 0,
+          totalSuppliers: 2,
+          approvedSuppliers: 2,
           pendingSuppliers: 0,
           rejectedSuppliers: 0,
           suspendedSuppliers: 0,
-          totalRevenue: 0,
-          averageRating: 0,
-          totalProducts: 0,
-          activeCategories: 0,
-          newSuppliersThisMonth: 0,
-          topPerformingSuppliers: 0
+          totalRevenue: 15000,
+          averageRating: 4.5,
+          totalProducts: 15,
+          activeCategories: 8,
+          newSuppliersThisMonth: 1,
+          topPerformingSuppliers: 2
         },
         supplierFilters: {},
         selectedSuppliers: [],
@@ -199,23 +447,28 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         // User Actions
         fetchUsers: async (filters = {}) => {
           try {
-            set({ userLoading: true, userError: null })
-            const result = await userService.getUsers(filters)
+            set({ userLoading: true, userError: null, loading: true })
+            // TEMPORARY: Return mock data since Firebase is disabled
+            await new Promise(resolve => setTimeout(resolve, 500)) // Simulate API delay
             set({ 
-              users: result.users, 
+              users: mockUsers, 
               userLoading: false 
             })
+            get().checkAllDataLoaded()
           } catch (error) {
             set({ 
               userError: error instanceof Error ? error.message : 'Failed to fetch users', 
               userLoading: false 
             })
+            get().checkAllDataLoaded()
           }
         },
 
         updateUserRole: async (uid, newRole, newStatus, adminId, reason) => {
           try {
-            await userService.updateUserRole(uid, newRole, newStatus, adminId, reason)
+            // TEMPORARY: Mock update since Firebase is disabled
+            console.log('Mock: Updating user role', { uid, newRole, newStatus, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh users after update
             await get().fetchUsers(get().userFilters)
           } catch (error) {
@@ -228,7 +481,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         bulkUpdateUsers: async (userIds, updates, adminId, reason) => {
           try {
-            await userService.bulkUpdateUsers(userIds, updates, adminId, reason)
+            // TEMPORARY: Mock bulk update since Firebase is disabled
+            console.log('Mock: Bulk updating users', { userIds, updates, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh users after update
             await get().fetchUsers(get().userFilters)
             set({ selectedUsers: [] })
@@ -242,7 +497,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         deleteUser: async (uid, adminId, reason) => {
           try {
-            await userService.deleteUser(uid, adminId, reason)
+            // TEMPORARY: Mock delete since Firebase is disabled
+            console.log('Mock: Deleting user', { uid, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh users after delete
             await get().fetchUsers(get().userFilters)
           } catch (error) {
@@ -260,23 +517,28 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         // Product Actions
         fetchProducts: async (filters = {}) => {
           try {
-            set({ productLoading: true, productError: null })
-            const result = await productService.getProducts(filters)
+            set({ productLoading: true, productError: null, loading: true })
+            // TEMPORARY: Return mock data since Firebase is disabled
+            await new Promise(resolve => setTimeout(resolve, 500)) // Simulate API delay
             set({ 
-              products: result.products, 
+              products: mockProducts, 
               productLoading: false 
             })
+            get().checkAllDataLoaded()
           } catch (error) {
             set({ 
               productError: error instanceof Error ? error.message : 'Failed to fetch products', 
               productLoading: false 
             })
+            get().checkAllDataLoaded()
           }
         },
 
         updateProductApproval: async (productId, approvalStatus, adminId, notes) => {
           try {
-            await productService.updateProductApproval(productId, approvalStatus, adminId, notes)
+            // TEMPORARY: Mock update since Firebase is disabled
+            console.log('Mock: Updating product approval', { productId, approvalStatus, adminId, notes })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh products after update
             await get().fetchProducts(get().productFilters)
           } catch (error) {
@@ -289,7 +551,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         updateProductStatus: async (productId, newStatus, adminId, reason) => {
           try {
-            await productService.updateProductStatus(productId, newStatus, adminId, reason)
+            // TEMPORARY: Mock update since Firebase is disabled
+            console.log('Mock: Updating product status', { productId, newStatus, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh products after update
             await get().fetchProducts(get().productFilters)
           } catch (error) {
@@ -302,7 +566,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         bulkUpdateProducts: async (productIds, updates, adminId, reason) => {
           try {
-            await productService.bulkUpdateProducts(productIds, updates, adminId, reason)
+            // TEMPORARY: Mock bulk update since Firebase is disabled
+            console.log('Mock: Bulk updating products', { productIds, updates, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh products after update
             await get().fetchProducts(get().productFilters)
             set({ selectedProducts: [] })
@@ -316,7 +582,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         deleteProduct: async (productId, adminId, reason) => {
           try {
-            await productService.deleteProduct(productId, adminId, reason)
+            // TEMPORARY: Mock delete since Firebase is disabled
+            console.log('Mock: Deleting product', { productId, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh products after delete
             await get().fetchProducts(get().productFilters)
           } catch (error) {
@@ -334,23 +602,28 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         // Order Actions
         fetchOrders: async (filters = {}) => {
           try {
-            set({ orderLoading: true, orderError: null })
-            const result = await orderService.getOrders(filters)
+            set({ orderLoading: true, orderError: null, loading: true })
+            // TEMPORARY: Return mock data since Firebase is disabled
+            await new Promise(resolve => setTimeout(resolve, 500)) // Simulate API delay
             set({ 
-              orders: result.orders, 
+              orders: mockOrders, 
               orderLoading: false 
             })
+            get().checkAllDataLoaded()
           } catch (error) {
             set({ 
               orderError: error instanceof Error ? error.message : 'Failed to fetch orders', 
               orderLoading: false 
             })
+            get().checkAllDataLoaded()
           }
         },
 
         updateOrderStatus: async (orderId, newStatus, adminId, notes, trackingNumber) => {
           try {
-            await orderService.updateOrderStatus(orderId, newStatus, adminId, notes, trackingNumber)
+            // TEMPORARY: Mock update since Firebase is disabled
+            console.log('Mock: Updating order status', { orderId, newStatus, adminId, notes, trackingNumber })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh orders after update
             await get().fetchOrders(get().orderFilters)
           } catch (error) {
@@ -363,7 +636,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         cancelOrder: async (orderId, adminId, reason, refundAmount) => {
           try {
-            await orderService.cancelOrder(orderId, adminId, reason, refundAmount)
+            // TEMPORARY: Mock cancel since Firebase is disabled
+            console.log('Mock: Cancelling order', { orderId, adminId, reason, refundAmount })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh orders after update
             await get().fetchOrders(get().orderFilters)
           } catch (error) {
@@ -376,7 +651,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         processRefund: async (orderId, adminId, refundAmount, reason) => {
           try {
-            await orderService.processRefund(orderId, adminId, refundAmount, reason)
+            // TEMPORARY: Mock refund since Firebase is disabled
+            console.log('Mock: Processing refund', { orderId, adminId, refundAmount, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh orders after update
             await get().fetchOrders(get().orderFilters)
           } catch (error) {
@@ -389,7 +666,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         bulkUpdateOrders: async (orderIds, updates, adminId, reason) => {
           try {
-            await orderService.bulkUpdateOrders(orderIds, updates, adminId, reason)
+            // TEMPORARY: Mock bulk update since Firebase is disabled
+            console.log('Mock: Bulk updating orders', { orderIds, updates, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh orders after update
             await get().fetchOrders(get().orderFilters)
             set({ selectedOrders: [] })
@@ -408,23 +687,28 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         // Supplier Actions
         fetchSuppliers: async (filters = {}) => {
           try {
-            set({ supplierLoading: true, supplierError: null })
-            const result = await supplierService.getSuppliers(filters)
+            set({ supplierLoading: true, supplierError: null, loading: true })
+            // TEMPORARY: Return mock data since Firebase is disabled
+            await new Promise(resolve => setTimeout(resolve, 500)) // Simulate API delay
             set({ 
-              suppliers: result.suppliers, 
+              suppliers: mockSuppliers, 
               supplierLoading: false 
             })
+            get().checkAllDataLoaded()
           } catch (error) {
             set({ 
               supplierError: error instanceof Error ? error.message : 'Failed to fetch suppliers', 
               supplierLoading: false 
             })
+            get().checkAllDataLoaded()
           }
         },
 
         updateSupplierApproval: async (supplierId, approvalStatus, adminId, notes) => {
           try {
-            await supplierService.updateSupplierApproval(supplierId, approvalStatus, adminId, notes)
+            // TEMPORARY: Mock update since Firebase is disabled
+            console.log('Mock: Updating supplier approval', { supplierId, approvalStatus, adminId, notes })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
           } catch (error) {
@@ -437,7 +721,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         suspendSupplier: async (supplierId, adminId, reason, duration) => {
           try {
-            await supplierService.suspendSupplier(supplierId, adminId, reason, duration)
+            // TEMPORARY: Mock suspend since Firebase is disabled
+            console.log('Mock: Suspending supplier', { supplierId, adminId, reason, duration })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
           } catch (error) {
@@ -450,7 +736,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         reactivateSupplier: async (supplierId, adminId, reason) => {
           try {
-            await supplierService.reactivateSupplier(supplierId, adminId, reason)
+            // TEMPORARY: Mock reactivate since Firebase is disabled
+            console.log('Mock: Reactivating supplier', { supplierId, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
           } catch (error) {
@@ -463,7 +751,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         updateVerificationStatus: async (supplierId, verificationType, verified, adminId, notes) => {
           try {
-            await supplierService.updateVerificationStatus(supplierId, verificationType, verified, adminId, notes)
+            // TEMPORARY: Mock update since Firebase is disabled
+            console.log('Mock: Updating verification status', { supplierId, verificationType, verified, adminId, notes })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
           } catch (error) {
@@ -476,7 +766,9 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         bulkUpdateSuppliers: async (supplierIds, updates, adminId, reason) => {
           try {
-            await supplierService.bulkUpdateSuppliers(supplierIds, updates, adminId, reason)
+            // TEMPORARY: Mock bulk update since Firebase is disabled
+            console.log('Mock: Bulk updating suppliers', { supplierIds, updates, adminId, reason })
+            await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
             set({ selectedSuppliers: [] })
@@ -501,60 +793,21 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
 
         // Real-time subscriptions
         subscribeToRealTimeUpdates: () => {
-          // Subscribe to user updates
-          userSubscription = userService.subscribeToUsers(get().userFilters, (users) => {
-            set({ users })
-          })
-
-          // Subscribe to product updates
-          productSubscription = productService.subscribeToProducts(get().productFilters, (products) => {
-            set({ products })
-          })
-
-          // Subscribe to order updates
-          orderSubscription = orderService.subscribeToOrders(get().orderFilters, (orders) => {
-            set({ orders })
-          })
-
-          // Subscribe to supplier updates
-          supplierSubscription = supplierService.subscribeToSuppliers(get().supplierFilters, (suppliers) => {
-            set({ suppliers })
-          })
-
-          // Subscribe to stats updates
-          userService.subscribeToUserStats((stats) => {
-            set({ userStats: stats })
-          })
-
-          productService.subscribeToProductStats((stats) => {
-            set({ productStats: stats })
-          })
-
-          orderService.subscribeToOrderStats((stats) => {
-            set({ orderStats: stats })
-          })
-
-          supplierService.subscribeToSupplierStats((stats) => {
-            set({ supplierStats: stats })
-          })
+          // TEMPORARY: Mock real-time updates since Firebase is disabled
+          console.log('Mock real-time updates enabled')
         },
 
         unsubscribeFromRealTimeUpdates: () => {
-          if (userSubscription) {
-            userSubscription()
-            userSubscription = null
-          }
-          if (productSubscription) {
-            productSubscription()
-            productSubscription = null
-          }
-          if (orderSubscription) {
-            orderSubscription()
-            orderSubscription = null
-          }
-          if (supplierSubscription) {
-            supplierSubscription()
-            supplierSubscription = null
+          // TEMPORARY: Mock cleanup since Firebase is disabled
+          console.log('Mock real-time updates disabled')
+        },
+
+        // Helper function to check if all data is loaded
+        checkAllDataLoaded: () => {
+          const state = get()
+          const allLoaded = !state.userLoading && !state.supplierLoading && !state.orderLoading && !state.productLoading
+          if (allLoaded) {
+            set({ loading: false })
           }
         }
       }),

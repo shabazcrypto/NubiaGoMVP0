@@ -59,9 +59,9 @@ export class SearchService {
 
       if (filters?.availability) {
         if (filters.availability === 'in-stock') {
-          products = products.filter(product => product.stock > 0)
+          products = products.filter(product => (product.stock ?? 0) > 0)
         } else if (filters.availability === 'out-of-stock') {
-          products = products.filter(product => product.stock === 0)
+          products = products.filter(product => (product.stock ?? 0) === 0)
         }
       }
 

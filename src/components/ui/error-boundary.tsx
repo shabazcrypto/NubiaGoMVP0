@@ -468,7 +468,7 @@ export function AuthErrorBoundary({ children, ...props }: Props) {
           </p>
           <div className="flex gap-2">
             <Button
-              onClick={() => window.location.href = '/auth/login'}
+              onClick={() => window.location.href = '/login'}
               size="sm"
               variant="outline"
               className="text-red-700 border-red-300 hover:bg-red-100"

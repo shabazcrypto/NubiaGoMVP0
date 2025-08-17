@@ -3,10 +3,11 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Heart, Share2, Save, Eye, Star, Truck, Shield, CreditCard, Clock, Tag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { formatPrice } from '@/lib/utils'
+import { CURRENCY } from '@/lib/constants'
 import Image from 'next/image'
 import Link from 'next/link'
-import Recommendations from './recommendations'
 
 interface CartItem {
   id: string
@@ -70,14 +71,17 @@ const ShoppingCart = React.memo(function ShoppingCart({
     items.reduce((sum, item) => sum + item.quantity, 0), 
     [items]
   )
-  const shipping = useMemo(() => 
-    subtotal > 50 ? 0 : 5.99, 
+  const FREE_SHIP_THRESHOLD = 50
+  const SHIPPING_FLAT = 5.99
+  const TAX_RATE = 0.08
+  const shipping = useMemo(() =>
+    subtotal > FREE_SHIP_THRESHOLD ? 0 : SHIPPING_FLAT,
     [subtotal]
-  ) // Free shipping over $50
-  const tax = useMemo(() => 
-    subtotal * 0.08, 
+  )
+  const tax = useMemo(() =>
+    subtotal * TAX_RATE,
     [subtotal]
-  ) // 8% tax
+  )
   const total = useMemo(() => 
     subtotal + shipping + tax, 
     [subtotal, shipping, tax]
@@ -189,15 +193,15 @@ const ShoppingCart = React.memo(function ShoppingCart({
                         {/* Price and Savings */}
                         <div className="flex items-center gap-2 mt-2">
                           <span className="text-sm font-semibold text-gray-900">
-                            ${item.price.toFixed(2)}
+                            {formatPrice(item.price, CURRENCY.CODE)}
                           </span>
                           {item.originalPrice && item.originalPrice > item.price && (
                             <>
                               <span className="text-xs text-gray-500 line-through">
-                                ${item.originalPrice.toFixed(2)}
+                                {formatPrice(item.originalPrice, CURRENCY.CODE)}
                               </span>
                               <span className="text-xs text-green-600 font-medium">
-                                Save ${(item.originalPrice - item.price).toFixed(2)}
+                                Save {formatPrice(item.originalPrice - item.price, CURRENCY.CODE)}
                               </span>
                             </>
                           )}
@@ -367,12 +371,12 @@ const ShoppingCart = React.memo(function ShoppingCart({
             </div>
 
             {/* Shipping Info */}
-            {subtotal < 50 && (
+            {subtotal < FREE_SHIP_THRESHOLD && (
               <div className="mt-4 p-3 bg-primary-50 rounded-lg">
                 <div className="flex items-center gap-2">
                   <Truck className="h-4 w-4 text-primary-600" />
                   <p className="text-sm text-primary-800">
-                    Add ${(50 - subtotal).toFixed(2)} more to get free shipping!
+                    Add {formatPrice(FREE_SHIP_THRESHOLD - subtotal, CURRENCY.CODE)} more to get free shipping!
                   </p>
                 </div>
               </div>
@@ -387,16 +391,7 @@ const ShoppingCart = React.memo(function ShoppingCart({
         </>
       )}
 
-      {/* Recommendations Section */}
-      {items.length > 0 && (
-        <div className="border-t border-gray-200 p-4">
-          <Recommendations 
-            cartItems={items}
-            onAddToCart={onAddToCart}
-            onAddToWishlist={onAddToWishlist}
-          />
-        </div>
-      )}
+      {/* Recommendations Section removed for products page */}
     </div>
   )
 })

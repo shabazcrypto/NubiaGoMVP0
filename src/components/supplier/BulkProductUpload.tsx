@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { formatPrice } from '@/lib/utils'
+import { CURRENCY } from '@/lib/constants'
 import { 
   Upload, Download, FileText, X, CheckCircle, AlertCircle, 
   Info, ArrowDown, Plus, Trash2, Eye, Edit, Save
@@ -361,7 +363,7 @@ export default function BulkProductUpload() {
                     {product.category}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ₦{product.price.toLocaleString()}
+                    {formatPrice(product.price, CURRENCY.CODE)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {product.stock}

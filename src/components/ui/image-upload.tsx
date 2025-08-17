@@ -2,9 +2,10 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import { useImageUpload } from '@/hooks/useImageUpload';
-import { ImageCategory, IMAGE_CONFIG, formatFileSize } from '@/lib/image-utils';
+import { ImageCategory, localImageService } from '@/lib/services/local-image.service';
 import { Upload, X, CheckCircle, AlertCircle, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ErrorBoundary } from './error-boundary';
 
 interface ImageUploadProps {
   category: ImageCategory;
@@ -187,8 +188,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
               }
             </p>
             <p className="text-xs text-gray-400 mt-2">
-              Max file size: {formatFileSize(IMAGE_CONFIG.maxFileSize)} • 
-              Supported: {IMAGE_CONFIG.allowedTypes.join(', ')}
+              Max file size: 5MB • 
+              Supported: JPG, PNG, WEBP
             </p>
           </div>
         </div>
@@ -258,7 +259,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 
                 <div className="mt-2">
                   <p className="text-xs text-gray-600 truncate">{file.name}</p>
-                  <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
+                  <p className="text-xs text-gray-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                 </div>
               </div>
             ))}

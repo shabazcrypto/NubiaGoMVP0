@@ -24,32 +24,59 @@ export function RealTimeChat() {
 
   // WebSocket connection
   useEffect(() => {
-    // Simulate WebSocket connection
-    const connectWebSocket = () => {
-      console.log('Connecting to chat server...')
-      setIsConnected(true)
-      
-      // Simulate receiving messages
-      const interval = setInterval(() => {
-        if (Math.random() > 0.8) {
-          const mockMessage: Omit<ChatMessage, 'id' | 'timestamp'> = {
-            content: 'This is a simulated real-time message',
-            senderId: 'other-user',
-            senderName: 'John Doe',
-            senderType: 'customer',
-            messageType: 'text',
-            isRead: false
-          }
-          addMessage(mockMessage)
-        }
-      }, 5000)
+    if (!user?.uid || !currentRoom) return
 
-      return () => clearInterval(interval)
+    const connectWebSocket = () => {
+      console.log('Connecting to real-time chat server...')
+      
+      // Use Firebase Firestore real-time listeners
+      const setupFirebaseListener = async () => {
+        try {
+          const { db } = await import('@/lib/firebase/config')
+          const { collection, query, where, onSnapshot, orderBy } = await import('firebase/firestore')
+          
+          const messagesRef = collection(db, 'chat_messages')
+          const q = query(
+            messagesRef,
+            where('roomId', '==', currentRoom.id),
+            orderBy('timestamp', 'asc')
+          )
+
+          const unsubscribe = onSnapshot(q, (snapshot) => {
+            const newMessages: ChatMessage[] = []
+            snapshot.docChanges().forEach((change) => {
+              if (change.type === 'added') {
+                const messageData = change.doc.data()
+                newMessages.push({
+                  id: change.doc.id,
+                  ...messageData
+                } as ChatMessage)
+              }
+            })
+            
+            if (newMessages.length > 0) {
+              newMessages.forEach(message => addMessage(message))
+            }
+          })
+
+          setIsConnected(true)
+          return unsubscribe
+        } catch (error) {
+          console.error('Failed to connect to Firebase chat:', error)
+          setIsConnected(false)
+          return () => {}
+        }
+      }
+
+      return setupFirebaseListener()
     }
 
-    const cleanup = connectWebSocket()
-    return cleanup
-  }, [addMessage])
+    const cleanupPromise = connectWebSocket()
+    
+    return () => {
+      cleanupPromise.then(cleanup => cleanup())
+    }
+  }, [user?.uid, currentRoom?.id, addMessage])
 
   // Filter rooms based on search
   useEffect(() => {

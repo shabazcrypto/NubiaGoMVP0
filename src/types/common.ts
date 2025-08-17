@@ -35,14 +35,31 @@ export interface ApiError extends AppError {
 // ========================================
 
 export interface User {
+  // Identifiers
   id: string
+  uid?: string
+
+  // Basic info
   email: string
   name?: string
-  role: 'customer' | 'supplier' | 'admin'
+  displayName?: string
   avatar?: string
-  createdAt: Date
-  lastLogin?: Date
+
+  // Auth/role/status
+  role: 'customer' | 'supplier' | 'admin'
   isVerified: boolean
+  emailVerified?: boolean
+  status?: 'active' | 'suspended' | 'pending'
+
+  // Timestamps
+  createdAt: Date
+  updatedAt?: Date
+  lastLogin?: Date
+
+  // Contact
+  phoneNumber?: string
+
+  // Preferences
   preferences?: UserPreferences
 }
 
@@ -78,6 +95,15 @@ export interface Product {
   price: number
   currency: string
   category: string
+  // Optional commerce fields used across services/UI
+  sku?: string
+  brand?: string
+  stock?: number
+  imageUrl?: string
+  thumbnailUrl?: string
+  originalPrice?: number
+  subcategory?: string
+  isFeatured?: boolean
   images: string[]
   tags: string[]
   specifications: Record<string, string>
@@ -126,12 +152,12 @@ export interface ProductSearchResult {
 // ========================================
 
 export interface CartItem {
-  id: string
+  id?: string
   productId: string
   product: Product
   quantity: number
   price: number
-  addedAt: Date
+  addedAt?: Date
 }
 
 export interface Cart {
@@ -157,10 +183,34 @@ export interface Order {
   userId: string
   items: OrderItem[]
   total: number
+  subtotal?: number
+  tax?: number
+  shipping?: number
   status: OrderStatus
   paymentStatus: PaymentStatus
   shippingAddress: Address
   billingAddress: Address
+  paymentMethod?: string
+  trackingNumber?: string
+  notes?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+// ========================================
+// WISHLIST TYPES
+// ========================================
+
+export interface WishlistItem {
+  productId: string
+  product: Product
+  addedAt: Date
+}
+
+export interface Wishlist {
+  id: string
+  userId: string
+  items: WishlistItem[]
   createdAt: Date
   updatedAt: Date
 }

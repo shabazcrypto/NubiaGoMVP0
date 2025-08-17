@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Send, Paperclip, Smile, MoreVertical, Phone, Video, Search, User, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
 interface Message {
   id: string

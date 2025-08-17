@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { getImagePath, validateImagePath } from './image-utils'
+import { localImageService } from './services/local-image.service'
 
 export interface SupplierImage {
   id: string

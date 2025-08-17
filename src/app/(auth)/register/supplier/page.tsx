@@ -282,7 +282,7 @@ export default function RegisterSupplierPage() {
             </div>
 
             <div className="mt-6 text-center">
-              <Link href="/auth/login" className="font-medium text-primary-600 hover:text-primary-500">
+              <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
                 Sign in to your account
               </Link>
             </div>

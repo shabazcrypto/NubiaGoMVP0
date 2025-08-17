@@ -114,7 +114,7 @@ export function ConnectionAwareLoader<T>({
 
   useEffect(() => {
     loadData()
-  }, [loadData])
+  }, [])
 
   // Show offline component if offline and no cached data
   if (!networkInfo.online && !data && offlineComponent) {

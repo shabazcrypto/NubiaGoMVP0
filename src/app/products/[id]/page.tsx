@@ -189,12 +189,12 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
               {/* Stock Status */}
               <div className="mb-4">
                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                  product.stock > 0 
+                  (product.stock ?? 0) > 0 
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}>
-                  <div className={`w-2 h-2 rounded-full mr-2 ${product.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                  {product.stock > 0 ? `In Stock (${product.stock})` : 'Out of Stock'}
+                  <div className={`w-2 h-2 rounded-full mr-2 ${(product.stock ?? 0) > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                  {(product.stock ?? 0) > 0 ? `In Stock (${product.stock})` : 'Out of Stock'}
                 </span>
               </div>
 

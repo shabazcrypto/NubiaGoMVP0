@@ -108,7 +108,7 @@ export class LogisticsService {
     toAddress: ShippingAddress,
     packages: ShippingPackage[]
   ): Promise<ShippingRate[]> {
-    switch (api.provider.toLowerCase()) {
+    switch ((api.provider || '').toLowerCase()) {
       case 'fedex':
         return await this.getFedExRates(api, fromAddress, toAddress, packages)
       case 'ups':
@@ -138,7 +138,7 @@ export class LogisticsService {
         },
         body: JSON.stringify({
           accountNumber: {
-            value: api.config.accountNumber || '111111111'
+            value: (api.config?.accountNumber) || '111111111'
           },
           rateRequestControlParameters: {
             returnTransitTimes: true,
@@ -489,13 +489,13 @@ export class LogisticsService {
   async getTrackingInfo(trackingNumber: string, carrierCode: string): Promise<TrackingInfo | null> {
     try {
       const activeApis = await this.getActiveLogisticsApis()
-      const api = activeApis.find(a => a.provider.toLowerCase() === carrierCode.toLowerCase())
+      const api = activeApis.find(a => (a.provider || '').toLowerCase() === carrierCode.toLowerCase())
       
       if (!api) {
         throw new Error(`No active API found for carrier: ${carrierCode}`)
       }
 
-      switch (api.provider.toLowerCase()) {
+      switch ((api.provider || '').toLowerCase()) {
         case 'fedex':
           return await this.getFedExTracking(api, trackingNumber)
         case 'ups':
@@ -696,7 +696,7 @@ export class LogisticsService {
       return data
     } catch (error) {
       console.error('Generic tracking failed:', error)
-      return this.getMockTrackingInfo(trackingNumber, api.provider)
+      return this.getMockTrackingInfo(trackingNumber, api.provider || 'unknown')
     }
   }
 
@@ -763,7 +763,7 @@ export class LogisticsService {
         trackingNumber: data.output.trackingNumber,
         labelUrl: data.output.labelUrl,
         labelFormat: 'pdf',
-        carrier: api.provider,
+        carrier: api.provider || 'unknown',
         serviceCode,
         createdAt: new Date()
       }

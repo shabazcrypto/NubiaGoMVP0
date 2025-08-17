@@ -1,97 +1,87 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ============================================================================
-  // VERCEL HOSTING CONFIGURATION
+  // ULTRA-FAST DEVELOPMENT CONFIGURATION
   // ============================================================================
   
-  // ============================================================================
-  // IMAGE OPTIMIZATION FOR VERCEL
-  // ============================================================================
+  // Disable image optimization in development for speed
   images: {
-    unoptimized: false,
-    formats: ['image/webp', 'image/avif'],
-    deviceSizes: [320, 480, 640, 750, 828, 1080, 1200],
-    imageSizes: [16, 24, 32, 48, 64, 96, 128, 256],
-    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
-    loader: 'default',
+    unoptimized: true,
     dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
-        port: '',
-        pathname: '/**',
-      },
-    ],
+    domains: ['localhost'],
   },
 
   // ============================================================================
-  // COMPILER OPTIMIZATION
+  // COMPILER OPTIMIZATION - MINIMAL FOR SPEED
   // ============================================================================
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: false, // Keep console in dev
   },
 
   // ============================================================================
-  // PERFORMANCE OPTIMIZATIONS
+  // PERFORMANCE OPTIMIZATIONS - MAXIMUM SPEED
   // ============================================================================
-  // Enable output file tracing for better bundle analysis
-  outputFileTracing: true,
-  
-  // Enable static optimization
   trailingSlash: false,
-  
-  // Optimize bundle generation
   generateEtags: false,
-  
-  // Enable compression
-  compress: true,
-  
-  // Optimize powered by header
+  compress: false,
   poweredByHeader: false,
+  
+  // Disable slower features
+  reactStrictMode: false,
 
   // ============================================================================
-  // EXPERIMENTAL FEATURES
+  // EXPERIMENTAL FEATURES - SPEED FOCUSED
   // ============================================================================
   experimental: {
-    // Temporarily disabled to fix router error
-    // webpackBuildWorker: true,
-    // optimizeCss: true,
-    optimizePackageImports: [
-      '@headlessui/react', 
-      '@heroicons/react', 
-      'lucide-react',
-      'framer-motion',
-      'react-hook-form',
-      'react-intersection-observer',
-      'react-spring',
-      '@react-spring/web',
-      'react-swipeable',
-      'zustand',
-      'firebase/app',
-      'firebase/auth',
-      'firebase/firestore',
-      'firebase/storage',
-      'date-fns',
-      'uuid',
-      '@hookform/resolvers',
-      'zod'
-    ],
-    // Enable SWC minification for better performance
-    swcMinify: true,
+    webpackBuildWorker: false,
+    optimizeCss: false,
+    optimizePackageImports: [],
   },
 
   // ============================================================================
-  // WEBPACK OPTIMIZATION
+  // TURBOPACK CONFIGURATION (Stable in Next.js 15+)
   // ============================================================================
-  webpack: (config, { dev, isServer, webpack }) => {
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
+
+  // ============================================================================
+  // WEBPACK OPTIMIZATION - ULTRA-FAST DEVELOPMENT
+  // ============================================================================
+  webpack: (config, { dev, isServer }) => {
+    // Aggressive development optimizations
+    if (dev) {
+      // Use fastest source maps
+      config.devtool = 'eval'
+      
+      // Disable all optimizations in development
+      config.optimization = {
+        ...config.optimization,
+        removeAvailableModules: false,
+        removeEmptyChunks: false,
+        splitChunks: false,
+        minimize: false,
+        concatenateModules: false,
+        usedExports: false,
+        sideEffects: false,
+      }
+      
+      // Fastest possible file watching
+      config.watchOptions = {
+        poll: false,
+        aggregateTimeout: 50,
+        ignored: ['**/node_modules/**', '**/.next/**', '**/.git/**', '**/public/**'],
+      }
+
+      // Disable cache for faster initial compilation
+      config.cache = false
+    }
+
     // Handle Node.js modules for server-side code
     if (isServer) {
       config.externals = config.externals || []
@@ -176,16 +166,6 @@ const nextConfig = {
       }
     }
 
-    // Development optimizations
-    if (dev) {
-      // Enable fast refresh for better development experience
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'react-dom$': 'react-dom/profiling',
-        'scheduler/tracing': 'scheduler/tracing-profiling',
-      }
-    }
-
     return config
   },
 
@@ -193,6 +173,7 @@ const nextConfig = {
   // HEADERS & CACHING OPTIMIZATION
   // ============================================================================
   async headers() {
+    if (process.env.NODE_ENV === 'development') return []
     return [
       {
         source: '/(.*)',
@@ -237,10 +218,8 @@ const nextConfig = {
   // ============================================================================
   async rewrites() {
     return [
-      {
-        source: '/api/:path*',
-        destination: '/api/:path*',
-      },
+      // Keep API passthrough
+      { source: '/api/:path*', destination: '/api/:path*' },
     ]
   },
 }

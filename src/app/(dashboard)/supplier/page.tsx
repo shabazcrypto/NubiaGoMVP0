@@ -149,7 +149,7 @@ export default function SupplierDashboard() {
   // Handle view reports
   const handleViewReports = () => {
     // Navigate to reports page
-    router.push('/supplier/reports')
+    router.push('/supplier')
   }
 
           // Handle add product
@@ -172,7 +172,7 @@ export default function SupplierDashboard() {
   // Handle logout
   const handleLogout = () => {
     if (confirm('Are you sure you want to logout?')) {
-      router.push('/auth/login')
+      router.push('/login')
     }
   }
 

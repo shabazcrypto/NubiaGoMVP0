@@ -49,7 +49,7 @@ export class EmailService {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #2563eb;">Welcome to NubiaGo!</h2>
-          <p>Dear ${user.displayName || 'Valued Supplier'},</p>
+        <p>Dear ${(user as any).displayName || user.name || 'Valued Supplier'},</p>
           <p>Thank you for registering as a supplier on NubiaGo. Your application has been received and is currently under review.</p>
           
           <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -71,7 +71,7 @@ export class EmailService {
       text: `
         Welcome to NubiaGo!
         
-        Dear ${user.displayName || 'Valued Supplier'},
+      Dear ${(user as any).displayName || user.name || 'Valued Supplier'},
         
         Thank you for registering as a supplier on NubiaGo. Your application has been received and is currently under review.
         
@@ -103,7 +103,7 @@ export class EmailService {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #059669;">🎉 Your Account is Approved!</h2>
-          <p>Dear ${user.displayName || 'Valued Supplier'},</p>
+        <p>Dear ${(user as any).displayName || user.name || 'Valued Supplier'},</p>
           <p>Great news! Your supplier account has been approved and is now active on NubiaGo.</p>
           
           <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #059669;">
@@ -132,7 +132,7 @@ export class EmailService {
       text: `
         Congratulations! Your Account is Approved!
         
-        Dear ${user.displayName || 'Valued Supplier'},
+      Dear ${(user as any).displayName || user.name || 'Valued Supplier'},
         
         Great news! Your supplier account has been approved and is now active on NubiaGo.
         
@@ -172,7 +172,7 @@ export class EmailService {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #dc2626;">Application Status Update</h2>
-          <p>Dear ${user.displayName || 'Valued Applicant'},</p>
+        <p>Dear ${(user as any).displayName || user.name || 'Valued Applicant'},</p>
           <p>Thank you for your interest in becoming a supplier on NubiaGo. After careful review of your application, we regret to inform you that we are unable to approve your supplier account at this time.</p>
           
           <div style="background-color: #fef2f2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc2626;">
@@ -198,7 +198,7 @@ export class EmailService {
       text: `
         Application Status Update
         
-        Dear ${user.displayName || 'Valued Applicant'},
+      Dear ${(user as any).displayName || user.name || 'Valued Applicant'},
         
         Thank you for your interest in becoming a supplier on NubiaGo. After careful review of your application, we regret to inform you that we are unable to approve your supplier account at this time.
         
@@ -237,7 +237,7 @@ export class EmailService {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #dc2626;">Account Suspension Notice</h2>
-          <p>Dear ${user.displayName || 'Valued User'},</p>
+        <p>Dear ${(user as any).displayName || user.name || 'Valued User'},</p>
           <p>We regret to inform you that your NubiaGo account has been suspended due to a violation of our terms of service.</p>
           
           <div style="background-color: #fef2f2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc2626;">
@@ -269,7 +269,7 @@ export class EmailService {
       text: `
         Account Suspension Notice
         
-        Dear ${user.displayName || 'Valued User'},
+      Dear ${(user as any).displayName || user.name || 'Valued User'},
         
         We regret to inform you that your NubiaGo account has been suspended due to a violation of our terms of service.
         
@@ -308,7 +308,7 @@ export class EmailService {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #059669;">🎉 Welcome Back!</h2>
-          <p>Dear ${user.displayName || 'Valued User'},</p>
+        <p>Dear ${(user as any).displayName || user.name || 'Valued User'},</p>
           <p>Great news! Your NubiaGo account has been reactivated and you can now access all features and services.</p>
           
           <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #059669;">
@@ -339,7 +339,7 @@ export class EmailService {
       text: `
         Welcome Back!
         
-        Dear ${user.displayName || 'Valued User'},
+      Dear ${(user as any).displayName || user.name || 'Valued User'},
         
         Great news! Your NubiaGo account has been reactivated and you can now access all features and services.
         

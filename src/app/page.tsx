@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ImageWithFallback } from '@/components/ui/image-with-fallback'
+// Direct Next.js Image components - no layers
 import { 
   Laptop, 
   Shirt, 
@@ -24,6 +24,7 @@ import PullToRefresh from '@/components/mobile/PullToRefresh'
 import MobileHomepage from '@/components/mobile/MobileHomepage'
 import { useEffect, useState } from 'react'
 import TestConnection from './test-connection'
+import PlaceholderDemo from '@/components/ui/PlaceholderDemo'
 
 // ============================================================================
 // HERO SECTION
@@ -72,7 +73,7 @@ function HeroSection() {
               
               {/* Clean Category Items */}
               <div className="space-y-3">
-                <Link href="/products?category=Electronics" className="group flex items-center space-x-3 p-3 rounded-lg bg-primary-50 border border-primary-100 hover:bg-primary-100 hover:border-primary-200 transition-all duration-200">
+                <Link href={{ pathname: '/products', query: { category: 'electronics' } }} className="group flex items-center space-x-3 p-3 rounded-lg bg-primary-50 border border-primary-100 hover:bg-primary-100 hover:border-primary-200 transition-all duration-200">
                   <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
                     <Laptop className="h-5 w-5 text-white" />
                   </div>
@@ -83,7 +84,7 @@ function HeroSection() {
                   <span className="text-primary-600 font-medium text-xs">120K+</span>
                 </Link>
                 
-                <Link href="/products?category=Fashion" className="group flex items-center space-x-3 p-3 rounded-lg bg-pink-50 border border-pink-100 hover:bg-pink-100 hover:border-pink-200 transition-all duration-200">
+                <Link href={{ pathname: '/products', query: { category: 'fashion' } }} className="group flex items-center space-x-3 p-3 rounded-lg bg-pink-50 border border-pink-100 hover:bg-pink-100 hover:border-pink-200 transition-all duration-200">
                   <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-pink-600 rounded-lg flex items-center justify-center">
                     <Shirt className="h-5 w-5 text-white" />
                   </div>
@@ -94,7 +95,7 @@ function HeroSection() {
                   <span className="text-pink-600 font-medium text-xs">85K+</span>
                 </Link>
                 
-                <Link href="/products?category=Home & Living" className="group flex items-center space-x-3 p-3 rounded-lg bg-green-50 border border-green-100 hover:bg-green-100 hover:border-green-200 transition-all duration-200">
+                <Link href={{ pathname: '/products', query: { category: 'home-living' } }} className="group flex items-center space-x-3 p-3 rounded-lg bg-green-50 border border-green-100 hover:bg-green-100 hover:border-green-200 transition-all duration-200">
                   <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center">
                     <Home className="h-5 w-5 text-white" />
                   </div>
@@ -105,7 +106,7 @@ function HeroSection() {
                   <span className="text-green-600 font-medium text-xs">65K+</span>
                 </Link>
                 
-                <Link href="/products?category=Health & Beauty" className="group flex items-center space-x-3 p-3 rounded-lg bg-purple-50 border border-purple-100 hover:bg-purple-100 hover:border-purple-200 transition-all duration-200">
+                <Link href={{ pathname: '/products', query: { category: 'health-wellness' } }} className="group flex items-center space-x-3 p-3 rounded-lg bg-purple-50 border border-purple-100 hover:bg-purple-100 hover:border-purple-200 transition-all duration-200">
                   <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
                     <HealthIcon className="h-5 w-5 text-white" />
                   </div>
@@ -233,7 +234,7 @@ function HeroSection() {
             {/* Call to Action */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Link 
-                href="/products" 
+                href={{ pathname: '/products' }} 
                 className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold px-6 py-3 rounded-lg text-base transition-all duration-300 hover:shadow-xl hover:scale-105 text-center"
               >
                 Start Shopping Now
@@ -263,42 +264,42 @@ function NewArrivalsSection() {
       id: '1',
       name: 'Wireless Bluetooth Headphones',
       price: '$85K',
-      image: '/product-tech-1.jpg',
+      image: '/product-tech-1.svg',
       badge: 'New'
     },
     {
       id: '2',
       name: 'Organic Cotton T-Shirt',
       price: '$45K',
-      image: '/product-fashion-1.jpg',
+      image: '/product-headphones-1.svg',
       badge: 'Hot'
     },
     {
       id: '3',
       name: 'Complete Skincare Set',
       price: '$32K',
-      image: '/product-tech-1.jpg',
+      image: '/product-cosmetics-1.svg',
       badge: 'Hot'
     },
     {
       id: '4',
       name: 'Smart Fitness Watch',
       price: '$120K',
-      image: '/product-accessories-1.jpg',
+      image: '/product-watch-1.svg',
       badge: 'New'
     },
     {
       id: '5',
       name: 'Modern Wall Art',
       price: '$28K',
-      image: '/product-lifestyle-1.jpg',
+      image: '/product-home-1.svg',
       badge: 'Hot'
     },
     {
       id: '6',
       name: 'Designer Sunglasses',
       price: '$65K',
-      image: '/product-home-1.jpg',
+      image: '/product-accessories-1.svg',
       badge: 'New'
     }
   ]
@@ -326,8 +327,8 @@ function NewArrivalsSection() {
             <div key={product.id} className="bg-white rounded-2xl border border-neutral-200 shadow-soft overflow-hidden">
               <div className="relative aspect-[4/5] overflow-hidden">
                 <Link href={`/products/${product.id}`}>
-                  <ImageWithFallback
-                    src={product.image}
+                  <Image
+                    src={product.id === '1' ? '/product-tech-1.jpg' : product.id === '2' ? '/product-accessories-1.jpg' : product.id === '3' ? '/product-cosmetics-1.jpg' : product.id === '4' ? '/product-watch-1.jpg' : product.id === '5' ? '/product-home-1.jpg' : '/product-fashion-1.jpg'}
                     alt={product.name}
                     width={400}
                     height={500}
@@ -376,7 +377,7 @@ function NewArrivalsSection() {
 
         {/* CTA */}
         <div className="text-center mt-16">
-          <Link href="/products" className="inline-flex items-center px-8 py-4 bg-primary-600 text-white font-semibold rounded-2xl shadow-medium">
+              <Link href={{ pathname: '/products' }} className="inline-flex items-center px-8 py-4 bg-primary-600 text-white font-semibold rounded-2xl shadow-medium">
             View All New Arrivals
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -397,51 +398,51 @@ function ShopByCategoriesSection() {
     {
       id: 1,
       name: 'Women',
-              image: '/category-electronics.jpg',
+              image: '/category-cosmetics.svg',
       count: '750+ Products',
-      href: '/products?category=Women'
+      href: { pathname: '/products', query: { category: 'women' } }
     },
     {
       id: 2,
       name: 'Men',
-              image: '/category-men.jpg',
+              image: '/category-men.svg',
       count: '600+ Products',
-      href: '/products?category=Men'
+      href: { pathname: '/products', query: { category: 'men' } }
     },
     {
       id: 3,
       name: 'Mother & Child',
-              image: '/category-mother-child.jpg',
+              image: '/category-mother-child.svg',
       count: '450+ Products',
-      href: '/products?category=Mother & Child'
+      href: { pathname: '/products', query: { category: 'mother-child' } }
     },
     {
       id: 4,
       name: 'Home & Living',
-              image: '/category-home-living.jpg',
+              image: '/category-home-living.svg',
       count: '500+ Products',
-      href: '/products?category=Home & Living'
+      href: { pathname: '/products', query: { category: 'home-living' } }
     },
     {
       id: 5,
       name: 'Cosmetics',
-              image: '/product-lipstick-1.jpg',
+              image: '/category-cosmetics.svg',
       count: '400+ Products',
-      href: '/products?category=Cosmetics'
+      href: { pathname: '/products', query: { category: 'beauty-cosmetics' } }
     },
     {
       id: 6,
       name: 'Shoes & Bags',
-              image: '/category-shoes-bags.jpg',
+              image: '/category-shoes-bags.svg',
       count: '350+ Products',
-      href: '/products?category=Shoes & Bags'
+      href: { pathname: '/products', query: { category: 'shoes-bags' } }
     },
     {
       id: 7,
       name: 'Electronics',
-              image: '/category-electronics-2.jpg',
+              image: '/category-electronics-2.svg',
       count: '600+ Products',
-      href: '/products?category=Electronics'
+      href: { pathname: '/products', query: { category: 'electronics' } }
     }
   ]
 
@@ -454,7 +455,7 @@ function ShopByCategoriesSection() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {categories.map((category) => (
+            {categories.map((category) => (
             <Link
               key={category.id}
               href={category.href}
@@ -462,10 +463,11 @@ function ShopByCategoriesSection() {
             >
               <div className="relative aspect-[4/3]">
                 <Image
-                  src={category.image}
+                  src={category.id === 1 ? '/category-cosmetics.jpg' : category.id === 2 ? '/category-men.jpg' : category.id === 3 ? '/category-mother-child.jpg' : category.id === 4 ? '/category-home-living.jpg' : category.id === 5 ? '/category-cosmetics.jpg' : category.id === 6 ? '/category-shoes-bags.jpg' : '/category-electronics.jpg'}
                   alt={category.name}
-                  fill
-                  className="object-cover"
+                  width={400}
+                  height={300}
+                  className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                   <div className="p-4 text-white">
@@ -516,40 +518,40 @@ function FashionCollectionSection() {
 
             {/* Product Previews - Larger and More Prominent */}
             <div className="grid grid-cols-4 gap-3">
-              <Link href="/products?category=Fashion" className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <Link href={{ pathname: '/products', query: { category: 'fashion' } }} className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <Image
-                  src="/ui-logo-1.jpg"
-                  alt="Denim Jacket"
+                  src="/product-fashion-1.jpg"
+                  alt="Fashion Item"
                   width={120}
                   height={120}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Link>
-              <Link href="/products?category=Fashion" className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <Link href={{ pathname: '/products', query: { category: 'fashion' } }} className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <Image
-                  src="/ui-logo-2.jpg"
-                  alt="Casual Wear"
+                  src="/product-bag-1.jpg"
+                  alt="Fashion Bag"
                   width={120}
                   height={120}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Link>
-              <Link href="/products?category=Fashion" className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <Link href={{ pathname: '/products', query: { category: 'fashion' } }} className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <Image
-                  src="/ui-logo-3.jpg"
-                  alt="Sneakers"
+                  src="/product-shoes-1.jpg"
+                  alt="Fashion Shoes"
                   width={120}
                   height={120}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Link>
-              <Link href="/products?category=Fashion" className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <Link href={{ pathname: '/products', query: { category: 'fashion' } }} className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <Image
-                  src="/ui-logo-4.jpg"
-                  alt="Accessories"
+                  src="/product-watch-1.jpg"
+                  alt="Fashion Watch"
                   width={120}
                   height={120}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -565,7 +567,7 @@ function FashionCollectionSection() {
 
             {/* Premium CTA */}
             <div className="flex items-center space-x-4">
-              <Link href="/products?category=Fashion" className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+              <Link href={{ pathname: '/products', query: { category: 'fashion' } }} className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
                 Shop Collection
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -582,13 +584,14 @@ function FashionCollectionSection() {
           {/* Hero Image - Larger and More Impactful */}
           <div className="relative group">
             <div className="relative rounded-3xl overflow-hidden shadow-[0_20px_60px_rgb(0,0,0,0.15)] hover:shadow-[0_30px_80px_rgb(0,0,0,0.25)] transition-all duration-500 hover:-translate-y-2">
-              <Link href="/products?category=Fashion">
+              <Link href={{ pathname: '/products', query: { category: 'fashion' } }}>
                 <Image
                   src="/ui-hero-banner.jpg"
                   alt="Fashion Collection Showcase"
-                  width={700}
-                  height={500}
                   className="w-full h-[500px] lg:h-[600px] object-cover group-hover:scale-105 transition-transform duration-700"
+                  width={1200}
+                  height={600}
+                  priority={true}
                 />
               </Link>
               {/* Gradient Overlay */}
@@ -635,7 +638,8 @@ function ShopOurOffersSection() {
       category: 'Girls Clothing',
       price: '$24.99',
       originalPrice: '$39.99',
-              image: '/product-bag-2.jpg',
+      productCategory: 'fashion',
+      variant: 2,
       badge: 'Sale'
     },
     {
@@ -644,7 +648,8 @@ function ShopOurOffersSection() {
       category: 'Boys Clothing',
       price: '$18.99',
       originalPrice: '$29.99',
-              image: '/product-watch-3.jpg',
+      productCategory: 'fashion',
+      variant: 0,
       badge: 'Sale'
     },
     {
@@ -653,7 +658,8 @@ function ShopOurOffersSection() {
       category: 'Kids Shoes',
       price: '$32.99',
       originalPrice: '$49.99',
-              image: '/product-logo-1.jpg',
+      productCategory: 'shoes',
+      variant: 2,
       badge: 'Sale'
     },
     {
@@ -662,7 +668,8 @@ function ShopOurOffersSection() {
       category: 'Baby Clothing',
       price: '$16.99',
       originalPrice: '$24.99',
-              image: '/product-clothing-1.jpg',
+      productCategory: 'fashion',
+      variant: 1,
       badge: 'Sale'
     },
     {
@@ -670,7 +677,8 @@ function ShopOurOffersSection() {
       title: 'Cozy Winter Jacket',
       category: 'Winter Wear',
       price: '$45.99',
-              image: '/product-brand-1.jpg',
+      productCategory: 'accessories',
+      variant: 2,
       badge: 'New'
     }
   ]
@@ -694,7 +702,7 @@ function ShopOurOffersSection() {
             <Link key={offer.id} href={`/products/${offer.id}`} className="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
               <div className="relative">
                 <Image
-                  src={offer.image}
+                  src={offer.id === 1 ? '/product-fashion-1.jpg' : offer.id === 2 ? '/product-clothing-1.jpg' : offer.id === 3 ? '/product-shoes-1.jpg' : offer.id === 4 ? '/product-bag-1.jpg' : '/product-accessories-1.jpg'}
                   alt={offer.title}
                   width={300}
                   height={200}
@@ -737,7 +745,7 @@ function TestimonialsSection() {
       id: 1,
       name: 'Sarah Johnson',
       role: 'Fashion Enthusiast',
-              avatar: '/avatar-user-5.jpg',
+              avatar: '/avatar-user-5.svg',
       content: 'Amazing quality products and lightning-fast delivery! The customer service is exceptional.',
       rating: 5,
       location: 'Lagos, Nigeria'
@@ -746,7 +754,7 @@ function TestimonialsSection() {
       id: 2,
       name: 'David Chen',
       role: 'Tech Professional',
-              avatar: '/avatar-user-2.jpg',
+              avatar: '/avatar-user-2.svg',
       content: 'Found exactly what I was looking for at great prices. Highly recommend this platform!',
       rating: 5,
       location: 'Nairobi, Kenya'
@@ -755,7 +763,7 @@ function TestimonialsSection() {
       id: 3,
       name: 'Amina Hassan',
       role: 'Home Decor Lover',
-              avatar: '/avatar-user-3.jpg',
+              avatar: '/avatar-user-3.svg',
       content: 'The variety of products is incredible. I love how easy it is to find unique items.',
       rating: 5,
       location: 'Cairo, Egypt'
@@ -783,11 +791,11 @@ function TestimonialsSection() {
             <div key={testimonial.id} className="bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgb(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-2">
               <div className="flex items-center mb-6">
                 <Image
-                  src={testimonial.avatar}
+                  src={testimonial.id === 1 ? '/avatar-user-1.jpg' : testimonial.id === 2 ? '/avatar-user-2.jpg' : '/avatar-user-3.jpg'}
                   alt={testimonial.name}
-                  width={60}
-                  height={60}
-                  className="w-15 h-15 rounded-full object-cover"
+                  width={64}
+                  height={64}
+                  className="w-16 h-16 rounded-full object-cover"
                 />
                 <div className="ml-4">
                   <h3 className="font-semibold text-gray-900">{testimonial.name}</h3>
@@ -841,7 +849,7 @@ function FeaturedDealsSection() {
       title: 'Flash Sale',
       subtitle: 'Up to 70% Off',
       description: 'Limited time offer on selected items',
-              image: '/category-electronics.jpg',
+              image: '/category-electronics.svg',
       href: '/products?sale=flash',
       badge: 'Hot',
       endTime: '2 days left'
@@ -851,7 +859,7 @@ function FeaturedDealsSection() {
       title: 'New Arrivals',
       subtitle: 'Fresh Collection',
       description: 'Latest trends and styles',
-              image: '/category-men.jpg',
+              image: '/category-men.svg',
       href: '/products?new=true',
       badge: 'New',
       endTime: 'Limited stock'
@@ -861,7 +869,7 @@ function FeaturedDealsSection() {
       title: 'Clearance Sale',
       subtitle: 'Final Reduction',
       description: 'Last chance to grab amazing deals',
-              image: '/category-home-living.jpg',
+              image: '/category-home-living.svg',
       href: '/products?clearance=true',
       badge: 'Flash',
       endTime: '1 day left'
@@ -876,7 +884,7 @@ function FeaturedDealsSection() {
             <h2 className="text-4xl font-bold text-gray-900 mb-2">Featured Deals</h2>
             <p className="text-lg text-gray-600">Don't miss out on these incredible offers</p>
           </div>
-          <Link href="/products" className="flex items-center space-x-2 text-gray-900 font-semibold hover:text-primary-600 transition-colors mt-4 lg:mt-0">
+          <Link href={{ pathname: '/products' }} className="flex items-center space-x-2 text-gray-900 font-semibold hover:text-primary-600 transition-colors mt-4 lg:mt-0">
             View All Deals
             →
           </Link>
@@ -884,10 +892,10 @@ function FeaturedDealsSection() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {deals.map((deal) => (
-            <Link key={deal.id} href={deal.href} className="group relative overflow-hidden rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgb(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-3">
+            <Link key={deal.id} href={{ pathname: '/products', query: Object.fromEntries(new URLSearchParams(deal.href.split('?')[1] || '')) }} className="group relative overflow-hidden rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgb(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-3">
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src={deal.image}
+                  src={deal.id === 1 ? '/category-electronics.jpg' : deal.id === 2 ? '/category-men.jpg' : '/category-home-living.jpg'}
                   alt={deal.title}
                   width={400}
                   height={300}
@@ -985,6 +993,8 @@ export default function HomePage() {
     // Temporarily skip Firebase connection check to fix loading issue
     setConnectionStatus('fallback')
     
+    // Image diagnostics removed - no images to debug
+    
     // Add timeout to prevent infinite loading
     const timeout = setTimeout(() => {
       setLoadingTimeout(true)
@@ -999,13 +1009,27 @@ export default function HomePage() {
     window.location.href = `/search?q=${encodeURIComponent(query)}`
   }
 
-  // Handle category selection
+  // Handle category selection with mobile optimization
   const handleCategorySelect = (category: string) => {
-    if (category === 'all') {
-      window.location.href = '/products'
-    } else {
-      window.location.href = `/products?category=${encodeURIComponent(category)}`
+    const searchParams = new URLSearchParams()
+    
+    if (category !== 'all') {
+      searchParams.set('category', category)
     }
+    
+    // Add mobile flag for mobile devices
+    if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      if (isMobile) {
+        searchParams.set('mobile', 'true')
+      }
+    }
+    
+    const url = category === 'all' 
+      ? '/products' 
+      : `/products?${searchParams.toString()}`
+    
+    window.location.href = url
   }
 
   // Show loading state while detecting device
@@ -1041,6 +1065,11 @@ export default function HomePage() {
       <div className="fixed top-4 right-4 z-50">
         <TestConnection />
       </div>
+
+      {/* Placeholder Options Demo */}
+      <PlaceholderDemo />
+
+
 
       {/* Mobile homepage - only visible on mobile devices */}
       <div className="md:hidden">

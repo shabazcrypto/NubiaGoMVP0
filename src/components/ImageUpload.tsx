@@ -3,28 +3,68 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Upload, X, Image as ImageIcon, AlertCircle, CheckCircle } from 'lucide-react';
 
+// SECURITY: Secure file upload configuration
+const SECURE_UPLOAD_CONFIG = {
+  // Allowed file types with MIME type validation
+  ALLOWED_TYPES: new Set([
+    'image/jpeg',
+    'image/png', 
+    'image/webp',
+    'image/gif',
+    'image/svg+xml'
+  ]),
+  
+  // File size limits (5MB max)
+  MAX_FILE_SIZE: 5 * 1024 * 1024,
+  
+  // Magic bytes for file type validation
+  MAGIC_BYTES: {
+    jpeg: [0xFF, 0xD8, 0xFF],
+    png: [0x89, 0x50, 0x4E, 0x47],
+    webp: [0x52, 0x49, 0x46, 0x46],
+    gif: [0x47, 0x49, 0x46],
+    svg: [0x3C, 0x3F, 0x78, 0x6D, 0x6C] // <?xml
+  },
+  
+  // Maximum dimensions for images
+  MAX_DIMENSIONS: {
+    width: 4096,
+    height: 4096
+  },
+  
+  // Content validation
+  MIN_FILE_SIZE: 100, // 100 bytes minimum
+  MAX_FILENAME_LENGTH: 255
+};
+
 // ============================================================================
 // TYPES
 // ============================================================================
 
 export interface ImageUploadProps {
-  onImagesUploaded: (urls: string[]) => void;
+  onImagesChange: (images: string[]) => void;
   maxImages?: number;
-  maxFileSize?: number; // in bytes
+  maxFileSize?: number;
   allowedTypes?: string[];
-  storagePath: string;
+  storagePath?: string;
   className?: string;
   disabled?: boolean;
   showPreview?: boolean;
-  aspectRatio?: 'square' | '4/3' | '16/9' | 'free';
+  aspectRatio?: 'free' | '1:1' | '16:9' | '4:3';
 }
 
 export interface UploadProgress {
   file: File;
   progress: number;
   status: 'uploading' | 'success' | 'error';
-  error?: string;
   url?: string;
+  error?: string;
+}
+
+interface ValidationResult {
+  isValid: boolean;
+  error?: string;
+  warning?: string;
 }
 
 // ============================================================================
@@ -32,11 +72,11 @@ export interface UploadProgress {
 // ============================================================================
 
 export default function ImageUpload({
-  onImagesUploaded,
+  onImagesChange,
   maxImages = 5,
-  maxFileSize = 10 * 1024 * 1024, // 10MB
-  allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
-  storagePath,
+  maxFileSize = SECURE_UPLOAD_CONFIG.MAX_FILE_SIZE,
+  allowedTypes = Array.from(SECURE_UPLOAD_CONFIG.ALLOWED_TYPES),
+  storagePath = 'uploads',
   className = '',
   disabled = false,
   showPreview = true,
@@ -47,35 +87,188 @@ export default function ImageUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ============================================================================
-  // FILE VALIDATION
+  // SECURE FILE VALIDATION
   // ============================================================================
 
-  const validateFile = (file: File): { isValid: boolean; error?: string } => {
-    // Check file size
-    if (file.size > maxFileSize) {
-      return {
-        isValid: false,
-        error: `File size exceeds ${Math.round(maxFileSize / 1024 / 1024)}MB limit`
-      };
+  /**
+   * SECURITY: Comprehensive file validation with multiple security layers
+   */
+  const validateFile = async (file: File): Promise<ValidationResult> => {
+    try {
+      // 1. Basic file validation
+      if (!file || !(file instanceof File)) {
+        return { isValid: false, error: 'Invalid file object' };
+      }
+
+      // 2. File size validation
+      if (file.size < SECURE_UPLOAD_CONFIG.MIN_FILE_SIZE) {
+        return { isValid: false, error: 'File too small (minimum 100 bytes)' };
+      }
+
+      if (file.size > maxFileSize) {
+        return { isValid: false, error: `File size exceeds ${Math.round(maxFileSize / 1024 / 1024)}MB limit` };
+      }
+
+      // 3. Filename validation
+      if (file.name.length > SECURE_UPLOAD_CONFIG.MAX_FILENAME_LENGTH) {
+        return { isValid: false, error: 'Filename too long' };
+      }
+
+      // SECURITY: Prevent path traversal attacks
+      if (file.name.includes('..') || file.name.includes('/') || file.name.includes('\\')) {
+        return { isValid: false, error: 'Invalid filename' };
+      }
+
+      // 4. MIME type validation
+      if (!allowedTypes.includes(file.type)) {
+        return { isValid: false, error: `Invalid file type. Allowed: ${allowedTypes.join(', ')}` };
+      }
+
+      // 5. File extension validation
+      const extension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
+      
+      if (!extension || !allowedExtensions.includes(extension)) {
+        return { isValid: false, error: 'Invalid file extension' };
+      }
+
+      // 6. SECURITY: Magic bytes validation (file content verification)
+      const isValidContent = await validateFileContent(file);
+      if (!isValidContent.isValid) {
+        return { isValid: false, error: `File content validation failed: ${isValidContent.error}` };
+      }
+
+      // 7. Check if we've reached max images
+      if (uploadProgress.length >= maxImages) {
+        return { isValid: false, error: `Maximum ${maxImages} images allowed` };
+      }
+
+      // 8. SECURITY: Image dimension validation
+      if (file.type.startsWith('image/') && file.type !== 'image/svg+xml') {
+        const dimensions = await getImageDimensions(file);
+        if (dimensions) {
+          if (dimensions.width > SECURE_UPLOAD_CONFIG.MAX_DIMENSIONS.width || 
+              dimensions.height > SECURE_UPLOAD_CONFIG.MAX_DIMENSIONS.height) {
+            return { isValid: false, error: `Image dimensions too large (max: ${SECURE_UPLOAD_CONFIG.MAX_DIMENSIONS.width}x${SECURE_UPLOAD_CONFIG.MAX_DIMENSIONS.height})` };
+          }
+        }
+      }
+
+      return { isValid: true };
+    } catch (error) {
+      console.error('File validation error:', error);
+      return { isValid: false, error: 'File validation failed' };
+    }
+  };
+
+  /**
+   * SECURITY: Validate file content using magic bytes
+   */
+  const validateFileContent = async (file: File): Promise<ValidationResult> => {
+    try {
+      const buffer = await file.arrayBuffer();
+      const uint8Array = new Uint8Array(buffer);
+      
+      // Check magic bytes for different file types
+      const fileType = getFileTypeFromMagicBytes(uint8Array);
+      
+      if (!fileType) {
+        return { isValid: false, error: 'Unknown file type' };
+      }
+
+      // Verify MIME type matches magic bytes
+      const expectedMimeType = getMimeTypeFromExtension(fileType);
+      if (file.type !== expectedMimeType) {
+        return { isValid: false, error: 'File content does not match declared type' };
+      }
+
+      return { isValid: true };
+    } catch (error) {
+      console.error('Content validation error:', error);
+      return { isValid: false, error: 'Content validation failed' };
+    }
+  };
+
+  /**
+   * Get file type from magic bytes
+   */
+  const getFileTypeFromMagicBytes = (bytes: Uint8Array): string | null => {
+    // Check JPEG
+    if (bytes.length >= 3 && 
+        bytes[0] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.jpeg[0] &&
+        bytes[1] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.jpeg[1] &&
+        bytes[2] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.jpeg[2]) {
+      return 'jpeg';
     }
 
-    // Check file type
-    if (!allowedTypes.includes(file.type)) {
-      return {
-        isValid: false,
-        error: `Invalid file type. Allowed: ${allowedTypes.join(', ')}`
-      };
+    // Check PNG
+    if (bytes.length >= 4 &&
+        bytes[0] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.png[0] &&
+        bytes[1] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.png[1] &&
+        bytes[2] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.png[2] &&
+        bytes[3] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.png[3]) {
+      return 'png';
     }
 
-    // Check if we've reached max images
-    if (uploadProgress.length >= maxImages) {
-      return {
-        isValid: false,
-        error: `Maximum ${maxImages} images allowed`
-      };
+    // Check WebP
+    if (bytes.length >= 4 &&
+        bytes[0] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.webp[0] &&
+        bytes[1] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.webp[1] &&
+        bytes[2] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.webp[2] &&
+        bytes[3] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.webp[3]) {
+      return 'webp';
     }
 
-    return { isValid: true };
+    // Check GIF
+    if (bytes.length >= 3 &&
+        bytes[0] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.gif[0] &&
+        bytes[1] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.gif[1] &&
+        bytes[2] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.gif[2]) {
+      return 'gif';
+    }
+
+    // Check SVG (XML)
+    if (bytes.length >= 5 &&
+        bytes[0] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.svg[0] &&
+        bytes[1] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.svg[1] &&
+        bytes[2] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.svg[2] &&
+        bytes[3] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.svg[3] &&
+        bytes[4] === SECURE_UPLOAD_CONFIG.MAGIC_BYTES.svg[4]) {
+      return 'svg';
+    }
+
+    return null;
+  };
+
+  /**
+   * Get MIME type from file extension
+   */
+  const getMimeTypeFromExtension = (extension: string): string => {
+    const mimeTypes: Record<string, string> = {
+      'jpeg': 'image/jpeg',
+      'jpg': 'image/jpeg',
+      'png': 'image/png',
+      'webp': 'image/webp',
+      'gif': 'image/gif',
+      'svg': 'image/svg+xml'
+    };
+    return mimeTypes[extension] || 'application/octet-stream';
+  };
+
+  /**
+   * Get image dimensions for validation
+   */
+  const getImageDimensions = (file: File): Promise<{ width: number; height: number } | null> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve({ width: img.width, height: img.height });
+      };
+      img.onerror = () => {
+        resolve(null);
+      };
+      img.src = URL.createObjectURL(file);
+    });
   };
 
   // ============================================================================
@@ -83,8 +276,10 @@ export default function ImageUpload({
   // ============================================================================
 
   const uploadFile = async (file: File): Promise<string> => {
-    // Mock implementation
-    const fileName = `mock-${Date.now()}-${file.name}`;
+    // SECURITY: Additional server-side validation should be implemented here
+    // This is just a mock implementation for demonstration
+    
+    const fileName = `secure-${Date.now()}-${file.name}`;
     const path = `${storagePath}/${fileName}`;
     
     // Simulate upload delay
@@ -99,15 +294,15 @@ export default function ImageUpload({
     const validFiles: File[] = [];
     const errors: string[] = [];
 
-    // Validate files
-    fileArray.forEach(file => {
-      const validation = validateFile(file);
+    // SECURITY: Validate each file individually
+    for (const file of fileArray) {
+      const validation = await validateFile(file);
       if (validation.isValid) {
         validFiles.push(file);
       } else {
         errors.push(`${file.name}: ${validation.error}`);
       }
-    });
+    }
 
     // Show errors if any
     if (errors.length > 0) {
@@ -139,12 +334,12 @@ export default function ImageUpload({
               ? { ...item, progress: 100, status: 'success' as const, url }
               : item
           ));
-
+          
           return url;
         } catch (error) {
           setUploadProgress(prev => prev.map((item, i) => 
             i === progressIndex 
-              ? { ...item, progress: 0, status: 'error' as const, error: error instanceof Error ? error.message : 'Upload failed' }
+              ? { ...item, status: 'error' as const, error: 'Upload failed' }
               : item
           ));
           throw error;
@@ -152,12 +347,7 @@ export default function ImageUpload({
       });
 
       const urls = await Promise.all(uploadPromises);
-      const successfulUrls = urls.filter(url => url);
-      
-      if (successfulUrls.length > 0) {
-        onImagesUploaded(successfulUrls);
-      }
-
+      onImagesChange(urls);
     } catch (error) {
       console.error('Upload failed:', error);
     }

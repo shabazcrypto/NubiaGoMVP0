@@ -44,7 +44,7 @@ export function useInfiniteScroll({
         observerRef.current.disconnect()
       }
     }
-  }, [threshold, debounceMs, handleObserver])
+  }, [threshold, debounceMs])
 
   useEffect(() => {
     const observer = observerRef.current

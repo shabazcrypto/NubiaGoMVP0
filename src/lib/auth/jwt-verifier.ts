@@ -1,5 +1,5 @@
 // JWT verification utility for Edge Runtime
-// This works without Firebase Admin dependencies
+// SECURE IMPLEMENTATION - Fixed critical signature verification bypass
 
 interface JWTPayload {
   iss: string
@@ -23,12 +23,24 @@ interface VerificationResult {
   error?: string
 }
 
+interface JWTHeader {
+  alg: string
+  kid: string
+  typ: string
+}
+
 export class JWTVerifier {
   private static readonly FIREBASE_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
   private static readonly FIREBASE_AUTH_DOMAIN = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+  private static readonly PUBLIC_KEYS_URL = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
+  
+  // Cache for public keys to avoid repeated fetches
+  private static publicKeysCache: Record<string, string> = {}
+  private static cacheExpiry: number = 0
+  private static readonly CACHE_TTL = 60 * 60 * 1000 // 1 hour
 
   /**
-   * Verify Firebase JWT token
+   * Verify Firebase JWT token with proper signature verification
    */
   static async verifyToken(token: string): Promise<VerificationResult> {
     try {
@@ -63,7 +75,7 @@ export class JWTVerifier {
         return { valid: false, error: 'Invalid audience' }
       }
 
-      // Verify signature (simplified for Edge Runtime)
+      // CRITICAL FIX: Verify signature cryptographically
       if (!await this.verifySignature(token)) {
         return { valid: false, error: 'Invalid signature' }
       }
@@ -92,6 +104,26 @@ export class JWTVerifier {
       return decoded as JWTPayload
     } catch (error) {
       console.error('JWT decode error:', error)
+      return null
+    }
+  }
+
+  /**
+   * Decode JWT header to get algorithm and key ID
+   */
+  private static decodeJWTHeader(token: string): JWTHeader | null {
+    try {
+      const parts = token.split('.')
+      if (parts.length !== 3) {
+        return null
+      }
+
+      const header = parts[0]
+      const decoded = JSON.parse(atob(header))
+      
+      return decoded as JWTHeader
+    } catch (error) {
+      console.error('JWT header decode error:', error)
       return null
     }
   }
@@ -135,31 +167,38 @@ export class JWTVerifier {
   }
 
   /**
-   * Verify JWT signature (simplified implementation)
+   * SECURE IMPLEMENTATION: Verify JWT signature cryptographically
    */
   private static async verifySignature(token: string): Promise<boolean> {
     try {
-      // In a production environment, you would:
-      // 1. Fetch Firebase public keys from https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
-      // 2. Verify the signature using the appropriate public key
-      // 3. Check the key ID (kid) in the header
+      // 1. Decode header to get key ID and algorithm
+      const header = this.decodeJWTHeader(token)
+      if (!header || !header.kid || !header.alg) {
+        console.error('Invalid JWT header')
+        return false
+      }
+
+      // 2. Validate algorithm (only allow RS256)
+      if (header.alg !== 'RS256') {
+        console.error(`Unsupported algorithm: ${header.alg}`)
+        return false
+      }
+
+      // 3. Fetch Firebase public keys
+      const publicKeys = await this.fetchFirebasePublicKeys()
+      if (!publicKeys || !publicKeys[header.kid]) {
+        console.error(`Public key not found for kid: ${header.kid}`)
+        return false
+      }
+
+      // 4. Get the public key
+      const publicKey = publicKeys[header.kid]
       
-      // For now, we'll do basic validation
-      const parts = token.split('.')
-      if (parts.length !== 3) {
-        return false
-      }
-
-      // Check if the token has a valid structure
-      const header = JSON.parse(atob(parts[0]))
-      const payload = JSON.parse(atob(parts[1]))
-
-      // Basic checks
-      if (!header.alg || !header.kid) {
-        return false
-      }
-
-      if (!payload.iss || !payload.aud || !payload.sub) {
+      // 5. Verify signature using crypto module
+      const isValid = await this.verifyRSASignature(token, publicKey)
+      
+      if (!isValid) {
+        console.error('Signature verification failed')
         return false
       }
 
@@ -171,6 +210,139 @@ export class JWTVerifier {
   }
 
   /**
+   * Fetch Firebase public keys from Google's metadata endpoint
+   */
+  private static async fetchFirebasePublicKeys(): Promise<Record<string, string>> {
+    try {
+      // Check cache first
+      if (this.publicKeysCache && Object.keys(this.publicKeysCache).length > 0 && Date.now() < this.cacheExpiry) {
+        return this.publicKeysCache
+      }
+
+      // Fetch from Google's metadata endpoint
+      const response = await fetch(this.PUBLIC_KEYS_URL, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'NubiaGo-JWT-Verifier/1.0'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch public keys: ${response.status}`)
+      }
+
+      const keys = await response.json()
+      
+      // Cache the keys
+      this.publicKeysCache = keys
+      this.cacheExpiry = Date.now() + this.CACHE_TTL
+
+      return keys
+    } catch (error) {
+      console.error('Failed to fetch Firebase public keys:', error)
+      // Return cached keys if available, even if expired
+      return this.publicKeysCache || {}
+    }
+  }
+
+  /**
+   * Verify RSA signature using Web Crypto API
+   */
+  private static async verifyRSASignature(token: string, publicKeyPEM: string): Promise<boolean> {
+    try {
+      // Parse the JWT parts
+      const parts = token.split('.')
+      if (parts.length !== 3) {
+        return false
+      }
+
+      const header = parts[0]
+      const payload = parts[1]
+      const signature = parts[2]
+
+      // Create the data to verify (header.payload)
+      const data = `${header}.${payload}`
+      
+      // Convert PEM to ArrayBuffer
+      const publicKeyBuffer = this.pemToArrayBuffer(publicKeyPEM)
+      
+      // Import the public key
+      const cryptoKey = await crypto.subtle.importKey(
+        'spki',
+        publicKeyBuffer,
+        {
+          name: 'RSASSA-PKCS1-v1_5',
+          hash: 'SHA-256'
+        },
+        false,
+        ['verify']
+      )
+
+      // Convert base64url signature to ArrayBuffer
+      const signatureBuffer = this.base64UrlToArrayBuffer(signature)
+      
+      // Convert data to ArrayBuffer
+      const dataBuffer = new TextEncoder().encode(data)
+
+      // Verify the signature
+      const isValid = await crypto.subtle.verify(
+        'RSASSA-PKCS1-v1_5',
+        cryptoKey,
+        signatureBuffer,
+        dataBuffer
+      )
+
+      return isValid
+    } catch (error) {
+      console.error('RSA signature verification error:', error)
+      return false
+    }
+  }
+
+  /**
+   * Convert PEM format to ArrayBuffer
+   */
+  private static pemToArrayBuffer(pem: string): ArrayBuffer {
+    // Remove PEM headers and convert to base64
+    const base64 = pem
+      .replace(/-----BEGIN PUBLIC KEY-----/, '')
+      .replace(/-----END PUBLIC KEY-----/, '')
+      .replace(/\s/g, '')
+    
+    // Convert base64 to ArrayBuffer
+    const binary = atob(base64)
+    const bytes = new Uint8Array(binary.length)
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i)
+    }
+    return bytes.buffer
+  }
+
+  /**
+   * Convert base64url to ArrayBuffer
+   */
+  private static base64UrlToArrayBuffer(base64url: string): ArrayBuffer {
+        // Convert base64url to base64
+    let base64 = base64url
+      .replace(/-/g, '+')
+      .replace(/_/g, '/')
+
+    // Add padding if needed
+    while (base64.length % 4) {
+      base64 += '='
+    }
+    
+    // Convert base64 to ArrayBuffer
+    const binary = atob(base64)
+    const bytes = new Uint8Array(binary.length)
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i)
+    }
+    return bytes.buffer
+  }
+
+  /**
    * Extract user data from JWT payload
    */
   static extractUserData(payload: JWTPayload) {
@@ -179,5 +351,13 @@ export class JWTVerifier {
       email: payload.email,
       emailVerified: payload.email_verified
     }
+  }
+
+  /**
+   * Clear public keys cache (useful for testing)
+   */
+  static clearCache(): void {
+    this.publicKeysCache = {}
+    this.cacheExpiry = 0
   }
 } 

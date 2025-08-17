@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react'
 import { Product } from '@/types'
 import { ProductService } from '@/lib/services/product.service'
-import MobileHeader from './MobileHeader'
 import MobileProductGrid from './MobileProductGrid'
 import CategoryPills from './CategoryPills'
-import BottomNavigation from './BottomNavigation'
 import MobileMenu from './MobileMenu'
+import { useMobileMenu } from '@/components/providers/mobile-menu-provider'
 import { imageOptimizer } from '@/lib/image-optimization'
 import EnhancedImage from './EnhancedImage'
 
@@ -23,8 +22,9 @@ export default function MobileHomepage({
   const [products, setProducts] = useState<Product[]>([])
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState('all')
+  
+  const { isMenuOpen, closeMenu } = useMobileMenu()
 
   const productService = new ProductService()
 
@@ -87,9 +87,7 @@ export default function MobileHomepage({
     onCategorySelect(category)
   }
 
-  const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+
 
   const handleSearch = (query: string) => {
     onSearch(query)
@@ -111,40 +109,14 @@ export default function MobileHomepage({
 
   return (
     <div className="mobile-homepage md:hidden min-h-screen bg-gray-50">
-      {/* Mobile Header */}
-      <header className="mobile-header bg-white shadow-sm px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">NubiaGo</h1>
-              <p className="text-sm text-gray-600">Your Shopping Partner</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={handleMenuToggle}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </header>
-
       {/* Mobile Menu */}
       <MobileMenu
         isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
+        onClose={closeMenu}
       />
 
-      {/* Main Content */}
-      <main className="pb-20">
+      {/* Main Content - Header is now handled by UnifiedHeader */}
+      <main className="pt-4">
         {/* Hero Section */}
         <section className="relative bg-gradient-to-r from-primary-600 to-primary-700 text-white p-6">
           <div className="text-center">
@@ -246,7 +218,7 @@ export default function MobileHomepage({
                     className="flex-shrink-0 w-32 bg-white rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow"
                   >
                     <EnhancedImage
-                      src={imageOptimizer.optimizeImage(product.imageUrl, {
+                      src={imageOptimizer.optimizeImage(product.imageUrl || '', {
                         width: 120,
                         height: 120,
                         quality: 75,
@@ -289,7 +261,7 @@ export default function MobileHomepage({
       </main>
 
       {/* Bottom Navigation */}
-      <BottomNavigation />
+
     </div>
   )
 }

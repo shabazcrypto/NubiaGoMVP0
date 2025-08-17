@@ -57,13 +57,16 @@ export default function AdminUsersPage() {
 
   // Filter users based on search and filters
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        user.uid.toLowerCase().includes(searchQuery.toLowerCase())
-    
+    const searchLower = searchQuery.toLowerCase()
+    const nameLower = (user.displayName ?? user.name ?? '').toLowerCase()
+    const matchesSearch =
+      nameLower.includes(searchLower) ||
+      user.email.toLowerCase().includes(searchLower) ||
+      (user.uid ?? '').toLowerCase().includes(searchLower)
+
     const matchesStatus = statusFilter === 'all' || user.status === statusFilter
     const matchesRole = roleFilter === 'all' || user.role === roleFilter
-    
+
     return matchesSearch && matchesStatus && matchesRole
   })
 
@@ -93,7 +96,7 @@ export default function AdminUsersPage() {
       role: roleFilter === 'all' ? undefined : roleFilter as 'customer' | 'supplier' | 'admin' | undefined,
       search: searchQuery || undefined
     })
-  }, [statusFilter, roleFilter, searchQuery, setUserFilters, userFilters])
+  }, [statusFilter, roleFilter, searchQuery, setUserFilters])
 
   const handleApproveSupplier = async (supplierId: string) => {
     try {
@@ -151,7 +154,7 @@ export default function AdminUsersPage() {
 
   const handleSelectAllUsers = (checked: boolean) => {
     if (checked) {
-      setSelectedUsers(users.map(user => user.uid))
+      setSelectedUsers(users.map(user => user.uid!).filter((id): id is string => Boolean(id)))
     } else {
       setSelectedUsers([])
     }
@@ -441,8 +444,8 @@ export default function AdminUsersPage() {
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <input
                                   type="checkbox"
-                                  checked={selectedUsers.includes(user.uid)}
-                                  onChange={(e) => handleUserSelection(user.uid, e.target.checked)}
+                                  checked={selectedUsers.includes(user.uid ?? '')}
+                                  onChange={(e) => handleUserSelection(user.uid ?? '', e.target.checked)}
                                   className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                                 />
                               </td>
@@ -499,7 +502,7 @@ export default function AdminUsersPage() {
                                                                       <button
                                       onClick={() => {
                                         if (confirm('Are you sure you want to delete this user?')) {
-                                          deleteUser(user.uid, 'admin-1', 'User deletion')
+                                          deleteUser(user.uid ?? '', 'admin-1', 'User deletion')
                                         }
                                       }}
                                       className="text-red-600 hover:text-red-900"
@@ -543,7 +546,7 @@ export default function AdminUsersPage() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {suppliers.map((supplier) => (
+                            {suppliers.map((supplier) => (
                             <tr key={supplier.uid} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">
@@ -588,7 +591,7 @@ export default function AdminUsersPage() {
                                     </>
                                   )}
                                   <button
-                                    onClick={() => setShowSupplierDetails(supplier.uid)}
+                                     onClick={() => setShowSupplierDetails(supplier.uid)}
                                     className="text-primary-600 hover:text-primary-900"
                                   >
                                     <Eye className="h-4 w-4" />

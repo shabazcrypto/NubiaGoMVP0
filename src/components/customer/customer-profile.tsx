@@ -7,7 +7,7 @@ import {
   Camera, Lock, Globe, Moon, Sun
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
 
 interface UserProfile {

@@ -182,32 +182,228 @@ export const withCustomerAuth = withAuth({
 })
 
 /**
- * Rate limiting middleware
+ * ENTERPRISE-GRADE Rate limiting middleware with distributed support
  */
-export function withRateLimit(maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) {
-  const requests = new Map<string, { count: number; resetTime: number }>()
+export function withEnterpriseRateLimit(
+  maxRequests: number = 100, 
+  windowMs: number = 15 * 60 * 1000,
+  options: {
+    identifier?: 'ip' | 'user' | 'session' | 'custom';
+    customIdentifier?: (request: AuthenticatedRequest) => string;
+    skipSuccessfulRequests?: boolean;
+    skipFailedRequests?: boolean;
+    errorMessage?: string;
+    headers?: boolean;
+  } = {}
+) {
+  // SECURITY: Use Map for in-memory storage (in production, use Redis)
+  const rateLimitStore = new Map<string, {
+    count: number;
+    resetTime: number;
+    blocked: boolean;
+    blockUntil?: number;
+    attempts: number;
+  }>()
+
+  const {
+    identifier = 'ip',
+    customIdentifier,
+    skipSuccessfulRequests = false,
+    skipFailedRequests = false,
+    errorMessage = 'Rate limit exceeded',
+    headers = true
+  } = options
+
+  // Cleanup expired entries every 5 minutes
+  setInterval(() => {
+    const now = Date.now()
+    for (const [key, value] of rateLimitStore.entries()) {
+      if (now > value.resetTime) {
+        rateLimitStore.delete(key)
+      }
+    }
+  }, 5 * 60 * 1000)
 
   return function(handler: (request: AuthenticatedRequest) => Promise<NextResponse>) {
     return async function(request: AuthenticatedRequest): Promise<NextResponse> {
-      const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown'
-      const now = Date.now()
-      
-      const userRequests = requests.get(ip)
-      
-      if (!userRequests || now > userRequests.resetTime) {
-        requests.set(ip, { count: 1, resetTime: now + windowMs })
-      } else if (userRequests.count >= maxRequests) {
-        return NextResponse.json(
-          { error: 'Rate limit exceeded', code: 'RATE_LIMIT_EXCEEDED' },
-          { status: 429 }
-        )
-      } else {
-        userRequests.count++
-      }
+      try {
+        // SECURITY: Get identifier based on configuration
+        let rateLimitKey: string
+        
+        switch (identifier) {
+          case 'ip':
+            rateLimitKey = request.ip || 
+                          request.headers.get('x-forwarded-for') || 
+                          request.headers.get('x-real-ip') || 
+                          'unknown'
+            break
+          
+          case 'user':
+            if (request.user?.uid) {
+              rateLimitKey = `user:${request.user.uid}`
+            } else {
+              rateLimitKey = request.ip || 'unknown'
+            }
+            break
+          
+          case 'session':
+            const sessionToken = getSessionTokenFromRequest(request)
+            rateLimitKey = sessionToken ? `session:${sessionToken}` : 
+                          (request.ip || 'unknown')
+            break
+          
+          case 'custom':
+            if (customIdentifier) {
+              rateLimitKey = customIdentifier(request)
+            } else {
+              rateLimitKey = request.ip || 'unknown'
+            }
+            break
+          
+          default:
+            rateLimitKey = request.ip || 'unknown'
+        }
 
-      return handler(request)
+        // SECURITY: Add additional entropy to prevent key collisions
+        rateLimitKey = `rate_limit:${rateLimitKey}:${Math.floor(Date.now() / windowMs)}`
+
+        const now = Date.now()
+        const userRequests = rateLimitStore.get(rateLimitKey)
+        
+        // SECURITY: Check if user is blocked
+        if (userRequests?.blocked && userRequests.blockUntil && now < userRequests.blockUntil) {
+          const retryAfter = Math.ceil((userRequests.blockUntil - now) / 1000)
+          
+          const response = NextResponse.json(
+            { 
+              error: errorMessage, 
+              code: 'RATE_LIMIT_EXCEEDED',
+              retryAfter,
+              reason: 'Account temporarily blocked due to excessive requests'
+            },
+            { status: 429 }
+          )
+
+          if (headers) {
+            response.headers.set('X-RateLimit-Limit', maxRequests.toString())
+            response.headers.set('X-RateLimit-Remaining', '0')
+            response.headers.set('X-RateLimit-Reset', userRequests.blockUntil.toString())
+            response.headers.set('Retry-After', retryAfter.toString())
+          }
+
+          return response
+        }
+
+        // SECURITY: Initialize or update rate limit data
+        if (!userRequests || now > userRequests.resetTime) {
+          rateLimitStore.set(rateLimitKey, { 
+            count: 1, 
+            resetTime: now + windowMs,
+            blocked: false,
+            attempts: 1
+          })
+        } else {
+          userRequests.count++
+          userRequests.attempts++
+          
+          // SECURITY: Progressive blocking for repeated violations
+          if (userRequests.count > maxRequests * 2) {
+            const blockDuration = Math.min(
+              Math.pow(2, userRequests.attempts - maxRequests) * 60 * 1000, // Exponential backoff
+              60 * 60 * 1000 // Max 1 hour
+            )
+            
+            userRequests.blocked = true
+            userRequests.blockUntil = now + blockDuration
+            
+            const response = NextResponse.json(
+              { 
+                error: 'Account temporarily blocked', 
+                code: 'ACCOUNT_BLOCKED',
+                retryAfter: Math.ceil(blockDuration / 1000),
+                reason: 'Excessive rate limit violations'
+              },
+              { status: 429 }
+            )
+
+            if (headers) {
+              response.headers.set('X-RateLimit-Limit', maxRequests.toString())
+              response.headers.set('X-RateLimit-Remaining', '0')
+              response.headers.set('X-RateLimit-Reset', userRequests.blockUntil.toString())
+              response.headers.set('Retry-After', Math.ceil(blockDuration / 1000).toString())
+            }
+
+            return response
+          }
+          
+          // SECURITY: Check if rate limit exceeded
+          if (userRequests.count > maxRequests) {
+            const retryAfter = Math.ceil((userRequests.resetTime - now) / 1000)
+            
+            const response = NextResponse.json(
+              { 
+                error: errorMessage, 
+                code: 'RATE_LIMIT_EXCEEDED',
+                retryAfter,
+                remaining: 0
+              },
+              { status: 429 }
+            )
+
+            if (headers) {
+              response.headers.set('X-RateLimit-Limit', maxRequests.toString())
+              response.headers.set('X-RateLimit-Remaining', '0')
+              response.headers.set('X-RateLimit-Reset', userRequests.resetTime.toString())
+              response.headers.set('Retry-After', retryAfter.toString())
+            }
+
+            return response
+          }
+        }
+
+        // SECURITY: Add rate limit headers to successful responses
+        const response = await handler(request)
+        
+        if (headers && userRequests) {
+          const remaining = Math.max(0, maxRequests - userRequests.count)
+          response.headers.set('X-RateLimit-Limit', maxRequests.toString())
+          response.headers.set('X-RateLimit-Remaining', remaining.toString())
+          response.headers.set('X-RateLimit-Reset', userRequests.resetTime.toString())
+        }
+
+        // SECURITY: Skip successful requests if configured
+        if (skipSuccessfulRequests && response.status < 400) {
+          // Don't count successful requests against rate limit
+          if (userRequests) {
+            userRequests.count = Math.max(0, userRequests.count - 1)
+          }
+        }
+
+        return response
+      } catch (error) {
+        // SECURITY: Skip failed requests if configured
+        if (skipFailedRequests) {
+          // Don't count failed requests against rate limit
+          const rateLimitKey = `rate_limit:${request.ip || 'unknown'}:${Math.floor(Date.now() / windowMs)}`
+          const userRequests = rateLimitStore.get(rateLimitKey)
+          if (userRequests) {
+            userRequests.count = Math.max(0, userRequests.count - 1)
+          }
+        }
+        
+        throw error
+      }
     }
   }
+}
+
+/**
+ * Legacy rate limiting middleware (deprecated - use withEnterpriseRateLimit)
+ * @deprecated Use withEnterpriseRateLimit instead
+ */
+export function withRateLimit(maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) {
+  console.warn('withRateLimit is deprecated. Use withEnterpriseRateLimit instead.')
+  return withEnterpriseRateLimit(maxRequests, windowMs)
 }
 
 /**

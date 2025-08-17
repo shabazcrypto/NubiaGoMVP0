@@ -62,6 +62,7 @@ export class ApiService {
         apis.push({
           id: doc.id,
           name: data.name,
+          description: data.description || '',
           type: data.type,
           provider: data.provider,
           apiKey: data.apiKey,
@@ -105,6 +106,7 @@ export class ApiService {
       return {
         id: docSnap.id,
         name: data.name,
+        description: data.description || '',
         type: data.type,
         provider: data.provider,
         apiKey: data.apiKey,
@@ -158,6 +160,7 @@ export class ApiService {
       const updatedConfig: ApiConfiguration = {
         id: updatedDoc.id,
         name: data.name,
+        description: data.description || '',
         type: data.type,
         provider: data.provider,
         apiKey: data.apiKey,
@@ -252,10 +255,18 @@ export class ApiService {
       })
 
       return {
-        success,
-        message: success ? 'Connection successful' : 'Connection failed',
+        id: `test_${Date.now()}`,
+        apiId: id,
+        endpoint: config.baseUrl || 'N/A',
+        method: 'GET',
+        status: success ? 'success' : 'failed',
+        responseTime: 0,
+        statusCode: success ? 200 : 500,
+        responseBody: undefined,
         error: success ? undefined : errorMessage,
-        timestamp: new Date()
+        timestamp: new Date(),
+        success,
+        message: success ? 'Connection successful' : 'Connection failed'
       }
     } catch (error: any) {
       console.error('❌ Failed to test API connection:', error)
@@ -284,6 +295,7 @@ export class ApiService {
         apis.push({
           id: doc.id,
           name: data.name,
+          description: data.description || '',
           type: data.type,
           provider: data.provider,
           apiKey: data.apiKey,
@@ -325,6 +337,7 @@ export class ApiService {
         apis.push({
           id: doc.id,
           name: data.name,
+          description: data.description || '',
           type: data.type,
           provider: data.provider,
           apiKey: data.apiKey,
@@ -362,6 +375,7 @@ export class ApiService {
           apis.push({
             id: doc.id,
             name: data.name,
+            description: data.description || '',
             type: data.type,
             provider: data.provider,
             apiKey: data.apiKey,

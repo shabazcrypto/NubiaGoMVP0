@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
 import { toast } from '@/components/ui/toast'
 

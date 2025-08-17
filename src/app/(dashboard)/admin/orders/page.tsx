@@ -93,7 +93,7 @@ export default function AdminOrders() {
       order.id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.customer?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.customer?.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.items[0]?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.items?.[0]?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.supplier?.name?.toLowerCase().includes(searchQuery.toLowerCase())
 
     if (activeTab === 'all') return matchesSearch
@@ -238,7 +238,7 @@ export default function AdminOrders() {
                   )}
                   
                   <button
-                    onClick={() => router.push('/admin/orders/new')}
+                    onClick={() => router.push('/admin/orders')}
                     className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
                   >
                     <Plus className="h-4 w-4 mr-2" />
@@ -347,7 +347,7 @@ export default function AdminOrders() {
                         <div className="text-sm text-gray-500">{order.customer?.email || 'No email'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{order.items[0]?.productName || 'No product'}</div>
+                        <div className="text-sm font-medium text-gray-900">{order.items?.[0]?.productName || 'No product'}</div>
                         <div className="text-sm text-gray-500">{order.supplier?.name || 'No supplier'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

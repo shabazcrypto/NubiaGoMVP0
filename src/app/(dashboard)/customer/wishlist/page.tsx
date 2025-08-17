@@ -50,11 +50,11 @@ export default function WishlistPage() {
             id: item.product.id,
             name: item.product.name,
             price: item.product.price,
-            originalPrice: item.product.originalPrice,
+            originalPrice: (item.product as any).originalPrice,
             images: item.product.images,
             rating: item.product.rating,
             reviewCount: item.product.reviewCount,
-            stock: item.product.stock
+            stock: item.product.stock ?? 0
           },
           addedAt: item.addedAt
         }))

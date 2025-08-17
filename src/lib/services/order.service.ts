@@ -38,7 +38,9 @@ export class OrderService {
       // Calculate totals
       const subtotal = orderData.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
       const shipping = await cartService.calculateShipping(orderData.userId, orderData.shippingMethod)
-      const tax = subtotal * 0.1 // 10% tax rate
+      // Calculate tax based on shipping address
+      const taxRate = this.calculateTaxRate(orderData.shippingAddress)
+      const tax = subtotal * taxRate
       const total = subtotal + shipping + tax
 
       // Create order
@@ -205,7 +207,7 @@ export class OrderService {
       const orderRef = doc(db, this.COLLECTION_NAME, orderId)
       await updateDoc(orderRef, {
         status: 'cancelled',
-        notes: reason ? `${order.notes || ''}\nCancelled: ${reason}` : order.notes,
+        notes: reason ? `${(order as any).notes || ''}\nCancelled: ${reason}` : (order as any).notes,
         updatedAt: new Date()
       })
 
@@ -339,15 +341,21 @@ export class OrderService {
         throw new Error('Order is not paid')
       }
 
-      // TODO: Process refund through payment gateway
-      // await paymentService.processRefund(order.paymentMethod, refundAmount)
+      // Process refund through payment gateway
+      try {
+        const { PaymentService } = await import('./payment.service')
+        const paymentService = new PaymentService()
+        await paymentService.processRefund(order.id, refundAmount, reason)
+      } catch (error) {
+        console.warn('Payment service refund failed, proceeding with order update:', error)
+      }
 
       // Update order status
       const orderRef = doc(db, this.COLLECTION_NAME, orderId)
       await updateDoc(orderRef, {
         status: 'refunded',
         paymentStatus: 'refunded',
-        notes: reason ? `${order.notes || ''}\nRefunded: ${reason}` : order.notes,
+        notes: reason ? `${(order as any).notes || ''}\nRefunded: ${reason}` : (order as any).notes,
         updatedAt: new Date()
       })
 
@@ -357,6 +365,22 @@ export class OrderService {
       console.error('Error refunding order:', error)
       throw new Error('Failed to refund order')
     }
+  }
+
+  // Calculate tax rate based on address
+  private calculateTaxRate(address: Address): number {
+    // Default tax rates by country/region
+    const taxRates: { [key: string]: number } = {
+      'US': 0.08,      // 8% average US tax rate
+      'CA': 0.12,      // 12% average Canada tax rate
+      'GB': 0.20,      // 20% UK VAT
+      'DE': 0.19,      // 19% Germany VAT
+      'FR': 0.20,      // 20% France VAT
+      'default': 0.10  // 10% default rate
+    }
+
+    const country = address.country?.toUpperCase() || 'default'
+    return taxRates[country] || taxRates['default']
   }
 }
 

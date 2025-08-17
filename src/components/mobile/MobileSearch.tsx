@@ -293,7 +293,7 @@ export default function MobileSearch({
                     {/* Product Image */}
                     <div className="flex-shrink-0">
                       <EnhancedImage
-                        src={imageOptimizer.optimizeImage(result.product.imageUrl, {
+                        src={imageOptimizer.optimizeImage(result.product.imageUrl || '', {
                           width: 60,
                           height: 60,
                           quality: 75,

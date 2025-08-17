@@ -323,7 +323,7 @@ export default function SupplierProductsPage() {
                 <p className="text-gray-600 text-sm mb-3">{product.category}</p>
                 
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-bold text-gray-900">₦{product.price.toLocaleString()}</span>
+                  <span className="text-2xl font-bold text-gray-900">${product.price.toFixed(2)}</span>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(product.status)}`}>
                     {product.status}
                   </span>

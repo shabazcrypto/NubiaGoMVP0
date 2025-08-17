@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { Search, Filter, SortAsc, SortDesc, Star, ShoppingCart, Heart, Clock, TrendingUp } from 'lucide-react'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { CartService } from '@/lib/services/cart.service'
 import { WishlistService } from '@/lib/services/wishlist.service'
@@ -11,7 +11,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useSearchHistoryStore } from '@/store/search-history'
 import { SearchSuggestions } from './search-suggestions'
 import { Product } from '@/types'
-import EnhancedImage from '@/components/mobile/EnhancedImage'
+import { ProductImage as LocalProductImage } from '@/components/ui/LocalImage'
 
 interface ProductSearchProps {
   products: Product[]
@@ -305,18 +305,18 @@ const ProductSearch = React.memo(function ProductSearch({
           >
             {/* Product Image */}
             <div className="relative aspect-square overflow-hidden rounded-t-lg">
-              <EnhancedImage
-                src={product.imageUrl}
+              <LocalProductImage
+                productCategory="default"
+                variant={0}
                 alt={product.name}
                 width={400}
                 height={400}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                 priority={false}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
-              {product.originalPrice && product.originalPrice > product.price && (
+              {(product as any).originalPrice && (product as any).originalPrice > product.price && (
                 <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                  {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                  {Math.round((((product as any).originalPrice - product.price) / (product as any).originalPrice) * 100)}% OFF
                 </div>
               )}
               <button
@@ -360,9 +360,9 @@ const ProductSearch = React.memo(function ProductSearch({
                   <span className="text-sm font-medium text-gray-900">
                     ${product.price.toFixed(2)}
                   </span>
-                  {product.originalPrice && product.originalPrice > product.price && (
+                  {(product as any).originalPrice && (product as any).originalPrice > product.price && (
                     <span className="text-sm text-gray-500 line-through">
-                      ${product.originalPrice.toFixed(2)}
+                      ${(product as any).originalPrice.toFixed(2)}
                     </span>
                   )}
                 </div>
@@ -374,7 +374,7 @@ const ProductSearch = React.memo(function ProductSearch({
               
               <div className="flex items-center justify-between mt-2">
                 <span className="text-xs text-gray-500">
-                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                  {(product.stock ?? 0) > 0 ? `${product.stock} in stock` : 'Out of stock'}
                 </span>
                 <span className="text-xs text-gray-500">{product.reviewCount} reviews</span>
               </div>
@@ -383,12 +383,12 @@ const ProductSearch = React.memo(function ProductSearch({
               <div className="flex gap-2">
                 <Button
                   onClick={(e) => handleAddToCart(e, product)}
-                  disabled={product.stock <= 0}
+                  disabled={(product.stock ?? 0) <= 0}
                   className="flex-1"
                   size="sm"
                 >
                   <ShoppingCart className="h-3.5 w-3.5 mr-1" />
-                  {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+                  {(product.stock ?? 0) > 0 ? 'Add to Cart' : 'Out of Stock'}
                 </Button>
               </div>
             </div>

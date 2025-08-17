@@ -20,7 +20,7 @@ export const ROUTES = {
   
   // Authentication Routes
   AUTH: {
-    LOGIN: '/auth',
+    LOGIN: '/login',
     REGISTER: '/register',
     FORGOT_PASSWORD: '/forgot-password',
     VERIFY_EMAIL: '/auth/verify-email',

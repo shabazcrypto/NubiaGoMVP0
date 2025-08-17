@@ -7,8 +7,13 @@ export interface ApiConfiguration {
   type: 'payment' | 'logistics' | 'communication' | 'analytics' | 'storage' | 'other'
   provider?: string
   baseUrl: string
+  webhookUrl?: string
   apiKey?: string
   apiSecret?: string
+  // Optional flags used in UI/services
+  isActive?: boolean
+  isTestMode?: boolean
+  config?: Record<string, any>
   headers?: Record<string, string>
   rateLimit?: {
     requests: number
@@ -21,9 +26,11 @@ export interface ApiConfiguration {
     clientSecret?: string
   }
   endpoints?: ApiEndpoint[]
-  status: 'active' | 'inactive' | 'testing'
+  status: 'active' | 'inactive' | 'testing' | 'error'
+  errorMessage?: string
   createdAt: Date
   updatedAt: Date
+  lastTested?: Date
 }
 
 export interface ApiEndpoint {
@@ -77,9 +84,12 @@ export interface ApiTestResult {
   timestamp: Date
   requestHeaders?: Record<string, string>
   requestBody?: any
+  // Convenience flags/messages used by UI
+  success?: boolean
+  message?: string
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponsePayload<T = any> {
   success: boolean
   data?: T
   error?: string

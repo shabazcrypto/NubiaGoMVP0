@@ -115,7 +115,7 @@ export class EdgeUserService {
     if (user.role === 'supplier' && user.status === 'pending') {
       return {
         canAccess: false,
-        redirectTo: '/supplier/pending',
+        redirectTo: '/supplier/pending-approval',
         reason: 'Supplier account pending approval'
       }
     }

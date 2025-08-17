@@ -55,6 +55,7 @@ export const POST = protectAdminAPI(async (request: NextRequest) => {
     const validatedData = apiConfigurationSchema.parse(body)
     
     const apiConfig = await apiService.createApiConfiguration({
+      description: (validatedData as any).description as string || '',
       name: validatedData.name as string,
       type: validatedData.type as 'logistics' | 'payment' | 'communication' | 'analytics' | 'storage' | 'other',
       provider: validatedData.provider as string,

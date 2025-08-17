@@ -68,7 +68,7 @@ export function RoleChangeHandler({ children }: RoleChangeHandlerProps) {
     }
 
     handleRoleChange()
-  }, [user, router, addToast])
+  }, [user, router])
 
   // Store pending status for customers
   useEffect(() => {

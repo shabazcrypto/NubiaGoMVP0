@@ -37,13 +37,15 @@ export class AuthService {
 
       // Create user profile in Firestore
       const userProfile: User = {
+        id: firebaseUser.uid,
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
         displayName: displayName || firebaseUser.displayName || email.split('@')[0],
-        photoURL: firebaseUser.photoURL || undefined,
+        avatar: firebaseUser.photoURL || undefined,
         role: role,
         status: initialStatus,
         emailVerified: false,
+        isVerified: false,
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -71,7 +73,7 @@ export class AuthService {
       const user = await this.register(email, password, displayName, 'supplier')
       
       // Upload business documents to Firebase Storage
-      const documentUrls = await this.uploadBusinessDocuments(user.uid, documents)
+      const documentUrls = await this.uploadBusinessDocuments(user.uid ?? user.id, documents)
       
       // Create supplier profile with additional business information
       const supplierProfile = {
@@ -87,17 +89,17 @@ export class AuthService {
       }
 
       // Save supplier profile to a separate collection
-      await setDoc(doc(db, 'suppliers', user.uid), supplierProfile)
+      await setDoc(doc(db, 'suppliers', user.uid ?? user.id), supplierProfile)
       
       // Update user status to pending (both email verification and supplier approval)
-      await this.updateUserProfile(user.uid, { status: 'pending' })
+      await this.updateUserProfile(user.uid ?? user.id, { status: 'pending' } as any)
 
       // Send registration confirmation email
       await emailService.sendSupplierRegistrationConfirmation(user)
 
       // Log the registration event
       await auditService.logAuthEvent(
-        user.uid,
+        (user.uid ?? user.id),
         user.email || '',
         user.role || 'customer',
         'register',
@@ -133,15 +135,16 @@ export class AuthService {
       const user = userDoc.data() as User
 
       // Update email verification status if needed
-      if (!user.emailVerified) {
-        await this.updateUserProfile(user.uid, { emailVerified: true })
+      if (!user.emailVerified && !user.isVerified) {
+        await this.updateUserProfile(user.uid ?? user.id, { emailVerified: true } as any)
         user.emailVerified = true
+        user.isVerified = true
       }
 
       // Check if user is suspended
       if (user.status === 'suspended') {
         await auditService.logAuthEvent(
-          user.uid,
+          (user.uid ?? user.id),
           user.email || '',
           user.role || 'customer',
           'login',
@@ -152,9 +155,9 @@ export class AuthService {
       }
 
       // Check if user is pending email verification
-      if (user.status === 'pending' && !user.emailVerified) {
+      if (user.status === 'pending' && !(user.emailVerified || user.isVerified)) {
         await auditService.logAuthEvent(
-          user.uid,
+          (user.uid ?? user.id),
           user.email || '',
           user.role || 'customer',
           'login',
@@ -165,9 +168,9 @@ export class AuthService {
       }
 
       // For suppliers, check if they're approved (after email verification)
-      if (user.role === 'supplier' && user.status === 'pending' && user.emailVerified) {
+      if (user.role === 'supplier' && user.status === 'pending' && (user.emailVerified || user.isVerified)) {
         await auditService.logAuthEvent(
-          user.uid,
+          (user.uid ?? user.id),
           user.email || '',
           user.role || 'customer',
           'login',
@@ -178,14 +181,14 @@ export class AuthService {
       }
 
       // If email is verified but status is still pending, update to active for customers
-      if (user.emailVerified && user.status === 'pending' && user.role === 'customer') {
-        await this.updateUserProfile(user.uid, { status: 'active' })
+      if ((user.emailVerified || user.isVerified) && user.status === 'pending' && user.role === 'customer') {
+        await this.updateUserProfile(user.uid ?? user.id, { status: 'active' } as any)
         user.status = 'active'
       }
 
       // Log successful login
       await auditService.logAuthEvent(
-        user.uid,
+        (user.uid ?? user.id),
         user.email || '',
         user.role || 'customer',
         'login',
@@ -521,10 +524,10 @@ export class AuthService {
       const user = await this.register(email, password, displayName, 'admin')
       
       // Log admin creation
-      await setDoc(doc(db, 'admin_creations', `${user.uid}_${Date.now()}`), {
-        uid: user.uid,
+      await setDoc(doc(db, 'admin_creations', `${(user.uid ?? user.id)}_${Date.now()}`), {
+        uid: (user.uid ?? user.id),
         email: user.email,
-        displayName: user.displayName,
+        displayName: (user as any).displayName ?? user.name,
         createdBy,
         createdAt: new Date()
       })
@@ -554,21 +557,29 @@ export class AuthService {
 
   // Listen to auth state changes with real-time user updates
   onAuthStateChanged(callback: (user: User | null) => void): () => void {
-    return onAuthStateChanged(auth, async (firebaseUser) => {
+    console.log('AuthService: Setting up auth state listener')
+    
+    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log('AuthService: Firebase auth state changed', { firebaseUser: firebaseUser?.uid })
+      
       if (!firebaseUser) {
+        console.log('AuthService: No Firebase user, calling callback with null')
         callback(null)
         return
       }
 
       try {
+        console.log('AuthService: Setting up Firestore listener for user', firebaseUser.uid)
         // Set up real-time listener for user document
         const unsubscribe = onSnapshot(
           doc(db, 'users', firebaseUser.uid),
           (doc) => {
             if (doc.exists()) {
               const userData = doc.data() as User
+              console.log('AuthService: User document found', { userData })
               callback(userData)
             } else {
+              console.log('AuthService: User document not found')
               callback(null)
             }
           },
@@ -580,13 +591,14 @@ export class AuthService {
 
         // Store the unsubscribe function
         this.userListeners.set(firebaseUser.uid, unsubscribe)
-
-        return unsubscribe
       } catch (error) {
         console.error('Error in auth state change:', error)
         callback(null)
       }
     })
+
+    // Return the auth unsubscribe function
+    return unsubscribeAuth
   }
 
   // Get real-time user updates for a specific user

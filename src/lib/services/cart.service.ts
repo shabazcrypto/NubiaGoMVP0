@@ -69,7 +69,7 @@ export class CartService {
 
       return {
         ...cartData,
-        items: itemsWithProducts
+        items: itemsWithProducts as unknown as any
       }
     } catch (error) {
       console.error('Error getting cart:', error)
@@ -85,7 +85,7 @@ export class CartService {
         throw new Error('Product not found')
       }
 
-      if (product.stock < quantity) {
+      if ((product.stock ?? product.inventory) < quantity) {
         throw new Error('Insufficient stock')
       }
 
@@ -136,7 +136,7 @@ export class CartService {
       } else {
         // Check stock availability
         const product = await productService.getProduct(productId)
-        if (product && product.stock < quantity) {
+        if (product && (product.stock ?? product.inventory) < quantity) {
           throw new Error('Insufficient stock')
         }
         cart.items[itemIndex].quantity = quantity
@@ -285,7 +285,7 @@ export class CartService {
           continue
         }
 
-        if (product.stock < item.quantity) {
+        if ((product.stock ?? product.inventory) < item.quantity) {
           errors.push(`Insufficient stock for ${product.name}`)
           continue
         }

@@ -126,7 +126,7 @@ export function usePerformanceMonitor(componentName: string) {
 
   useEffect(() => {
     renderStartTime.current = performance.now()
-  })
+  }, [])
 
   useEffect(() => {
     const endTime = performance.now()
@@ -137,7 +137,7 @@ export function usePerformanceMonitor(componentName: string) {
     if (process.env.NODE_ENV === 'development' && duration > 16) {
       console.warn(`Slow render detected in ${componentName}: ${duration.toFixed(2)}ms`)
     }
-  })
+  }, [componentName])
 
   return { renderTime }
 }

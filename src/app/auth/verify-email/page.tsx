@@ -147,7 +147,7 @@ export default function VerifyEmailPage() {
 
             <div className="text-center">
               <Button
-                onClick={() => router.push('/auth/login')}
+                onClick={() => router.push('/login')}
                 variant="ghost"
                 className="text-sm"
               >

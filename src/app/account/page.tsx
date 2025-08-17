@@ -87,7 +87,7 @@ export default function AccountPage() {
           <h3 className="text-lg font-medium text-gray-900 mb-2">Not logged in</h3>
           <p className="text-gray-500 mb-6">Please log in to access your account</p>
           <Link
-            href="/auth/login"
+            href="/login"
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
           >
             Log In

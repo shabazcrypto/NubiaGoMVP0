@@ -11,6 +11,8 @@ import {
   Copy, ExternalLink, Target, Award, Zap
 } from 'lucide-react'
 import Link from 'next/link'
+import { formatPrice } from '@/lib/utils'
+import { CURRENCY } from '@/lib/constants'
 
 interface SupplierProduct {
   id: string
@@ -325,7 +327,7 @@ export default function SupplierProductsPage() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">₦{totalRevenue.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-gray-900">{formatPrice(totalRevenue, CURRENCY.CODE)}</p>
               </div>
             </div>
           </div>
@@ -544,7 +546,7 @@ export default function SupplierProductsPage() {
                   <p className="text-gray-600 text-sm mb-3">{product.category}</p>
 
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-2xl font-bold text-gray-900">₦{product.price.toLocaleString()}</span>
+                  <span className="text-2xl font-bold text-gray-900">{formatPrice(product.price, CURRENCY.CODE)}</span>
                   </div>
 
                   {/* Performance Metrics */}
@@ -668,7 +670,7 @@ export default function SupplierProductsPage() {
                         <span className="text-sm text-gray-900">{product.category}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-gray-900">₦{product.price.toLocaleString()}</span>
+                        <span className="text-sm font-medium text-gray-900">{formatPrice(product.price, CURRENCY.CODE)}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm text-gray-900">{product.stock}</span>

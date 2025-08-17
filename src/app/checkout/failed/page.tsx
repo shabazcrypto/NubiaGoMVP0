@@ -36,7 +36,7 @@ export default function PaymentFailedPage() {
   }
 
   const handleContactSupport = () => {
-    router.push('/support')
+    router.push('/help')
   }
 
   const handleGoHome = () => {

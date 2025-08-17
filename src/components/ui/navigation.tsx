@@ -199,7 +199,7 @@ function UserDropdown({ user, onLogout }: UserDropdownProps) {
   const handleLogout = async () => {
     try {
       await onLogout()
-      router.push('/auth/login')
+      router.push('/login')
     } catch (error) {
       console.error('Logout failed:', error)
     }
@@ -277,7 +277,7 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
   const handleLogout = async () => {
     try {
       // Add logout logic here
-      router.push('/auth/login')
+      router.push('/login')
       onClose()
     } catch (error) {
       console.error('Logout failed:', error)
@@ -454,13 +454,13 @@ export default function Navigation() {
             ) : (
               <div className="flex items-center space-x-2">
                 <Link
-                  href="/auth/login"
+                  href="/login"
                   className="text-sm font-medium text-nubia-gray hover:text-primary-600 transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
-                  href="/auth/register"
+                  href="/register"
                   className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
                 >
                   Sign Up

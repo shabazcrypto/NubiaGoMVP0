@@ -162,13 +162,13 @@ export default function MobileHeader({ onMenuToggle, onSearch }: MobileHeaderPro
           {/* Quick Categories */}
           <div className="flex items-center space-x-4">
             <Link
-              href="/products?category=electronics"
+              href={{ pathname: '/products', query: { category: 'electronics' } }}
               className="text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors"
             >
               Electronics
             </Link>
             <Link
-              href="/products?category=fashion"
+              href={{ pathname: '/products', query: { category: 'fashion' } }}
               className="text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors"
             >
               Fashion

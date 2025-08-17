@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ArrowLeft, ShoppingBag, Trash2, Plus, Minus, Shield, Truck, CreditCard, Star, Clock, Tag, AlertTriangle } from 'lucide-react'
 import ShoppingCart from '@/components/cart/shopping-cart'
 import { CartService } from '@/lib/services/cart.service'
@@ -42,6 +43,7 @@ export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [cartTotal, setCartTotal] = useState(0)
   const { user } = useAuth()
+  const router = useRouter()
   const cartService = new CartService()
 
   // Transform cart items to match ShoppingCart component interface
@@ -128,8 +130,25 @@ export default function CartPage() {
     }
   }
 
-  const handleCheckout = () => {
-    window.location.href = '/checkout'
+  const handleCheckout = async () => {
+    if (!user?.uid) {
+      router.push('/login?redirect=/checkout')
+      return
+    }
+    
+    try {
+      // Validate cart before checkout
+      const validation = await cartService.validateCart(user.uid)
+      if (!validation.isValid) {
+        setError(new Error(validation.errors.join(', ')))
+        return
+      }
+      
+      router.push('/checkout')
+    } catch (error: any) {
+      setError(error)
+      logger.error('Error during checkout:', error)
+    }
   }
 
   const handleAddToCart = async (item: RecommendedItem) => {
@@ -157,6 +176,9 @@ export default function CartPage() {
         specifications: {},
         isActive: true,
         isFeatured: false,
+        currency: 'USD',
+        inventory: 99,
+        supplierId: 'supplier-1',
         createdAt: new Date(),
         updatedAt: new Date()
       }

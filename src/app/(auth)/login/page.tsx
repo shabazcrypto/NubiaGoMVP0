@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
 import { Logo } from '@/components/ui/Logo'
@@ -18,7 +18,11 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { signIn, loading, error: authError, clearError } = useFirebaseAuth()
+  
+  // Get redirect URL from query parameters
+  const redirectUrl = searchParams.get('redirect') || '/customer'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,7 +31,7 @@ export default function LoginPage() {
 
     try {
       await signIn(formData.email, formData.password)
-      router.push('/customer')
+      router.push(redirectUrl)
     } catch (err: any) {
       setError(err.message || 'Invalid email or password')
     }
@@ -126,7 +130,7 @@ export default function LoginPage() {
                 </label>
               </div>
 
-              <Link href="/auth/forgot-password" className="text-sm text-primary-600 hover:text-primary-500">
+              <Link href="/forgot-password" className="text-sm text-primary-600 hover:text-primary-500">
                 Forgot password?
               </Link>
             </div>
@@ -153,7 +157,10 @@ export default function LoginPage() {
             <OAuthButtons 
               mode="login"
               onError={setError}
-              onSuccess={() => clearError()}
+              onSuccess={() => {
+                clearError()
+                router.push(redirectUrl)
+              }}
               disabled={loading}
               className="mt-6"
             />
@@ -162,7 +169,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <Link href="/auth/register" className="font-medium text-primary-600 hover:text-primary-500">
+              <Link href="/register" className="font-medium text-primary-600 hover:text-primary-500">
                 Sign up
               </Link>
             </p>

@@ -139,9 +139,24 @@ export function OAuthButtons({
     setLastErrorCode(null)
     
     try {
-      // TODO: Implement Facebook OAuth
-      console.log('Facebook OAuth not yet implemented')
-      onError?.('Facebook OAuth not yet implemented')
+      // Facebook OAuth implementation using Firebase Auth
+      const { signInWithPopup, FacebookAuthProvider } = await import('firebase/auth')
+      const { auth } = await import('@/lib/firebase/config')
+      
+      const provider = new FacebookAuthProvider()
+      provider.addScope('email')
+      provider.setCustomParameters({
+        'display': 'popup'
+      })
+
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+
+      if (user) {
+        onSuccess?.()
+      } else {
+        throw new Error('Facebook authentication failed')
+      }
     } catch (error: any) {
       const errorMessage = error.message || 'Facebook sign-in failed'
       setLastError(errorMessage)
@@ -423,11 +438,25 @@ export function FacebookAuthButton({
     setLastErrorCode(null)
     
     try {
-      // TODO: Implement Facebook OAuth
-      console.log('Facebook OAuth not yet implemented')
-      throw new Error('Facebook OAuth not yet implemented')
-      onSuccess?.()
-      router.push('/customer')
+      // Facebook OAuth implementation using Firebase Auth
+      const { signInWithPopup, FacebookAuthProvider } = await import('firebase/auth')
+      const { auth } = await import('@/lib/firebase/config')
+      
+      const provider = new FacebookAuthProvider()
+      provider.addScope('email')
+      provider.setCustomParameters({
+        'display': 'popup'
+      })
+
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+
+      if (user) {
+        onSuccess?.()
+        router.push('/customer')
+      } else {
+        throw new Error('Facebook authentication failed')
+      }
     } catch (error: any) {
       const errorMessage = error.message || 'Facebook sign-in failed'
       setLastError(errorMessage)

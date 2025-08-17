@@ -16,5 +16,11 @@ export default function ConditionalNavigation() {
     return null
   }
   
-  return <Navigation />
+  // Only show for desktop screens (2xl and above) as UnifiedHeader handles all smaller screens
+  // This prevents duplicate headers on mobile/tablet/laptop
+  return (
+    <div className="hidden 2xl:block">
+      <Navigation />
+    </div>
+  )
 }

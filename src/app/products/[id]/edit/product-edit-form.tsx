@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react'
 import { Save, X } from 'lucide-react'
-import { ImageUpload } from '@/components/ui/image-upload'
-import { ImageMetadata } from '@/lib/image-utils'
+import { SafeImageUpload } from '@/components/ui/safe-image-upload'
+import { ImageMetadata } from '@/lib/services/local-image.service'
 
 interface Product {
   id: string
@@ -185,12 +185,10 @@ export default function ProductEditForm({ product }: ProductEditFormProps) {
           {/* Image Upload */}
           <div className="border-t pt-6">
             <h4 className="text-sm font-medium text-gray-700 mb-3">Add New Images</h4>
-            <ImageUpload
+            <SafeImageUpload
               category="products"
               userId={userId}
-              multiple={true}
               maxFiles={5}
-              generateThumbnails={true}
               onUploadComplete={handleImageUploadComplete}
               onUploadError={handleImageUploadError}
               className="max-w-2xl"

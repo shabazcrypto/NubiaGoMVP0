@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
+import { formatPrice } from '@/lib/utils'
+import { CURRENCY } from '@/lib/constants'
 import { Search, Filter, X, ChevronDown, ChevronUp, Star, Tag, Truck, Clock } from 'lucide-react'
 import { useDebounce } from '@/lib/performance'
 import { ProductService } from '@/lib/services/product.service'
@@ -94,9 +96,9 @@ const ProductCard = React.memo(function ProductCard({ product, viewMode }: { pro
             <span className="text-sm text-gray-500">({product.reviewCount} reviews)</span>
           </div>
           <div className="flex items-center space-x-2 mt-2">
-            <span className="text-lg font-semibold text-gray-900">₦{product.price.toLocaleString()}</span>
+            <span className="text-lg font-semibold text-gray-900">{formatPrice(product.price, product.currency || CURRENCY.CODE)}</span>
             {product.originalPrice > product.price && (
-              <span className="text-sm text-gray-500 line-through">₦{product.originalPrice.toLocaleString()}</span>
+              <span className="text-sm text-gray-500 line-through">{formatPrice(product.originalPrice, product.currency || CURRENCY.CODE)}</span>
             )}
           </div>
           <div className="flex items-center space-x-2 mt-2">
@@ -138,9 +140,9 @@ const ProductCard = React.memo(function ProductCard({ product, viewMode }: { pro
           <span className="text-sm text-gray-500">({product.reviewCount})</span>
         </div>
         <div className="flex items-center space-x-2 mb-3">
-          <span className="text-lg font-semibold text-gray-900">₦{product.price.toLocaleString()}</span>
+          <span className="text-lg font-semibold text-gray-900">{formatPrice(product.price, product.currency || CURRENCY.CODE)}</span>
           {product.originalPrice > product.price && (
-            <span className="text-sm text-gray-500 line-through">₦{product.originalPrice.toLocaleString()}</span>
+            <span className="text-sm text-gray-500 line-through">{formatPrice(product.originalPrice, product.currency || CURRENCY.CODE)}</span>
           )}
         </div>
         <div className="flex items-center space-x-2">
@@ -429,7 +431,7 @@ export const AdvancedSearch = React.memo(function AdvancedSearch() {
                   />
                 </div>
                 <div className="text-xs text-gray-500">
-                  Range: ₦{filters.priceRange.min.toLocaleString()} - ₦{filters.priceRange.max.toLocaleString()}
+                  {`Range: ${formatPrice(filters.priceRange.min, CURRENCY.CODE)} - ${formatPrice(filters.priceRange.max, CURRENCY.CODE)}`}
                 </div>
               </div>
             </div>

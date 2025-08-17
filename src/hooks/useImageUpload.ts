@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { getImagePath, preloadImage, getImageDimensions } from '@/lib/image-utils'
+import { localImageService, ImageMetadata } from '@/lib/services/local-image.service'
 
 interface UseImageUploadReturn {
   isUploading: boolean
@@ -35,7 +35,7 @@ export function useImageUpload(): UseImageUploadReturn {
 
     // Check image dimensions
     try {
-      const dimensions = await getImageDimensions(URL.createObjectURL(file))
+      const dimensions = await localImageService.getImageDimensions(file)
       if (dimensions.width > 1920 || dimensions.height > 1080) {
         setError('Image dimensions must be less than 1920x1080')
         return false
@@ -107,7 +107,7 @@ export function useImageUpload(): UseImageUploadReturn {
 
   const preloadImages = useCallback(async (urls: string[]): Promise<void> => {
     try {
-      await Promise.all(urls.map(url => preloadImage(url)))
+      await Promise.all(urls.map(url => localImageService.preloadImage(url)))
     } catch (err) {
       console.warn('Failed to preload some images:', err)
     }

@@ -8,7 +8,7 @@ import {
   getImageOptimizationInfo,
   ImageUploadProgress 
 } from '@/lib/supplier-image-utils';
-import { ImageMetadata } from '@/lib/image-utils';
+import { ImageMetadata } from '@/lib/services/local-image.service';
 
 interface SupplierImageManagerProps {
   productId: string;

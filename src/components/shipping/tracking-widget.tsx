@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useShippingStore } from '@/store/shipping'
-import { Input } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/toast'
 import { 
   Truck, Package, MapPin, Clock, CheckCircle, XCircle,

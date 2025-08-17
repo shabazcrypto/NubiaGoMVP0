@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { ArrowLeft, Camera, Save, User, Mail, Phone, MapPin, AlertCircle } from 'lucide-react'
 import { ImageUpload } from '@/components/ui/image-upload'
-import { ImageMetadata } from '@/lib/image-utils'
+import { ImageMetadata } from '@/lib/services/local-image.service'
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
 
 interface UserProfile {

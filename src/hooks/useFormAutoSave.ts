@@ -49,7 +49,7 @@ export function useFormAutoSave<T extends object>({
   // Debounced save function
   const debouncedSave = useCallback(
     debounce(async (data: T) => {
-      if (!enabled || !hasUnsavedChanges) return
+      if (!enabled) return
 
       try {
         setIsSaving(true)
@@ -63,7 +63,7 @@ export function useFormAutoSave<T extends object>({
         setIsSaving(false)
       }
     }, debounceMs),
-    [enabled, hasUnsavedChanges, onSave, debounceMs]
+    [enabled, onSave, debounceMs, success, error]
   )
 
   // Update data and trigger save
@@ -74,7 +74,7 @@ export function useFormAutoSave<T extends object>({
       debouncedSave(newData)
       return newData
     })
-  }, [debouncedSave])
+  }, [])
 
   // Force save
   const forceSave = useCallback(async () => {

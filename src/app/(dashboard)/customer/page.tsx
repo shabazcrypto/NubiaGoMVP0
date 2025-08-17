@@ -213,7 +213,7 @@ export default function CustomerDashboard() {
   // Handle logout
   const handleLogout = () => {
     if (confirm('Are you sure you want to logout?')) {
-      router.push('/auth/login')
+    router.push('/login')
     }
   }
 

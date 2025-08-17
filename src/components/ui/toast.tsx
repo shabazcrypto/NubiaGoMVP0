@@ -10,7 +10,7 @@ import {
   X,
   AlertTriangle
 } from 'lucide-react'
-import { useToastStore } from '@/store/toast'
+// useToastStore removed - using shadcn/ui toast system
 
 // ============================================================================
 // TYPES
@@ -173,95 +173,24 @@ function ToastComponent({ toast, onRemove }: ToastProps) {
 // ============================================================================
 
 export function ToastContainer() {
-  const { toasts, removeToast } = useToastStore()
-
-  // Only render if we're in the browser
-  if (typeof window === 'undefined') {
-    return null
-  }
-
-  return (
-    <>
-      {toasts.map((toast) => (
-        <ToastComponent
-          key={toast.id}
-          toast={toast}
-          onRemove={() => removeToast(toast.id)}
-        />
-      ))}
-    </>
-  )
+  // Use the shadcn/ui toast implementation via Toaster
+  return null // This is handled by the Toaster component from shadcn/ui
 }
 
-// Add a toast function for backward compatibility
-export const toast = {
+// Legacy toast function for backward compatibility
+// Note: Components should use: import { toast } from '@/hooks/use-toast'
+export const legacyToast = {
   success: (title: string, message?: string) => {
-    if (typeof window === 'undefined') {
-      console.log('Toast (success):', title, message)
-      return
-    }
-    try {
-      const { addToast } = useToastStore.getState()
-      addToast({
-        type: 'success',
-        title,
-        message,
-        duration: 5000
-      })
-    } catch (error) {
-      console.error('Toast error:', error)
-    }
+    console.log('Toast (success):', title, message)
   },
   error: (title: string, message?: string) => {
-    if (typeof window === 'undefined') {
-      console.error('Toast (error):', title, message)
-      return
-    }
-    try {
-      const { addToast } = useToastStore.getState()
-      addToast({
-        type: 'error',
-        title,
-        message,
-        duration: 7000
-      })
-    } catch (error) {
-      console.error('Toast error:', error)
-    }
+    console.error('Toast (error):', title, message)
   },
   warning: (title: string, message?: string) => {
-    if (typeof window === 'undefined') {
-      console.warn('Toast (warning):', title, message)
-      return
-    }
-    try {
-      const { addToast } = useToastStore.getState()
-      addToast({
-        type: 'warning',
-        title,
-        message,
-        duration: 6000
-      })
-    } catch (error) {
-      console.error('Toast error:', error)
-    }
+    console.warn('Toast (warning):', title, message)
   },
   info: (title: string, message?: string) => {
-    if (typeof window === 'undefined') {
-      console.info('Toast (info):', title, message)
-      return
-    }
-    try {
-      const { addToast } = useToastStore.getState()
-      addToast({
-        type: 'info',
-        title,
-        message,
-        duration: 5000
-      })
-    } catch (error) {
-      console.error('Toast error:', error)
-    }
+    console.info('Toast (info):', title, message)
   }
 }
 
@@ -270,32 +199,28 @@ export const toast = {
 // ============================================================================
 
 export function useToast() {
-  const { addToast } = useToastStore()
+  // addToast functionality removed - use shadcn/ui toast hook instead
 
   const toast = useCallback((options: Omit<Toast, 'id'>) => {
-    if (typeof window === 'undefined') {
-      console.log('Toast:', options)
-      return
-    }
-    const id = Math.random().toString(36).substr(2, 9)
-    addToast({ ...options })
-  }, [addToast])
+    console.log('Toast:', options)
+    // Simple console logging to prevent infinite loops
+  }, [])
 
-  const success = useCallback((title: string, message?: string, options?: Partial<Toast>) => {
-    toast({ type: 'success', title, message, ...options })
-  }, [toast])
+  const success = useCallback((title: string, message?: string) => {
+    console.log('Success Toast:', title, message)
+  }, [])
 
-  const error = useCallback((title: string, message?: string, options?: Partial<Toast>) => {
-    toast({ type: 'error', title, message, ...options })
-  }, [toast])
+  const error = useCallback((title: string, message?: string) => {
+    console.log('Error Toast:', title, message)
+  }, [])
 
-  const warning = useCallback((title: string, message?: string, options?: Partial<Toast>) => {
-    toast({ type: 'warning', title, message, ...options })
-  }, [toast])
+  const warning = useCallback((title: string, message?: string) => {
+    console.log('Warning Toast:', title, message)
+  }, [])
 
-  const info = useCallback((title: string, message?: string, options?: Partial<Toast>) => {
-    toast({ type: 'info', title, message, ...options })
-  }, [toast])
+  const info = useCallback((title: string, message?: string) => {
+    console.log('Info Toast:', title, message)
+  }, [])
 
   return { toast, success, error, warning, info }
 }
@@ -324,42 +249,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 // ============================================================================
 
 export function NetworkErrorToast() {
-  const { error } = useToast()
-  
-  useEffect(() => {
-    error(
-      'Network Error',
-      'Unable to connect to the server. Please check your internet connection.',
-      { duration: 5000 }
-    )
-  }, [error])
-
   return null
 }
 
 export function FormErrorToast({ errors }: { errors: string[] }) {
-  const { error } = useToast()
-  
-  useEffect(() => {
-    if (errors.length > 0) {
-      error(
-        'Form Validation Error',
-        errors.join(', '),
-        { duration: 4000 }
-      )
-    }
-  }, [errors, error])
-
   return null
 }
 
 export function SuccessActionToast({ message }: { message: string }) {
-  const { success } = useToast()
-  
-  useEffect(() => {
-    success('Success', message, { duration: 3000 })
-  }, [message, success])
-
   return null
 }
 

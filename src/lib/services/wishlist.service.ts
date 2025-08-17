@@ -27,6 +27,7 @@ export class WishlistService {
           id: userId,
           userId,
           items: [],
+          createdAt: new Date(),
           updatedAt: new Date()
         }
         await setDoc(wishlistRef, emptyWishlist)
@@ -66,7 +67,7 @@ export class WishlistService {
 
       return {
         ...wishlistData,
-        items: itemsWithProducts
+        items: itemsWithProducts as any
       }
     } catch (error) {
       console.error('Error getting wishlist:', error)
@@ -133,6 +134,7 @@ export class WishlistService {
         id: userId,
         userId,
         items: [],
+        createdAt: new Date(),
         updatedAt: new Date()
       }
       await setDoc(wishlistRef, emptyWishlist)

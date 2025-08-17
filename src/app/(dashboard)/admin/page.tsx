@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   Users, Shield, BarChart3, Settings, LogOut, Search, 
@@ -38,12 +38,14 @@ export default function AdminDashboard() {
     fetchUsers,
     fetchSuppliers,
     fetchOrders,
+    fetchProducts,
     setActiveTab,
     setSearchQuery,
     setSelectedOrders,
     updateSupplierApproval,
     updateOrderStatus,
-    toggleDarkMode
+    toggleDarkMode,
+    setLoading
   } = useAdminDashboardStore()
 
   // Local state for modals
@@ -51,6 +53,9 @@ export default function AdminDashboard() {
   const [showNotificationModal, setShowNotificationModal] = useState(false)
   const [showCalendarModal, setShowCalendarModal] = useState(false)
   const [showSettingsModal, setShowSettingsModal] = useState(false)
+  
+  // Ref to track if data has been fetched to prevent infinite loops
+  const hasFetchedData = useRef(false)
 
   // Mock data for messages and notifications
   const messages = [
@@ -66,10 +71,26 @@ export default function AdminDashboard() {
   ]
 
   useEffect(() => {
-    fetchUsers()
-    fetchSuppliers()
-    fetchOrders()
-  }, [fetchUsers, fetchSuppliers, fetchOrders])
+    console.log('AdminDashboard: useEffect triggered', { adminUser, loading })
+    
+    // TEMPORARY: Disable Firebase authentication check
+    if (!hasFetchedData.current) {
+      console.log('AdminDashboard: Fetching data (Firebase disabled)')
+      hasFetchedData.current = true
+      
+      // Fetch all data - the store will manage loading states
+      Promise.all([
+        fetchUsers(),
+        fetchSuppliers(),
+        fetchOrders(),
+        fetchProducts()
+      ]).then(() => {
+        console.log('AdminDashboard: Data fetching completed')
+      }).catch((error) => {
+        console.error('AdminDashboard: Error fetching data:', error)
+      })
+    }
+  }, [fetchUsers, fetchSuppliers, fetchOrders, fetchProducts])
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab)
@@ -77,7 +98,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     // Handle logout logic
-    router.push('/auth/login')
+    router.push('/login')
   }
 
   const handleThemeToggle = () => {
@@ -96,7 +117,11 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading Admin Dashboard</h2>
+          <p className="text-gray-600">Setting up your admin experience...</p>
+        </div>
       </div>
     )
   }
@@ -106,8 +131,9 @@ export default function AdminDashboard() {
     { id: 'users', icon: Users, label: 'User Management', path: '/admin/users' },
     { id: 'suppliers', icon: Shield, label: 'Supplier Management', path: '/admin/suppliers' },
     { id: 'orders', icon: ShoppingCart, label: 'Order Management', path: '/admin/orders' },
+    { id: 'cms', icon: FileText, label: 'Content Management', path: '/admin/cms' },
     { id: 'approvals', icon: CheckCircle, label: 'Approval System', path: '/admin/approvals' },
-    { id: 'monitoring', icon: BarChart3, label: 'System Monitoring', path: '/admin/monitoring' },
+    { id: 'monitoring', icon: BarChart3, label: 'System Monitoring', path: '/admin/apis' },
     { id: 'apis', icon: Zap, label: 'API Management', path: '/admin/apis' },
     { id: 'settings', icon: Settings, label: 'Settings', path: '/admin/settings' }
   ]

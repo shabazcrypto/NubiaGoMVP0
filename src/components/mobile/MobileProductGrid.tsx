@@ -121,7 +121,7 @@ export default function MobileProductGrid({
       {products.map((product) => {
         const isInWishlist = wishlistItems.has(product.id)
         const isLoading = loadingStates.has(product.id)
-        const optimizedImage = imageOptimizer.optimizeImage(product.imageUrl, {
+        const optimizedImage = imageOptimizer.optimizeImage(product.imageUrl || '', {
           width: 400,
           height: 400,
           quality: 75,
@@ -192,9 +192,9 @@ export default function MobileProductGrid({
                 <p className="text-lg font-bold text-primary-600">
                   ${product.price.toFixed(2)}
                 </p>
-                {product.originalPrice && product.originalPrice > product.price && (
+                {(product as any).originalPrice && (product as any).originalPrice > product.price && (
                   <p className="text-sm text-gray-500 line-through">
-                    ${product.originalPrice.toFixed(2)}
+                    ${(product as any).originalPrice.toFixed(2)}
                   </p>
                 )}
               </div>

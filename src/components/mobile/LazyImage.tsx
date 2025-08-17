@@ -91,7 +91,7 @@ export default function LazyImage({
     >
       {/* Loading skeleton */}
       {!isLoaded && (
-        <div className="absolute inset-0 skeleton animate-pulse bg-gray-200" />
+        <div className="absolute inset-0 bg-gray-100" />
       )}
 
       {/* Image - only render when in view or priority */}

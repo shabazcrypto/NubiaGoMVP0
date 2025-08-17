@@ -1,6 +1,12 @@
-# 🏠 HomeBase - NubiaGo E-commerce Platform
+# 🛍️ NubiaGo - Modern E-commerce Platform
 
-A modern, full-stack e-commerce platform built with Next.js, TypeScript, and Firebase.
+[![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18-blue)](https://reactjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-blue)](https://tailwindcss.com/)
+[![Firebase](https://img.shields.io/badge/Firebase-10.12-orange)](https://firebase.google.com/)
+
+A high-performance, modern e-commerce platform built with Next.js 15, featuring advanced state management, comprehensive error handling, and optimized performance for both mobile and desktop experiences.
 
 ## 🚀 Quick Start
 

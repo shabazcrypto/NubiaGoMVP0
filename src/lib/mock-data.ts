@@ -1,4 +1,4 @@
-import { User, Product, Category, Cart, Order, Review, Wishlist, Address } from '@/types'
+import { User, Product, Cart, Order, Wishlist, Address } from '@/types'
 
 // ============================================================================
 // MOCK USERS
@@ -6,111 +6,66 @@ import { User, Product, Category, Cart, Order, Review, Wishlist, Address } from 
 
 export const mockUsers: User[] = [
   {
+    id: 'user-1',
     uid: 'user-1',
     email: 'john.doe@example.com',
     displayName: 'John Doe',
-    photoURL: '/avatar-user-1.jpg',
+    avatar: '/avatar-user-1.jpg',
     phoneNumber: '+1234567890',
     role: 'customer',
     status: 'active',
+    emailVerified: true,
+    isVerified: true,
     createdAt: new Date('2024-01-15'),
     updatedAt: new Date('2024-01-15')
   },
   {
+    id: 'user-2',
     uid: 'user-2',
     email: 'jane.smith@example.com',
     displayName: 'Jane Smith',
-    photoURL: '/avatar-user-2.jpg',
+    avatar: '/avatar-user-2.jpg',
     phoneNumber: '+1234567891',
     role: 'customer',
     status: 'active',
+    emailVerified: true,
+    isVerified: true,
     createdAt: new Date('2024-01-20'),
     updatedAt: new Date('2024-01-20')
   },
   {
+    id: 'supplier-1',
     uid: 'supplier-1',
     email: 'techstore@example.com',
     displayName: 'Tech Store',
-    photoURL: '/ui-supplier-logo-1.jpg',
+    avatar: '/ui-supplier-logo-1.jpg',
     phoneNumber: '+1234567892',
     role: 'supplier',
     status: 'active',
+    emailVerified: true,
+    isVerified: true,
     createdAt: new Date('2024-01-10'),
     updatedAt: new Date('2024-01-10')
   },
   {
+    id: 'admin-1',
     uid: 'admin-1',
     email: 'admin@homebase.com',
     displayName: 'Admin User',
-    photoURL: '/avatar-user-3.jpg',
+    avatar: '/avatar-user-3.jpg',
     phoneNumber: '+1234567893',
     role: 'admin',
     status: 'active',
+    emailVerified: true,
+    isVerified: true,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01')
   }
 ]
 
 // ============================================================================
-// MOCK CATEGORIES
+// MOCK CATEGORIES - Removed as Category type is not exported from @/types
 // ============================================================================
-
-export const mockCategories: Category[] = [
-  {
-    id: 'cat-1',
-    name: 'Electronics',
-    description: 'Latest gadgets and electronic devices',
-    image: '/category-electronics.jpg',
-    slug: 'electronics',
-    isActive: true,
-    order: 1
-  },
-  {
-    id: 'cat-2',
-    name: 'Clothing',
-    description: 'Fashion and apparel for all ages',
-    image: '/category-men.jpg',
-    slug: 'clothing',
-    isActive: true,
-    order: 2
-  },
-  {
-    id: 'cat-3',
-    name: 'Home & Living',
-    description: 'Furniture and home decor',
-    image: '/category-home-living.jpg',
-    slug: 'home-living',
-    isActive: true,
-    order: 3
-  },
-  {
-    id: 'cat-4',
-    name: 'Shoes & Bags',
-    description: 'Footwear and accessories',
-    image: '/category-shoes-bags.jpg',
-    slug: 'shoes-bags',
-    isActive: true,
-    order: 4
-  },
-  {
-    id: 'cat-5',
-    name: 'Beauty & Cosmetics',
-    description: 'Beauty products and cosmetics',
-    image: '/category-cosmetics.jpg',
-    slug: 'beauty-cosmetics',
-    isActive: true,
-    order: 5
-  },
-  {
-    id: 'cat-6',
-    name: 'Mother & Child',
-    description: 'Products for mothers and children',
-    image: '/category-mother-child.jpg',
-    slug: 'mother-child',
-    isActive: true,
-    order: 6
-  }
-]
 
 // ============================================================================
 // MOCK PRODUCTS
@@ -123,12 +78,12 @@ export const mockProducts: Product[] = [
     description: 'High-quality wireless headphones with noise cancellation',
     price: 89.99,
     originalPrice: 129.99,
-          imageUrl: '/product-headphones-1.jpg',
-      images: [
-        '/product-headphones-1.jpg',
-        '/product-headphones-2.jpg'
-      ],
-      thumbnailUrl: '/product-headphones-1.jpg',
+    imageUrl: '/product-headphones-1.jpg',
+    images: [
+      '/product-headphones-1.jpg',
+      '/product-headphones-2.jpg'
+    ],
+    thumbnailUrl: '/product-headphones-1.jpg',
     category: 'Electronics',
     subcategory: 'Audio',
     brand: 'TechAudio',
@@ -144,6 +99,9 @@ export const mockProducts: Product[] = [
     },
     isActive: true,
     isFeatured: true,
+    currency: 'USD',
+    inventory: 50,
+    supplierId: 'supplier-1',
     createdAt: new Date('2024-01-15'),
     updatedAt: new Date('2024-01-15')
   },
@@ -153,13 +111,13 @@ export const mockProducts: Product[] = [
     description: 'Advanced smartwatch with health monitoring features',
     price: 299.99,
     originalPrice: 399.99,
-          imageUrl: '/product-watch-1.jpg',
-      images: [
-        '/product-watch-1.jpg',
-        '/product-watch-2.jpg',
-        '/product-watch-3.jpg'
-      ],
-      thumbnailUrl: '/product-watch-1.jpg',
+    imageUrl: '/product-watch-1.jpg',
+    images: [
+      '/product-watch-1.jpg',
+      '/product-watch-2.jpg',
+      '/product-watch-3.jpg'
+    ],
+    thumbnailUrl: '/product-watch-1.jpg',
     category: 'Electronics',
     subcategory: 'Wearables',
     brand: 'SmartTech',
@@ -175,6 +133,9 @@ export const mockProducts: Product[] = [
     },
     isActive: true,
     isFeatured: true,
+    currency: 'USD',
+    inventory: 25,
+    supplierId: 'supplier-1',
     createdAt: new Date('2024-01-10'),
     updatedAt: new Date('2024-01-10')
   },
@@ -184,12 +145,12 @@ export const mockProducts: Product[] = [
     description: 'Handcrafted leather bag with multiple compartments',
     price: 149.99,
     originalPrice: 199.99,
-          imageUrl: '/product-bag-1.jpg',
-      images: [
-        '/product-bag-1.jpg',
-        '/product-bag-2.jpg'
-      ],
-      thumbnailUrl: '/product-bag-1.jpg',
+    imageUrl: '/product-bag-1.jpg',
+    images: [
+      '/product-bag-1.jpg',
+      '/product-bag-2.jpg'
+    ],
+    thumbnailUrl: '/product-bag-1.jpg',
     category: 'Shoes & Bags',
     subcategory: 'Bags',
     brand: 'LeatherCraft',
@@ -205,6 +166,9 @@ export const mockProducts: Product[] = [
     },
     isActive: true,
     isFeatured: false,
+    currency: 'USD',
+    inventory: 30,
+    supplierId: 'supplier-1',
     createdAt: new Date('2024-01-12'),
     updatedAt: new Date('2024-01-12')
   },
@@ -214,13 +178,13 @@ export const mockProducts: Product[] = [
     description: 'Professional running shoes with advanced cushioning',
     price: 129.99,
     originalPrice: 159.99,
-          imageUrl: '/product-shoes-1.jpg',
-      images: [
-        '/product-shoes-1.jpg',
-        '/product-shoes-2.jpg',
-        '/product-shoes-3.jpg'
-      ],
-      thumbnailUrl: '/product-shoes-1.jpg',
+    imageUrl: '/product-shoes-1.jpg',
+    images: [
+      '/product-shoes-1.jpg',
+      '/product-shoes-2.jpg',
+      '/product-shoes-3.jpg'
+    ],
+    thumbnailUrl: '/product-shoes-1.jpg',
     category: 'Shoes & Bags',
     subcategory: 'Shoes',
     brand: 'RunFast',
@@ -236,6 +200,9 @@ export const mockProducts: Product[] = [
     },
     isActive: true,
     isFeatured: true,
+    currency: 'USD',
+    inventory: 75,
+    supplierId: 'supplier-1',
     createdAt: new Date('2024-01-08'),
     updatedAt: new Date('2024-01-08')
   },
@@ -245,11 +212,11 @@ export const mockProducts: Product[] = [
     description: 'Natural organic face cream for all skin types',
     price: 34.99,
     originalPrice: 44.99,
-          imageUrl: '/product-cosmetics-1.jpg',
-      images: [
-        '/product-cosmetics-1.jpg'
-      ],
-      thumbnailUrl: '/product-cosmetics-1.jpg',
+    imageUrl: '/product-cosmetics-1.jpg',
+    images: [
+      '/product-cosmetics-1.jpg'
+    ],
+    thumbnailUrl: '/product-cosmetics-1.jpg',
     category: 'Beauty & Cosmetics',
     subcategory: 'Skincare',
     brand: 'NaturalBeauty',
@@ -265,6 +232,9 @@ export const mockProducts: Product[] = [
     },
     isActive: true,
     isFeatured: false,
+    currency: 'USD',
+    inventory: 100,
+    supplierId: 'supplier-1',
     createdAt: new Date('2024-01-05'),
     updatedAt: new Date('2024-01-05')
   },
@@ -274,11 +244,11 @@ export const mockProducts: Product[] = [
     description: 'Elegant modern coffee table for your living room',
     price: 299.99,
     originalPrice: 399.99,
-          imageUrl: '/product-home-1.jpg',
-      images: [
-        '/product-home-1.jpg'
-      ],
-      thumbnailUrl: '/product-home-1.jpg',
+    imageUrl: '/product-home-1.jpg',
+    images: [
+      '/product-home-1.jpg'
+    ],
+    thumbnailUrl: '/product-home-1.jpg',
     category: 'Home & Living',
     subcategory: 'Furniture',
     brand: 'ModernHome',
@@ -294,6 +264,9 @@ export const mockProducts: Product[] = [
     },
     isActive: true,
     isFeatured: true,
+    currency: 'USD',
+    inventory: 15,
+    supplierId: 'supplier-1',
     createdAt: new Date('2024-01-03'),
     updatedAt: new Date('2024-01-03')
   }
@@ -306,6 +279,7 @@ export const mockProducts: Product[] = [
 export const mockAddresses: Address[] = [
   {
     id: 'addr-1',
+    type: 'shipping',
     firstName: 'John',
     lastName: 'Doe',
     company: 'Tech Corp',
@@ -320,6 +294,7 @@ export const mockAddresses: Address[] = [
   },
   {
     id: 'addr-2',
+    type: 'billing',
     firstName: 'Jane',
     lastName: 'Smith',
     address1: '456 Oak Avenue',
@@ -342,15 +317,19 @@ export const mockOrders: Order[] = [
     userId: 'user-1',
     items: [
       {
+        id: 'oi-1',
         productId: 'prod-1',
         quantity: 1,
         price: 89.99,
+        total: 89.99,
         product: mockProducts[0]
       },
       {
+        id: 'oi-2',
         productId: 'prod-2',
         quantity: 1,
         price: 299.99,
+        total: 299.99,
         product: mockProducts[1]
       }
     ],
@@ -373,9 +352,11 @@ export const mockOrders: Order[] = [
     userId: 'user-2',
     items: [
       {
+        id: 'oi-3',
         productId: 'prod-3',
         quantity: 1,
         price: 149.99,
+        total: 149.99,
         product: mockProducts[2]
       }
     ],
@@ -395,44 +376,8 @@ export const mockOrders: Order[] = [
 ]
 
 // ============================================================================
-// MOCK REVIEWS
+// MOCK REVIEWS - Removed as Review type is not exported from @/types
 // ============================================================================
-
-export const mockReviews: Review[] = [
-  {
-    id: 'review-1',
-    productId: 'prod-1',
-    userId: 'user-1',
-    rating: 5,
-    title: 'Excellent sound quality!',
-    comment: 'These headphones are amazing. The sound quality is incredible and the battery life is impressive.',
-    isVerified: true,
-    createdAt: new Date('2024-01-18'),
-    updatedAt: new Date('2024-01-18')
-  },
-  {
-    id: 'review-2',
-    productId: 'prod-1',
-    userId: 'user-2',
-    rating: 4,
-    title: 'Great headphones',
-    comment: 'Very good headphones for the price. Comfortable to wear for long periods.',
-    isVerified: true,
-    createdAt: new Date('2024-01-19'),
-    updatedAt: new Date('2024-01-19')
-  },
-  {
-    id: 'review-3',
-    productId: 'prod-2',
-    userId: 'user-1',
-    rating: 5,
-    title: 'Perfect smartwatch',
-    comment: 'This smartwatch has exceeded my expectations. The health monitoring features are fantastic.',
-    isVerified: true,
-    createdAt: new Date('2024-01-20'),
-    updatedAt: new Date('2024-01-20')
-  }
-]
 
 // ============================================================================
 // MOCK CART
@@ -474,6 +419,7 @@ export const mockWishlist: Wishlist = {
       addedAt: new Date('2024-01-20')
     }
   ],
+  createdAt: new Date('2024-01-10'),
   updatedAt: new Date('2024-01-20')
 }
 
@@ -487,10 +433,6 @@ export const getMockUser = (uid: string): User | undefined => {
 
 export const getMockProduct = (id: string): Product | undefined => {
   return mockProducts.find(product => product.id === id)
-}
-
-export const getMockCategory = (id: string): Category | undefined => {
-  return mockCategories.find(category => category.id === id)
 }
 
 export const getMockProductsByCategory = (category: string): Product[] => {
@@ -507,8 +449,4 @@ export const getMockFeaturedProducts = (): Product[] => {
 
 export const getMockUserOrders = (userId: string): Order[] => {
   return mockOrders.filter(order => order.userId === userId)
-}
-
-export const getMockProductReviews = (productId: string): Review[] => {
-  return mockReviews.filter(review => review.productId === productId)
 } 

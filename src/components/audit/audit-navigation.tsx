@@ -95,7 +95,7 @@ const auditTools: AuditTool[] = [
     name: 'Component Auditor',
     description: 'Deep-dive analysis of individual components',
     icon: Eye,
-    href: '/component-auditor',
+    href: '/audit-dashboard',
     status: 'active',
     category: 'core'
   },
@@ -103,7 +103,7 @@ const auditTools: AuditTool[] = [
     name: 'Accessibility Checker',
     description: 'WCAG 2.1 AA compliance and screen reader support',
     icon: Accessibility,
-    href: '/accessibility-audit',
+    href: '/audit-dashboard',
     status: 'active',
     category: 'core'
   },
@@ -111,7 +111,7 @@ const auditTools: AuditTool[] = [
     name: 'Design System Analyzer',
     description: 'Design consistency and component library validation',
     icon: Design,
-    href: '/design-system-audit',
+    href: '/audit-dashboard',
     status: 'active',
     category: 'core'
   },
@@ -121,7 +121,7 @@ const auditTools: AuditTool[] = [
     name: 'Mobile Optimization',
     description: 'Touch targets, responsive design, and mobile-first validation',
     icon: Mobile,
-    href: '/mobile-audit',
+    href: '/audit-dashboard',
     status: 'active',
     category: 'advanced'
   },
@@ -129,7 +129,7 @@ const auditTools: AuditTool[] = [
     name: 'Performance Monitor',
     description: 'Bundle size, loading times, and optimization metrics',
     icon: Lightning,
-    href: '/performance-audit',
+    href: '/audit-dashboard',
     status: 'active',
     category: 'advanced'
   },
@@ -137,7 +137,7 @@ const auditTools: AuditTool[] = [
     name: 'Cultural Relevance',
     description: 'African market optimization and cultural sensitivity',
     icon: World,
-    href: '/cultural-audit',
+    href: '/audit-dashboard',
     status: 'active',
     category: 'advanced'
   },
@@ -145,7 +145,7 @@ const auditTools: AuditTool[] = [
     name: 'User Experience Flow',
     description: 'User journey analysis and conversion optimization',
     icon: TrendingUp,
-    href: '/ux-flow-audit',
+    href: '/audit-dashboard',
     status: 'active',
     category: 'advanced'
   },

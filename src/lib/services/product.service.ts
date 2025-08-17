@@ -90,35 +90,32 @@ let MOCK_PRODUCTS: Product[] = [
 
 export class ProductService {
   private readonly COLLECTION_NAME = 'products'
+  
+  // Normalize arbitrary category strings and slugs to a comparable slug
+  private normalizeCategorySlug(value: string | null | undefined): string {
+    if (!value) return ''
+    return String(value)
+      .toLowerCase()
+      .replace(/&/g, 'and')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  }
 
-  // Get all products with pagination
+  // Get all products with pagination (supports large page size)
   async getAllProducts(page: number = 1, pageSize: number = 20): Promise<{
     products: Product[]
     total: number
     hasMore: boolean
   }> {
-    // Temporarily use mock data to fix loading issues
-    console.log('Using mock data for all products')
-    const allProducts = MOCK_PRODUCTS.filter(p => p.isActive)
-    const startIndex = (page - 1) * pageSize
-    const endIndex = startIndex + pageSize
-    const paginatedProducts = allProducts.slice(startIndex, endIndex)
-    
-    return {
-      products: paginatedProducts,
-      total: allProducts.length,
-      hasMore: endIndex < allProducts.length
-    }
-    
-    // Original Firebase code commented out temporarily
-    /*
     try {
+      const { db } = await import('@/lib/firebase/config')
+      const { collection, query, where, orderBy, limit, getDocs } = await import('firebase/firestore')
+      
       const q = query(
         collection(db, this.COLLECTION_NAME),
         where('isActive', '==', true),
         orderBy('createdAt', 'desc'),
-        limit(pageSize),
-        startAfter(page > 1 ? (page - 1) * pageSize : 0)
+        limit(pageSize)
       )
 
       const snapshot = await getDocs(q)
@@ -146,32 +143,22 @@ export class ProductService {
       const allProducts = MOCK_PRODUCTS.filter(p => p.isActive)
       const startIndex = (page - 1) * pageSize
       const endIndex = startIndex + pageSize
-      const paginatedProducts = allProducts.slice(startIndex, endIndex)
+      const paginatedProducts = pageSize >= allProducts.length ? allProducts : allProducts.slice(startIndex, endIndex)
       
       return {
         products: paginatedProducts,
         total: allProducts.length,
-        hasMore: endIndex < allProducts.length
+        hasMore: pageSize < allProducts.length && endIndex < allProducts.length
       }
     }
-    */
   }
 
   // Get a single product by ID
   async getProduct(id: string): Promise<Product | null> {
-    // Temporarily use mock data to fix loading issues
-    console.log('Using mock data for product:', id)
-    const mockProduct = MOCK_PRODUCTS.find(p => p.id === id)
-    if (mockProduct) {
-      return mockProduct
-    }
-    
-    // If not found in mock data, return first mock product as fallback
-    return MOCK_PRODUCTS[0] || null
-    
-    // Original Firebase code commented out temporarily
-    /*
     try {
+      const { db } = await import('@/lib/firebase/config')
+      const { doc, getDoc } = await import('firebase/firestore')
+      
       const docRef = doc(db, this.COLLECTION_NAME, id)
       const docSnap = await getDoc(docRef)
       
@@ -186,9 +173,14 @@ export class ProductService {
     } catch (error) {
       console.error('Error getting product, using mock data:', error)
       // Return mock product when Firebase fails
-      return MOCK_PRODUCTS.find(p => p.id === id) || null
+      const mockProduct = MOCK_PRODUCTS.find(p => p.id === id)
+      if (mockProduct) {
+        return mockProduct
+      }
+      
+      // If not found in mock data, return first mock product as fallback
+      return MOCK_PRODUCTS[0] || null
     }
-    */
   }
 
   // Get products by category
@@ -199,7 +191,12 @@ export class ProductService {
   }> {
     // Temporarily use mock data to fix loading issues
     console.log('Using mock data for category:', category)
-    const filteredProducts = MOCK_PRODUCTS.filter(p => p.category === category)
+    const inputSlug = this.normalizeCategorySlug(category)
+    const filteredProducts = MOCK_PRODUCTS.filter(p => {
+      const productCategorySlug = this.normalizeCategorySlug(p.category as any)
+      // Match either exact slug or loose contains for broader categories
+      return productCategorySlug === inputSlug || productCategorySlug.includes(inputSlug)
+    })
     return {
       products: filteredProducts,
       total: filteredProducts.length,
@@ -249,8 +246,12 @@ export class ProductService {
   }> {
     // Temporarily use mock data to fix loading issues
     console.log('Using mock data for subcategory:', subcategory)
-    // Since Product interface doesn't have subcategory, filter by category instead
-    const filteredProducts = MOCK_PRODUCTS.filter(p => p.category === subcategory)
+    // Since Product interface doesn't have subcategory, approximate by category match using slug normalization
+    const inputSlug = this.normalizeCategorySlug(subcategory)
+    const filteredProducts = MOCK_PRODUCTS.filter(p => {
+      const productCategorySlug = this.normalizeCategorySlug(p.category as any)
+      return productCategorySlug === inputSlug || productCategorySlug.includes(inputSlug)
+    })
     return {
       products: filteredProducts,
       total: filteredProducts.length,

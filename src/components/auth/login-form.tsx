@@ -73,7 +73,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
                 placeholder="Enter your email"
                 className="pl-10"
                 {...register('email')}
-                error={errors.email?.message}
+                error={errors.email?.message || undefined}
               />
             </div>
           </div>
@@ -91,7 +91,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
                 placeholder="Enter your password"
                 className="pl-10 pr-10"
                 {...register('password')}
-                error={errors.password?.message}
+                error={errors.password?.message || undefined}
               />
               <button
                 type="button"

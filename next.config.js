@@ -30,18 +30,34 @@ const nextConfig = {
 
   // Compiler options
   compiler: {
-    removeConsole: false,
+    removeConsole: process.env.NODE_ENV === 'production',
+    minify: true,
+    reactRemoveProperties: process.env.NODE_ENV === 'production',
+    removeDebugger: process.env.NODE_ENV === 'production',
   },
 
   // Performance settings
   trailingSlash: false,
-  generateEtags: false,
-  compress: false,
+  generateEtags: true,
+  compress: true,
   poweredByHeader: false,
+  productionBrowserSourceMaps: false,
+  optimizeFonts: true,
+  crossOrigin: 'anonymous',
 
-  // Experimental features (minimal)
+  // Experimental features
   experimental: {
-    optimizePackageImports: [],
+    optimizePackageImports: [
+      '@radix-ui/react-icons',
+      '@radix-ui/react-tabs',
+      'lucide-react',
+      'class-variance-authority',
+      'clsx',
+      'tailwind-merge'
+    ],
+    optimizeCss: true,
+    scrollRestoration: true,
+    legacyBrowsers: false,
   },
 
   // Turbopack configuration

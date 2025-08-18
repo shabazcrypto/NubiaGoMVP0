@@ -92,7 +92,7 @@ export function AddressValidation({
         })
 
         if (result.data.isValid) {
-          toast('error', "success")
+          toast('Address validated successfully', 'success')
         }
       } else {
                   toast(result.error || 'Address validation failed', 'error')

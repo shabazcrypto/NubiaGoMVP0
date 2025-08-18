@@ -143,25 +143,17 @@ export function ShippingCalculator({ onRateSelect, className = '' }: ShippingCal
 
       if (success) {
         setStep(2)
-        toast('error', "success")
+        toast('Shipping rates calculated successfully!', 'success')
       }
     } catch (error) {
-              toast('An error occurred while calculating rates', 'error')
+      toast('An error occurred while calculating rates', 'error')
     }
   }
 
   const handleRateSelect = (rate: any) => {
     selectRate(rate)
     onRateSelect?.(rate)
-    toast({
-        weight: 1,
-        length: 10,
-        width: 8,
-        height: 6,
-        weightUnit: 'lb',
-        dimensionUnit: 'in',
-      },
-    ], "success")
+    toast(`Selected ${rate.serviceName} - $${rate.rate.toFixed(2)}`, 'success')
   }
 
   const removePackage = (index: number) => {

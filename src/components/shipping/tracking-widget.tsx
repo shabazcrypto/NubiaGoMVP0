@@ -48,7 +48,7 @@ export function TrackingWidget({
     const success = await getTrackingInfo(trackingNumber, carrierCode)
     
     if (success) {
-      toast('error', "success")
+              toast('Tracking information updated', 'success')
     }
     
     setIsSearching(false)

@@ -40,9 +40,25 @@ interface Order {
   carrierCode?: string
 }
 
-export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id: orderId } = await params
+export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const [orderId, setOrderId] = React.useState<string>('')
+  
+  React.useEffect(() => {
+    params.then(({ id }) => setOrderId(id))
+  }, [params])
   const { trackingInfo, loading: trackingLoading, error: trackingError, getTrackingInfo, clearTrackingInfo } = useLogistics()
+  
+  // Show loading while params are being resolved
+  if (!orderId) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary-600 mx-auto mb-4" />
+          <p className="text-gray-600">Loading order details...</p>
+        </div>
+      </div>
+    )
+  }
   
   // Static order data for demo
   const order: Order = {

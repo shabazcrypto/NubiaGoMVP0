@@ -131,7 +131,7 @@
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   },
   "keywords": [
     "ecommerce",

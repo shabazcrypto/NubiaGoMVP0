@@ -39,11 +39,13 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
     updateQuantity, 
     removeItem, 
     clearCart, 
-    total,
-    subtotal,
-    tax,
-    shipping 
+    total
   } = useCartStore()
+
+  // Calculate derived values
+  const subtotal = total
+  const tax = total * 0.1 // 10% tax
+  const shipping = total > 50 ? 0 : 5.99 // Free shipping over $50
 
   const itemCount = items.reduce((total, item) => total + item.quantity, 0)
   const isEmpty = items.length === 0
@@ -51,10 +53,7 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
   const handleUpdateQuantity = (id: string, quantity: number) => {
     if (quantity <= 0) {
       removeItem(id)
-      toast({
-        title: "Item removed",
-        description: "Item has been removed from your cart.",
-      })
+      toast("Item has been removed from your cart.", "success")
     } else {
       updateQuantity(id, quantity)
     }
@@ -62,18 +61,12 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
 
   const handleRemoveItem = (id: string, name: string) => {
     removeItem(id)
-    toast({
-      title: "Item removed",
-      description: `${name} has been removed from your cart.`,
-    })
+    toast(`${name} has been removed from your cart.`, "success")
   }
 
   const handleClearCart = () => {
     clearCart()
-    toast({
-      title: "Cart cleared",
-      description: "All items have been removed from your cart.",
-    })
+    toast("All items have been removed from your cart.", "success")
   }
 
   return (

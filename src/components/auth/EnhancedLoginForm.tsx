@@ -225,7 +225,7 @@ export function EnhancedLoginForm({ redirectUrl = '/customer', className }: Logi
             <Checkbox 
               id="remember" 
               checked={rememberMe}
-              onCheckedChange={setRememberMe}
+              onCheckedChange={(checked) => setRememberMe(checked === true)}
               disabled={isLoading}
             />
             <Label 

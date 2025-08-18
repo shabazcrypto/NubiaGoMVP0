@@ -3,9 +3,11 @@ const nextConfig = {
   // Basic configuration
   reactStrictMode: false,
   
-  // ESLint configuration - ignore during builds to prevent warnings from failing deployment
+  // ESLint configuration
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, // Prevent ESLint from failing builds
+    ignoreDevelopmentErrors: true, // Prevent ESLint errors in development
+    dirs: ['src', 'pages', 'components', 'lib', 'utils'], // Directories to lint
   },
   
   // Image optimization

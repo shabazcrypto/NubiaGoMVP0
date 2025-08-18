@@ -8,7 +8,6 @@ const nextConfig = {
   // ESLint configuration
   eslint: {
     ignoreDuringBuilds: true, // Prevent ESLint from failing builds
-    ignoreDevelopmentErrors: true, // Prevent ESLint errors in development
     dirs: ['src', 'pages', 'components', 'lib', 'utils'], // Directories to lint
   },
   
@@ -31,9 +30,7 @@ const nextConfig = {
   // Compiler options
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
-    minify: true,
     reactRemoveProperties: process.env.NODE_ENV === 'production',
-    removeDebugger: process.env.NODE_ENV === 'production',
   },
 
   // Performance settings
@@ -42,7 +39,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
-  optimizeFonts: true,
   crossOrigin: 'anonymous',
 
   // Experimental features
@@ -57,7 +53,6 @@ const nextConfig = {
     ],
     optimizeCss: true,
     scrollRestoration: true,
-    legacyBrowsers: false,
   },
 
   // Turbopack configuration
@@ -107,34 +102,24 @@ const nextConfig = {
       })
     }
 
-    // Handle client-side polyfills and fallbacks
+    // Handle client-side fallbacks
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
-        fs: require.resolve('browserify-fs'),
-        net: require.resolve('net-browserify'),
-        tls: require.resolve('tls-browserify'),
-        crypto: require.resolve('crypto-browserify'),
-        stream: require.resolve('stream-browserify'),
-        url: require.resolve('url/'),
-        zlib: require.resolve('browserify-zlib'),
-        http: require.resolve('stream-http'),
-        https: require.resolve('https-browserify'),
-        assert: require.resolve('assert/'),
-        os: require.resolve('os-browserify/browser'),
-        path: require.resolve('path-browserify'),
-        process: require.resolve('process/browser'),
-        buffer: require.resolve('buffer/'),
-        util: require.resolve('util/'),
+        fs: false,
+        net: false,
+        tls: false,
+        crypto: false,
+        stream: false,
+        url: false,
+        zlib: false,
+        http: false,
+        https: false,
+        assert: false,
+        os: false,
+        path: false,
+        process: false,
       }
-
-      // Add buffer polyfill
-      config.plugins.push(
-        new webpack.ProvidePlugin({
-          Buffer: ['buffer', 'Buffer'],
-          process: 'process/browser',
-        })
-      )
     }
 
     // Handle SVG files

@@ -107,19 +107,19 @@ export function MainNavigation() {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <Button variant="ghost" asChild>
-              <Link href="/products" className="text-base">
+            <Link href="/products" className="text-base">
+              <Button variant="ghost">
                 <Package className="mr-2 h-4 w-4" />
                 Products
-              </Link>
-            </Button>
+              </Button>
+            </Link>
             
-            <Button variant="ghost" asChild>
-              <Link href="/deals" className="text-base">
+            <Link href="/deals" className="text-base">
+              <Button variant="ghost">
                 <Tag className="mr-2 h-4 w-4" />
                 Deals
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </nav>
         </div>
         
@@ -140,12 +140,12 @@ export function MainNavigation() {
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
           {/* Wishlist */}
-          <Button variant="ghost" className="h-8 w-8 p-0" asChild>
-            <Link href="/wishlist">
+          <Link href="/wishlist">
+            <Button variant="ghost" className="h-8 w-8 p-0">
               <Heart className="h-5 w-5" />
               <span className="sr-only">Wishlist</span>
-            </Link>
-          </Button>
+            </Button>
+          </Link>
           
           {/* Shopping Cart */}
           <CartDrawer />
@@ -205,12 +205,12 @@ export function MainNavigation() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" asChild>
-                <Link href="/login">Sign in</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/register">Sign up</Link>
-              </Button>
+              <Link href="/login">
+                <Button variant="ghost">Sign in</Button>
+              </Link>
+              <Link href="/register">
+                <Button>Sign up</Button>
+              </Link>
             </div>
           )}
           
@@ -233,42 +233,42 @@ export function MainNavigation() {
               </SheetHeader>
               
               <nav className="flex flex-col p-6 space-y-4">
-                <Button variant="ghost" className="justify-start" asChild>
-                  <Link href="/">
+                <Link href="/">
+                  <Button variant="ghost" className="justify-start">
                     <Home className="mr-2 h-4 w-4" />
                     Home
-                  </Link>
-                </Button>
-                <Button variant="ghost" className="justify-start" asChild>
-                  <Link href="/products">
+                  </Button>
+                </Link>
+                <Link href="/products">
+                  <Button variant="ghost" className="justify-start">
                     <Package className="mr-2 h-4 w-4" />
                     Products
-                  </Link>
-                </Button>
-                <Button variant="ghost" className="justify-start" asChild>
-                  <Link href="/categories">
+                  </Button>
+                </Link>
+                <Link href="/categories">
+                  <Button variant="ghost" className="justify-start">
                     <Grid3X3 className="mr-2 h-4 w-4" />
                     Categories
-                  </Link>
-                </Button>
-                <Button variant="ghost" className="justify-start" asChild>
-                  <Link href="/deals">
+                  </Button>
+                </Link>
+                <Link href="/deals">
+                  <Button variant="ghost" className="justify-start">
                     <Tag className="mr-2 h-4 w-4" />
                     Deals
-                  </Link>
-                </Button>
-                <Button variant="ghost" className="justify-start" asChild>
-                  <Link href="/about">
+                  </Button>
+                </Link>
+                <Link href="/about">
+                  <Button variant="ghost" className="justify-start">
                     <Info className="mr-2 h-4 w-4" />
                     About
-                  </Link>
-                </Button>
-                <Button variant="ghost" className="justify-start" asChild>
-                  <Link href="/contact">
+                  </Button>
+                </Link>
+                <Link href="/contact">
+                  <Button variant="ghost" className="justify-start">
                     <Phone className="mr-2 h-4 w-4" />
                     Contact
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>

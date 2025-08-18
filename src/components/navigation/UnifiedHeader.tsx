@@ -179,34 +179,34 @@ export function UnifiedHeader({ variant = 'default', showBackButton = false, tit
                  Browse Products
                </Button>
                
-               <Button variant="ghost" size="sm" asChild className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
-                 <Link href="/wishlist">
+               <Link href="/wishlist">
+                 <Button variant="ghost" size="sm" className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                    <Heart className="h-5 w-5" />
-                 </Link>
-               </Button>
+                 </Button>
+               </Link>
 
-               <Button variant="ghost" size="sm" asChild className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 relative">
-                 <Link href="/cart">
+               <Link href="/cart">
+                 <Button variant="ghost" size="sm" className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 relative">
                    <ShoppingCart className="h-5 w-5" />
                    {cartItemCount > 0 && (
                      <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs bg-blue-600 border-2 border-white">
                        {cartItemCount}
                      </Badge>
                    )}
-                 </Link>
-               </Button>
+                 </Button>
+               </Link>
 
                <Button variant="ghost" size="sm" className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                  <Moon className="h-5 w-5" />
                </Button>
 
                {user && isClient ? (
-                 <Button variant="ghost" size="sm" asChild className="text-slate-700 hover:bg-slate-100">
-                   <Link href="/profile">
+                 <Link href="/profile">
+                   <Button variant="ghost" size="sm" className="text-slate-700 hover:bg-slate-100">
                      <User className="h-5 w-5 mr-2" />
                      Account
-                   </Link>
-                 </Button>
+                   </Button>
+                 </Link>
                ) : (
                  <div className="flex items-center space-x-3">
                    <Link href="/login" className="text-slate-600 hover:text-slate-900 text-sm font-medium">

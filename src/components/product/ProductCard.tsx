@@ -208,9 +208,8 @@ export function ProductCard({
               )}
               
               <Button 
-                className="h-8 w-8 p-0" 
+                className="h-8 w-8 bg-white/90 hover:bg-white" 
                 variant="secondary"
-                className="h-8 w-8 bg-white/90 hover:bg-white"
                 onClick={handleShare}
               >
                 <Share2 className="h-4 w-4 text-gray-600" />
@@ -288,11 +287,11 @@ export function ProductCard({
               {isLoading ? 'Adding...' : 'Add to Cart'}
             </Button>
             {size !== 'sm' && (
-              <Button variant="outline" size="sm" asChild>
-                <Link href={`/products/${product.id}`}>
+              <Link href={`/products/${product.id}`}>
+                <Button variant="outline" size="sm">
                   View Details
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             )}
           </div>
         </CardFooter>

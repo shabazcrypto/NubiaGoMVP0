@@ -42,11 +42,19 @@ interface Order {
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const [orderId, setOrderId] = React.useState<string>('')
+  const { trackingInfo, loading: trackingLoading, error: trackingError, getTrackingInfo, clearTrackingInfo } = useLogistics()
   
   React.useEffect(() => {
     params.then(({ id }) => setOrderId(id))
   }, [params])
-  const { trackingInfo, loading: trackingLoading, error: trackingError, getTrackingInfo, clearTrackingInfo } = useLogistics()
+  
+  // Load tracking information when component mounts
+  React.useEffect(() => {
+    if (orderId && orderId !== '') {
+      // We'll load tracking info once orderId is available
+      // This will be handled in the main component logic
+    }
+  }, [orderId, getTrackingInfo])
   
   // Show loading while params are being resolved
   if (!orderId) {
@@ -104,12 +112,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     carrierCode: 'fedex'
   }
 
-  // Load tracking information when component mounts
-  useEffect(() => {
-    if (order.trackingNumber && order.carrierCode) {
+  // Load tracking information when order is available
+  React.useEffect(() => {
+    if (orderId && order.trackingNumber && order.carrierCode) {
       getTrackingInfo(order.trackingNumber, order.carrierCode)
     }
-  }, [order.trackingNumber, order.carrierCode, getTrackingInfo])
+  }, [orderId, order.trackingNumber, order.carrierCode, getTrackingInfo])
 
   const getStatusIcon = (status: string) => {
     switch (status) {

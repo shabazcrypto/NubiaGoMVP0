@@ -190,7 +190,7 @@ export default function ProductEditForm({ product }: ProductEditFormProps) {
               userId={userId}
               maxFiles={5}
               onUploadComplete={handleImageUploadComplete}
-              onUploadError={handleImageUploadError}
+              onError={handleImageUploadError}
               className="max-w-2xl"
             />
           </div>

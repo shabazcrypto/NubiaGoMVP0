@@ -23,9 +23,8 @@ interface Product {
   images: string[]
 }
 
-export default async function EditProductPage({ params }: { params: { id: string } }) {
-  const resolvedParams = await params
-  const productId = resolvedParams.id
+export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: productId } = await params
   
   // Static product data for demo
   const product: Product = {

@@ -56,8 +56,8 @@ interface Review {
   images?: string[]
 }
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const productId = params.id
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: productId } = await params
   const productService = new ProductService()
   
   // Get product data from Firebase

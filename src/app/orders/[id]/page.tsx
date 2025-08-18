@@ -40,8 +40,8 @@ interface Order {
   carrierCode?: string
 }
 
-export default function OrderDetailPage({ params }: { params: { id: string } }) {
-  const orderId = params.id
+export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: orderId } = await params
   const { trackingInfo, loading: trackingLoading, error: trackingError, getTrackingInfo, clearTrackingInfo } = useLogistics()
   
   // Static order data for demo

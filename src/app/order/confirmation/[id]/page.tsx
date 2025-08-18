@@ -53,8 +53,8 @@ interface OrderDetails {
   transactionId: string
 }
 
-export default function OrderConfirmationPage({ params }: { params: { id: string } }) {
-  const orderId = params.id
+export default async function OrderConfirmationPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: orderId } = await params
   
   // Static order details for demo
   const orderDetails = {

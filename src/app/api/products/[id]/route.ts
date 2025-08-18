@@ -84,10 +84,10 @@ const mockProducts = [
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
-    const { id } = params
     const product = mockProducts.find(p => p.id === id)
     
     if (!product) {
@@ -112,10 +112,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
-    const { id } = params
     const body = await request.json()
     
     const productIndex = mockProducts.findIndex(p => p.id === id)
@@ -150,10 +150,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
-    const { id } = params
     const productIndex = mockProducts.findIndex(p => p.id === id)
     
     if (productIndex === -1) {
@@ -182,10 +182,10 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
-    const { id } = params
     const body = await request.json()
     
     const productIndex = mockProducts.findIndex(p => p.id === id)

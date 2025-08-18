@@ -52,8 +52,8 @@ interface OrderDetails {
   events: TrackingEvent[]
 }
 
-export default function OrderTrackingPage({ params }: { params: { id: string } }) {
-  const orderId = params.id
+export default async function OrderTrackingPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: orderId } = await params
   
   // Static order details for demo
   const orderDetails: OrderDetails = {

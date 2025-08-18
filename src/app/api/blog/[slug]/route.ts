@@ -121,10 +121,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { slug } = await params
   try {
-    const { slug } = params
     
     // This endpoint could be used for deleting blog posts via API
     // For now, we'll return an error as posts should be deleted via the CMS admin

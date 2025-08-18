@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { CheckCircle, AlertCircle, Database, FileText, Globe } from 'lucide-react'
 import { InlineLoading } from '@/components/ui/loading'
 import { useCMSContentStore } from '@/store/cms'
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/toast'
 
 interface SampleContent {
   id: string

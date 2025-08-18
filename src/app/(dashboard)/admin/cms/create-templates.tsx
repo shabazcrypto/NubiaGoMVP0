@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { CheckCircle, AlertCircle, FileText, Plus } from 'lucide-react'
 import { InlineLoading } from '@/components/ui/loading'
 import { useCMSContentStore } from '@/store/cms'
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/toast'
 
 const defaultTemplates = [
   {

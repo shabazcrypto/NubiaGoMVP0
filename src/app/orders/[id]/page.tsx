@@ -48,11 +48,24 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     params.then(({ id }) => setOrderId(id))
   }, [params])
   
-  // Load tracking information when component mounts
+  // Load tracking information when order is available
   React.useEffect(() => {
     if (orderId && orderId !== '') {
       // We'll load tracking info once orderId is available
       // This will be handled in the main component logic
+    }
+  }, [orderId, getTrackingInfo])
+  
+  // Load tracking information when order is available
+  React.useEffect(() => {
+    if (orderId && orderId !== '') {
+      const order = {
+        trackingNumber: 'TRK123456789',
+        carrierCode: 'fedex'
+      }
+      if (order.trackingNumber && order.carrierCode) {
+        getTrackingInfo(order.trackingNumber, order.carrierCode)
+      }
     }
   }, [orderId, getTrackingInfo])
   
@@ -111,13 +124,6 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     shippingMethod: 'Standard Shipping',
     carrierCode: 'fedex'
   }
-
-  // Load tracking information when order is available
-  React.useEffect(() => {
-    if (orderId && order.trackingNumber && order.carrierCode) {
-      getTrackingInfo(order.trackingNumber, order.carrierCode)
-    }
-  }, [orderId, order.trackingNumber, order.carrierCode, getTrackingInfo])
 
   const getStatusIcon = (status: string) => {
     switch (status) {

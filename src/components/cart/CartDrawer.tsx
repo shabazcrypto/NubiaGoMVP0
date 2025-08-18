@@ -73,7 +73,7 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
     <Sheet>
       <SheetTrigger asChild>
         {children || (
-          <Button variant="ghost" className="h-8 w-8 p-0" className={cn("relative", className)}>
+          <Button variant="ghost" className={cn("h-8 w-8 p-0 relative", className)}>
             <ShoppingCart className="h-5 w-5" />
             {itemCount > 0 && (
               <Badge 

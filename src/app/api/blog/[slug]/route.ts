@@ -3,10 +3,10 @@ import { cmsContentService } from '@/lib/services/cms/cms-content.service'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { slug } = await params
   try {
-    const { slug } = params
 
     if (!slug) {
       return NextResponse.json(
@@ -90,10 +90,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { slug } = await params
   try {
-    const { slug } = params
     const body = await request.json()
     
     // This endpoint could be used for updating blog posts via API

@@ -140,7 +140,7 @@ export function MainNavigation() {
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
           {/* Wishlist */}
-          <Button variant="ghost" size="icon" asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0" asChild>
             <Link href="/wishlist">
               <Heart className="h-5 w-5" />
               <span className="sr-only">Wishlist</span>
@@ -217,7 +217,7 @@ export function MainNavigation() {
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
+              <Button variant="ghost" className="h-8 w-8 p-0" className="lg:hidden">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>

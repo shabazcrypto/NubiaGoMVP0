@@ -138,11 +138,7 @@ export function MobileMoneyForm(props: MobileMoneyFormProps) {
         currency: props.currency,
       })
       
-      toast.success('Payment initiated successfully')
-      props.onSuccess?.(data)
-    } catch (error: any) {
-      const errorMessage = error.message || 'Payment processing failed'
-      toast(errorMessage, 'error')
+      toast('error', "success")
       props.onError?.(errorMessage)
     } finally {
       setIsProcessing(false)

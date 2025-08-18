@@ -188,7 +188,7 @@ export default function CustomerProfilePage() {
                     multiple={false}
                     generateThumbnails={true}
                     onUploadComplete={handleAvatarUploadComplete}
-                    onUploadError={handleAvatarUploadError}
+                    onError={handleAvatarUploadError}
                     className="max-w-xs"
                   />
                 </div>

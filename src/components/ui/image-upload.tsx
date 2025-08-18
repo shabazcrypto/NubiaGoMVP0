@@ -11,7 +11,7 @@ interface ImageUploadProps {
   category: ImageCategory;
   userId: string;
   onUploadComplete?: (metadata: any) => void;
-  onUploadError?: (error: string) => void;
+  onError?: (error: string) => void;
   multiple?: boolean;
   maxFiles?: number;
   className?: string;
@@ -29,7 +29,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   category,
   userId,
   onUploadComplete,
-  onUploadError,
+  onError,
   multiple = false,
   maxFiles = 5,
   className,
@@ -66,7 +66,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         }
         validFiles.push(fileWithPreview);
       } else {
-        onUploadError?.(error || 'Invalid file');
+        onError?.(error || 'Invalid file');
       }
     }
 
@@ -78,7 +78,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     } else {
       setFiles(validFiles.slice(0, 1));
     }
-  }, [multiple, maxFiles, validateImage, showPreview, onUploadError, error]);
+  }, [multiple, maxFiles, validateImage, showPreview, onError, error]);
 
   // Handle drag and drop
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -122,9 +122,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       setFiles([]);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Upload failed';
-      onUploadError?.(errorMessage);
+      onError?.(errorMessage);
     }
-  }, [files, multiple, uploadImage, onUploadComplete, onUploadError]);
+  }, [files, multiple, uploadImage, onUploadComplete, onError]);
 
   // Remove file
   const removeFile = useCallback((index: number) => {

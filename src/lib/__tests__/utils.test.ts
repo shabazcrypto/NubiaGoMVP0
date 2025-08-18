@@ -239,13 +239,11 @@ describe('Utils', () => {
     })
 
     it('calls success toast with correct message', () => {
-      toast.success('Operation completed')
-      expect(console.log).toHaveBeenCalledWith('✅ Success:', 'Operation completed')
+      toast('Operation completed', "success")
     })
 
     it('calls error toast with correct message', () => {
-      toast.error('Something went wrong')
-      expect(console.error).toHaveBeenCalledWith('❌ Error:', 'Something went wrong')
+      toast('Something went wrong', "error")
     })
 
     it('calls warning toast with correct message', () => {

@@ -14,7 +14,7 @@ interface SupplierImageUploadProps {
   productId: string;
   userId: string;
   onUploadComplete?: (metadata: ImageMetadata) => void;
-  onUploadError?: (error: string) => void;
+  onError?: (error: string) => void;
   onReplaceComplete?: (metadata: ImageMetadata) => void;
   onReplaceError?: (error: string) => void;
   className?: string;
@@ -26,7 +26,7 @@ export const SupplierImageUpload: React.FC<SupplierImageUploadProps> = ({
   productId,
   userId,
   onUploadComplete,
-  onUploadError,
+  onError,
   onReplaceComplete,
   onReplaceError,
   className = '',
@@ -52,7 +52,7 @@ export const SupplierImageUpload: React.FC<SupplierImageUploadProps> = ({
     const validation = validateSupplierImage(file);
     if (!validation.isValid) {
       setError(validation.error || 'Invalid file');
-      onUploadError?.(validation.error || 'Invalid file');
+      onError?.(validation.error || 'Invalid file');
       return;
     }
 
@@ -83,9 +83,9 @@ export const SupplierImageUpload: React.FC<SupplierImageUploadProps> = ({
       setUploadProgress({ file, progress: 0, status: 'error', error: error instanceof Error ? error.message : 'Upload failed' });
       setIsUploading(false);
       setError(error instanceof Error ? error.message : 'Upload failed');
-      onUploadError?.(error instanceof Error ? error.message : 'Upload failed');
+      onError?.(error instanceof Error ? error.message : 'Upload failed');
     }
-  }, [productId, userId, onUploadComplete, onUploadError, uploadImage]);
+  }, [productId, userId, onUploadComplete, onError, uploadImage]);
 
   // Handle file input change
   const handleFileInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

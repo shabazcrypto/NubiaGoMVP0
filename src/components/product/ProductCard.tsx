@@ -182,7 +182,7 @@ export function ProductCard({
             <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {showWishlist && (
                 <Button 
-                  size="icon" 
+                  className="h-8 w-8 p-0" 
                   variant="secondary" 
                   className="h-8 w-8 bg-white/90 hover:bg-white"
                   onClick={handleWishlistToggle}
@@ -198,7 +198,7 @@ export function ProductCard({
               
               {onQuickView && (
                 <Button 
-                  size="icon" 
+                  className="h-8 w-8 p-0" 
                   variant="secondary"
                   className="h-8 w-8 bg-white/90 hover:bg-white"
                   onClick={handleQuickView}
@@ -208,7 +208,7 @@ export function ProductCard({
               )}
               
               <Button 
-                size="icon" 
+                className="h-8 w-8 p-0" 
                 variant="secondary"
                 className="h-8 w-8 bg-white/90 hover:bg-white"
                 onClick={handleShare}

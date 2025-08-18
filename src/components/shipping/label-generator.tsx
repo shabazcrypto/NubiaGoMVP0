@@ -138,9 +138,7 @@ export function LabelGenerator({ orderId, className = '' }: LabelGeneratorProps)
       }
 
       setGeneratedLabel(result.data)
-      toast.success('Shipping label generated successfully!')
-    } catch (error: any) {
-      toast(error.message || 'Failed to generate shipping label', 'error')
+      toast('error', "success")
     } finally {
       setIsGenerating(false)
     }

@@ -80,7 +80,7 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
     <Sheet>
       <SheetTrigger asChild>
         {children || (
-          <Button variant="ghost" size="icon" className={cn("relative", className)}>
+          <Button variant="ghost" className="h-8 w-8 p-0" className={cn("relative", className)}>
             <ShoppingCart className="h-5 w-5" />
             {itemCount > 0 && (
               <Badge 
@@ -150,7 +150,7 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
                         <div className="flex items-center gap-2">
                           <Button 
                             variant="outline" 
-                            size="icon" 
+                            className="h-8 w-8 p-0" 
                             className="h-6 w-6"
                             onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                           >
@@ -161,7 +161,7 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
                           </span>
                           <Button 
                             variant="outline" 
-                            size="icon" 
+                            className="h-8 w-8 p-0" 
                             className="h-6 w-6"
                             onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                           >
@@ -172,7 +172,7 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
                         {/* Remove Button */}
                         <Button
                           variant="ghost"
-                          size="icon"
+                          className="h-8 w-8 p-0"
                           className="h-6 w-6 text-destructive hover:text-destructive"
                           onClick={() => handleRemoveItem(item.id, item.name)}
                         >

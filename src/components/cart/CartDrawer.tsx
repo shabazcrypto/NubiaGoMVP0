@@ -108,12 +108,12 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
                 Looks like you haven't added anything to your cart yet.
               </p>
             </div>
-            <Button asChild>
-              <Link href="/products">
+            <Link href="/products">
+              <Button>
                 Start Shopping
                 <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </div>
         ) : (
           /* Cart Items */

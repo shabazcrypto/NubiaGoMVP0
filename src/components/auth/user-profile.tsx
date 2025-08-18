@@ -81,7 +81,7 @@ export default function UserProfile({ onClose }: UserProfileProps) {
       toast.success('Profile updated', 'Your profile has been updated successfully')
       setIsEditing(false)
     } catch (error) {
-      toast.error('Update failed', 'Failed to update profile')
+      toast('Failed to update profile', 'error')
     } finally {
       setIsLoading(false)
     }
@@ -94,7 +94,7 @@ export default function UserProfile({ onClose }: UserProfileProps) {
       // Mock preferences update
       toast.success('Preferences updated', 'Your preferences have been updated successfully')
     } catch (error) {
-      toast.error('Update failed', 'Failed to update preferences')
+      toast('Failed to update preferences', 'error')
     } finally {
       setIsLoading(false)
     }

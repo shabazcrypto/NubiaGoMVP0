@@ -145,10 +145,10 @@ export function ShippingCalculator({ onRateSelect, className = '' }: ShippingCal
         setStep(2)
         toast.success('Shipping rates calculated successfully!')
       } else {
-        toast.error(ratesError || 'Failed to calculate shipping rates')
+        toast(ratesError || 'Failed to calculate shipping rates', 'error')
       }
     } catch (error) {
-      toast.error('An error occurred while calculating rates')
+              toast('An error occurred while calculating rates', 'error')
     }
   }
 

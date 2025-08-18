@@ -95,13 +95,13 @@ export function AddressValidation({
           toast.success('Address validated successfully')
           onValidated?.(result.data.formattedAddress || data)
         } else {
-          toast.error('Address validation failed')
+          toast('Address validation failed', 'error')
         }
       } else {
-        toast.error(result.error || 'Address validation failed')
+                  toast(result.error || 'Address validation failed', 'error')
       }
     } catch (error) {
-      toast.error('Failed to validate address')
+              toast('Failed to validate address', 'error')
     } finally {
       setIsValidating(false)
     }

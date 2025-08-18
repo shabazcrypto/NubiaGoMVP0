@@ -40,7 +40,7 @@ export function TrackingWidget({
 
   const handleTrack = async () => {
     if (!trackingNumber || !carrierCode) {
-      toast.error('Please enter both tracking number and carrier')
+      toast('Please enter both tracking number and carrier', 'error')
       return
     }
 
@@ -50,7 +50,7 @@ export function TrackingWidget({
     if (success) {
       toast.success('Tracking information updated')
     } else {
-      toast.error(trackingError || 'Failed to get tracking information')
+      toast(trackingError || 'Failed to get tracking information', 'error')
     }
     
     setIsSearching(false)

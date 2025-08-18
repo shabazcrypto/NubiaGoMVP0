@@ -45,7 +45,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
       toast.success('Login successful', 'Welcome back!')
       onSuccess?.()
     } catch (err) {
-      toast.error('Login failed', 'Invalid email or password. Try: john.doe@example.com / password')
+      toast('Invalid email or password. Try: john.doe@example.com / password', 'error')
     } finally {
       setIsLoading(false)
     }

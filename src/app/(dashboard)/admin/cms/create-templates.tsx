@@ -92,13 +92,13 @@ export default function CreateTemplates() {
         } catch (error: any) {
           const errorMsg = `Failed to create template "${templateData.name}": ${error.message}`
           setErrors(prev => [...prev, errorMsg])
-          toast.error(errorMsg)
+          toast(errorMsg, 'error')
         }
       }
 
       toast.success('Template creation completed!')
     } catch (error: any) {
-      toast.error(`Template creation failed: ${error.message}`)
+      toast(`Template creation failed: ${error.message}`, 'error')
     } finally {
       setIsCreating(false)
     }

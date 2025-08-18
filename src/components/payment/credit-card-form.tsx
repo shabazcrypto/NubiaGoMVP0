@@ -139,7 +139,7 @@ export function CreditCardForm({
       onSuccess?.(data)
     } catch (error: any) {
       const errorMessage = error.message || 'Payment processing failed'
-      toast.error('Payment Error', errorMessage)
+      toast(errorMessage, 'error')
       onError?.(errorMessage)
     } finally {
       setIsProcessing(false)

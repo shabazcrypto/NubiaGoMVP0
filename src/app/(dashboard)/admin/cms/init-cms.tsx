@@ -70,7 +70,7 @@ export default function InitCMS() {
     try {
       // Check if we have templates
       if (!templates || templates.length === 0) {
-        toast.error('No CMS templates found. Please create templates first.')
+        toast('No CMS templates found. Please create templates first.', 'error')
         return
       }
 
@@ -79,7 +79,7 @@ export default function InitCMS() {
        const pageTemplate = templates.find(t => t.name === 'Page' && t.type === 'page')
 
       if (!postTemplate || !pageTemplate) {
-        toast.error('Required templates not found. Please create Blog Post and Page templates first.')
+        toast('Required templates not found. Please create Blog Post and Page templates first.', 'error')
         return
       }
 
@@ -274,7 +274,7 @@ We're committed to building not just a platform, but an ecosystem that supports 
         } catch (error: any) {
           const errorMsg = `Failed to create blog post "${post.title}": ${error.message}`
           setErrors(prev => [...prev, errorMsg])
-          toast.error(errorMsg)
+          toast(errorMsg, 'error')
         }
       }
 
@@ -287,13 +287,13 @@ We're committed to building not just a platform, but an ecosystem that supports 
         } catch (error: any) {
           const errorMsg = `Failed to create page "${page.title}": ${error.message}`
           setErrors(prev => [...prev, errorMsg])
-          toast.error(errorMsg)
+          toast(errorMsg, 'error')
         }
       }
 
       toast.success('CMS initialization completed!')
     } catch (error: any) {
-      toast.error(`Initialization failed: ${error.message}`)
+      toast(`Initialization failed: ${error.message}`, 'error')
     } finally {
       setIsInitializing(false)
     }

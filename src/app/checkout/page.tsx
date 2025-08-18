@@ -271,12 +271,12 @@ export default function CheckoutPage() {
 
   const handleContinueToPayment = async () => {
     if (!validateForm()) {
-      toast.error('Please fill in all required fields')
+      toast('Please fill in all required fields', 'error')
       return
     }
     
     if (!selectedRate && rates.length > 0) {
-      toast.error('Please select a shipping method')
+      toast('Please select a shipping method', 'error')
       return
     }
     
@@ -286,7 +286,7 @@ export default function CheckoutPage() {
       setStep(2)
     } catch (error) {
       console.error('Error creating order:', error)
-      toast.error('Failed to create order. Please try again.')
+      toast('Failed to create order. Please try again.', 'error')
     }
   }
 

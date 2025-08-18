@@ -135,8 +135,8 @@ export function CreditCardForm({
         cardNumber: data.cardNumber.replace(/\s/g, '').slice(-4), // Only last 4 digits
       })
       
-              toast('Payment processed successfully', 'success')
-      onError?.(errorMessage)
+                      toast('Payment processed successfully', 'success')
+        onSuccess?.(data)
     } finally {
       setIsProcessing(false)
     }

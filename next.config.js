@@ -8,7 +8,6 @@ const nextConfig = {
   // ESLint configuration
   eslint: {
     ignoreDuringBuilds: true, // Prevent ESLint from failing builds
-    dirs: ['src', 'pages', 'components', 'lib', 'utils'], // Directories to lint
   },
   
   // Image optimization
@@ -54,6 +53,7 @@ const nextConfig = {
     optimizeCss: true,
     scrollRestoration: true,
   },
+
 
   // Turbopack configuration
   turbopack: {
@@ -127,6 +127,14 @@ const nextConfig = {
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
+
+    // Exclude test files from production build
+    if (!dev) {
+      config.module.rules.push({
+        test: /\.(test|spec)\.(js|ts|tsx)$/,
+        loader: 'null-loader',
+      })
+    }
 
     return config
   },

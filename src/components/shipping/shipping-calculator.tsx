@@ -156,6 +156,20 @@ export function ShippingCalculator({ onRateSelect, className = '' }: ShippingCal
     toast(`Selected ${rate.serviceName} - $${rate.rate.toFixed(2)}`, 'success')
   }
 
+  const addPackage = () => {
+    setPackages([
+      ...packages,
+      {
+        weight: 1,
+        length: 10,
+        width: 8,
+        height: 6,
+        weightUnit: 'lb',
+        dimensionUnit: 'in',
+      },
+    ])
+  }
+
   const removePackage = (index: number) => {
     if (packages.length > 1) {
       setPackages(packages.filter((_, i) => i !== index))

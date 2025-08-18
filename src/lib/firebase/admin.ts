@@ -23,8 +23,8 @@ try {
       // For client-side only apps, create a minimal admin app
       // This won't interfere with client-side authentication
       adminApp = initializeApp({
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiagolast2025',
-        storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiagolast2025'}.appspot.com`,
+          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiago-latest',
+  storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiago-latest'}.firebasestorage.app`,
       }, 'admin-app')
     }
   } else {

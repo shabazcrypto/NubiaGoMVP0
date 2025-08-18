@@ -92,7 +92,7 @@ export default function UserProfile({ onClose }: UserProfileProps) {
     
     try {
       // Mock preferences update
-      toast.success('Preferences updated', 'Your preferences have been updated successfully')
+              toast('Your preferences have been updated successfully', 'success')
     } catch (error) {
       toast('Failed to update preferences', 'error')
     } finally {
@@ -102,7 +102,7 @@ export default function UserProfile({ onClose }: UserProfileProps) {
 
   const handleLogout = () => {
     signOut()
-    toast.success('Logged out', 'You have been logged out successfully')
+            toast('You have been logged out successfully', 'success')
   }
 
   const handleCancelEdit = () => {

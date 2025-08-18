@@ -204,8 +204,7 @@ export function EnhancedLoginForm({ redirectUrl = '/customer', className }: Logi
               <Button
                 type="button"
                 variant="ghost"
-                size="icon"
-                className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8"
+                className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={isLoading}
               >

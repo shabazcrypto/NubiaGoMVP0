@@ -3,10 +3,10 @@ import { mobileMoneyService } from '@/lib/services/mobile-money.service'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { paymentId: string } }
+  { params }: { params: Promise<{ paymentId: string }> }
 ) {
+  const { paymentId } = await params
   try {
-    const { paymentId } = params
     
     if (!paymentId) {
       return NextResponse.json(

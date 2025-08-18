@@ -143,7 +143,6 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
                         <div className="flex items-center gap-2">
                           <Button 
                             variant="outline" 
-                            className="h-8 w-8 p-0" 
                             className="h-6 w-6"
                             onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                           >
@@ -154,7 +153,6 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
                           </span>
                           <Button 
                             variant="outline" 
-                            className="h-8 w-8 p-0" 
                             className="h-6 w-6"
                             onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                           >
@@ -165,7 +163,6 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
                         {/* Remove Button */}
                         <Button
                           variant="ghost"
-                          className="h-8 w-8 p-0"
                           className="h-6 w-6 text-destructive hover:text-destructive"
                           onClick={() => handleRemoveItem(item.id, item.name)}
                         >
@@ -226,17 +223,17 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
               
               {/* Action Buttons */}
               <div className="space-y-2">
-                <Button className="w-full" size="lg" asChild>
-                  <Link href="/checkout">
+                <Link href="/checkout">
+                  <Button className="w-full" size="lg">
                     Proceed to Checkout
                     <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
                 
                 <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1" asChild>
-                    <Link href="/cart">View Cart</Link>
-                  </Button>
+                  <Link href="/cart">
+                    <Button variant="outline" className="flex-1">View Cart</Button>
+                  </Link>
                   <Button 
                     variant="outline" 
                     onClick={handleClearCart}

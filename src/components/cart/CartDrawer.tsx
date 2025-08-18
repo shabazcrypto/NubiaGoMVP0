@@ -26,7 +26,7 @@ import {
 } from 'lucide-react'
 import { useCartStore } from '@/hooks/useCartStore'
 import { cn } from '@/lib/utils'
-import { toast } from '@/hooks/use-toast'
+import { toast } from '@/components/ui/toast'
 
 interface CartDrawerProps {
   children?: React.ReactNode

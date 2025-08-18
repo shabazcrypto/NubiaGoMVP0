@@ -81,7 +81,7 @@ export default function SupplierShippingPage() {
       setOrders(mockOrders)
     } catch (error) {
       console.error('Error loading shipping orders:', error)
-      toast.error('Failed to load shipping orders')
+      toast('Failed to load shipping orders', 'error')
     } finally {
       setLoading(false)
     }

@@ -88,7 +88,7 @@ export default function CreateTemplates() {
           })
           
           setCreatedTemplates(prev => [...prev, `Template: ${templateData.name}`])
-          toast.success(`Created template: ${templateData.name}`)
+          toast(`Created template: ${templateData.name}`, 'success')
         } catch (error: any) {
           const errorMsg = `Failed to create template "${templateData.name}": ${error.message}`
           setErrors(prev => [...prev, errorMsg])
@@ -96,7 +96,7 @@ export default function CreateTemplates() {
         }
       }
 
-      toast.success('Template creation completed!')
+              toast('Template creation completed!', 'success')
     } catch (error: any) {
       toast(`Template creation failed: ${error.message}`, 'error')
     } finally {

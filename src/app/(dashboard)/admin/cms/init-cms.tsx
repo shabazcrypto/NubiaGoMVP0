@@ -270,7 +270,7 @@ We're committed to building not just a platform, but an ecosystem that supports 
         try {
           await createContent({ ...post, contentType: 'post' as const }, 'post')
           setInitializedItems(prev => [...prev, `Blog Post: ${post.title}`])
-          toast.success(`Created blog post: ${post.title}`)
+          toast(`Created blog post: ${post.title}`, 'success')
         } catch (error: any) {
           const errorMsg = `Failed to create blog post "${post.title}": ${error.message}`
           setErrors(prev => [...prev, errorMsg])
@@ -283,7 +283,7 @@ We're committed to building not just a platform, but an ecosystem that supports 
         try {
           await createContent({ ...page, contentType: 'page' as const }, 'page')
           setInitializedItems(prev => [...prev, `Page: ${page.title}`])
-          toast.success(`Created page: ${page.title}`)
+          toast(`Created page: ${page.title}`, 'success')
         } catch (error: any) {
           const errorMsg = `Failed to create page "${page.title}": ${error.message}`
           setErrors(prev => [...prev, errorMsg])
@@ -291,7 +291,7 @@ We're committed to building not just a platform, but an ecosystem that supports 
         }
       }
 
-      toast.success('CMS initialization completed!')
+      toast('CMS initialization completed!', 'success')
     } catch (error: any) {
       toast(`Initialization failed: ${error.message}`, 'error')
     } finally {

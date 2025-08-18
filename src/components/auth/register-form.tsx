@@ -79,7 +79,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
         data.password, 
         data.name
       )
-      toast.success('Registration successful', 'Welcome to our platform!')
+      toast('Welcome to our platform!', 'success')
       onSuccess?.()
     } catch (err) {
       // Error is handled by the store

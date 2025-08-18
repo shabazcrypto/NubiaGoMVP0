@@ -78,7 +78,7 @@ export default function UserProfile({ onClose }: UserProfileProps) {
     
     try {
       await updateUserProfile(data.name)
-      toast.success('Profile updated', 'Your profile has been updated successfully')
+      toast('Your profile has been updated successfully', 'success')
       setIsEditing(false)
     } catch (error) {
       toast('Failed to update profile', 'error')

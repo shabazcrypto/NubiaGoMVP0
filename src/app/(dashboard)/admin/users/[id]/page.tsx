@@ -23,10 +23,11 @@ interface User {
   address?: string
 }
 
-export default function AdminUserDetailPage({ params }: { params: { id: string } }) {
+export default async function AdminUserDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   // Simulate user data - in a real app, this would come from an API or database
   const user: User = {
-    id: params.id,
+    id: id,
     name: 'John Doe',
     email: 'john.doe@example.com',
     role: 'customer',

@@ -42,7 +42,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
     
     try {
       await signIn(data.email, data.password)
-      toast.success('Login successful', 'Welcome back!')
+      toast('Welcome back!', 'success')
       onSuccess?.()
     } catch (err) {
       toast('Invalid email or password. Try: john.doe@example.com / password', 'error')

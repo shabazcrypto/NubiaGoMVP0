@@ -1,3 +1,5 @@
+const webpack = require('webpack')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Basic configuration
@@ -89,24 +91,34 @@ const nextConfig = {
       })
     }
 
-    // Handle client-side fallbacks
+    // Handle client-side polyfills and fallbacks
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-        crypto: false,
-        stream: false,
-        url: false,
-        zlib: false,
-        http: false,
-        https: false,
-        assert: false,
-        os: false,
-        path: false,
-        process: false,
+        fs: require.resolve('browserify-fs'),
+        net: require.resolve('net-browserify'),
+        tls: require.resolve('tls-browserify'),
+        crypto: require.resolve('crypto-browserify'),
+        stream: require.resolve('stream-browserify'),
+        url: require.resolve('url/'),
+        zlib: require.resolve('browserify-zlib'),
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        assert: require.resolve('assert/'),
+        os: require.resolve('os-browserify/browser'),
+        path: require.resolve('path-browserify'),
+        process: require.resolve('process/browser'),
+        buffer: require.resolve('buffer/'),
+        util: require.resolve('util/'),
       }
+
+      // Add buffer polyfill
+      config.plugins.push(
+        new webpack.ProvidePlugin({
+          Buffer: ['buffer', 'Buffer'],
+          process: 'process/browser',
+        })
+      )
     }
 
     // Handle SVG files

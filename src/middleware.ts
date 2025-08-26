@@ -110,7 +110,7 @@ function isPublicRoute(pathname: string): boolean {
   }
 
   // Check exact matches
-  if (MIDDLEWARE_CONFIG.PUBLIC_ROUTES.includes(pathname)) {
+  if (MIDDLEWARE_CONFIG.PUBLIC_ROUTES.includes(pathname as any)) {
     routeCache.set(pathname, true)
     return true
   }
@@ -167,7 +167,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Early return for static assets (no middleware processing needed)
-  if (matchesPattern(pathname, MIDDLEWARE_CONFIG.STATIC_PATTERNS)) {
+  if (matchesPattern(pathname, [...MIDDLEWARE_CONFIG.STATIC_PATTERNS])) {
     performanceMetrics.staticAssets++
     
     // Add caching headers for static assets
@@ -176,7 +176,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Early return for API routes (minimal processing)
-  if (matchesPattern(pathname, MIDDLEWARE_CONFIG.API_PATTERNS)) {
+  if (matchesPattern(pathname, [...MIDDLEWARE_CONFIG.API_PATTERNS])) {
     performanceMetrics.apiCalls++
     return NextResponse.next()
   }

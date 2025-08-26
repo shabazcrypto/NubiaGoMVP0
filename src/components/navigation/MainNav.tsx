@@ -156,7 +156,7 @@ export function MainNavigation() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                    <AvatarImage src={user.photoURL as string || undefined} alt={user.displayName || 'User'} />
                     <AvatarFallback>
                       {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
                     </AvatarFallback>
@@ -217,7 +217,7 @@ export function MainNavigation() {
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0" className="lg:hidden">
+              <Button variant="ghost" className="h-8 w-8 p-0 lg:hidden">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>

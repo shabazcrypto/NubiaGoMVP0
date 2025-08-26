@@ -1,7 +1,7 @@
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import app from './firebase/config';
 
-const storage = getStorage(app);
+const storage = getStorage(app || undefined);
 
 // Base Firebase Storage URL for your project
 const STORAGE_BASE_URL = 'https://firebasestorage.googleapis.com/v0/b/nubiago-aa411.firebasestorage.app/o';

@@ -290,7 +290,7 @@ export function withCache<T extends (...args: any[]) => Promise<any>>(
  */
 export async function preloadCache(): Promise<void> {
   // Preload frequently accessed data
-  const preloadTasks = [
+  const preloadTasks: Promise<void>[] = [
     // Add your preload tasks here
     // Example: CacheService.set(CACHE_KEYS.CATEGORIES, await fetchCategories())
   ]

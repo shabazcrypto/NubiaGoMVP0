@@ -182,9 +182,8 @@ export function ProductCard({
             <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {showWishlist && (
                 <Button 
-                  className="h-8 w-8 p-0" 
+                  className="h-8 w-8 p-0 bg-white/90 hover:bg-white" 
                   variant="secondary" 
-                  className="h-8 w-8 bg-white/90 hover:bg-white"
                   onClick={handleWishlistToggle}
                 >
                   <Heart 
@@ -198,9 +197,8 @@ export function ProductCard({
               
               {onQuickView && (
                 <Button 
-                  className="h-8 w-8 p-0" 
+                  className="h-8 w-8 p-0 bg-white/90 hover:bg-white" 
                   variant="secondary"
-                  className="h-8 w-8 bg-white/90 hover:bg-white"
                   onClick={handleQuickView}
                 >
                   <Eye className="h-4 w-4 text-gray-600" />

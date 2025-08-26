@@ -44,8 +44,8 @@ export default function ProductEditForm({ product }: ProductEditFormProps) {
   }
 
   // Handle image upload error
-  const handleImageUploadError = (error: Error) => {
-    console.error('Image upload failed:', error.message)
+  const handleImageUploadError = (error: string) => {
+    console.error('Image upload failed:', error)
     // You can add toast notification here
   }
 

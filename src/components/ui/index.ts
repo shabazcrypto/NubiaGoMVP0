@@ -36,7 +36,7 @@ export { SocialSharing } from './social-sharing'
 // Navigation Components
 // Navigation components that exist
 // export { Breadcrumb } from './breadcrumb'
-export { default as Pagination } from './pagination'
+export { Pagination } from './pagination'
 // export { Tabs } from './tabs'
 // export { TabList } from './tab-list'
 // export { TabTrigger } from './tab-trigger'

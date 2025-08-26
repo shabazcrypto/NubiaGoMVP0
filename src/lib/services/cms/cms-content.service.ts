@@ -196,9 +196,29 @@ export class CMSContentService {
     }
     return collection(db, 'cms_content')
   }
-  private templatesCollection = collection(db, 'cms_templates')
-  private mediaCollection = collection(db, 'cms_media')
-  private versionsCollection = collection(db, 'cms_versions')
+  
+  private get templatesCollection() {
+    // Check if Firebase is properly initialized
+    if (!db || typeof db.collection !== 'function') {
+      throw new Error('Firebase not properly initialized')
+    }
+    return collection(db, 'cms_templates')
+  }
+  
+  private get mediaCollection() {
+    // Check if Firebase is properly initialized
+    if (!db || typeof db.collection !== 'function') {
+      throw new Error('Firebase not properly initialized')
+    }
+    return collection(db, 'cms_media')
+  }
+  private get versionsCollection() {
+    // Check if Firebase is properly initialized
+    if (!db || typeof db.collection !== 'function') {
+      throw new Error('Firebase not properly initialized')
+    }
+    return collection(db, 'cms_versions')
+  }
   private listeners: Map<string, () => void> = new Map()
 
   // Content CRUD Operations

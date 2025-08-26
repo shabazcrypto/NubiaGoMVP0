@@ -215,6 +215,9 @@ interface AdminDashboardState {
   // Real-time subscriptions
   subscribeToRealTimeUpdates: () => void
   unsubscribeFromRealTimeUpdates: () => void
+
+  // Helper methods
+  checkAllDataLoaded: () => void
 }
 
 // TEMPORARY: Mock data since Firebase is disabled

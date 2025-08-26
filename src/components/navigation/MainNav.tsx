@@ -156,7 +156,7 @@ export function MainNavigation() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={user.photoURL as string || undefined} alt={user.displayName || 'User'} />
+                    <AvatarImage src={user.avatar || undefined} alt={user.displayName || 'User'} />
                     <AvatarFallback>
                       {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
                     </AvatarFallback>

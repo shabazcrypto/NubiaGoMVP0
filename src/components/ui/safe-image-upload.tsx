@@ -15,7 +15,7 @@ interface SafeImageUploadProps {
   userId: string
   onUploadComplete?: (metadata: any) => void
   onUploadProgress?: (progress: number) => void
-  onError?: (error: Error) => void
+  onError?: (error: string) => void
   maxFiles?: number
   className?: string
 }
@@ -33,7 +33,7 @@ export function SafeImageUpload(props: SafeImageUploadProps) {
       onError={(error, errorInfo) => {
         console.error('ImageUpload Error:', error, errorInfo)
         if (props.onError) {
-          props.onError(error)
+          props.onError(error.message || 'Unknown error occurred')
         }
       }}
     >

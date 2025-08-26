@@ -814,14 +814,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
           console.log('Mock real-time updates disabled')
         },
 
-        // Helper function to check if all data is loaded
-        checkAllDataLoaded: () => {
-          const state = get()
-          const allLoaded = !state.userLoading && !state.supplierLoading && !state.orderLoading && !state.productLoading
-          if (allLoaded) {
-            set({ loading: false })
-          }
-        }
+
       }),
       {
         name: 'admin-dashboard-store',

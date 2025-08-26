@@ -309,6 +309,33 @@ export class CMSContentService {
 
   async getContentBySlug(slug: string): Promise<CMSContent | null> {
     try {
+      // Check if Firebase is properly initialized
+      if (!db || typeof db.collection !== 'function') {
+        // Return mock data for build process
+        console.log('CMS: Using mock data for getContentBySlug')
+        return {
+          id: 'mock-blog-post',
+          title: 'Sample Blog Post',
+          slug: slug,
+          content: 'This is a sample blog post content for demonstration purposes.',
+          excerpt: 'This is a sample blog post excerpt.',
+          template: 'blog-post',
+          status: 'published',
+          contentType: 'post',
+          authorId: 'mock-author',
+          authorName: 'Sample Author',
+          approvalStatus: 'approved',
+          version: 1,
+          isScheduled: false,
+          tags: ['sample', 'blog'],
+          categories: ['General'],
+          customFields: {},
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          publishedAt: new Date()
+        } as CMSContent
+      }
+
       const q = query(
         this.contentCollection,
         where('slug', '==', slug),

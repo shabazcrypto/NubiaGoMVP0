@@ -132,7 +132,7 @@ async function storeMetrics(report: PerformanceReport): Promise<void> {
   // Store errors separately for analysis
   if (report.errors.length > 0) {
     const errorsKey = `analytics:errors:${date}`
-    const errors = await CacheService.get(errorsKey) || []
+    const errors: any[] = await CacheService.get(errorsKey) || []
     
     errors.push(...report.errors.map(error => ({
       ...error,

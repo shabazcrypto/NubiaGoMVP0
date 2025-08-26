@@ -16,13 +16,21 @@ import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { 
   ShoppingCart, 
+  X, 
   Plus, 
   Minus, 
-  Trash2, 
-  ArrowRight,
-  ShoppingBag,
-  Truck,
-  Shield
+  ArrowRight, 
+  Heart, 
+  Share2, 
+  Save, 
+  Eye, 
+  Star, 
+  Truck, 
+  Shield, 
+  CreditCard, 
+  Clock, 
+  Tag,
+  Trash,
 } from 'lucide-react'
 import { useCartStore } from '@/hooks/useCartStore'
 import { cn } from '@/lib/utils'
@@ -91,7 +99,7 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
       <SheetContent className="w-full sm:max-w-lg flex flex-col">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
-            <ShoppingBag className="h-5 w-5" />
+            <ShoppingCart className="h-5 w-5" />
             Shopping Cart ({itemCount})
           </SheetTitle>
         </SheetHeader>
@@ -166,7 +174,7 @@ export function CartDrawer({ children, className }: CartDrawerProps) {
                           className="h-6 w-6 text-destructive hover:text-destructive"
                           onClick={() => handleRemoveItem(item.id, item.name)}
                         >
-                          <Trash2 className="h-3 w-3" />
+                          <Trash className="h-3 w-3" />
                         </Button>
                       </div>
                     </div>

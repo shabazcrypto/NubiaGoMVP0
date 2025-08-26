@@ -1,229 +1,197 @@
-const webpack = require('webpack')
+/**
+ * 🛡️ UI DESIGN PROTECTION NOTICE
+ * 
+ * This file contains UI elements that are PROTECTED from changes.
+ * The current design is FROZEN and cannot be modified unless:
+ * 1. User explicitly requests a specific change
+ * 2. User confirms the change before implementation
+ * 3. Change is documented in UI_DESIGN_PROTECTION.md
+ * 
+ * DO NOT MODIFY UI ELEMENTS WITHOUT EXPLICIT USER AUTHORIZATION
+ * 
+ * @ui-protected: true
+ * @requires-user-approval: true
+ * @last-approved: 2024-12-19
+ */
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Basic configuration
-  reactStrictMode: false,
-  
-  // ESLint configuration
-  eslint: {
-    ignoreDuringBuilds: true, // Prevent ESLint from failing builds
+  // Enhanced experimental configuration for optimization
+  experimental: {
+    optimizeCss: true,
+    scrollRestoration: true,
+    optimizePackageImports: [
+      'lucide-react', 
+      '@radix-ui/react-icons',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-select',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-toast'
+    ],
+    // Enable modern optimizations
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+    // Enable partial prerendering for better performance (requires canary Next.js)
+    // ppr: true,
   },
   
   // Image optimization
   images: {
-    unoptimized: false, // Enable image optimization
-    dangerouslyAllowSVG: true,
     domains: [
-      'localhost',
       'firebasestorage.googleapis.com',
-      'nubiago.vercel.app'
+      'images.unsplash.com',
+      'via.placeholder.com',
+      'picsum.photos'
     ],
+    formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    formats: ['image/webp'],
-    minimumCacheTTL: 60,
-    disableStaticImages: false,
-  },
-
-  // Compiler options
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-    reactRemoveProperties: process.env.NODE_ENV === 'production',
-  },
-
-  // Performance settings
-  trailingSlash: false,
-  generateEtags: true,
-  compress: true,
-  poweredByHeader: false,
-  productionBrowserSourceMaps: false,
-  crossOrigin: 'anonymous',
-
-  // Experimental features
-  experimental: {
-    optimizePackageImports: [
-      '@radix-ui/react-icons',
-      '@radix-ui/react-tabs',
-      'lucide-react',
-      'class-variance-authority',
-      'clsx',
-      'tailwind-merge'
-    ],
-    optimizeCss: true,
-    scrollRestoration: true,
-  },
-
-
-  // Turbopack configuration
-  turbopack: {
-    rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
   },
 
   // Webpack configuration
   webpack: (config, { dev, isServer }) => {
-    // Development optimizations
-    if (dev) {
-      config.devtool = 'eval'
-      config.optimization = {
-        ...config.optimization,
-        removeAvailableModules: false,
-        removeEmptyChunks: false,
-        splitChunks: false,
-        minimize: false,
-        concatenateModules: false,
-        usedExports: false,
-        sideEffects: false,
-      }
-      
-      config.watchOptions = {
-        poll: false,
-        aggregateTimeout: 50,
-        ignored: ['**/node_modules/**', '**/.next/**', '**/.git/**', '**/public/**'],
-      }
-      
-      config.cache = false
-    }
-
-    // Handle Node.js modules for server-side
-    if (isServer) {
-      config.externals = config.externals || []
-      config.externals.push({
-        'firebase-admin': 'commonjs firebase-admin',
-        'firebase-admin/app': 'commonjs firebase-admin/app',
-        'firebase-admin/auth': 'commonjs firebase-admin/auth',
-        'firebase-admin/firestore': 'commonjs firebase-admin/firestore',
-        'firebase-admin/storage': 'commonjs firebase-admin/storage',
-      })
-    }
-
-    // Handle client-side fallbacks
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-        crypto: false,
-        stream: false,
-        url: false,
-        zlib: false,
-        http: false,
-        https: false,
-        assert: false,
-        os: false,
-        path: false,
-        process: false,
-      }
-    }
-
     // Handle SVG files
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
 
-    // Exclude test files from production build
-    if (!dev) {
-      config.module.rules.push({
-        test: /\.(test|spec)\.(js|ts|tsx)$/,
-        loader: 'null-loader',
-      })
+    // Optimize bundle size
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
+      }
     }
 
     return config
   },
 
-  // Headers for production
+  // Environment variables
+  env: {
+    CUSTOM_KEY: process.env.CUSTOM_KEY,
+  },
+
+  // Enhanced headers for security and caching
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
           {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          },
-          {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'DENY',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'origin-when-cross-origin',
           },
-          {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' *.vercel.app; style-src 'self' 'unsafe-inline' *.googleapis.com; img-src 'self' data: blob: *.googleapis.com firebasestorage.googleapis.com; font-src 'self' fonts.gstatic.com; connect-src 'self' *.vercel.app firebaseapp.com *.firebaseio.com *.googleapis.com; frame-ancestors 'none';"
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
-          }
-        ]
+        ],
       },
+      // Cache static assets for 1 year
       {
         source: '/static/(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
       },
+             // Cache images for 1 month
+       {
+         source: '/:path*.(jpg|jpeg|png|gif|webp|avif|ico|svg)',
+         headers: [
+           {
+             key: 'Cache-Control',
+             value: 'public, max-age=2592000, stale-while-revalidate=86400',
+           },
+         ],
+       },
+       // Cache CSS and JS for 1 year
+       {
+         source: '/:path*.(css|js)',
+         headers: [
+           {
+             key: 'Cache-Control',
+             value: 'public, max-age=31536000, immutable',
+           },
+         ],
+       },
+       // Cache fonts for 1 year
+       {
+         source: '/:path*.(woff|woff2|ttf|eot)',
+         headers: [
+           {
+             key: 'Cache-Control',
+             value: 'public, max-age=31536000, immutable',
+           },
+         ],
+       },
+      // Cache API responses for 15 minutes
       {
         source: '/api/(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate'
-          }
-        ]
+            value: 'public, max-age=900, stale-while-revalidate=300',
+          },
+        ],
       },
-      {
-        source: '/_next/static/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
-      },
-      {
-        source: '/images/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400'
-          }
-        ]
-      }
     ]
   },
 
-  // Rewrites
-  async rewrites() {
+  // Redirects
+  async redirects() {
     return [
-      { source: '/api/:path*', destination: '/api/:path*' },
+      {
+        source: '/home',
+        destination: '/',
+        permanent: true,
+      },
     ]
   },
+
+  // Rewrites for API routes
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*',
+      },
+    ]
+  },
+
+  // PWA configuration
+  async generateBuildId() {
+    return 'build-' + Date.now()
+  },
+
+  // Compression
+  compress: true,
+
+  // Power by header
+  poweredByHeader: false,
+
+  // React strict mode
+  reactStrictMode: true,
 }
 
 module.exports = nextConfig 

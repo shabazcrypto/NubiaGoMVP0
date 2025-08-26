@@ -14,7 +14,6 @@ import {
   UserCredential
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase/config'
-import { logger } from '@/lib/utils/logger'
 
 interface AuthContextType {
   user: User | null
@@ -27,6 +26,7 @@ interface AuthContextType {
   updateUserProfile: (displayName: string) => Promise<void>
   error: string | null
   clearError: () => void
+  isFirebaseAvailable: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -35,47 +35,87 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isFirebaseAvailable, setIsFirebaseAvailable] = useState(false)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
-      setLoading(false)
-    }, (error) => {
-      logger.error('Auth state change error:', error)
-      setError('Authentication error occurred')
-      setLoading(false)
-    })
+    // Check if auth is available and properly configured
+    const checkFirebaseAvailability = () => {
+      if (!auth) {
+        console.warn('Firebase Auth not available')
+        setIsFirebaseAvailable(false)
+        setLoading(false)
+        return false
+      }
 
-    return unsubscribe
+      if (typeof auth.onAuthStateChanged !== 'function') {
+        console.warn('Firebase Auth methods not available')
+        setIsFirebaseAvailable(false)
+        setLoading(false)
+        return false
+      }
+
+      setIsFirebaseAvailable(true)
+      return true
+    }
+
+    if (!checkFirebaseAvailability()) {
+      return
+    }
+
+    try {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user)
+        setLoading(false)
+      }, (error) => {
+        console.error('Auth state change error:', error)
+        setError('Authentication error occurred')
+        setLoading(false)
+      })
+
+      return unsubscribe
+    } catch (error) {
+      console.error('Failed to set up auth state listener:', error)
+      setIsFirebaseAvailable(false)
+      setLoading(false)
+    }
   }, [])
 
   const signIn = async (email: string, password: string) => {
     try {
       setError(null)
+      
+      if (!isFirebaseAvailable || !auth || typeof signInWithEmailAndPassword !== 'function') {
+        throw new Error('Authentication service not available')
+      }
+      
       const result = await signInWithEmailAndPassword(auth, email, password)
       return result
     } catch (error: any) {
-      logger.error('Sign in error:', error)
+      console.error('Sign in error:', error)
       let errorMessage = 'Sign in failed'
       
-      switch (error.code) {
-        case 'auth/user-not-found':
-          errorMessage = 'No account found with this email'
-          break
-        case 'auth/wrong-password':
-          errorMessage = 'Incorrect password'
-          break
-        case 'auth/invalid-email':
-          errorMessage = 'Invalid email address'
-          break
-        case 'auth/too-many-requests':
-          errorMessage = 'Too many failed attempts. Please try again later'
-          break
-        case 'auth/internal-error':
-          errorMessage = 'Authentication service error. Please try again'
-          break
-        default:
-          errorMessage = error.message || 'Sign in failed'
+      if (error.message === 'Authentication service not available') {
+        errorMessage = 'Authentication service is not configured'
+      } else {
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMessage = 'No account found with this email'
+            break
+          case 'auth/wrong-password':
+            errorMessage = 'Incorrect password'
+            break
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email address'
+            break
+          case 'auth/too-many-requests':
+            errorMessage = 'Too many failed attempts. Please try again later'
+            break
+          case 'auth/internal-error':
+            errorMessage = 'Authentication service error. Please try again'
+            break
+          default:
+            errorMessage = error.message || 'Sign in failed'
+        }
       }
       
       setError(errorMessage)
@@ -86,32 +126,41 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   const signUp = async (email: string, password: string, displayName?: string) => {
     try {
       setError(null)
+      
+      if (!isFirebaseAvailable || !auth || typeof createUserWithEmailAndPassword !== 'function') {
+        throw new Error('Authentication service not available')
+      }
+      
       const result = await createUserWithEmailAndPassword(auth, email, password)
       
-      if (displayName && result.user) {
+      if (displayName && result.user && typeof updateProfile === 'function') {
         await updateProfile(result.user, { displayName })
       }
       
       return result
     } catch (error: any) {
-      logger.error('Sign up error:', error)
+      console.error('Sign up error:', error)
       let errorMessage = 'Account creation failed'
       
-      switch (error.code) {
-        case 'auth/email-already-in-use':
-          errorMessage = 'An account with this email already exists'
-          break
-        case 'auth/weak-password':
-          errorMessage = 'Password is too weak. Use at least 6 characters'
-          break
-        case 'auth/invalid-email':
-          errorMessage = 'Invalid email address'
-          break
-        case 'auth/internal-error':
-          errorMessage = 'Authentication service error. Please try again'
-          break
-        default:
-          errorMessage = error.message || 'Account creation failed'
+      if (error.message === 'Authentication service not available') {
+        errorMessage = 'Authentication service is not configured'
+      } else {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'An account with this email already exists'
+            break
+          case 'auth/weak-password':
+            errorMessage = 'Password is too weak. Use at least 6 characters'
+            break
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email address'
+            break
+          case 'auth/internal-error':
+            errorMessage = 'Authentication service error. Please try again'
+            break
+          default:
+            errorMessage = error.message || 'Account creation failed'
+        }
       }
       
       setError(errorMessage)
@@ -122,9 +171,14 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   const signOut = async () => {
     try {
       setError(null)
+      
+      if (!isFirebaseAvailable || !auth || typeof firebaseSignOut !== 'function') {
+        throw new Error('Authentication service not available')
+      }
+      
       await firebaseSignOut(auth)
     } catch (error: any) {
-      logger.error('Sign out error:', error)
+      console.error('Sign out error:', error)
       setError('Sign out failed')
       throw error
     }
@@ -133,20 +187,29 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   const resetPassword = async (email: string) => {
     try {
       setError(null)
+      
+      if (!isFirebaseAvailable || !auth || typeof sendPasswordResetEmail !== 'function') {
+        throw new Error('Authentication service not available')
+      }
+      
       await sendPasswordResetEmail(auth, email)
     } catch (error: any) {
-      logger.error('Password reset error:', error)
+      console.error('Password reset error:', error)
       let errorMessage = 'Password reset failed'
       
-      switch (error.code) {
-        case 'auth/user-not-found':
-          errorMessage = 'No account found with this email'
-          break
-        case 'auth/invalid-email':
-          errorMessage = 'Invalid email address'
-          break
-        default:
-          errorMessage = error.message || 'Password reset failed'
+      if (error.message === 'Authentication service not available') {
+        errorMessage = 'Authentication service is not configured'
+      } else {
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMessage = 'No account found with this email'
+            break
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email address'
+            break
+          default:
+            errorMessage = error.message || 'Password reset failed'
+        }
       }
       
       setError(errorMessage)
@@ -157,11 +220,14 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   const updateUserProfile = async (displayName: string) => {
     try {
       setError(null)
-      if (user) {
-        await updateProfile(user, { displayName })
+      
+      if (!user || typeof updateProfile !== 'function') {
+        throw new Error('Profile update not available')
       }
+      
+      await updateProfile(user, { displayName })
     } catch (error: any) {
-      logger.error('Profile update error:', error)
+      console.error('Profile update error:', error)
       setError('Profile update failed')
       throw error
     }
@@ -170,6 +236,11 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   const signInWithGoogle = async () => {
     try {
       setError(null)
+      
+      if (!isFirebaseAvailable || !auth || typeof signInWithPopup !== 'function') {
+        throw new Error('Google authentication not available')
+      }
+      
       const provider = new GoogleAuthProvider()
       // Add custom parameters for better UX
       provider.setCustomParameters({
@@ -179,21 +250,25 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       const result = await signInWithPopup(auth, provider)
       return result
     } catch (error: any) {
-      logger.error('Google sign in error:', error)
+      console.error('Google sign in error:', error)
       let errorMessage = 'Google sign in failed'
       
-      switch (error.code) {
-        case 'auth/popup-closed-by-user':
-          errorMessage = 'Sign in was cancelled'
-          break
-        case 'auth/popup-blocked':
-          errorMessage = 'Pop-up was blocked. Please allow pop-ups for this site'
-          break
-        case 'auth/account-exists-with-different-credential':
-          errorMessage = 'An account already exists with this email using a different sign-in method'
-          break
-        default:
-          errorMessage = error.message || 'Google sign in failed'
+      if (error.message === 'Google authentication not available') {
+        errorMessage = 'Google authentication is not configured'
+      } else {
+        switch (error.code) {
+          case 'auth/popup-closed-by-user':
+            errorMessage = 'Sign in was cancelled'
+            break
+          case 'auth/popup-blocked':
+            errorMessage = 'Pop-up was blocked. Please allow pop-ups for this site'
+            break
+          case 'auth/account-exists-with-different-credential':
+            errorMessage = 'An account already exists with this email using a different sign-in method'
+            break
+          default:
+            errorMessage = error.message || 'Google sign in failed'
+        }
       }
       
       setError(errorMessage)
@@ -213,7 +288,8 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
     resetPassword,
     updateUserProfile,
     error,
-    clearError
+    clearError,
+    isFirebaseAvailable
   }
 
   return (

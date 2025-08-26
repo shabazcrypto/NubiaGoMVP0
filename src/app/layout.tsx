@@ -8,6 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ErrorBoundaryProvider } from '@/components/providers/error-boundary-provider'
 import { performanceMonitor } from '@/lib/utils/performance-monitor'
 import { FirebaseAuthProvider } from '@/hooks/useFirebaseAuth'
+import SSRSafeErrorBoundary from '@/components/ui/SSRSafeErrorBoundary'
 import { RoleChangeHandler } from '@/components/auth/role-change-handler'
 import ConditionalNavigation from '@/components/layout/conditional-navigation'
 import StoreProvider from '@/components/providers/store-provider'
@@ -248,40 +249,42 @@ export default function RootLayout({
       <body className={`${inter.className} dark:bg-gray-900 dark:text-gray-100`}>
                  <ErrorBoundaryProvider>
            <Suspense fallback={<SimpleLoading timeout={15000} />}>
-             <FirebaseAuthProvider>
-               {/* <ToastProvider> */}
-                 <StoreProvider>
-                   <RoleChangeHandler>
-                     <MobileOptimizationProvider>
-                                               <MobileMenuProvider>
-                          {/* Unified Header with Top Utility Bar, Main Header, and Categories */}
-                          <ErrorBoundary>
-                            <UnifiedHeader />
-                          </ErrorBoundary>
+             <SSRSafeErrorBoundary>
+               <FirebaseAuthProvider>
+                 {/* <ToastProvider> */}
+                   <StoreProvider>
+                     <RoleChangeHandler>
+                       <MobileOptimizationProvider>
+                                                 <MobileMenuProvider>
+                            {/* Unified Header with Top Utility Bar, Main Header, and Categories */}
+                            <ErrorBoundary>
+                              <UnifiedHeader />
+                            </ErrorBoundary>
 
-                          {/* Desktop navigation - DISABLED - UnifiedHeader handles all navigation */}
-                          {/* <ConditionalNavigation /> */}
+                            {/* Desktop navigation - DISABLED - UnifiedHeader handles all navigation */}
+                            {/* <ConditionalNavigation /> */}
 
-                          {/* Main content with proper spacing */}
-                          <main className="min-h-screen pb-20 lg:pb-0">
-                            {children}
-                          </main>
+                            {/* Main content with proper spacing */}
+                            <main className="min-h-screen pb-20 lg:pb-0">
+                              {children}
+                            </main>
 
-                          {/* Unified bottom navigation */}
-                          <ErrorBoundary>
-                            <UnifiedBottomNav />
-                          </ErrorBoundary>
+                            {/* Unified bottom navigation */}
+                            <ErrorBoundary>
+                              <UnifiedBottomNav />
+                            </ErrorBoundary>
 
-                          {/* Desktop footer */}
-                          <div className="hidden lg:block">
-                            <Footer />
-                          </div>
-                        </MobileMenuProvider>
-                     </MobileOptimizationProvider>
-                   </RoleChangeHandler>
-                 </StoreProvider>
-               {/* </ToastProvider> */}
-             </FirebaseAuthProvider>
+                            {/* Desktop footer */}
+                            <div className="hidden lg:block">
+                              <Footer />
+                            </div>
+                          </MobileMenuProvider>
+                       </MobileOptimizationProvider>
+                     </RoleChangeHandler>
+                   </StoreProvider>
+                 {/* </ToastProvider> */}
+               </FirebaseAuthProvider>
+             </SSRSafeErrorBoundary>
            </Suspense>
          </ErrorBoundaryProvider>
         {/* <Toaster /> */}

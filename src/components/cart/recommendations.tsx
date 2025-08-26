@@ -255,7 +255,7 @@ export default function Recommendations({
                 <div className="flex items-center gap-1">
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className={`h-3 w-3 ${i < Math.floor(item.rating) ? 'fill-current' : ''}`} />
+                      <Star key={`star-${item.id}-${i}`} className={`h-3 w-3 ${i < Math.floor(item.rating) ? 'fill-current' : ''}`} />
                     ))}
                   </div>
                   <span className="text-xs text-gray-500">({item.reviewCount})</span>

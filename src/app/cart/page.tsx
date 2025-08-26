@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, ShoppingBag, Trash2, Plus, Minus, Shield, Truck, CreditCard, Star, Clock, Tag, AlertTriangle } from 'lucide-react'
+import { ArrowLeft, ShoppingBag, Trash, Plus, Minus, Shield, Truck, CreditCard, Star, Clock, Tag, AlertTriangle } from 'lucide-react'
 import ShoppingCart from '@/components/cart/shopping-cart'
 import { CartService } from '@/lib/services/cart.service'
 import { useAuth } from '@/hooks/useAuth'

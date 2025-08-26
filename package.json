@@ -29,7 +29,9 @@
     "vercel:env:pull": "vercel env pull",
     "vercel:env:push": "vercel env push",
     "assets:generate": "node scripts/generate-placeholder-images.js",
-    "populate-admin-data": "node scripts/populate-admin-data.js"
+    "populate-admin-data": "node scripts/populate-admin-data.js",
+    "test:optimization": "node scripts/test-optimization.js",
+    "test:performance": "npm run test:optimization"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.0",
@@ -98,6 +100,8 @@
     "react-spring": "^10.0.1",
     "react-swipeable": "^7.0.2",
     "recharts": "^3.1.0",
+    "@upstash/redis": "^1.28.4",
+    "swr": "^2.2.4",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tailwind-merge": "^3.3.1",

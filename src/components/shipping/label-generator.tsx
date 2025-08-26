@@ -328,7 +328,7 @@ export function LabelGenerator({ orderId, className = '' }: LabelGeneratorProps)
             </div>
             <div className="space-y-4">
               {packages.map((pkg, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-4">
+                <div key={`package-${index}-${pkg.weight}-${pkg.length}-${pkg.width}-${pkg.height}`} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="text-sm font-medium text-gray-900">
                       Package {index + 1}

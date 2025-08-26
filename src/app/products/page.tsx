@@ -1,3 +1,19 @@
+/**
+ * 🛡️ UI DESIGN PROTECTION NOTICE
+ * 
+ * This file contains UI elements that are PROTECTED from changes.
+ * The current design is FROZEN and cannot be modified unless:
+ * 1. User explicitly requests a specific change
+ * 2. User confirms the change before implementation
+ * 3. Change is documented in UI_DESIGN_PROTECTION.md
+ * 
+ * DO NOT MODIFY UI ELEMENTS WITHOUT EXPLICIT USER AUTHORIZATION
+ * 
+ * @ui-protected: true
+ * @requires-user-approval: true
+ * @last-approved: 2024-12-19
+ */
+
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from 'react'
@@ -13,9 +29,39 @@ import { ProductService } from '@/lib/services/product.service'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { Product } from '@/types'
 import PullToRefresh from '@/components/mobile/PullToRefresh'
-import { ProductImage as LocalProductImage } from '@/components/ui/LocalImage'
+import Image from 'next/image'
+import SSRSafeErrorBoundary from '@/components/ui/SSRSafeErrorBoundary'
 
-
+// Error boundary wrapper component
+function ProductsErrorBoundary({ children }: { children: React.ReactNode }) {
+  return (
+    <SSRSafeErrorBoundary
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+          <div className="text-center max-w-md">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="h-8 w-8 text-red-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Products Page Error
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Something went wrong while loading the products. Please try refreshing the page.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              Refresh Page
+            </button>
+          </div>
+        </div>
+      }
+    >
+      {children}
+    </SSRSafeErrorBoundary>
+  )
+}
 
 export default function ProductsPage() {
   const searchParams = useSearchParams()
@@ -91,16 +137,25 @@ export default function ProductsPage() {
       }
 
       let result: { products: Product[]; total: number; hasMore: boolean }
-      const limit = 1000 // Load all products in one go
+      const limit = 50 // Reduced limit for faster loading
       const currentPage = isLoadingMore ? page : 1
       
-      if (subcategory) {
-        result = await productService.getProductsBySubcategory(subcategory, currentPage, limit)
-      } else if (category) {
-        result = await productService.getProductsByCategory(category, currentPage, limit)
-      } else {
-        result = await productService.getAllProducts(currentPage, limit)
-      }
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      )
+      
+      const fetchPromise = (async () => {
+        if (subcategory) {
+          return await productService.getProductsBySubcategory(subcategory, currentPage, limit)
+        } else if (category) {
+          return await productService.getProductsByCategory(category, currentPage, limit)
+        } else {
+          return await productService.getAllProducts(currentPage, limit)
+        }
+      })()
+      
+      result = await Promise.race([fetchPromise, timeoutPromise]) as any
       
       if (isLoadingMore) {
         setProducts(prev => [...prev, ...result.products])
@@ -112,6 +167,10 @@ export default function ProductsPage() {
       setHasMore(result.hasMore)
     } catch (error) {
       console.error('Error loading products:', error)
+      // Set empty products array on error to show empty state
+      if (!isLoadingMore) {
+        setProducts([])
+      }
     } finally {
       setIsLoading(false)
       resetFetching()
@@ -185,7 +244,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <ProductsErrorBoundary>
       <PullToRefresh onRefresh={() => loadProducts(searchParams.get('category'), searchParams.get('subcategory'))}>
         <div className={`max-w-none mx-auto px-2 sm:px-4 lg:px-6 xl:px-8 py-3 ${isMobile ? 'py-2' : 'py-6'}`}>
         {/* Header removed as requested */}
@@ -292,18 +351,24 @@ export default function ProductsPage() {
 
             {/* Enhanced Products Grid with sticky cart on desktop */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              <div className={`${viewMode === 'grid' ? 'lg:col-span-10' : 'lg:col-span-10'} grid ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5' : 'grid-cols-1'} gap-5`}>
+              <div className={`${viewMode === 'grid' ? 'lg:col-span-10' : 'lg:col-span-10'} grid ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-1'} gap-5`}>
             {getDisplayProducts().map((product, index) => (
                 <div key={product.id} className="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                   {/* Product Image with Badges */}
                   <div className="relative aspect-square overflow-hidden bg-gray-50">
-                    <LocalProductImage
-                      productCategory="default"
-                      variant={index % 6}
+                    <Image
+                      src={product.imageUrl || product.images?.[0] || product.thumbnailUrl || '/product-placeholder.jpg'}
                       alt={product.name}
                       width={400}
                       height={400}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      priority={index < 8}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      onError={(e) => {
+                        // Fallback to a default image if the main image fails to load
+                        const target = e.target as HTMLImageElement
+                        target.src = '/product-placeholder.jpg'
+                      }}
                     />
                     
                     {/* Discount Badge */}
@@ -404,13 +469,14 @@ export default function ProductsPage() {
               ))}
               </div>
               <div className="hidden lg:block lg:col-span-2 xl:col-span-2">
-                <div className="sticky top-24">
+                <div className="sticky top-6">
                   <SidebarCart
                     items={cart.items as any}
                     onUpdateQuantity={(id, q) => cart.updateQuantity(id as any, q)}
                     onRemoveItem={(id) => cart.removeItem(id as any)}
                     onClearCart={() => cart.clearCart()}
                     onCheckout={() => window.location.href = '/checkout'}
+                    className="cart-compact-v2"
                   />
                 </div>
               </div>
@@ -450,6 +516,6 @@ export default function ProductsPage() {
         )}
         </div>
       </PullToRefresh>
-    </div>
+    </ProductsErrorBoundary>
   )
 } 

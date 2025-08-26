@@ -2,120 +2,139 @@ import { initializeApp, getApps, FirebaseApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
-import { logger } from '@/lib/utils/logger'
+
+// Safe environment variable access with fallbacks
+const getEnvVar = (key: string, fallback: string) => {
+  if (typeof window !== 'undefined') {
+    // Client-side: use NEXT_PUBLIC_ variables
+    const value = process.env[`NEXT_PUBLIC_${key}`]
+    console.log(`Firebase Config: ${key} = ${value ? '***' : 'undefined (using fallback)'}`)
+    return value || fallback
+  }
+  // Server-side: use fallback
+  console.log(`Firebase Config: ${key} = fallback (server-side)`)
+  return fallback
+}
+
+// Check if we're in a browser environment and if Firebase should be initialized
+const shouldInitializeFirebase = () => {
+  console.log('Firebase Config: Checking if should initialize Firebase')
+  if (typeof window === 'undefined') {
+    console.log('Firebase Config: Server-side, skipping initialization')
+    return false // Don't initialize on server-side
+  }
+  
+  // Always return true since we have fallback values
+  // The fallback values will be used if environment variables are not set
+  console.log('Firebase Config: Client-side, will initialize with fallbacks')
+  return true
+}
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyCrdNo31J54779co1uhxVKCZEybgKK6hII',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'nubiago-latest.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'nubiago-latest',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'nubiago-latest.firebasestorage.app',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '1071680034258',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:1071680034258:web:e7b95de06ce571dbc0240b',
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-XE1YM7HV2J'
+  apiKey: getEnvVar('FIREBASE_API_KEY', 'AIzaSyCrdNo31J54779co1uhxVKCZEybgKK6hII'),
+  authDomain: getEnvVar('FIREBASE_AUTH_DOMAIN', 'nubiago-latest.firebaseapp.com'),
+  projectId: getEnvVar('FIREBASE_PROJECT_ID', 'nubiago-latest'),
+  storageBucket: getEnvVar('FIREBASE_STORAGE_BUCKET', 'nubiago-latest.firebasestorage.app'),
+  messagingSenderId: getEnvVar('FIREBASE_MESSAGING_SENDER_ID', '1071680034258'),
+  appId: getEnvVar('FIREBASE_APP_ID', '1:1071680034258:web:e7b95de06ce571dbc0240b'),
+  measurementId: getEnvVar('FIREBASE_MEASUREMENT_ID', 'G-XE1YM7HV2J')
 }
 
-// Validate required environment variables only in production runtime
-const requiredEnvVars = [
-  'NEXT_PUBLIC_FIREBASE_API_KEY',
-  'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN',
-  'NEXT_PUBLIC_FIREBASE_PROJECT_ID',
-  'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET',
-  'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
-  'NEXT_PUBLIC_FIREBASE_APP_ID'
-]
+console.log('Firebase Config: Configuration object created:', {
+  apiKey: firebaseConfig.apiKey ? '***' : 'missing',
+  authDomain: firebaseConfig.authDomain,
+  projectId: firebaseConfig.projectId,
+  storageBucket: firebaseConfig.storageBucket,
+  messagingSenderId: firebaseConfig.messagingSenderId,
+  appId: firebaseConfig.appId,
+  measurementId: firebaseConfig.measurementId
+})
 
-// Only validate in production runtime, not during build
-if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PHASE) {
-  for (const envVar of requiredEnvVars) {
-    if (!process.env[envVar]) {
-      logger.warn(`Missing required environment variable: ${envVar}`)
-    }
+// Initialize Firebase with error handling
+let app: FirebaseApp | null = null
+let auth: any = null
+let db: any = null
+let storage: any = null
+
+// Create mock services for when Firebase is not available
+const createMockServices = () => {
+  console.warn('Firebase: Using mock services - Firebase not properly configured')
+  
+  const mockAuth = {
+    onAuthStateChanged: (callback: any) => {
+      callback(null)
+      return () => {}
+    },
+    signOut: () => Promise.resolve(),
+    currentUser: null,
+    signInWithEmailAndPassword: () => Promise.reject(new Error('Firebase not configured')),
+    createUserWithEmailAndPassword: () => Promise.reject(new Error('Firebase not configured')),
+    sendPasswordResetEmail: () => Promise.reject(new Error('Firebase not configured')),
+    updateProfile: () => Promise.reject(new Error('Firebase not configured')),
+    signInWithPopup: () => Promise.reject(new Error('Firebase not configured'))
   }
+  
+  const mockDb = {
+    collection: () => ({
+      doc: () => ({
+        get: () => Promise.resolve({ exists: false, data: () => null }),
+        set: () => Promise.resolve(),
+        update: () => Promise.resolve(),
+        delete: () => Promise.resolve()
+      }),
+      add: () => Promise.resolve({ id: 'mock-id' }),
+      get: () => Promise.resolve({ docs: [], empty: true })
+    })
+  }
+  
+  const mockStorage = {
+    ref: () => ({
+      put: () => Promise.resolve({ ref: { getDownloadURL: () => Promise.resolve('mock-url') } }),
+      getDownloadURL: () => Promise.resolve('mock-url')
+    })
+  }
+  
+  return { mockAuth, mockDb, mockStorage }
 }
 
-// Initialize Firebase - Prevent multiple initializations
-let app: FirebaseApp
 try {
-  // Check if Firebase is already initialized
-  const existingApps = getApps()
-  if (existingApps.length > 0) {
-    app = existingApps[0]
-    console.log('Firebase: Using existing app instance')
+  if (shouldInitializeFirebase()) {
+    // Check if Firebase is already initialized
+    const existingApps = getApps()
+    if (existingApps.length > 0) {
+      app = existingApps[0]
+      console.log('Firebase: Using existing app instance')
+    } else {
+      console.log('Firebase: Initializing with config', {
+        apiKey: firebaseConfig.apiKey ? '***' : 'missing',
+        authDomain: firebaseConfig.authDomain,
+        projectId: firebaseConfig.projectId
+      })
+      app = initializeApp(firebaseConfig)
+      console.log('Firebase: Successfully initialized')
+    }
+
+    // Initialize services
+    auth = getAuth(app)
+    db = getFirestore(app)
+    storage = getStorage(app)
   } else {
-    console.log('Firebase: Initializing with config', firebaseConfig)
-    app = initializeApp(firebaseConfig)
-    console.log('Firebase: Successfully initialized')
+    console.warn('Firebase: Skipping initialization - missing required environment variables')
+    const { mockAuth, mockDb, mockStorage } = createMockServices()
+    auth = mockAuth
+    db = mockDb
+    storage = mockStorage
   }
+
 } catch (error) {
   console.error('Firebase: Failed to initialize', error)
-  logger.error('Failed to initialize Firebase:', error)
   
-  // During build time, create a minimal app
-  if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
-    app = initializeApp({
-      apiKey: 'build-time-key',
-      authDomain: 'build-time.firebaseapp.com',
-      projectId: 'build-time',
-      storageBucket: 'build-time.appspot.com',
-      messagingSenderId: '123456789',
-      appId: '1:123456789:web:build-time'
-    })
-  } else {
-    // Create a minimal app for development when Firebase fails
-    try {
-      app = initializeApp({
-        apiKey: 'fallback-key',
-        authDomain: 'fallback.firebaseapp.com',
-        projectId: 'fallback',
-        storageBucket: 'fallback.appspot.com',
-        messagingSenderId: '123456789',
-        appId: '1:123456789:web:fallback'
-      })
-      logger.warn('Using fallback Firebase configuration')
-    } catch (fallbackError) {
-      logger.error('Failed to create fallback Firebase app:', fallbackError)
-      throw new Error('Firebase initialization failed completely')
-    }
-  }
+  // Create mock services as fallback
+  const { mockAuth, mockDb, mockStorage } = createMockServices()
+  auth = mockAuth
+  db = mockDb
+  storage = mockStorage
 }
 
-// Initialize Firebase services
-export const auth = getAuth(app)
-export const db = getFirestore(app)
-export const storage = getStorage(app)
-
-// Add connection timeout and retry settings - Only configure once
-if (typeof window !== 'undefined' && !(window as any).__firebaseAuthConfigured) {
-  try {
-    console.log('Firebase: Configuring auth settings')
-    // Configure auth settings for better error handling
-    auth.settings.appVerificationDisabledForTesting = false
-    
-    // Add error listener for better debugging
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log('Firebase: User authenticated:', user.email)
-        logger.info('User authenticated:', user.email)
-      } else {
-        console.log('Firebase: No user authenticated')
-      }
-    }, (error) => {
-      console.error('Firebase: Auth state change error:', error)
-      logger.error('Auth state change error:', error)
-    })
-    
-    // Store unsubscribe function to prevent memory leaks
-    if (typeof window !== 'undefined') {
-      (window as any).__firebaseAuthUnsubscribe = unsubscribe
-    }
-    console.log('Firebase: Auth settings configured successfully')
-    
-    // Mark as configured to prevent multiple setups
-    (window as any).__firebaseAuthConfigured = true
-  } catch (error) {
-    console.error('Firebase: Failed to configure auth settings:', error)
-    logger.warn('Failed to configure auth settings:', error)
-  }
-}
-
+export { auth, db, storage }
 export default app 

@@ -241,7 +241,7 @@ export function ProductCard({
             <div className="flex">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star 
-                  key={i} 
+                  key={`star-${product.id}-${i}`} 
                   className={cn(
                     "h-3 w-3",
                     i < Math.floor(product.rating) 

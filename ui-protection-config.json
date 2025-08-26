@@ -1,0 +1,53 @@
+{
+  "uiProtection": {
+    "status": "ACTIVE",
+    "designFreezeDate": "2024-12-19",
+    "protectionLevel": "MAXIMUM",
+    "requiresUserApproval": true,
+    "protectedFiles": [
+      "src/app/page.tsx",
+      "src/app/products/page.tsx",
+      "src/components/cart/shopping-cart.tsx",
+      "src/components/product/ProductCard.tsx",
+      "src/components/ui/LocalImage.tsx"
+    ],
+    "protectedElements": {
+      "heroSection": {
+        "layout": "two-column",
+        "leftContent": "protected",
+        "rightImage": "protected",
+        "styling": "frozen"
+      },
+      "productsPage": {
+        "gridLayout": "10/2 split",
+        "productCards": "protected",
+        "shoppingCart": "50% size",
+        "searchFunctionality": "protected"
+      },
+      "shoppingCart": {
+        "size": "50% of original",
+        "compactDesign": "protected",
+        "styling": "frozen"
+      }
+    },
+    "changeProtocol": {
+      "requiresExplicitRequest": true,
+      "requiresUserConfirmation": true,
+      "requiresDocumentation": true,
+      "prohibitedActions": [
+        "automatic_ui_improvements",
+        "design_optimizations",
+        "styling_enhancements",
+        "layout_refinements",
+        "aesthetic_changes"
+      ]
+    },
+    "enforcementRules": [
+      "ALWAYS check protection status before UI changes",
+      "NEVER suggest UI improvements without user request",
+      "ALWAYS ask for explicit confirmation",
+      "ALWAYS document authorized changes",
+      "ALWAYS preserve current design unless specifically instructed"
+    ]
+  }
+}

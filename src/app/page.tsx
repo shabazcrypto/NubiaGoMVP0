@@ -1,3 +1,19 @@
+/**
+ * 🛡️ UI DESIGN PROTECTION NOTICE
+ * 
+ * This file contains UI elements that are PROTECTED from changes.
+ * The current design is FROZEN and cannot be modified unless:
+ * 1. User explicitly requests a specific change
+ * 2. User confirms the change before implementation
+ * 3. Change is documented in UI_DESIGN_PROTECTION.md
+ * 
+ * DO NOT MODIFY UI ELEMENTS WITHOUT EXPLICIT USER AUTHORIZATION
+ * 
+ * @ui-protected: true
+ * @requires-user-approval: true
+ * @last-approved: 2024-12-19
+ */
+
 'use client'
 
 import Link from 'next/link'
@@ -42,7 +58,7 @@ function HeroSection() {
   }
 
   return (
-    <section className="relative bg-gradient-to-br from-primary-900 via-primary-700 to-primary-600 text-white overflow-hidden">
+    <section className="relative bg-gradient-to-br from-primary-900 via-primary-700 to-primary-600 text-white overflow-hidden min-h-screen">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full bg-[url('/hero-pattern.svg')] bg-repeat bg-[length:60px_60px]"></div>
@@ -53,111 +69,40 @@ function HeroSection() {
       <div className="absolute bottom-20 left-20 w-48 h-48 bg-primary-400/10 rounded-full blur-2xl animate-pulse delay-1000"></div>
       
       <div className="relative w-full px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-4 gap-8 items-center max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
           
-          {/* Categories Sidebar - Clean & Visible Design */}
-          <div className="bg-white rounded-2xl p-5 shadow-xl border border-neutral-200 lg:block hidden">
-            <div className="relative z-10">
-              {/* Header */}
-              <div className="flex items-center mb-5">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-gradient-to-r from-primary-600 to-primary-500 rounded-lg flex items-center justify-center shadow-md">
-                    <Globe className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-lg font-bold text-neutral-900">Categories</h3>
-                    <p className="text-neutral-600 text-xs">Explore our range</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Clean Category Items */}
-              <div className="space-y-3">
-                <Link href={{ pathname: '/products', query: { category: 'electronics' } }} className="group flex items-center space-x-3 p-3 rounded-lg bg-primary-50 border border-primary-100 hover:bg-primary-100 hover:border-primary-200 transition-all duration-200">
-                  <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
-                    <Laptop className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <span className="text-nubia-black font-semibold text-sm block">Electronics</span>
-                    <span className="text-nubia-gray text-xs">Phones, Laptops, Gadgets</span>
-                  </div>
-                  <span className="text-primary-600 font-medium text-xs">120K+</span>
-                </Link>
-                
-                <Link href={{ pathname: '/products', query: { category: 'fashion' } }} className="group flex items-center space-x-3 p-3 rounded-lg bg-pink-50 border border-pink-100 hover:bg-pink-100 hover:border-pink-200 transition-all duration-200">
-                  <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-pink-600 rounded-lg flex items-center justify-center">
-                    <Shirt className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <span className="text-nubia-black font-semibold text-sm block">Fashion</span>
-                    <span className="text-nubia-gray text-xs">Clothing, Shoes, Accessories</span>
-                  </div>
-                  <span className="text-pink-600 font-medium text-xs">85K+</span>
-                </Link>
-                
-                <Link href={{ pathname: '/products', query: { category: 'home-living' } }} className="group flex items-center space-x-3 p-3 rounded-lg bg-green-50 border border-green-100 hover:bg-green-100 hover:border-green-200 transition-all duration-200">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center">
-                    <Home className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <span className="text-nubia-black font-semibold text-sm block">Home & Living</span>
-                    <span className="text-nubia-gray text-xs">Furniture, Decor, Kitchen</span>
-                  </div>
-                  <span className="text-green-600 font-medium text-xs">65K+</span>
-                </Link>
-                
-                <Link href={{ pathname: '/products', query: { category: 'health-wellness' } }} className="group flex items-center space-x-3 p-3 rounded-lg bg-purple-50 border border-purple-100 hover:bg-purple-100 hover:border-purple-200 transition-all duration-200">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
-                    <HealthIcon className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <span className="text-nubia-black font-semibold text-sm block">Health & Beauty</span>
-                    <span className="text-nubia-gray text-xs">Skincare, Wellness, Beauty</span>
-                  </div>
-                  <span className="text-purple-600 font-medium text-xs">45K+</span>
-                </Link>
-                
-                {/* View All Categories */}
-                <Link href="/categories" className="group flex items-center justify-center space-x-2 p-3 rounded-lg bg-neutral-50 border border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300 transition-all duration-200">
-                  <Globe className="h-4 w-4 text-nubia-gray" />
-                  <span className="text-nubia-black font-medium text-sm">View All Categories</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Hero Content - Enterprise Scale */}
-          <div className="lg:col-span-3 space-y-6">
+          {/* Left Column - Hero Content */}
+          <div className="space-y-6 order-2 lg:order-1">
             
-            {/* Trust Badges */}
-            <div className="flex flex-wrap gap-3">
-              <div className="flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Globe className="h-4 w-4 mr-2 text-yellow-400" />
-                <span className="text-sm font-medium">Africa's #1 Marketplace</span>
+            {/* Trust Badges - Smaller and more refined */}
+            <div className="flex flex-wrap gap-2">
+              <div className="flex items-center bg-white/15 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
+                <Globe className="h-3 w-3 mr-1.5 text-yellow-400" />
+                <span className="text-xs font-medium">Africa's #1 Marketplace</span>
               </div>
-              <div className="flex items-center bg-yellow-500/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Star className="h-4 w-4 mr-2 text-yellow-400" />
-                <span className="text-sm font-medium">Trusted by Millions</span>
+              <div className="flex items-center bg-yellow-500/15 backdrop-blur-sm px-3 py-1.5 rounded-full border border-yellow-400/20">
+                <Star className="h-3 w-3 mr-1.5 text-yellow-400" />
+                <span className="text-xs font-medium">Trusted by Millions</span>
               </div>
-              <div className="flex items-center bg-green-500/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Users className="h-4 w-4 mr-2 text-green-400" />
-                <span className="text-sm font-medium">50K+ Verified Sellers</span>
+              <div className="flex items-center bg-green-500/15 backdrop-blur-sm px-3 py-1.5 rounded-full border border-green-400/20">
+                <Users className="h-3 w-3 mr-1.5 text-green-400" />
+                <span className="text-xs font-medium">50K+ Verified Sellers</span>
               </div>
             </div>
 
-            {/* Main Headline */}
+            {/* Main Headline - Better spacing */}
             <div className="space-y-4">
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-black leading-tight tracking-tight">
                 Africa's <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500">Premier</span> Marketplace
               </h1>
 
-              <p className="text-lg lg:text-xl text-white/90 max-w-3xl leading-relaxed">
-                <span className="font-bold text-yellow-400">Trusted sellers across 34+ African countries.</span> Secure payments, fast delivery, guaranteed quality.
+              <p className="text-lg lg:text-xl text-white/90 leading-relaxed">
+                <span className="font-semibold text-yellow-400">Trusted sellers across 34+ African countries.</span> Secure payments, fast delivery, guaranteed quality.
               </p>
             </div>
 
-            {/* Enhanced Search Bar */}
-            <form onSubmit={handleSearch} className="relative max-w-4xl">
+            {/* Refined Search Bar */}
+            <form onSubmit={handleSearch} className="relative">
               <div className="relative">
                 <input 
                   type="text" 
@@ -165,30 +110,30 @@ function HeroSection() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setIsSearchFocused(false)}
-                  placeholder="Search from 500K+ products: smartphones, fashion, home appliances..." 
-                  className={`w-full px-6 py-4 pr-16 text-base rounded-xl text-neutral-900 placeholder-neutral-500 focus:outline-none shadow-2xl border transition-all duration-300 ${
+                  placeholder="Search from 500K+ products..." 
+                  className={`w-full px-4 py-3 pr-12 text-base rounded-lg text-neutral-900 placeholder-neutral-500 focus:outline-none shadow-lg border transition-all duration-300 ${
                     isSearchFocused 
-                      ? 'ring-4 ring-yellow-400/50 border-yellow-400/50' 
+                      ? 'ring-2 ring-yellow-400/50 border-yellow-400/50' 
                       : 'border-white/20'
                   }`}
                 />
                 <button 
                   type="submit"
-                  className="absolute right-2 top-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
+                  className="absolute right-1.5 top-1.5 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-3 py-1.5 rounded-md transition-all duration-300 hover:shadow-md hover:scale-105"
                 >
-                  <Search className="h-5 w-5" />
+                  <Search className="h-4 w-4" />
                 </button>
               </div>
               
-              {/* Quick Suggestions */}
-              <div className="flex flex-wrap gap-2 mt-4">
-                <span className="text-white/70 text-sm">Popular:</span>
+              {/* Quick Suggestions - More compact */}
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                <span className="text-white/70 text-xs">Popular:</span>
                 {['iPhone', 'Samsung TV', 'Nike Shoes', 'Home Decor'].map((term) => (
                   <button 
                     key={term} 
                     type="button"
                     onClick={() => setSearchQuery(term)}
-                    className="bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full text-sm transition-colors"
+                    className="bg-white/10 hover:bg-white/20 px-2 py-1 rounded-full text-xs transition-colors border border-white/10"
                   >
                     {term}
                   </button>
@@ -196,57 +141,96 @@ function HeroSection() {
               </div>
             </form>
 
-
-
-            {/* Value Propositions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
-              <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                  <Shield className="h-5 w-5 text-green-400" />
+            {/* Value Propositions - Smaller and more elegant */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="flex items-center space-x-2.5 bg-white/8 backdrop-blur-sm rounded-lg p-3 border border-white/15">
+                <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                  <Shield className="h-4 w-4 text-green-400" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">Secure Payments</h3>
-                  <p className="text-white/70 text-xs">Multiple payment methods protected</p>
+                  <h3 className="font-semibold text-white text-xs">Secure Payments</h3>
+                  <p className="text-white/60 text-xs">Multiple payment methods</p>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                <div className="w-10 h-10 bg-primary-600/20 rounded-lg flex items-center justify-center">
-                  <Truck className="h-5 w-5 text-primary-400" />
+              <div className="flex items-center space-x-2.5 bg-white/8 backdrop-blur-sm rounded-lg p-3 border border-white/15">
+                <div className="w-8 h-8 bg-primary-600/20 rounded-lg flex items-center justify-center">
+                  <Truck className="h-4 w-4 text-primary-400" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">Fast Delivery</h3>
-                  <p className="text-white/70 text-xs">Same-day delivery in major cities</p>
+                  <h3 className="font-semibold text-white text-xs">Fast Delivery</h3>
+                  <p className="text-white/60 text-xs">Same-day delivery</p>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-purple-400" />
+              <div className="flex items-center space-x-2.5 bg-white/8 backdrop-blur-sm rounded-lg p-3 border border-white/15">
+                <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="h-4 w-4 text-purple-400" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">Best Prices</h3>
-                  <p className="text-white/70 text-xs">Competitive pricing guaranteed</p>
+                  <h3 className="font-semibold text-white text-xs">Best Prices</h3>
+                  <p className="text-white/60 text-xs">Competitive pricing</p>
                 </div>
               </div>
             </div>
 
-            {/* Call to Action */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            {/* Call to Action - More refined buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Link 
                 href={{ pathname: '/products' }} 
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold px-6 py-3 rounded-lg text-base transition-all duration-300 hover:shadow-xl hover:scale-105 text-center"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-semibold px-6 py-3 rounded-lg text-base transition-all duration-300 hover:shadow-lg hover:scale-105 text-center"
               >
                 Start Shopping Now
               </Link>
               <Link 
                 href="/become-supplier" 
-                className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold px-6 py-3 rounded-lg text-base transition-all duration-300 border border-white/30 text-center"
+                className="bg-white/15 backdrop-blur-sm hover:bg-white/25 text-white font-medium px-6 py-3 rounded-lg text-base transition-all duration-300 border border-white/20 text-center"
               >
                 Become a Seller
               </Link>
             </div>
             
+          </div>
+
+          {/* Right Column - Hero Image */}
+          <div className="relative order-1 lg:order-2">
+            <div className="relative w-full h-[400px] lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
+              <Image
+                src="/hero-image.webp"
+                alt="NubiaGo Marketplace - Africa's Premier E-commerce Platform"
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              {/* Overlay for better text contrast */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+              
+              {/* Floating Product Cards */}
+              <div className="absolute top-4 right-4 lg:top-8 lg:right-8 bg-white/95 backdrop-blur-sm rounded-xl p-3 lg:p-4 shadow-xl">
+                <div className="flex items-center space-x-2 lg:space-x-3">
+                  <div className="w-8 h-8 lg:w-12 lg:h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <TrendingUp className="h-4 w-4 lg:h-6 lg:w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs lg:text-sm font-semibold text-gray-900">Trending Now</p>
+                    <p className="text-xs text-gray-600">500K+ Products</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="absolute bottom-4 left-4 lg:bottom-8 lg:left-8 bg-white/95 backdrop-blur-sm rounded-xl p-3 lg:p-4 shadow-xl">
+                <div className="flex items-center space-x-2 lg:space-x-3">
+                  <div className="w-8 h-8 lg:w-12 lg:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Shield className="h-4 w-4 lg:h-6 lg:w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs lg:text-sm font-semibold text-gray-900">Secure Shopping</p>
+                    <p className="text-xs text-gray-600">100% Protected</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -328,7 +312,12 @@ function NewArrivalsSection() {
               <div className="relative aspect-[4/5] overflow-hidden">
                 <Link href={`/products/${product.id}`}>
                   <Image
-                    src={product.id === '1' ? '/product-tech-1.jpg' : product.id === '2' ? '/product-accessories-1.jpg' : product.id === '3' ? '/product-cosmetics-1.jpg' : product.id === '4' ? '/product-watch-1.jpg' : product.id === '5' ? '/product-home-1.jpg' : '/product-fashion-1.jpg'}
+                    src={product.id === '1' ? '/product-tech-1.jpg' : 
+                         product.id === '2' ? '/headphones.jpg' : 
+                         product.id === '3' ? '/product-cosmetics-1.jpg' : 
+                         product.id === '4' ? '/product-watch-1.jpg' : 
+                         product.id === '5' ? '/product-home-1.jpg' : 
+                         '/product-accessories-1.jpg'}
                     alt={product.name}
                     width={400}
                     height={500}

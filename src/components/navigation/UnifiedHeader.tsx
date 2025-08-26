@@ -175,9 +175,11 @@ export function UnifiedHeader({ variant = 'default', showBackButton = false, tit
 
              {/* Action Buttons */}
              <div className="flex items-center space-x-3">
-               <Button variant="outline" size="sm" className="hidden lg:flex border-slate-300 text-slate-700 hover:bg-slate-50">
-                 Browse Products
-               </Button>
+               <Link href="/products">
+                 <Button variant="outline" size="sm" className="hidden lg:flex border-slate-300 text-slate-700 hover:bg-slate-50">
+                   Browse Products
+                 </Button>
+               </Link>
                
                <Link href="/wishlist">
                  <Button variant="ghost" size="sm" className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
@@ -201,7 +203,7 @@ export function UnifiedHeader({ variant = 'default', showBackButton = false, tit
                </Button>
 
                {user && isClient ? (
-                 <Link href="/profile">
+                 <Link href="/account">
                    <Button variant="ghost" size="sm" className="text-slate-700 hover:bg-slate-100">
                      <User className="h-5 w-5 mr-2" />
                      Account
@@ -212,9 +214,11 @@ export function UnifiedHeader({ variant = 'default', showBackButton = false, tit
                    <Link href="/login" className="text-slate-600 hover:text-slate-900 text-sm font-medium">
                      Login
                    </Link>
-                   <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
-                     Sign Up
-                   </Button>
+                   <Link href="/register">
+                     <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                       Sign Up
+                     </Button>
+                   </Link>
                  </div>
                )}
              </div>

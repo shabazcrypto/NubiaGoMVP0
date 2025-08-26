@@ -46,7 +46,7 @@ async function storeMetrics(report: PerformanceReport): Promise<void> {
   
   // Store daily metrics
   const dailyKey = `analytics:daily:${date}`
-  const dailyMetrics = await CacheService.get(dailyKey) || {
+  const dailyMetrics: any = await CacheService.get(dailyKey) || {
     date,
     totalReports: 0,
     totalErrors: 0,
@@ -107,7 +107,7 @@ async function storeMetrics(report: PerformanceReport): Promise<void> {
   
   // Store hourly metrics
   const hourlyKey = `analytics:hourly:${date}:${hour}`
-  const hourlyMetrics = await CacheService.get(hourlyKey) || {
+  const hourlyMetrics: any = await CacheService.get(hourlyKey) || {
     date,
     hour,
     totalReports: 0,

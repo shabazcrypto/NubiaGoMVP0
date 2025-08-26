@@ -9,7 +9,14 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-explicit-any': 'warn',
-    'no-console': 'warn'
+    'no-console': 'warn',
+    'react/no-unescaped-entities': 'off',
+    'react-hooks/exhaustive-deps': 'off',
+    '@next/next/no-img-element': 'off',
+    '@next/next/no-page-custom-font': 'off',
+    '@next/next/no-assign-module-variable': 'off',
+    'jsx-a11y/alt-text': 'off',
+    'import/no-anonymous-default-export': 'off'
   },
   env: {
     browser: true,

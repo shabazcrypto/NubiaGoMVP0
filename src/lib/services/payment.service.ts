@@ -92,7 +92,7 @@ export class PaymentService {
 
     } catch (error) {
       console.error('Error processing payment:', error)
-      throw new Error(`Payment processing failed: ${error.message}`)
+      throw new Error(`Payment processing failed: ${(error as any).message}`)
     }
   }
 
@@ -156,7 +156,7 @@ export class PaymentService {
 
     } catch (error) {
       console.error('Error processing refund:', error)
-      throw new Error(`Refund processing failed: ${error.message}`)
+      throw new Error(`Refund processing failed: ${(error as any).message}`)
     }
   }
 
@@ -167,7 +167,7 @@ export class PaymentService {
       'mobile_money': 'flutterwave',
       'bank_transfer': 'razorpay'
     }
-    return gateways[method] || 'default'
+    return (gateways as any)[method] || 'default'
   }
 
   // Process credit card payment
@@ -195,7 +195,7 @@ export class PaymentService {
       return {
         success: false,
         transactionId: null,
-        metadata: { error: error.message }
+        metadata: { error: (error as any).message }
       }
     }
   }
@@ -223,7 +223,7 @@ export class PaymentService {
       return {
         success: false,
         transactionId: null,
-        metadata: { error: error.message }
+        metadata: { error: (error as any).message }
       }
     }
   }
@@ -251,7 +251,7 @@ export class PaymentService {
       return {
         success: false,
         transactionId: null,
-        metadata: { error: error.message }
+        metadata: { error: (error as any).message }
       }
     }
   }

@@ -420,7 +420,7 @@ export class CMSTemplatesService {
         updatedAt: now
       }
 
-      await setDoc(doc(db, this.templatesCollection, id), {
+      await setDoc(doc(db, this.templatesCollection.path, id), {
         ...newTemplate,
         createdAt: Timestamp.fromDate(now),
         updatedAt: Timestamp.fromDate(now)
@@ -437,7 +437,7 @@ export class CMSTemplatesService {
   // Get template by ID
   async getTemplate(id: string): Promise<CMSTemplate | null> {
     try {
-      const templateSnap = await getDoc(doc(db, this.templatesCollection, id))
+      const templateSnap = await getDoc(doc(db, this.templatesCollection.path, id))
       
       if (!templateSnap.exists()) {
         return null
@@ -538,7 +538,7 @@ export class CMSTemplatesService {
   // Update template
   async updateTemplate(id: string, updates: Partial<CMSTemplate>): Promise<CMSTemplate> {
     try {
-      const templateRef = doc(db, this.templatesCollection, id)
+      const templateRef = doc(db, this.templatesCollection.path, id)
       const templateSnap = await getDoc(templateRef)
 
       if (!templateSnap.exists()) {
@@ -567,7 +567,7 @@ export class CMSTemplatesService {
   // Delete template
   async deleteTemplate(id: string): Promise<void> {
     try {
-      await deleteDoc(doc(db, this.templatesCollection, id))
+      await deleteDoc(doc(db, this.templatesCollection.path, id))
       logger.info(`✅ CMS template deleted: ${id}`)
     } catch (error: any) {
       logger.error('❌ Failed to delete CMS template:', error)

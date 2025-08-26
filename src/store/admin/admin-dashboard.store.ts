@@ -514,6 +514,15 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         setSelectedUsers: (userIds) => set({ selectedUsers: userIds }),
         clearUserSelection: () => set({ selectedUsers: [] }),
 
+        // Helper method to check if all data is loaded
+        checkAllDataLoaded: () => {
+          const state = get()
+          const allLoaded = !state.userLoading && !state.productLoading && !state.orderLoading
+          if (allLoaded && state.loading) {
+            set({ loading: false })
+          }
+        },
+
         // Product Actions
         fetchProducts: async (filters = {}) => {
           try {

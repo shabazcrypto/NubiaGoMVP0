@@ -8,8 +8,10 @@ import { ErrorFallback } from './error-fallback'
 // Lazy load the actual ImageUpload component for better performance
 const ImageUpload = React.lazy(() => import('./image-upload').then(module => ({ default: module.ImageUpload })))
 
+import { ImageCategory } from '@/lib/services/local-image.service'
+
 interface SafeImageUploadProps {
-  category: string
+  category: ImageCategory
   userId: string
   onUploadComplete?: (metadata: any) => void
   onUploadProgress?: (progress: number) => void

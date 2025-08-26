@@ -12,6 +12,7 @@ export interface AuthenticatedRequest extends NextRequest {
     displayName?: string | null
     emailVerified?: boolean
   }
+  ip?: string
 }
 
 export interface RoleGuard {

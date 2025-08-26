@@ -61,10 +61,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Badge */}
         {badge && (
           <div className="absolute top-3 left-3">
-            <Badge 
-              variant={badge === 'New' ? 'primary' : badge === 'Sale' ? 'warning' : 'yellow'} 
-              size="sm"
-            >
+                         <Badge 
+               variant={badge === 'New' ? 'default' : badge === 'Sale' ? 'destructive' : 'secondary'} 
+             >
               {badge}
             </Badge>
           </div>

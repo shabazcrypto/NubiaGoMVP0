@@ -204,7 +204,7 @@ async function batchRequests<T>(requests: ApiRequest[]): Promise<ApiResponse<T>[
     cache: false,
   })
 
-  return response.data
+  return response.data as ApiResponse<T>[]
 }
 
 /**

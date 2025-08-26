@@ -29,17 +29,6 @@ const nextConfig = {
       '@radix-ui/react-tabs',
       '@radix-ui/react-toast'
     ],
-    // Enable modern optimizations
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-    // Enable partial prerendering for better performance (requires canary Next.js)
-    // ppr: true,
   },
   
   // Image optimization
@@ -115,36 +104,36 @@ const nextConfig = {
           },
         ],
       },
-             // Cache images for 1 month
-       {
-         source: '/:path*.(jpg|jpeg|png|gif|webp|avif|ico|svg)',
-         headers: [
-           {
-             key: 'Cache-Control',
-             value: 'public, max-age=2592000, stale-while-revalidate=86400',
-           },
-         ],
-       },
-       // Cache CSS and JS for 1 year
-       {
-         source: '/:path*.(css|js)',
-         headers: [
-           {
-             key: 'Cache-Control',
-             value: 'public, max-age=31536000, immutable',
-           },
-         ],
-       },
-       // Cache fonts for 1 year
-       {
-         source: '/:path*.(woff|woff2|ttf|eot)',
-         headers: [
-           {
-             key: 'Cache-Control',
-             value: 'public, max-age=31536000, immutable',
-           },
-         ],
-       },
+      // Cache images for 1 month
+      {
+        source: '/:path*.(jpg|jpeg|png|gif|webp|avif|ico|svg)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      // Cache CSS and JS for 1 year
+      {
+        source: '/:path*.(css|js)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Cache fonts for 1 year
+      {
+        source: '/:path*.(woff|woff2|ttf|eot)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
       // Cache API responses for 15 minutes
       {
         source: '/api/(.*)',

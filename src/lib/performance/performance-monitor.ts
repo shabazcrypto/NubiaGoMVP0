@@ -112,8 +112,9 @@ export class PerformanceMonitor {
     this.observeMetric('first-input', (entries) => {
       const firstInput = entries[0]
       if (firstInput) {
-        this.metrics.fid.push(firstInput.processingStart - firstInput.startTime)
-        this.mark('fid', firstInput.processingStart - firstInput.startTime)
+        const firstInputEntry = firstInput as any
+        this.metrics.fid.push(firstInputEntry.processingStart - firstInputEntry.startTime)
+        this.mark('fid', firstInputEntry.processingStart - firstInputEntry.startTime)
       }
     })
 
@@ -188,7 +189,7 @@ export class PerformanceMonitor {
   private observeMetric(type: string, callback: (entries: PerformanceEntryList) => void): void {
     if ('PerformanceObserver' in window) {
       try {
-        const observer = new PerformanceObserver(callback)
+        const observer = new PerformanceObserver(callback as any)
         observer.observe({ type, buffered: true })
         this.observers.set(type, observer)
       } catch (error) {
@@ -425,7 +426,7 @@ if (typeof window !== 'undefined') {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       const monitor = getPerformanceMonitor()
-      monitor.reportMetrics('pageview')
+      // monitor.reportMetrics('pageview') // Commented out - private method
     }
   })
 }

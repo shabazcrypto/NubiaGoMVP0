@@ -450,7 +450,7 @@ export class CMSContentService {
   // Workflow Management
   async submitForApproval(contentId: string): Promise<void> {
     try {
-      await updateDoc(doc(db, this.contentCollection, contentId), {
+      await updateDoc(doc(db, this.contentCollection.path, contentId), {
         status: 'pending_approval',
         approvalStatus: 'pending',
         updatedAt: serverTimestamp()
@@ -476,7 +476,7 @@ export class CMSContentService {
         updates.approvalNotes = notes
       }
 
-      await updateDoc(doc(db, this.contentCollection, contentId), updates)
+      await updateDoc(doc(db, this.contentCollection.path, contentId), updates)
       logger.info(`✅ Content approved: ${contentId}`)
     } catch (error: any) {
       logger.error('❌ Failed to approve content:', error)
@@ -486,7 +486,7 @@ export class CMSContentService {
 
   async rejectContent(contentId: string, approverId: string, reason: string): Promise<void> {
     try {
-      await updateDoc(doc(db, this.contentCollection, contentId), {
+      await updateDoc(doc(db, this.contentCollection.path, contentId), {
         status: 'draft',
         approvalStatus: 'rejected',
         approverId,
@@ -516,7 +516,7 @@ export class CMSContentService {
         changeNotes
       }
 
-      await setDoc(doc(db, this.versionsCollection, id), {
+      await setDoc(doc(db, this.versionsCollection.path, id), {
         ...version,
         createdAt: Timestamp.fromDate(now)
       })
@@ -557,14 +557,14 @@ export class CMSContentService {
 
   async restoreVersion(contentId: string, versionId: string): Promise<void> {
     try {
-      const versionSnap = await getDoc(doc(db, this.versionsCollection, versionId))
+      const versionSnap = await getDoc(doc(db, this.versionsCollection.path, versionId))
       
       if (!versionSnap.exists()) {
         throw new Error('Version not found')
       }
 
       const version = versionSnap.data() as CMSVersion
-      const contentRef = doc(db, this.contentCollection, contentId)
+      const contentRef = doc(db, this.contentCollection.path, contentId)
       
       // Create new version before restoring
       const currentContentSnap = await getDoc(contentRef)
@@ -591,7 +591,7 @@ export class CMSContentService {
   // Real-time listeners
   onContentChange(contentId: string, callback: (content: CMSContent | null) => void): () => void {
     const unsubscribe = onSnapshot(
-      doc(db, this.contentCollection, contentId),
+      doc(db, this.contentCollection.path, contentId),
       (doc) => {
         if (doc.exists()) {
           const data = doc.data()

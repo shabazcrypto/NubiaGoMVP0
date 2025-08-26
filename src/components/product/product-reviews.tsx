@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Star, ThumbsUp, ThumbsDown, MessageCircle, User, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { TextArea } from '@/components/ui/form'
+import { Textarea } from '@/components/ui/textarea'
 import EnhancedImage from '@/components/mobile/EnhancedImage'
 
 interface Review {
@@ -208,7 +208,7 @@ export default function ProductReviews({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Your Review
               </label>
-              <TextArea
+                              <Textarea
                 value={newReview.comment}
                 onChange={(e) => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
                 placeholder="Share your experience with this product..."

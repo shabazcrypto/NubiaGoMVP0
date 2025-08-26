@@ -189,7 +189,13 @@ export interface CMSVersion {
 }
 
 export class CMSContentService {
-  private contentCollection = collection(db, 'cms_content')
+  private get contentCollection() {
+    // Check if Firebase is properly initialized
+    if (!db || typeof db.collection !== 'function') {
+      throw new Error('Firebase not properly initialized')
+    }
+    return collection(db, 'cms_content')
+  }
   private templatesCollection = collection(db, 'cms_templates')
   private mediaCollection = collection(db, 'cms_media')
   private versionsCollection = collection(db, 'cms_versions')
@@ -309,33 +315,6 @@ export class CMSContentService {
 
   async getContentBySlug(slug: string): Promise<CMSContent | null> {
     try {
-      // Check if Firebase is properly initialized
-      if (!db || typeof db.collection !== 'function') {
-        // Return mock data for build process
-        console.log('CMS: Using mock data for getContentBySlug')
-        return {
-          id: 'mock-blog-post',
-          title: 'Sample Blog Post',
-          slug: slug,
-          content: 'This is a sample blog post content for demonstration purposes.',
-          excerpt: 'This is a sample blog post excerpt.',
-          template: 'blog-post',
-          status: 'published',
-          contentType: 'post',
-          authorId: 'mock-author',
-          authorName: 'Sample Author',
-          approvalStatus: 'approved',
-          version: 1,
-          isScheduled: false,
-          tags: ['sample', 'blog'],
-          categories: ['General'],
-          customFields: {},
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          publishedAt: new Date()
-        } as CMSContent
-      }
-
       const q = query(
         this.contentCollection,
         where('slug', '==', slug),
@@ -361,6 +340,32 @@ export class CMSContentService {
         scheduledPublishAt: data.scheduledPublishAt?.toDate()
       } as CMSContent
     } catch (error: any) {
+      // If Firebase is not properly initialized, return mock data
+      if (error.message.includes('Firebase not properly initialized') || error.message.includes('Expected first argument to collection')) {
+        console.log('CMS: Using mock data for getContentBySlug due to Firebase initialization issue')
+        return {
+          id: 'mock-blog-post',
+          title: 'Sample Blog Post',
+          slug: slug,
+          content: 'This is a sample blog post content for demonstration purposes.',
+          excerpt: 'This is a sample blog post excerpt.',
+          template: 'blog-post',
+          status: 'published',
+          contentType: 'post',
+          authorId: 'mock-author',
+          authorName: 'Sample Author',
+          approvalStatus: 'approved',
+          version: 1,
+          isScheduled: false,
+          tags: ['sample', 'blog'],
+          categories: ['General'],
+          customFields: {},
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          publishedAt: new Date()
+        } as CMSContent
+      }
+      
       logger.error('❌ Failed to fetch CMS content by slug:', error)
       throw new Error(`Failed to fetch CMS content by slug: ${error.message}`)
     }

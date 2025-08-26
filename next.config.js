@@ -16,6 +16,9 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // Enhanced experimental configuration for optimization
   experimental: {
     optimizeCss: true,

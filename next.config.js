@@ -20,7 +20,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   // Disable static generation to prevent client reference manifest issues
-  output: 'standalone',
+  // output: 'standalone', // Not needed for Next.js 14
   // Enhanced experimental configuration for optimization
   experimental: {
     // optimizeCss: true, // Disabled due to build issues

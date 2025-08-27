@@ -24,6 +24,11 @@ const nextConfig = {
   },
   swcMinify: true,
   output: 'standalone',
+  staticPageGenerationTimeout: 1000,
+  experimental: {
+    isrMemoryCacheSize: 0,
+    serverActions: true,
+  },
   // Enhanced experimental configuration for optimization
   experimental: {
     // optimizeCss: true, // Disabled due to build issues

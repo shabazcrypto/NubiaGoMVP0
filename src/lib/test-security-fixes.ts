@@ -5,7 +5,7 @@
 
 import { CSRFProtection } from './security/csrf'
 import { EnhancedCache, CacheFactory } from './cache'
-import { errorLogger } from './services/error-logging.service'
+import { errorLoggingService } from './services/error-logging.service'
 import { PerformanceMetrics } from './performance'
 
 /**
@@ -87,33 +87,42 @@ export function testEnhancedCache(): boolean {
 /**
  * Test Error Logging Service
  */
-export function testErrorLoggingService(): boolean {
+export async function testErrorLoggingService(): Promise<boolean> {
   try {
     console.log('🧪 Testing Error Logging Service...')
     
     // Test basic error logging
-    const errorId = errorLogger.logError('Test error message')
+    const errorId = await errorLoggingService.logError(new Error('Test error message'))
     console.log('✅ Basic error logging:', errorId.length > 0)
     
     // Test warning logging
-    const warningId = errorLogger.logWarning('Test warning message')
+    const warningId = await errorLoggingService.logError(new Error('Test warning message'), { level: 'warn' })
     console.log('✅ Warning logging:', warningId.length > 0)
     
     // Test info logging
-    const infoId = errorLogger.logInfo('Test info message')
+    const infoId = await errorLoggingService.logError(new Error('Test info message'), { level: 'info' })
     console.log('✅ Info logging:', infoId.length > 0)
     
     // Test API error logging
-    const apiErrorId = errorLogger.logAPIError(
+    const apiErrorId = await errorLoggingService.logError(
       new Error('API test error'),
-      { method: 'GET', url: '/test', statusCode: 500 }
+      { 
+        category: 'api',
+        context: { method: 'GET', url: '/test', statusCode: 500 },
+        tags: ['api', 'get']
+      }
     )
     console.log('✅ API error logging:', apiErrorId.length > 0)
     
     // Test validation error logging
-    const validationErrorId = errorLogger.logValidationError(
+    const validationErrorId = await errorLoggingService.logError(
       new Error('Validation test error'),
-      { form: 'test-form', field: 'test-field' }
+      { 
+        category: 'validation',
+        level: 'warn',
+        context: { form: 'test-form', field: 'test-field' },
+        tags: ['validation', 'form']
+      }
     )
     console.log('✅ Validation error logging:', validationErrorId.length > 0)
     
@@ -264,7 +273,7 @@ export async function runAllTests(): Promise<{
 /**
  * Test specific functionality
  */
-export function testSpecificFunctionality(): void {
+export async function testSpecificFunctionality(): Promise<void> {
   console.log('🧪 Testing Specific Functionality...')
   
   // Test CSRF token generation
@@ -282,7 +291,7 @@ export function testSpecificFunctionality(): void {
   console.log('Cached value:', cachedValue)
   
   // Test error logging
-  const errorId = errorLogger.logError('Test error for functionality test')
+      const errorId = await errorLoggingService.logError(new Error('Test error for functionality test'))
   console.log('Logged error ID:', errorId)
   
   console.log('✅ Specific functionality tests completed')

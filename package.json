@@ -121,6 +121,7 @@
     "@axe-core/react": "^4.10.2",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.19.11",
+    "@types/nodemailer": "^7.0.1",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",

@@ -84,7 +84,7 @@ class NodemailerProvider implements EmailProvider {
       // For server-side only
       if (typeof window === 'undefined') {
         const nodemailer = await import('nodemailer')
-        const transporter = nodemailer.createTransporter({
+        const transporter = nodemailer.createTransport({
           host: this.config.host,
           port: this.config.port,
           secure: this.config.port === 465,

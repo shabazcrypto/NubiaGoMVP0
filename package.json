@@ -4,10 +4,10 @@
   "description": "A modern, responsive ecommerce website built with Next.js 14",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "dev:fast": "next dev --turbo",
+    "dev": "node server.js",
+    "dev:fast": "NODE_ENV=development node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint --fix",
     "type-check": "tsc --noEmit",
     "test": "jest",

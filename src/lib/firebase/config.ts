@@ -119,6 +119,6 @@ const initializeFirebase = () => {
 // Initialize Firebase immediately
 initializeFirebase()
 
-// Export with non-null assertion since we always have either real or mock services
-export { auth!, db!, storage! }
+// Export services - they will always be defined (either real or mock)
+export { auth as authService, db as dbService, storage as storageService }
 export default app

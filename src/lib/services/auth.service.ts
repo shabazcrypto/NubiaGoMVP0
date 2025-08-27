@@ -10,7 +10,7 @@ import {
   getIdToken
 } from 'firebase/auth'
 import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs, onSnapshot } from 'firebase/firestore'
-import { auth, db } from '@/lib/firebase/config'
+import { authService as auth, dbService as db } from '@/lib/firebase/config'
 import { User } from '@/types'
 import { emailService } from './email.service'
 import { auditService } from './audit.service'

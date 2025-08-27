@@ -4,31 +4,19 @@
   "outputDirectory": ".next",
   "installCommand": "npm install",
   "framework": "nextjs",
+  "regions": ["iad1"],
   "env": {
-    "NODE_ENV": "production",
-                  "NEXT_PUBLIC_APP_URL": "https://nubiago.vercel.app",
-              "NEXT_PUBLIC_FIREBASE_API_KEY": "AIzaSyCrdNo31J54779co1uhxVKCZEybgKK6hII",
-              "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN": "nubiago-latest.firebaseapp.com",
-              "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "nubiago-latest",
-              "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET": "nubiago-latest.firebasestorage.app",
-              "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "1071680034258",
-              "NEXT_PUBLIC_FIREBASE_APP_ID": "1:1071680034258:web:e7b95de06ce571dbc0240b",
-              "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-XE1YM7HV2J",
-    "NEXT_PUBLIC_APP_NAME": "NubiaGo",
-    "NEXT_PUBLIC_SUPPORT_EMAIL": "support@nubiago.com",
-    "NEXT_PUBLIC_SUPPORT_PHONE": "+1234567890",
-    "RATE_LIMIT_WINDOW_MS": "900000",
-    "RATE_LIMIT_MAX_REQUESTS": "100",
-    "AUDIT_LOG_RETENTION_DAYS": "365",
-    "ENABLE_AUDIT_LOGGING": "true",
-    "MAX_FILE_SIZE_MB": "10",
-    "MAX_IMAGE_SIZE_MB": "5",
-    "ALLOWED_FILE_TYPES": "pdf,jpg,jpeg,png,webp,doc,docx",
-    "ENABLE_EMAIL_NOTIFICATIONS": "true",
-    "ENABLE_RATE_LIMITING": "true",
-    "ENABLE_CSRF_PROTECTION": "true",
-    "ENABLE_FILE_UPLOAD": "true",
-    "ENABLE_MOCK_SERVICES": "false",
-    "ENABLE_DEBUG_LOGGING": "false"
+    "NEXT_PUBLIC_FIREBASE_API_KEY": "your-api-key",
+    "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN": "your-auth-domain",
+    "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "your-project-id",
+    "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET": "your-storage-bucket",
+    "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "your-messaging-sender-id",
+    "NEXT_PUBLIC_FIREBASE_APP_ID": "your-app-id",
+    "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID": "your-measurement-id"
+  },
+  "build": {
+    "env": {
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
   }
 }

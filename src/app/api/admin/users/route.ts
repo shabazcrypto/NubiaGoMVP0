@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authService } from '@/lib/services/auth.service'
 import { adminUserService } from '@/lib/services/admin/admin-user.service'
+import { protectAdminAPI } from '@/lib/middleware/api-auth'
 
-export async function POST(request: NextRequest) {
+export const POST = protectAdminAPI(async (request: NextRequest) => {
   try {
     const body = await request.json()
     const { email, password, displayName, role } = body
@@ -45,4 +46,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
+})

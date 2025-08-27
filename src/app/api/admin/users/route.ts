@@ -17,6 +17,15 @@ async function hasExistingUsers() {
 
 export async function POST(request: NextRequest) {
   try {
+    // Handle Vercel authentication
+    const vercelAuthHeader = request.headers.get('x-vercel-authentication')
+    if (vercelAuthHeader) {
+      return NextResponse.json(
+        { success: false, error: 'Vercel authentication not supported' },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json()
     const { email, password, displayName, role } = body
 

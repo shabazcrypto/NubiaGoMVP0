@@ -4,13 +4,10 @@ import { logger } from '@/lib/utils/logger'
 import { AdminUser } from '@/types'
 
 class AdminUserService {
-  private usersCollection = collection(db, 'users')
-  private adminActionsCollection = collection(db, 'admin_actions')
-
   // Get user by ID
   async getUserById(uid: string): Promise<AdminUser | null> {
     try {
-      const userDoc = await getDoc(doc(this.usersCollection, uid))
+      const userDoc = await getDoc(doc(db, 'users', uid))
       if (userDoc.exists()) {
         return {
           uid: userDoc.id,
@@ -46,7 +43,7 @@ class AdminUserService {
       })
 
       // Log admin action
-      const actionRef = doc(this.adminActionsCollection)
+      const actionRef = doc(collection(db, 'admin_actions'))
       batch.set(actionRef, {
         adminId,
         action: 'update_user_role',
@@ -74,7 +71,7 @@ class AdminUserService {
   // Get all users
   async getAllUsers(): Promise<AdminUser[]> {
     try {
-      const snapshot = await getDocs(this.usersCollection)
+      const snapshot = await getDocs(collection(db, 'users'))
       return snapshot.docs.map(doc => ({
         uid: doc.id,
         ...doc.data()
@@ -88,7 +85,7 @@ class AdminUserService {
   // Get users by role
   async getUsersByRole(role: string): Promise<AdminUser[]> {
     try {
-      const q = query(this.usersCollection, where('role', '==', role))
+      const q = query(collection(db, 'users'), where('role', '==', role))
       const snapshot = await getDocs(q)
       return snapshot.docs.map(doc => ({
         uid: doc.id,
@@ -103,7 +100,7 @@ class AdminUserService {
   // Get users by status
   async getUsersByStatus(status: string): Promise<AdminUser[]> {
     try {
-      const q = query(this.usersCollection, where('status', '==', status))
+      const q = query(collection(db, 'users'), where('status', '==', status))
       const snapshot = await getDocs(q)
       return snapshot.docs.map(doc => ({
         uid: doc.id,

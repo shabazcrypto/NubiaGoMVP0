@@ -21,7 +21,7 @@ const nextConfig = {
   },
   // Enhanced experimental configuration for optimization
   experimental: {
-    optimizeCss: true,
+    // optimizeCss: true, // Disabled due to build issues
     optimizePackageImports: [
       'lucide-react', 
       '@radix-ui/react-icons',

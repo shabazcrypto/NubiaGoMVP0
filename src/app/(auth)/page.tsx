@@ -1,11 +1,16 @@
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default async function AuthRedirect({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  const queryString = new URLSearchParams(searchParams as Record<string, string>).toString()
-  const redirectUrl = queryString ? `/login?${queryString}` : '/login'
+export default function AuthRedirect() {
+  const headersList = headers()
+  const referer = headersList.get('referer')
   
-  redirect(redirectUrl)
+  // If coming from a specific page, redirect back after login
+  const redirectParam = referer ? `?redirect=${encodeURIComponent(referer)}` : ''
+  const loginUrl = `/login${redirectParam}`
+
+  return redirect(loginUrl)
 }

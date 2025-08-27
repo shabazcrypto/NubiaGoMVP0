@@ -2,6 +2,9 @@ import { initializeApp, getApps, FirebaseApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
+import type { Auth } from 'firebase/auth'
+import type { Firestore } from 'firebase/firestore'
+import type { FirebaseStorage } from 'firebase/storage'
 
 // Safe environment variable access with fallbacks
 const getEnvVar = (key: string, fallback: string) => {
@@ -28,23 +31,13 @@ const firebaseConfig = {
   apiKey: getEnvVar('FIREBASE_API_KEY', 'AIzaSyCrdNo31J54779co1uhxVKCZEybgKK6hII'),
   authDomain: getEnvVar('FIREBASE_AUTH_DOMAIN', 'nubiago-latest.firebaseapp.com'),
   projectId: getEnvVar('FIREBASE_PROJECT_ID', 'nubiago-latest'),
-  storageBucket: getEnvVar('FIREBASE_STORAGE_BUCKET', 'nubiago-latest.firebasestorage.app'),
+  storageBucket: getEnvVar('FIREBASE_STORAGE_BUCKET', 'nubiago-latest.appspot.com'),
   messagingSenderId: getEnvVar('FIREBASE_MESSAGING_SENDER_ID', '1071680034258'),
   appId: getEnvVar('FIREBASE_APP_ID', '1:1071680034258:web:e7b95de06ce571dbc0240b'),
   measurementId: getEnvVar('FIREBASE_MEASUREMENT_ID', 'G-XE1YM7HV2J')
 }
 
-// Initialize Firebase with error handling and proper typing
-import type { Auth } from 'firebase/auth'
-import type { Firestore } from 'firebase/firestore'
-import type { FirebaseStorage } from 'firebase/storage'
-
-let app: FirebaseApp | null = null
-let auth: Auth | null = null
-let db: Firestore | null = null
-let storage: FirebaseStorage | null = null
-
-// Create mock services for when Firebase is not available
+// Create mock services
 const createMockServices = () => {
   const mockAuth = {
     onAuthStateChanged: (callback: any) => {
@@ -83,6 +76,13 @@ const createMockServices = () => {
   return { mockAuth, mockDb, mockStorage }
 }
 
+// Initialize with mock services as default
+const { mockAuth, mockDb, mockStorage } = createMockServices()
+let app: FirebaseApp = {} as FirebaseApp
+let auth: Auth = mockAuth as Auth
+let db: Firestore = mockDb as Firestore
+let storage: FirebaseStorage = mockStorage as FirebaseStorage
+
 // Initialize Firebase with better error handling
 const initializeFirebase = () => {
   try {
@@ -99,26 +99,19 @@ const initializeFirebase = () => {
       auth = getAuth(app)
       db = getFirestore(app)
       storage = getStorage(app)
-    } else {
-      const { mockAuth, mockDb, mockStorage } = createMockServices()
-      auth = mockAuth
-      db = mockDb
-      storage = mockStorage
     }
   } catch (error) {
     console.error('Firebase: Failed to initialize', error)
-    
-    // Create mock services as fallback
-    const { mockAuth, mockDb, mockStorage } = createMockServices()
-    auth = mockAuth
-    db = mockDb
-    storage = mockStorage
   }
 }
 
-// Initialize Firebase immediately
-initializeFirebase()
+// Initialize Firebase
+try {
+  initializeFirebase()
+} catch (error) {
+  console.error('Failed to initialize Firebase:', error)
+}
 
-// Export services - they will always be defined (either real or mock)
-export { auth as authService, db as dbService, storage as storageService }
+// Export services
+export { auth, db, storage }
 export default app

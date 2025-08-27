@@ -7,7 +7,7 @@ import {
   listAll,
   StorageReference
 } from 'firebase/storage'
-import { storageService as storage } from '@/lib/firebase/config'
+import { storage } from '@/lib/firebase/config'
 
 export interface UploadResult {
   url: string

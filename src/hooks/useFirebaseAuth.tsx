@@ -13,7 +13,7 @@ import {
   GoogleAuthProvider,
   UserCredential
 } from 'firebase/auth'
-import { authService as auth } from '@/lib/firebase/config'
+import { auth } from '@/lib/firebase/config'
 
 interface AuthContextType {
   user: User | null

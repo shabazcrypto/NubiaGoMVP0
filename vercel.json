@@ -11,16 +11,8 @@
     "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET": "nubiago-latest.appspot.com",
     "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "1071680034258",
     "NEXT_PUBLIC_FIREBASE_APP_ID": "1:1071680034258:web:e7b95de06ce571dbc0240b",
-    "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-XE1YM7HV2J"
-  },
-  "env": {
-    "NEXT_PUBLIC_FIREBASE_API_KEY": "your-api-key",
-    "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN": "your-auth-domain",
-    "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "your-project-id",
-    "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET": "your-storage-bucket",
-    "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "your-messaging-sender-id",
-    "NEXT_PUBLIC_FIREBASE_APP_ID": "your-app-id",
-    "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID": "your-measurement-id"
+    "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-XE1YM7HV2J",
+    "NEXT_TELEMETRY_DISABLED": "1"
   },
   "build": {
     "env": {

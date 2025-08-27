@@ -750,23 +750,84 @@ export class AuthService {
   }
 
   // Helper method to get user-friendly error messages
-  private getErrorMessage(errorCode: string): string {
-    switch (errorCode) {
-      case 'auth/user-not-found':
-        return 'No account found with this email address'
-      case 'auth/wrong-password':
-        return 'Incorrect password'
-      case 'auth/email-already-in-use':
-        return 'An account with this email already exists'
-      case 'auth/weak-password':
-        return 'Password should be at least 6 characters'
-      case 'auth/invalid-email':
-        return 'Invalid email address'
-      case 'auth/too-many-requests':
-        return 'Too many failed attempts. Please try again later'
-      default:
-        return 'An error occurred. Please try again'
+  private getErrorMessage(error: any): string {
+    console.error('Auth error:', error)
+    
+    const errorCode = error.code as string
+    const errorMap: Record<string, string> = {
+      'auth/user-not-found': 'No account found with this email address',
+      'auth/wrong-password': 'Incorrect password',
+      'auth/email-already-in-use': 'An account with this email already exists',
+      'auth/weak-password': 'Password should be at least 6 characters',
+      'auth/invalid-email': 'Invalid email address',
+      'auth/too-many-requests': 'Too many failed attempts. Please try again later',
+      'auth/network-request-failed': 'Network error. Please check your connection',
+      'auth/invalid-credential': 'Invalid credentials. Please try again',
+      'auth/operation-not-allowed': 'This operation is not allowed',
+      'auth/popup-blocked': 'Popup was blocked by the browser',
+      'auth/popup-closed-by-user': 'Authentication popup was closed',
+      'auth/unauthorized-domain': 'This domain is not authorized',
+      'auth/user-disabled': 'This account has been disabled',
+      'auth/user-token-expired': 'Please sign in again',
+      'auth/web-storage-unsupported': 'Web storage is not supported',
+      'auth/invalid-verification-code': 'Invalid verification code',
+      'auth/invalid-verification-id': 'Invalid verification ID',
+      'auth/internal-error': 'An internal error occurred. Please try again',
+      'auth/invalid-api-key': 'Invalid API configuration',
+      'auth/app-deleted': 'Application has been deleted',
+      'auth/account-exists-with-different-credential': 'An account already exists with a different sign-in method',
+      'auth/cancelled-popup-request': 'Only one popup request is allowed at a time',
+      'auth/expired-action-code': 'The action code has expired',
+      'auth/invalid-action-code': 'The action code is invalid',
+      'auth/invalid-persistence-type': 'Invalid persistence type',
+      'auth/invalid-recipient-email': 'Invalid recipient email',
+      'auth/invalid-sender': 'Invalid sender',
+      'auth/invalid-verification-code': 'Invalid verification code',
+      'auth/missing-android-pkg-name': 'Missing Android package name',
+      'auth/missing-continue-uri': 'Missing continue URL',
+      'auth/missing-iframe-start': 'Missing iframe start',
+      'auth/missing-ios-bundle-id': 'Missing iOS bundle ID',
+      'auth/missing-verification-code': 'Missing verification code',
+      'auth/missing-verification-id': 'Missing verification ID',
+      'auth/app-not-authorized': 'Application not authorized',
+      'auth/captcha-check-failed': 'reCAPTCHA verification failed',
+      'auth/code-expired': 'The code has expired',
+      'auth/cordova-not-ready': 'Cordova framework is not ready',
+      'auth/cors-unsupported': 'CORS is not supported',
+      'auth/credential-already-in-use': 'This credential is already associated with a different user account',
+      'auth/custom-token-mismatch': 'The custom token corresponds to a different audience',
+      'auth/requires-recent-login': 'This operation requires recent authentication. Please sign in again',
+      'auth/dynamic-link-not-activated': 'Dynamic links service must be activated',
+      'auth/email-change-needs-verification': 'Email change needs verification',
+      'auth/email-already-in-use': 'The email address is already in use',
+      'auth/expired-popup-request': 'This popup request has expired',
+      'auth/invalid-cert-hash': 'Invalid certificate hash',
+      'auth/invalid-message-payload': 'Invalid message payload',
+      'auth/invalid-oauth-provider': 'Invalid OAuth provider',
+      'auth/invalid-phone-number': 'Invalid phone number',
+      'auth/invalid-provider-id': 'Invalid provider ID',
+      'auth/invalid-recipient-email': 'Invalid recipient email',
+      'auth/invalid-sender': 'Invalid sender',
+      'auth/invalid-verification-id': 'Invalid verification ID',
+      'auth/invalid-tenant-id': 'Invalid tenant ID',
+      'auth/multi-factor-auth-required': 'Multi-factor authentication required',
+      'auth/missing-phone-number': 'Missing phone number',
+      'auth/missing-verification-code': 'Missing verification code',
+      'auth/missing-verification-id': 'Missing verification ID',
+      'auth/second-factor-already-in-use': 'Second factor already enrolled',
+      'auth/maximum-second-factor-count-exceeded': 'Maximum second factor count exceeded',
+      'auth/unsupported-persistence-type': 'Unsupported persistence type',
+      'auth/unsupported-tenant-operation': 'This operation is not supported in a multi-tenant context',
+      'auth/unverified-email': 'Email is not verified',
+      'auth/user-cancelled': 'User cancelled the operation',
+      'auth/user-not-found': 'No user found',
+      'auth/user-mismatch': 'The supplied credentials do not correspond to the previously signed in user',
+      'auth/user-signed-out': 'User is signed out',
+      'auth/weak-password': 'Password is too weak',
+      'auth/web-storage-unsupported': 'Web storage is unsupported',
     }
+
+    return errorMap[errorCode] || 'An unexpected error occurred. Please try again'
   }
 }
 

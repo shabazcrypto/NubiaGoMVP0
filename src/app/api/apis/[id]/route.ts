@@ -3,7 +3,7 @@ import { apiService } from '@/lib/services/api.service'
 import { protectAdminAPI } from '@/lib/middleware/api-auth'
 
 // GET /api/apis/[id] - Get specific API configuration
-export const GET = protectAdminAPI(async (request: NextRequest) => {
+export const GET = protectAdminAPI(async (request) => {
   try {
     const url = new URL(request.url)
     const id = url.pathname.split('/').pop()
@@ -47,7 +47,7 @@ export const GET = protectAdminAPI(async (request: NextRequest) => {
 })
 
 // PUT /api/apis/[id] - Update API configuration
-export const PUT = protectAdminAPI(async (request: NextRequest) => {
+export const PUT = protectAdminAPI(async (request) => {
   try {
     const url = new URL(request.url)
     const id = url.pathname.split('/').pop()
@@ -106,7 +106,7 @@ export const PUT = protectAdminAPI(async (request: NextRequest) => {
 })
 
 // DELETE /api/apis/[id] - Delete API configuration
-export const DELETE = protectAdminAPI(async (request: NextRequest) => {
+export const DELETE = protectAdminAPI(async (request) => {
   try {
     const url = new URL(request.url)
     const id = url.pathname.split('/').pop()

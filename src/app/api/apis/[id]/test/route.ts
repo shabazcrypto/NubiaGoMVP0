@@ -3,7 +3,7 @@ import { apiService } from '@/lib/services/api.service'
 import { protectAdminAPI } from '@/lib/middleware/api-auth'
 
 // POST /api/apis/[id]/test - Test API connection
-export const POST = protectAdminAPI(async (request: NextRequest) => {
+export const POST = protectAdminAPI(async (request) => {
   try {
     const url = new URL(request.url)
     const id = url.pathname.split('/').pop()

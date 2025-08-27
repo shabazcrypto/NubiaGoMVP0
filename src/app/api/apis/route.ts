@@ -5,7 +5,7 @@ import { apiConfigurationSchema } from '@/lib/validation-schemas'
 import { z } from 'zod'
 
 // GET /api/apis - Get all API configurations
-export const GET = protectAdminAPI(async (request: NextRequest) => {
+export const GET = protectAdminAPI(async (request) => {
   try {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
@@ -47,7 +47,7 @@ export const GET = protectAdminAPI(async (request: NextRequest) => {
 })
 
 // POST /api/apis - Create new API configuration
-export const POST = protectAdminAPI(async (request: NextRequest) => {
+export const POST = protectAdminAPI(async (request) => {
   try {
     const body = await request.json()
     

@@ -14,47 +14,44 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 }
 
-let app: FirebaseApp | null = null
-let auth: Auth
-let db: Firestore
-let storage: FirebaseStorage
-
 function initializeFirebase() {
-  try {
-    // Only initialize Firebase on the client side
-    if (typeof window !== 'undefined') {
-      // Check if Firebase is already initialized
-      const existingApps = getApps()
-      if (existingApps.length > 0) {
-        app = existingApps[0]
-      } else {
-        app = initializeApp(firebaseConfig)
-      }
-
-      // Initialize services
-      auth = getAuth(app)
-      db = getFirestore(app)
-      storage = getStorage(app)
-
-      return { auth, db, storage }
+  // Only initialize Firebase on the client side
+  if (typeof window === 'undefined') {
+    return {
+      app: null,
+      auth: createMockAuth() as Auth,
+      db: createMockFirestore() as Firestore,
+      storage: createMockStorage() as FirebaseStorage
     }
-  } catch (error) {
-    console.error('Failed to initialize Firebase:', error)
   }
 
-  // Return mock services if initialization fails or on server side
-  const mockAuth = createMockAuth() as Auth
-  const mockDb = createMockFirestore() as Firestore
-  const mockStorage = createMockStorage() as FirebaseStorage
+  try {
+    // Check if Firebase is already initialized
+    const existingApps = getApps()
+    const app = existingApps.length > 0 ? existingApps[0] : initializeApp(firebaseConfig)
 
-  return { auth: mockAuth, db: mockDb, storage: mockStorage }
+    // Initialize services
+    const auth = getAuth(app)
+    const db = getFirestore(app)
+    const storage = getStorage(app)
+
+    return { app, auth, db, storage }
+  } catch (error) {
+    console.error('Failed to initialize Firebase:', error)
+    
+    // Return mock services if initialization fails
+    return {
+      app: null,
+      auth: createMockAuth() as Auth,
+      db: createMockFirestore() as Firestore,
+      storage: createMockStorage() as FirebaseStorage
+    }
+  }
 }
 
 // Initialize Firebase and get services
-const { auth: initializedAuth, db: initializedDb, storage: initializedStorage } = initializeFirebase()
+const { app, auth, db, storage } = initializeFirebase()
 
 // Export initialized services
-export const auth = initializedAuth
-export const db = initializedDb
-export const storage = initializedStorage
+export { auth, db, storage }
 export default app

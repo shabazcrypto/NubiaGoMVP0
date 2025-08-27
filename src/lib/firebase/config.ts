@@ -34,11 +34,15 @@ const firebaseConfig = {
   measurementId: getEnvVar('FIREBASE_MEASUREMENT_ID', 'G-XE1YM7HV2J')
 }
 
-// Initialize Firebase with error handling
+// Initialize Firebase with error handling and proper typing
+import type { Auth } from 'firebase/auth'
+import type { Firestore } from 'firebase/firestore'
+import type { FirebaseStorage } from 'firebase/storage'
+
 let app: FirebaseApp | null = null
-let auth: any = null
-let db: any = null
-let storage: any = null
+let auth: Auth | null = null
+let db: Firestore | null = null
+let storage: FirebaseStorage | null = null
 
 // Create mock services for when Firebase is not available
 const createMockServices = () => {
@@ -115,5 +119,6 @@ const initializeFirebase = () => {
 // Initialize Firebase immediately
 initializeFirebase()
 
-export { auth, db, storage }
-export default app 
+// Export with non-null assertion since we always have either real or mock services
+export { auth!, db!, storage! }
+export default app

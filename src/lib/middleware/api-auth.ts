@@ -535,7 +535,11 @@ export function protectAPI(
  */
 export const protectAdminAPI = protectAPI(
   { roles: ['admin'], requireActive: true, requireEmailVerified: true },
-  { enableCSRF: true, rateLimit: 50, enableLogging: true }
+  { 
+    enableCSRF: true, 
+    enableLogging: true,
+    rateLimit: undefined // Using enterprise rate limit instead
+  }
 )
 
 /**
@@ -543,7 +547,11 @@ export const protectAdminAPI = protectAPI(
  */
 export const protectSupplierAPI = protectAPI(
   { roles: ['supplier'], requireActive: true, requireEmailVerified: true },
-  { enableCSRF: true, rateLimit: 100, enableLogging: true }
+  { 
+    enableCSRF: true, 
+    enableLogging: true,
+    rateLimit: undefined // Using enterprise rate limit instead
+  }
 )
 
 /**
@@ -551,5 +559,9 @@ export const protectSupplierAPI = protectAPI(
  */
 export const protectCustomerAPI = protectAPI(
   { roles: ['customer'], requireActive: true, requireEmailVerified: true },
-  { enableCSRF: true, rateLimit: 200, enableLogging: true }
+  { 
+    enableCSRF: true, 
+    enableLogging: true,
+    rateLimit: undefined // Using enterprise rate limit instead
+  }
 ) 

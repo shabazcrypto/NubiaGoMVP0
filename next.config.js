@@ -19,6 +19,8 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Disable static generation to prevent client reference manifest issues
+  output: 'standalone',
   // Enhanced experimental configuration for optimization
   experimental: {
     // optimizeCss: true, // Disabled due to build issues

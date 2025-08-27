@@ -18,6 +18,9 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'
 // Direct Next.js Image components - no layers
 import { 
   Laptop, 

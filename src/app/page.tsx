@@ -318,7 +318,7 @@ function NewArrivalsSection() {
                          product.id === '4' ? '/product-watch-1.jpg' : 
                          product.id === '5' ? '/product-home-1.jpg' : 
                          '/product-accessories-1.jpg'}
-                    alt={product.name}
+                    alt={`${product.name} - ${product.badge} product`}
                     width={400}
                     height={500}
                     className="w-full h-full object-cover"

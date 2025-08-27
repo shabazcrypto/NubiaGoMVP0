@@ -146,7 +146,7 @@ export function ProductCard({
           <div className="aspect-square bg-muted">
             <img 
               src={product.image} 
-              alt={product.name}
+              alt={`${product.name} - ${product.category} product`}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
             />

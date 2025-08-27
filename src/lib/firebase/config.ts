@@ -8,25 +8,19 @@ const getEnvVar = (key: string, fallback: string) => {
   if (typeof window !== 'undefined') {
     // Client-side: use NEXT_PUBLIC_ variables
     const value = process.env[`NEXT_PUBLIC_${key}`]
-    console.log(`Firebase Config: ${key} = ${value ? '***' : 'undefined (using fallback)'}`)
     return value || fallback
   }
   // Server-side: use fallback
-  console.log(`Firebase Config: ${key} = fallback (server-side)`)
   return fallback
 }
 
 // Check if we're in a browser environment and if Firebase should be initialized
 const shouldInitializeFirebase = () => {
-  console.log('Firebase Config: Checking if should initialize Firebase')
   if (typeof window === 'undefined') {
-    console.log('Firebase Config: Server-side, skipping initialization')
     return false // Don't initialize on server-side
   }
   
   // Always return true since we have fallback values
-  // The fallback values will be used if environment variables are not set
-  console.log('Firebase Config: Client-side, will initialize with fallbacks')
   return true
 }
 
@@ -40,16 +34,6 @@ const firebaseConfig = {
   measurementId: getEnvVar('FIREBASE_MEASUREMENT_ID', 'G-XE1YM7HV2J')
 }
 
-console.log('Firebase Config: Configuration object created:', {
-  apiKey: firebaseConfig.apiKey ? '***' : 'missing',
-  authDomain: firebaseConfig.authDomain,
-  projectId: firebaseConfig.projectId,
-  storageBucket: firebaseConfig.storageBucket,
-  messagingSenderId: firebaseConfig.messagingSenderId,
-  appId: firebaseConfig.appId,
-  measurementId: firebaseConfig.measurementId
-})
-
 // Initialize Firebase with error handling
 let app: FirebaseApp | null = null
 let auth: any = null
@@ -58,8 +42,6 @@ let storage: any = null
 
 // Create mock services for when Firebase is not available
 const createMockServices = () => {
-  console.warn('Firebase: Using mock services - Firebase not properly configured')
-  
   const mockAuth = {
     onAuthStateChanged: (callback: any) => {
       callback(null)
@@ -97,44 +79,41 @@ const createMockServices = () => {
   return { mockAuth, mockDb, mockStorage }
 }
 
-try {
-  if (shouldInitializeFirebase()) {
-    // Check if Firebase is already initialized
-    const existingApps = getApps()
-    if (existingApps.length > 0) {
-      app = existingApps[0]
-      console.log('Firebase: Using existing app instance')
-    } else {
-      console.log('Firebase: Initializing with config', {
-        apiKey: firebaseConfig.apiKey ? '***' : 'missing',
-        authDomain: firebaseConfig.authDomain,
-        projectId: firebaseConfig.projectId
-      })
-      app = initializeApp(firebaseConfig)
-      console.log('Firebase: Successfully initialized')
-    }
+// Initialize Firebase with better error handling
+const initializeFirebase = () => {
+  try {
+    if (shouldInitializeFirebase()) {
+      // Check if Firebase is already initialized
+      const existingApps = getApps()
+      if (existingApps.length > 0) {
+        app = existingApps[0]
+      } else {
+        app = initializeApp(firebaseConfig)
+      }
 
-    // Initialize services
-    auth = getAuth(app)
-    db = getFirestore(app)
-    storage = getStorage(app)
-  } else {
-    console.warn('Firebase: Skipping initialization - missing required environment variables')
+      // Initialize services
+      auth = getAuth(app)
+      db = getFirestore(app)
+      storage = getStorage(app)
+    } else {
+      const { mockAuth, mockDb, mockStorage } = createMockServices()
+      auth = mockAuth
+      db = mockDb
+      storage = mockStorage
+    }
+  } catch (error) {
+    console.error('Firebase: Failed to initialize', error)
+    
+    // Create mock services as fallback
     const { mockAuth, mockDb, mockStorage } = createMockServices()
     auth = mockAuth
     db = mockDb
     storage = mockStorage
   }
-
-} catch (error) {
-  console.error('Firebase: Failed to initialize', error)
-  
-  // Create mock services as fallback
-  const { mockAuth, mockDb, mockStorage } = createMockServices()
-  auth = mockAuth
-  db = mockDb
-  storage = mockStorage
 }
+
+// Initialize Firebase immediately
+initializeFirebase()
 
 export { auth, db, storage }
 export default app 

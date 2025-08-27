@@ -11,11 +11,188 @@ export interface EmailProvider {
   sendEmail: (to: string, template: EmailTemplate) => Promise<void>
 }
 
+// Console Email Provider (for development)
+class ConsoleEmailProvider implements EmailProvider {
+  name = 'Console'
+
+  async sendEmail(to: string, template: EmailTemplate): Promise<void> {
+    console.log('📧 Email sent via Console Provider:')
+    console.log('To:', to)
+    console.log('Subject:', template.subject)
+    console.log('Content:', template.text)
+    console.log('---')
+  }
+}
+
+// SendGrid Email Provider
+class SendGridProvider implements EmailProvider {
+  name = 'SendGrid'
+  private apiKey: string
+
+  constructor(apiKey?: string) {
+    this.apiKey = apiKey || ''
+  }
+
+  async sendEmail(to: string, template: EmailTemplate): Promise<void> {
+    if (!this.apiKey) {
+      throw new Error('SendGrid API key not configured')
+    }
+
+    try {
+      const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          personalizations: [{ to: [{ email: to }] }],
+          from: { email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'noreply@nubiago.com' },
+          subject: template.subject,
+          content: [
+            { type: 'text/plain', value: template.text },
+            { type: 'text/html', value: template.html }
+          ]
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`SendGrid API error: ${response.status} ${response.statusText}`)
+      }
+    } catch (error) {
+      console.error('SendGrid email error:', error)
+      throw error
+    }
+  }
+}
+
+// Nodemailer SMTP Provider
+class NodemailerProvider implements EmailProvider {
+  name = 'Nodemailer'
+  private config: { host: string; port: number; user: string; pass: string }
+
+  constructor(config: { host: string; port: number; user: string; pass: string }) {
+    this.config = config
+  }
+
+  async sendEmail(to: string, template: EmailTemplate): Promise<void> {
+    if (!this.config.user || !this.config.pass) {
+      throw new Error('SMTP credentials not configured')
+    }
+
+    try {
+      // For server-side only
+      if (typeof window === 'undefined') {
+        const nodemailer = await import('nodemailer')
+        const transporter = nodemailer.createTransporter({
+          host: this.config.host,
+          port: this.config.port,
+          secure: this.config.port === 465,
+          auth: {
+            user: this.config.user,
+            pass: this.config.pass
+          }
+        })
+
+        await transporter.sendMail({
+          from: this.config.user,
+          to,
+          subject: template.subject,
+          text: template.text,
+          html: template.html
+        })
+      } else {
+        throw new Error('Nodemailer is server-side only')
+      }
+    } catch (error) {
+      console.error('Nodemailer email error:', error)
+      throw error
+    }
+  }
+}
+
+// Mailgun Email Provider
+class MailgunProvider implements EmailProvider {
+  name = 'Mailgun'
+  private apiKey: string
+  private domain: string
+
+  constructor(apiKey?: string) {
+    this.apiKey = apiKey || ''
+    this.domain = process.env.MAILGUN_DOMAIN || 'nubiago.com'
+  }
+
+  async sendEmail(to: string, template: EmailTemplate): Promise<void> {
+    if (!this.apiKey) {
+      throw new Error('Mailgun API key not configured')
+    }
+
+    try {
+      const formData = new FormData()
+      formData.append('from', `NubiaGo <noreply@${this.domain}>`)
+      formData.append('to', to)
+      formData.append('subject', template.subject)
+      formData.append('text', template.text)
+      formData.append('html', template.html)
+
+      const response = await fetch(`https://api.mailgun.net/v3/${this.domain}/messages`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${btoa(`api:${this.apiKey}`)}`
+        },
+        body: formData
+      })
+
+      if (!response.ok) {
+        throw new Error(`Mailgun API error: ${response.status} ${response.statusText}`)
+      }
+    } catch (error) {
+      console.error('Mailgun email error:', error)
+      throw error
+    }
+  }
+}
+
 export class EmailService {
   private provider: EmailProvider
+  private config: {
+    provider: string
+    apiKey?: string
+    smtp?: {
+      host: string
+      port: number
+      user: string
+      pass: string
+    }
+  }
 
   constructor(provider?: EmailProvider) {
-    this.provider = provider || new ConsoleEmailProvider()
+    this.config = {
+      provider: process.env.EMAIL_SERVICE_PROVIDER || 'sendgrid',
+      apiKey: process.env.SENDGRID_API_KEY,
+      smtp: {
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        user: process.env.SMTP_USER || '',
+        pass: process.env.SMTP_PASS || ''
+      }
+    }
+    
+    this.provider = provider || this.createProvider()
+  }
+
+  private createProvider(): EmailProvider {
+    switch (this.config.provider.toLowerCase()) {
+      case 'sendgrid':
+        return new SendGridProvider(this.config.apiKey)
+      case 'nodemailer':
+        return new NodemailerProvider(this.config.smtp!)
+      case 'mailgun':
+        return new MailgunProvider(this.config.apiKey)
+      default:
+        console.warn(`Email provider '${this.config.provider}' not configured, using console provider`)
+        return new ConsoleEmailProvider()
+    }
   }
 
   private async sendEmail(to: string, template: EmailTemplate): Promise<void> {
@@ -99,56 +276,155 @@ export class EmailService {
     }
 
     const template: EmailTemplate = {
-      subject: 'Congratulations! Your Supplier Account is Approved - NubiaGo',
+      subject: 'Supplier Approval Successful - NubiaGo',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #059669;">🎉 Your Account is Approved!</h2>
-        <p>Dear ${(user as any).displayName || user.name || 'Valued Supplier'},</p>
-          <p>Great news! Your supplier account has been approved and is now active on NubiaGo.</p>
+          <h2 style="color: #10b981;">🎉 Congratulations! Your Supplier Account is Approved</h2>
+          <p>Dear ${(user as any).displayName || user.name || 'Valued Supplier'},</p>
+          <p>Great news! Your supplier application has been approved by our team. You can now start selling your products on NubiaGo.</p>
           
-          <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #059669;">
-            <h3 style="margin-top: 0; color: #059669;">What you can do now:</h3>
+          <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
+            <h3 style="margin-top: 0; color: #10b981;">What's Next?</h3>
             <ul>
-              <li>Access your supplier dashboard</li>
-              <li>Add products to your catalog</li>
-              <li>Manage orders and inventory</li>
-              <li>View analytics and reports</li>
+              <li>Log in to your supplier dashboard</li>
+              <li>Add your products and inventory</li>
+              <li>Set up your payment preferences</li>
+              <li>Start receiving orders from customers</li>
             </ul>
           </div>
           
-          <p><strong>Next steps:</strong></p>
-          <ol>
-            <li>Log in to your account at <a href="https://nubiago.com/supplier">nubiago.com/supplier</a></li>
-            <li>Complete your business profile</li>
-            <li>Add your first products</li>
-            <li>Set up your payment methods</li>
-          </ol>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/supplier/dashboard" 
+               style="background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+              Access Your Dashboard
+            </a>
+          </div>
           
-          <p>If you need help getting started, our support team is here to assist you.</p>
+          <p>If you have any questions, please contact our support team at <a href="mailto:support@nubiago.com">support@nubiago.com</a></p>
           
           <p>Best regards,<br>The NubiaGo Team</p>
         </div>
       `,
       text: `
-        Congratulations! Your Account is Approved!
+        Congratulations! Your Supplier Account is Approved
         
-      Dear ${(user as any).displayName || user.name || 'Valued Supplier'},
+        Dear ${(user as any).displayName || user.name || 'Valued Supplier'},
         
-        Great news! Your supplier account has been approved and is now active on NubiaGo.
+        Great news! Your supplier application has been approved by our team. You can now start selling your products on NubiaGo.
         
-        What you can do now:
-        - Access your supplier dashboard
-        - Add products to your catalog
-        - Manage orders and inventory
-        - View analytics and reports
+        What's Next?
+        - Log in to your supplier dashboard
+        - Add your products and inventory
+        - Set up your payment preferences
+        - Start receiving orders from customers
         
-        Next steps:
-        1. Log in to your account at nubiago.com/supplier
-        2. Complete your business profile
-        3. Add your first products
-        4. Set up your payment methods
+        Access your dashboard: ${process.env.NEXT_PUBLIC_APP_URL}/supplier/dashboard
         
-        If you need help getting started, our support team is here to assist you.
+        If you have any questions, please contact our support team at support@nubiago.com
+        
+        Best regards,
+        The NubiaGo Team
+      `
+    }
+
+    await this.sendEmail(user.email, template)
+  }
+
+  async sendOrderConfirmation(user: User, order: any): Promise<void> {
+    if (!user || !user.email) {
+      throw new Error('User and email are required')
+    }
+
+    const template: EmailTemplate = {
+      subject: `Order Confirmation #${order.id} - NubiaGo`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #2563eb;">✅ Order Confirmed</h2>
+          <p>Dear ${(user as any).displayName || user.name || 'Valued Customer'},</p>
+          <p>Thank you for your order! We've received your order and it's being processed.</p>
+          
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="margin-top: 0;">Order Details</h3>
+            <p><strong>Order ID:</strong> ${order.id}</p>
+            <p><strong>Total Amount:</strong> $${order.total}</p>
+            <p><strong>Order Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
+          </div>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/orders/${order.id}" 
+               style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+              View Order Details
+            </a>
+          </div>
+          
+          <p>We'll send you updates as your order progresses.</p>
+          
+          <p>Best regards,<br>The NubiaGo Team</p>
+        </div>
+      `,
+      text: `
+        Order Confirmed
+        
+        Dear ${(user as any).displayName || user.name || 'Valued Customer'},
+        
+        Thank you for your order! We've received your order and it's being processed.
+        
+        Order Details:
+        - Order ID: ${order.id}
+        - Total Amount: $${order.total}
+        - Order Date: ${new Date(order.createdAt).toLocaleDateString()}
+        
+        View your order: ${process.env.NEXT_PUBLIC_APP_URL}/orders/${order.id}
+        
+        We'll send you updates as your order progresses.
+        
+        Best regards,
+        The NubiaGo Team
+      `
+    }
+
+    await this.sendEmail(user.email, template)
+  }
+
+  async sendPasswordReset(user: User, resetToken: string): Promise<void> {
+    if (!user || !user.email) {
+      throw new Error('User and email are required')
+    }
+
+    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${resetToken}`
+
+    const template: EmailTemplate = {
+      subject: 'Password Reset Request - NubiaGo',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #dc2626;">🔐 Password Reset Request</h2>
+          <p>Dear ${(user as any).displayName || user.name || 'User'},</p>
+          <p>We received a request to reset your password. Click the button below to create a new password:</p>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetUrl}" 
+               style="background-color: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+              Reset Password
+            </a>
+          </div>
+          
+          <p style="color: #6b7280; font-size: 14px;">
+            This link will expire in 1 hour. If you didn't request this password reset, please ignore this email.
+          </p>
+          
+          <p>Best regards,<br>The NubiaGo Team</p>
+        </div>
+      `,
+      text: `
+        Password Reset Request
+        
+        Dear ${(user as any).displayName || user.name || 'User'},
+        
+        We received a request to reset your password. Click the link below to create a new password:
+        
+        ${resetUrl}
+        
+        This link will expire in 1 hour. If you didn't request this password reset, please ignore this email.
         
         Best regards,
         The NubiaGo Team
@@ -365,21 +641,6 @@ export class EmailService {
     }
 
     await this.sendEmail(user.email, template)
-  }
-}
-
-// Console email provider for development/testing
-class ConsoleEmailProvider implements EmailProvider {
-  name = 'console'
-
-  async sendEmail(to: string, template: EmailTemplate): Promise<void> {
-    console.log('📧 Sending email:')
-    console.log(`To: ${to}`)
-    console.log(`Subject: ${template.subject}`)
-    console.log(`Content: ${template.text}`)
-    
-    // Simulate email sending delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
   }
 }
 

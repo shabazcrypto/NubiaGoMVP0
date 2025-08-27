@@ -98,14 +98,19 @@ export class ErrorLoggingService {
       this.logToConsole(logEntry)
     }
 
-    // Process immediately if critical
-    if (options.level === 'error' && options.reportToExternal !== false) {
-      this.processErrorImmediately(logEntry)
+    // Report to external services if configured
+    if (options.reportToExternal !== false) {
+      this.reportToExternalServices(logEntry)
     }
 
-    // Flush queue if it's getting large
-    if (this.errorQueue.length >= this.maxQueueSize) {
-      this.flushQueue()
+    // Save to database if configured
+    if (options.saveToDatabase !== false) {
+      this.saveToDatabase(logEntry)
+    }
+
+    // Notify team if critical
+    if (options.notifyTeam || logEntry.level === 'error') {
+      this.notifyTeam(logEntry)
     }
 
     return errorId
@@ -560,6 +565,122 @@ export class ErrorLoggingService {
       await this.processErrorBatch([logEntry])
     } catch (error) {
       console.error('Failed to process error immediately:', error)
+    }
+  }
+
+  /**
+   * Report to external services
+   */
+  private async reportToExternalServices(logEntry: ErrorLogEntry): Promise<void> {
+    try {
+      // Report to Sentry if configured
+      if (process.env.SENTRY_DSN) {
+        await this.reportToSentry(logEntry)
+      }
+
+      // Report to other services as needed
+      if (process.env.LOG_LEVEL === 'debug') {
+        await this.reportToCustomEndpoint(logEntry)
+      }
+    } catch (error) {
+      console.error('Failed to report to external services:', error)
+    }
+  }
+
+  /**
+   * Report to Sentry
+   */
+  private async reportToSentry(logEntry: ErrorLogEntry): Promise<void> {
+    try {
+      // Dynamic import to avoid SSR issues
+      const Sentry = await import('@sentry/nextjs')
+      
+      Sentry.captureException(new Error(logEntry.message), {
+        tags: logEntry.tags,
+        extra: {
+          ...logEntry.context,
+          ...logEntry.metadata,
+          errorId: logEntry.id
+        }
+      })
+    } catch (error) {
+      console.error('Sentry reporting failed:', error)
+    }
+  }
+
+  /**
+   * Report to custom endpoint
+   */
+  private async reportToCustomEndpoint(logEntry: ErrorLogEntry): Promise<void> {
+    try {
+      const endpoint = process.env.ERROR_REPORTING_ENDPOINT
+      if (!endpoint) return
+
+      await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.ERROR_REPORTING_TOKEN}`
+        },
+        body: JSON.stringify(logEntry)
+      })
+    } catch (error) {
+      console.error('Custom endpoint reporting failed:', error)
+    }
+  }
+
+  /**
+   * Save to database
+   */
+  private async saveToDatabase(logEntry: ErrorLogEntry): Promise<void> {
+    try {
+      // Save to Firebase if available
+      if (typeof window === 'undefined') {
+        const { db } = await import('@/lib/firebase/config')
+        const { doc, setDoc } = await import('firebase/firestore')
+        
+        await setDoc(doc(db, 'error_logs', logEntry.id), {
+          ...logEntry,
+          timestamp: new Date(logEntry.timestamp)
+        })
+      }
+    } catch (error) {
+      console.error('Failed to save error to database:', error)
+    }
+  }
+
+  /**
+   * Notify team of critical errors
+   */
+  private async notifyTeam(logEntry: ErrorLogEntry): Promise<void> {
+    try {
+      // Only notify for critical errors
+      if (logEntry.level !== 'error') return
+
+      const { emailService } = await import('./email.service')
+      
+      const notificationEmail = {
+        to: process.env.ADMIN_EMAIL || 'admin@nubiago.com',
+        subject: `🚨 Critical Error Alert - ${logEntry.category}`,
+        html: `
+          <h2>Critical Error Detected</h2>
+          <p><strong>Error ID:</strong> ${logEntry.id}</p>
+          <p><strong>Message:</strong> ${logEntry.message}</p>
+          <p><strong>Category:</strong> ${logEntry.category}</p>
+          <p><strong>Timestamp:</strong> ${logEntry.timestamp}</p>
+          <p><strong>URL:</strong> ${logEntry.context?.url || 'N/A'}</p>
+          <p><strong>User Agent:</strong> ${logEntry.context?.userAgent || 'N/A'}</p>
+          <pre>${logEntry.error?.stack || 'No stack trace'}</pre>
+        `
+      }
+
+      await emailService.sendEmail(notificationEmail.to, {
+        subject: notificationEmail.subject,
+        html: notificationEmail.html,
+        text: notificationEmail.html.replace(/<[^>]*>/g, '')
+      })
+    } catch (error) {
+      console.error('Failed to notify team:', error)
     }
   }
 }

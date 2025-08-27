@@ -9,6 +9,11 @@ export interface CartItem {
   price: number
   quantity: number
   image: string
+  originalPrice?: number
+  inStock?: boolean
+  maxQuantity?: number
+  category?: string
+  supplierName?: string
   variant?: {
     size?: string
     color?: string
@@ -43,9 +48,25 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (newItem) => {
         const { items } = get()
+        
+        // Ensure the item has all required properties with defaults
+        const normalizedItem = {
+          id: newItem.id || `item-${Date.now()}-${Math.random()}`,
+          name: newItem.name || 'Unknown Product',
+          price: newItem.price || 0,
+          quantity: newItem.quantity || 1,
+          image: newItem.image || '/product-placeholder.jpg',
+          originalPrice: newItem.originalPrice,
+          inStock: newItem.inStock !== undefined ? newItem.inStock : true,
+          maxQuantity: newItem.maxQuantity || 99,
+          category: newItem.category || 'General',
+          supplierName: newItem.supplierName || 'NubiaGo',
+          variant: newItem.variant
+        }
+        
         const existingItemIndex = items.findIndex(item => 
-          item.id === newItem.id && 
-          JSON.stringify(item.variant) === JSON.stringify(newItem.variant)
+          item.id === normalizedItem.id && 
+          JSON.stringify(item.variant) === JSON.stringify(normalizedItem.variant)
         )
 
         let updatedItems: CartItem[]
@@ -54,12 +75,12 @@ export const useCartStore = create<CartStore>()(
           // Update existing item quantity
           updatedItems = items.map((item, index) =>
             index === existingItemIndex
-              ? { ...item, quantity: item.quantity + (newItem.quantity || 1) }
+              ? { ...item, quantity: item.quantity + (normalizedItem.quantity || 1) }
               : item
           )
         } else {
           // Add new item
-          updatedItems = [...items, { ...newItem, quantity: newItem.quantity || 1 }]
+          updatedItems = [...items, normalizedItem]
         }
 
         set({

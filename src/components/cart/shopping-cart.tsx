@@ -202,15 +202,15 @@ const ShoppingCart = React.memo(function ShoppingCart({
           {/* Cart Items - Compact Design */}
           <div className={`overflow-y-auto ${isCompact ? 'max-h-36' : 'max-h-48'}`}>
             <div className="divide-y divide-gray-100">
-              {items.map((item) => (
-                <div key={item.id} className={`hover:bg-gray-50 transition-colors ${isCompact ? 'p-2' : 'p-3'}`}>
+              {items.map((item, index) => (
+                <div key={item.id || `cart-item-${index}`} className={`hover:bg-gray-50 transition-colors ${isCompact ? 'p-2' : 'p-3'}`}>
                   <div className="flex gap-2">
                     {/* Product Image */}
                     <div className="flex-shrink-0">
                       <div className={`bg-gray-100 rounded-md overflow-hidden ${isCompact ? 'w-10 h-10' : 'w-12 h-12'}`}>
                         <Image
                           src={item.image || '/fallback-product.jpg'}
-                          alt={item.name}
+                          alt={`${item.name} - Product image`}
                           width={isCompact ? 40 : 48}
                           height={isCompact ? 40 : 48}
                           className="w-full h-full object-cover"

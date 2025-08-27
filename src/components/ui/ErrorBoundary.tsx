@@ -32,7 +32,7 @@ export class ErrorBoundary extends Component<Props, State> {
       category: 'ui',
       context: {
         action: 'error_boundary',
-        componentStack: errorInfo.componentStack,
+        componentStack: errorInfo.componentStack || undefined,
         url: typeof window !== 'undefined' ? window.location.href : undefined
       },
       tags: ['error_boundary', 'react'],

@@ -197,6 +197,7 @@ export class AuthService {
 
       return user
     } catch (error: any) {
+      // Sign in error - logging removed for production
       // Log failed login attempt
       await auditService.logAuthEvent(
         'unknown',
@@ -204,8 +205,19 @@ export class AuthService {
         'unknown',
         'login',
         false,
-        error.message
+        error.message || error.toString()
       )
+      
+      // Check if Firebase is properly initialized
+      if (!auth) {
+        throw new Error('Firebase authentication is not initialized')
+      }
+      
+      // Handle specific error cases
+      if (error.code === 'auth/internal-error') {
+        // Firebase internal error details - logging removed for production
+      }
+      
       throw new Error(this.getErrorMessage(error.code))
     }
   }
@@ -239,7 +251,7 @@ export class AuthService {
 
       return userDoc.data() as User
     } catch (error) {
-      console.error('Error getting current user:', error)
+      // Error getting current user - logging removed for production
       return null
     }
   }
@@ -549,7 +561,7 @@ export class AuthService {
       
       return uploadResults.map(result => result.url)
     } catch (error) {
-      console.error('Failed to upload business documents:', error)
+      // Failed to upload business documents - logging removed for production
       // Return mock URLs as fallback
       return documents.map((doc, index) => `https://storage.googleapis.com/business-docs/${uid}/doc_${index}.pdf`)
     }
@@ -557,34 +569,34 @@ export class AuthService {
 
   // Listen to auth state changes with real-time user updates
   onAuthStateChanged(callback: (user: User | null) => void): () => void {
-    console.log('AuthService: Setting up auth state listener')
+    // AuthService: Setting up auth state listener - logging removed for production
     
     const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
-      console.log('AuthService: Firebase auth state changed', { firebaseUser: firebaseUser?.uid })
+      // AuthService: Firebase auth state changed - logging removed for production
       
       if (!firebaseUser) {
-        console.log('AuthService: No Firebase user, calling callback with null')
+        // AuthService: No Firebase user, calling callback with null - logging removed for production
         callback(null)
         return
       }
 
       try {
-        console.log('AuthService: Setting up Firestore listener for user', firebaseUser.uid)
+        // AuthService: Setting up Firestore listener for user - logging removed for production
         // Set up real-time listener for user document
         const unsubscribe = onSnapshot(
           doc(db, 'users', firebaseUser.uid),
           (doc) => {
             if (doc.exists()) {
               const userData = doc.data() as User
-              console.log('AuthService: User document found', { userData })
+              // AuthService: User document found - logging removed for production
               callback(userData)
             } else {
-              console.log('AuthService: User document not found')
+              // AuthService: User document not found - logging removed for production
               callback(null)
             }
           },
           (error) => {
-            console.error('Error in user document listener:', error)
+            // Error in user document listener - logging removed for production
             callback(null)
           }
         )
@@ -592,7 +604,7 @@ export class AuthService {
         // Store the unsubscribe function
         this.userListeners.set(firebaseUser.uid, unsubscribe)
       } catch (error) {
-        console.error('Error in auth state change:', error)
+        // Error in auth state change - logging removed for production
         callback(null)
       }
     })
@@ -613,7 +625,7 @@ export class AuthService {
         }
       },
       (error) => {
-        console.error('Error in user change listener:', error)
+        // // // console.error('Error in user change listener:', error)
         callback(null)
       }
     )
@@ -659,7 +671,7 @@ export class AuthService {
       
       return firebaseUser.emailVerified
     } catch (error) {
-      console.error('Error checking email verification:', error)
+      // Error checking email verification - logging removed for production
       return false
     }
   }
@@ -693,7 +705,7 @@ export class AuthService {
         await currentUser.getIdToken(true)
       }
     } catch (error) {
-      console.error('Error handling role change:', error)
+      // Error handling role change - logging removed for production
       throw new Error('Failed to update user role')
     }
   }
@@ -713,7 +725,7 @@ export class AuthService {
             try {
               await currentUser.getIdToken(true)
             } catch (error) {
-              console.error('Error refreshing token after role change:', error)
+              // Error refreshing token after role change - logging removed for production
             }
           }
           
@@ -723,7 +735,7 @@ export class AuthService {
         }
       },
       (error) => {
-        console.error('Error in user change listener:', error)
+        // // // console.error('Error in user change listener:', error)
         callback(null)
       }
     )
@@ -744,14 +756,14 @@ export class AuthService {
       
       return await getIdToken(user, true)
     } catch (error) {
-      console.error('Error getting auth token:', error)
+      // Error getting auth token - logging removed for production
       return null
     }
   }
 
   // Helper method to get user-friendly error messages
   private getErrorMessage(error: any): string {
-    console.error('Auth error:', error)
+    // Auth error - logging removed for production
     
     const errorCode = error.code as string
     const errorMap: Record<string, string> = {

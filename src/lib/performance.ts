@@ -21,7 +21,7 @@ export function lazyImport<T extends ComponentType<any>>(
         return await importFunc()
       } catch (error) {
         lastError = error as Error
-        console.warn(`Lazy import attempt ${i + 1} failed:`, error)
+        // // // console.warn(`Lazy import attempt ${i + 1} failed:`, error)
         
         if (i < retries - 1) {
           await new Promise(resolve => setTimeout(resolve, delay * (i + 1)))
@@ -93,12 +93,12 @@ export function usePerformanceMonitor(componentName: string) {
 
     // Log performance metrics
     if (process.env.NODE_ENV === 'development') {
-      console.log(`[Performance] ${componentName} mounted in ${mountDuration.toFixed(2)}ms`)
+      // // // console.log(`[Performance] ${componentName} mounted in ${mountDuration.toFixed(2)}ms`)
     }
 
     // Report to performance monitoring service
     if (mountDuration > 100) { // Log slow components
-      console.warn(`[Performance] Slow component: ${componentName} took ${mountDuration.toFixed(2)}ms to mount`)
+      // // // console.warn(`[Performance] Slow component: ${componentName} took ${mountDuration.toFixed(2)}ms to mount`)
     }
   }, [componentName])
 
@@ -322,7 +322,7 @@ export function preloadComponent<T extends ComponentType<any>>(
     const promise = importFunc()
     promise.then(() => {
       // Component is now loaded and cached
-      console.log('Component preloaded successfully')
+      // // // console.log('Component preloaded successfully')
     })
     return promise
   }
@@ -437,7 +437,7 @@ export class PerformanceMetrics {
       navigationObserver.observe({ entryTypes: ['navigation'] })
       this.observers.add(navigationObserver)
     } catch (error) {
-      console.warn('Failed to setup navigation observer:', error)
+      // // // console.warn('Failed to setup navigation observer:', error)
     }
 
     // Observe resource timing
@@ -454,7 +454,7 @@ export class PerformanceMetrics {
       resourceObserver.observe({ entryTypes: ['resource'] })
       this.observers.add(resourceObserver)
     } catch (error) {
-      console.warn('Failed to setup resource observer:', error)
+      // // // console.warn('Failed to setup resource observer:', error)
     }
   }
 

@@ -15,6 +15,7 @@ import Link from 'next/link'
 import AdminAuthGuard from '@/components/admin/AdminAuthGuard'
 import { useAdminDashboardStore } from '@/store/admin/admin-dashboard.store'
 import { useAuth } from '@/hooks/useAuth'
+import ROUTES from '@/app/routes'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -71,11 +72,11 @@ export default function AdminDashboard() {
   ]
 
   useEffect(() => {
-    console.log('AdminDashboard: useEffect triggered', { adminUser, loading })
+    // // // console.log('AdminDashboard: useEffect triggered', { adminUser, loading })
     
     // TEMPORARY: Disable Firebase authentication check
     if (!hasFetchedData.current) {
-      console.log('AdminDashboard: Fetching data (Firebase disabled)')
+      // // // console.log('AdminDashboard: Fetching data (Firebase disabled)')
       hasFetchedData.current = true
       
       // Fetch all data - the store will manage loading states
@@ -85,9 +86,9 @@ export default function AdminDashboard() {
         fetchOrders(),
         fetchProducts()
       ]).then(() => {
-        console.log('AdminDashboard: Data fetching completed')
+        // // // console.log('AdminDashboard: Data fetching completed')
       }).catch((error) => {
-        console.error('AdminDashboard: Error fetching data:', error)
+        // // // console.error('AdminDashboard: Error fetching data:', error)
       })
     }
   }, [fetchUsers, fetchSuppliers, fetchOrders, fetchProducts])
@@ -127,15 +128,15 @@ export default function AdminDashboard() {
   }
 
   const sidebarItems = [
-    { id: 'overview', icon: Grid3X3, label: 'Overview', path: '/admin' },
-    { id: 'users', icon: Users, label: 'User Management', path: '/admin/users' },
-    { id: 'suppliers', icon: Shield, label: 'Supplier Management', path: '/admin/suppliers' },
-    { id: 'orders', icon: ShoppingCart, label: 'Order Management', path: '/admin/orders' },
+    { id: 'overview', icon: Grid3X3, label: 'Overview', path: ROUTES.ADMIN.DASHBOARD },
+    { id: 'users', icon: Users, label: 'User Management', path: ROUTES.ADMIN.USERS },
+    { id: 'suppliers', icon: Shield, label: 'Supplier Management', path: ROUTES.ADMIN.SUPPLIERS },
+    { id: 'orders', icon: ShoppingCart, label: 'Order Management', path: ROUTES.ADMIN.ORDERS },
     { id: 'cms', icon: FileText, label: 'Content Management', path: '/admin/cms' },
-    { id: 'approvals', icon: CheckCircle, label: 'Approval System', path: '/admin/approvals' },
-    { id: 'monitoring', icon: BarChart3, label: 'System Monitoring', path: '/admin/apis' },
-    { id: 'apis', icon: Zap, label: 'API Management', path: '/admin/apis' },
-    { id: 'settings', icon: Settings, label: 'Settings', path: '/admin/settings' }
+    { id: 'approvals', icon: CheckCircle, label: 'Approval System', path: ROUTES.ADMIN.APPROVALS },
+    { id: 'monitoring', icon: BarChart3, label: 'System Monitoring', path: ROUTES.ADMIN.MONITORING },
+    { id: 'apis', icon: Zap, label: 'API Management', path: ROUTES.ADMIN.APIS },
+    { id: 'settings', icon: Settings, label: 'Settings', path: ROUTES.ADMIN.SETTINGS }
   ]
 
   return (

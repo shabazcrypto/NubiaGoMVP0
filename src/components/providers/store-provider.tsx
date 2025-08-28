@@ -24,7 +24,7 @@ export default function StoreProvider({ children }: StoreProviderProps) {
       try {
         // Check if localStorage is available and accessible
         if (!window.localStorage) {
-          console.warn('localStorage not available, skipping store rehydration')
+          // // // console.warn('localStorage not available, skipping store rehydration')
           setIsHydrated(true)
           return
         }
@@ -35,7 +35,7 @@ export default function StoreProvider({ children }: StoreProviderProps) {
           window.localStorage.setItem(testKey, 'test')
           window.localStorage.removeItem(testKey)
         } catch (error) {
-          console.warn('localStorage access blocked, skipping store rehydration:', error)
+          // // // console.warn('localStorage access blocked, skipping store rehydration:', error)
           setIsHydrated(true)
           return
         }
@@ -51,7 +51,7 @@ export default function StoreProvider({ children }: StoreProviderProps) {
         setIsHydrated(true)
         setError(null)
       } catch (error) {
-        console.warn('Store rehydration failed or timed out:', error)
+        // // // console.warn('Store rehydration failed or timed out:', error)
         setError('Continuing without persistence')
         // Continue anyway to prevent infinite loading
         setIsHydrated(true)
@@ -60,7 +60,7 @@ export default function StoreProvider({ children }: StoreProviderProps) {
 
     // Very short fallback timeout to ensure we never get stuck
     const fallbackTimeout = setTimeout(() => {
-      console.warn('Store provider fallback timeout - forcing hydration')
+      // // // console.warn('Store provider fallback timeout - forcing hydration')
       setError('Continuing without persistence')
       setIsHydrated(true)
     }, 1200)

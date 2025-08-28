@@ -70,7 +70,7 @@ export class WishlistService {
         items: itemsWithProducts as any
       }
     } catch (error) {
-      console.error('Error getting wishlist:', error)
+      // // // console.error('Error getting wishlist:', error)
       throw new Error('Failed to fetch wishlist')
     }
   }
@@ -103,7 +103,7 @@ export class WishlistService {
 
       return wishlist
     } catch (error) {
-      console.error('Error adding to wishlist:', error)
+      // // // console.error('Error adding to wishlist:', error)
       throw new Error('Failed to add item to wishlist')
     }
   }
@@ -121,7 +121,7 @@ export class WishlistService {
 
       return wishlist
     } catch (error) {
-      console.error('Error removing from wishlist:', error)
+      // // // console.error('Error removing from wishlist:', error)
       throw new Error('Failed to remove item from wishlist')
     }
   }
@@ -140,7 +140,7 @@ export class WishlistService {
       await setDoc(wishlistRef, emptyWishlist)
       return emptyWishlist
     } catch (error) {
-      console.error('Error clearing wishlist:', error)
+      // // // console.error('Error clearing wishlist:', error)
       throw new Error('Failed to clear wishlist')
     }
   }
@@ -151,7 +151,7 @@ export class WishlistService {
       const wishlist = await this.getWishlist(userId)
       return wishlist.items.some(item => item.productId === productId)
     } catch (error) {
-      console.error('Error checking wishlist status:', error)
+      // // // console.error('Error checking wishlist status:', error)
       return false
     }
   }
@@ -162,7 +162,7 @@ export class WishlistService {
       const wishlist = await this.getWishlist(userId)
       return wishlist.items.length
     } catch (error) {
-      console.error('Error getting wishlist count:', error)
+      // // // console.error('Error getting wishlist count:', error)
       return 0
     }
   }
@@ -187,7 +187,7 @@ export class WishlistService {
         cartUpdated: true
       }
     } catch (error) {
-      console.error('Error moving item from wishlist to cart:', error)
+      // // // console.error('Error moving item from wishlist to cart:', error)
       throw new Error('Failed to move item from wishlist to cart')
     }
   }
@@ -221,7 +221,7 @@ export class WishlistService {
 
       return recommendations
     } catch (error) {
-      console.error('Error getting wishlist recommendations:', error)
+      // // // console.error('Error getting wishlist recommendations:', error)
       return []
     }
   }
@@ -247,7 +247,7 @@ export class WishlistService {
         shareCode
       }
     } catch (error) {
-      console.error('Error sharing wishlist:', error)
+      // // // console.error('Error sharing wishlist:', error)
       throw new Error('Failed to share wishlist')
     }
   }
@@ -262,7 +262,7 @@ export class WishlistService {
       
       return null
     } catch (error) {
-      console.error('Error getting shared wishlist:', error)
+      // // // console.error('Error getting shared wishlist:', error)
       return null
     }
   }
@@ -289,7 +289,7 @@ export class WishlistService {
         categories
       }
     } catch (error) {
-      console.error('Error getting wishlist statistics:', error)
+      // // // console.error('Error getting wishlist statistics:', error)
       throw new Error('Failed to fetch wishlist statistics')
     }
   }

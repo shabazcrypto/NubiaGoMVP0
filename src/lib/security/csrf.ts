@@ -59,7 +59,7 @@ export class CSRFProtection {
 
       return tokenData
     } catch (error) {
-      console.error('CSRF token generation error:', error)
+      // // // console.error('CSRF token generation error:', error)
       throw new Error('Failed to generate CSRF token')
     }
   }
@@ -119,7 +119,7 @@ export class CSRFProtection {
         expiresAt: tokenData.expiresAt 
       }
     } catch (error) {
-      console.error('CSRF token validation error:', error)
+      // // // console.error('CSRF token validation error:', error)
       return { valid: false, reason: 'Validation error' }
     }
   }
@@ -139,7 +139,7 @@ export class CSRFProtection {
       
       return signedToken
     } catch (error) {
-      console.error('Signed CSRF token generation error:', error)
+      // // // console.error('Signed CSRF token generation error:', error)
       throw new Error('Failed to generate signed CSRF token')
     }
   }
@@ -188,7 +188,7 @@ export class CSRFProtection {
 
       return { valid: true, expiresAt }
     } catch (error) {
-      console.error('Signed CSRF token validation error:', error)
+      // // // console.error('Signed CSRF token validation error:', error)
       return { valid: false, reason: 'Signature validation error' }
     }
   }

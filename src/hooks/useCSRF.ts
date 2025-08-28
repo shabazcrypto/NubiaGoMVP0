@@ -89,7 +89,7 @@ export function useEnterpriseSession() {
         setSessionData(newSession)
       }
     } catch (error) {
-      console.error('Session initialization error:', error)
+      // // console.infor('Session initialization error:', error)
       setError('Failed to initialize session')
     } finally {
       setIsLoading(false)
@@ -126,7 +126,7 @@ export function useEnterpriseSession() {
       
       return session
     } catch (error) {
-      console.error('Session creation error:', error)
+      // // console.infor('Session creation error:', error)
       throw new Error('Failed to create session')
     }
   }
@@ -192,7 +192,7 @@ export function useEnterpriseSession() {
         await invalidateSession(oldestSession.sessionId)
       }
     } catch (error) {
-      console.error('Concurrent session check error:', error)
+      // // console.infor('Concurrent session check error:', error)
     }
   }
 
@@ -215,13 +215,13 @@ export function useEnterpriseSession() {
       // SECURITY: Validate device fingerprint
       const currentDeviceId = await generateDeviceFingerprint()
       if (session.deviceInfo.deviceId !== currentDeviceId) {
-        console.warn('Device fingerprint mismatch - potential session hijacking')
+        // // // // console.warn('Device fingerprint mismatch - potential session hijacking')
         return false
       }
       
       return true
     } catch (error) {
-      console.error('Session validation error:', error)
+      // // console.infor('Session validation error:', error)
       return false
     }
   }
@@ -233,7 +233,7 @@ export function useEnterpriseSession() {
         sessionData.lastActivity = new Date()
         await storeSession(sessionData)
       } catch (error) {
-        console.error('Activity update error:', error)
+        // // console.infor('Activity update error:', error)
       }
     }
   }
@@ -248,7 +248,7 @@ export function useEnterpriseSession() {
           setSessionData(null)
         }
       } catch (error) {
-        console.error('Session refresh error:', error)
+        // // console.infor('Session refresh error:', error)
       }
     }
   }
@@ -266,7 +266,7 @@ export function useEnterpriseSession() {
         }
       }
     } catch (error) {
-      console.error('Session cleanup error:', error)
+      // // console.infor('Session cleanup error:', error)
     }
   }
 
@@ -280,7 +280,7 @@ export function useEnterpriseSession() {
         localStorage.setItem(sessionKey, encryptedData)
       }
     } catch (error) {
-      console.error('Session storage error:', error)
+      // // console.infor('Session storage error:', error)
       throw error
     }
   }
@@ -302,7 +302,7 @@ export function useEnterpriseSession() {
               }
             }
           } catch (error) {
-            console.warn('Failed to decrypt session:', key, error)
+            // // // // console.warn('Failed to decrypt session:', key, error)
             // SECURITY: Remove corrupted session
             localStorage.removeItem(key)
           }
@@ -311,7 +311,7 @@ export function useEnterpriseSession() {
       
       return null
     } catch (error) {
-      console.error('Session retrieval error:', error)
+      // // console.infor('Session retrieval error:', error)
       return null
     }
   }
@@ -344,7 +344,7 @@ export function useEnterpriseSession() {
       
       return btoa(String.fromCharCode(...combined))
     } catch (error) {
-      console.error('Session encryption error:', error)
+      // // console.infor('Session encryption error:', error)
       throw error
     }
   }
@@ -377,7 +377,7 @@ export function useEnterpriseSession() {
       
       return JSON.parse(jsonString) as SessionData
     } catch (error) {
-      console.error('Session decryption error:', error)
+      // // console.infor('Session decryption error:', error)
       return null
     }
   }
@@ -399,7 +399,7 @@ export function useEnterpriseSession() {
               }
             }
           } catch (error) {
-            console.warn('Failed to decrypt session:', key, error)
+            // // // // console.warn('Failed to decrypt session:', key, error)
           }
         }
         
@@ -408,7 +408,7 @@ export function useEnterpriseSession() {
       
       return []
     } catch (error) {
-      console.error('Active sessions retrieval error:', error)
+      // // console.infor('Active sessions retrieval error:', error)
       return []
     }
   }
@@ -421,7 +421,7 @@ export function useEnterpriseSession() {
         localStorage.removeItem(sessionKey)
       }
     } catch (error) {
-      console.error('Session invalidation error:', error)
+      // // console.infor('Session invalidation error:', error)
     }
   }
 
@@ -440,7 +440,7 @@ export function useEnterpriseSession() {
       
       setSessionData(null)
     } catch (error) {
-      console.error('Session clear error:', error)
+      // // console.infor('Session clear error:', error)
     }
   }
 
@@ -490,7 +490,7 @@ export function useCSRF() {
           localStorage.setItem('csrf-token', signedToken)
           localStorage.setItem('csrf-expires', tokenData.expiresAt.toString())
         } catch (error) {
-          console.warn('Failed to store CSRF token in localStorage:', error)
+          // // // // console.warn('Failed to store CSRF token in localStorage:', error)
         }
       }
 
@@ -499,7 +499,7 @@ export function useCSRF() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to generate CSRF token'
       setError(errorMessage)
-      console.error('CSRF token generation error:', err)
+      // // console.infor('CSRF token generation error:', err)
       return null
     } finally {
       setIsLoading(false)
@@ -518,7 +518,7 @@ export function useCSRF() {
       const result = CSRFProtection.validateSignedToken(token, sessionToken, secret)
       return result.valid
     } catch (err) {
-      console.error('CSRF token validation error:', err)
+      // // console.infor('CSRF token validation error:', err)
       return false
     }
   }, [])
@@ -536,7 +536,7 @@ export function useCSRF() {
           storedToken = localStorage.getItem('csrf-token')
           expiresAt = localStorage.getItem('csrf-expires')
         } catch (error) {
-          console.warn('Failed to read CSRF token from localStorage:', error)
+          // // // // console.warn('Failed to read CSRF token from localStorage:', error)
         }
       }
 
@@ -547,7 +547,7 @@ export function useCSRF() {
       const isExpired = CSRFProtection.isTokenExpired(parseInt(expiresAt))
       
       if (isExpired) {
-        console.log('CSRF token expired, generating new one')
+        // // // // console.log('CSRF token expired, generating new one')
         return await generateToken()
       }
 
@@ -556,11 +556,11 @@ export function useCSRF() {
         setCsrfToken(storedToken)
         return storedToken
       } else {
-        console.log('Stored CSRF token invalid, generating new one')
+        // // // // console.log('Stored CSRF token invalid, generating new one')
         return await generateToken()
       }
     } catch (err) {
-      console.error('Error refreshing CSRF token:', err)
+      // // console.infor('Error refreshing CSRF token:', err)
       return await generateToken()
     }
   }, [generateToken, validateToken])
@@ -589,7 +589,7 @@ export function useCSRF() {
         localStorage.removeItem('csrf-token')
         localStorage.removeItem('csrf-expires')
       } catch (error) {
-        console.warn('Failed to clear CSRF token from localStorage:', error)
+        // // // // console.warn('Failed to clear CSRF token from localStorage:', error)
       }
     }
     setCsrfToken(null)
@@ -643,7 +643,7 @@ function getSessionToken(): string | null {
       return localStorage.getItem('session-token') || 
              localStorage.getItem('auth-token')
     } catch (error) {
-      console.warn('Failed to read session token from localStorage:', error)
+      // // // // console.warn('Failed to read session token from localStorage:', error)
       return null
     }
   }
@@ -673,7 +673,7 @@ export function useCSRFFetch() {
 
       return fetch(url, options)
     } catch (error) {
-      console.error('Error adding CSRF token to request:', error)
+      // // console.infor('Error adding CSRF token to request:', error)
       // Continue without CSRF token if there's an error
       return fetch(url, options)
     }

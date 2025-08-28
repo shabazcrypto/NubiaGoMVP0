@@ -22,25 +22,20 @@ export function useAuth(): UseAuthReturn {
 
            // Initialize auth state
          useEffect(() => {
-           console.log('useAuth: Initializing auth state (Firebase disabled)')
+           // // // console.log('useAuth: Initializing auth state')
            
-           // TEMPORARY: Disable Firebase authentication
-           setLoading(false)
-           setError(null)
-           
-           // TODO: Re-enable this when Firebase is ready
-           // const unsubscribe = authService.onAuthStateChanged((user) => {
-           //   console.log('useAuth: Auth state changed', { user, loading })
-           //   setUser(user)
-           //   setLoading(false)
-           //   setError(null)
-           // })
+           const unsubscribe = authService.onAuthStateChanged((user) => {
+             // // // console.log('useAuth: Auth state changed', { user, loading })
+             setUser(user)
+             setLoading(false)
+             setError(null)
+           })
        
-           // return () => {
-           //   console.log('useAuth: Cleaning up auth listeners')
-           //   unsubscribe()
-           //   authService.cleanupListeners()
-           // }
+           return () => {
+             // // // console.log('useAuth: Cleaning up auth listeners')
+             unsubscribe()
+             authService.cleanupListeners()
+           }
          }, [])
 
   const signIn = useCallback(async (email: string, password: string) => {

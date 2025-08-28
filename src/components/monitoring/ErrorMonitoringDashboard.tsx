@@ -108,7 +108,7 @@ export default function ErrorMonitoringDashboard() {
       setStats(mockStats)
       setRecentErrors(mockErrors)
     } catch (error) {
-      console.error('Failed to load error data:', error)
+      // // // console.error('Failed to load error data:', error)
     } finally {
       setLoading(false)
     }

@@ -3,225 +3,66 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, ShoppingBag, Trash, Plus, Minus, Shield, Truck, CreditCard, Star, Clock, Tag, AlertTriangle } from 'lucide-react'
-import ShoppingCart from '@/components/cart/shopping-cart'
-import { CartService } from '@/lib/services/cart.service'
+import { ArrowLeft, ShoppingBag, Trash, Plus, Minus, Shield, Truck, CreditCard, Star, Clock, Tag, AlertTriangle, Heart } from 'lucide-react'
+import { useCartStore } from '@/hooks/useCartStore'
 import { useAuth } from '@/hooks/useAuth'
-import { Product } from '@/types'
-import { logger } from '@/lib/utils/logger'
-
-interface CartItem {
-  id: string
-  name: string
-  price: number
-  originalPrice?: number
-  quantity: number
-  image: string
-  inStock: boolean
-  maxQuantity?: number
-  category: string
-  supplierId: string
-  supplierName: string
-}
-
-interface RecommendedItem {
-  id: string
-  name: string
-  price: number
-  originalPrice?: number
-  image: string
-  rating: number
-  reviewCount: number
-  category: string
-  isPrime?: boolean
-  discount?: number
-}
+import { useToast } from '@/components/ui/toast'
+import EnhancedImage from '@/components/mobile/EnhancedImage'
 
 export default function CartPage() {
-  const [error, setError] = useState<Error | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
-  const [cartTotal, setCartTotal] = useState(0)
+  const { items, total, itemCount, updateQuantity, removeItem, clearCart } = useCartStore()
   const { user } = useAuth()
   const router = useRouter()
-  const cartService = new CartService()
-
-  // Transform cart items to match ShoppingCart component interface
-  const transformCartItems = (cart: any) => {
-    return cart.items.map((item: any) => ({
-      id: item.productId,
-      name: item.product.name,
-      price: item.price,
-      originalPrice: item.product.originalPrice,
-      quantity: item.quantity,
-      image: item.product.imageUrl,
-      inStock: item.product.stock > 0,
-      maxQuantity: item.product.stock,
-      category: item.product.category,
-      supplierId: 'supplier-1', // Default supplier ID
-      supplierName: 'Supplier' // Default supplier name
-    }))
-  }
+  const { success, error } = useToast()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const fetchCart = async () => {
-      if (!user?.uid) {
-        setCartItems([])
-        setCartTotal(0)
-        setIsLoading(false)
-        return
-      }
+    // Simulate loading for better UX
+    const timer = setTimeout(() => setIsLoading(false), 500)
+    return () => clearTimeout(timer)
+  }, [])
 
-      try {
-        setIsLoading(true)
-        const cart = await cartService.getCart(user.uid)
-        const transformedItems = transformCartItems(cart)
-        setCartItems(transformedItems)
-        setCartTotal(cart.total)
-      } catch (error: any) {
-        setError(error)
-        logger.error('Error fetching cart:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchCart()
-  }, [user?.uid])
-
-  const handleUpdateQuantity = async (itemId: string, quantity: number) => {
-    if (!user?.uid) return
-    
+  const handleUpdateQuantity = (itemId: string, newQuantity: number) => {
     try {
-      const cart = await cartService.updateCartItemQuantity(user.uid, itemId, quantity)
-      const transformedItems = transformCartItems(cart)
-      setCartItems(transformedItems)
-      setCartTotal(cart.total)
-    } catch (error: any) {
-      setError(error)
-              logger.error('Error updating quantity:', error)
+      updateQuantity(itemId, newQuantity)
+      success('Quantity updated')
+    } catch (err) {
+      error('Failed to update quantity')
     }
   }
 
-  const handleRemoveItem = async (itemId: string) => {
-    if (!user?.uid) return
-    
+  const handleRemoveItem = (itemId: string) => {
     try {
-      const cart = await cartService.removeFromCart(user.uid, itemId)
-      const transformedItems = transformCartItems(cart)
-      setCartItems(transformedItems)
-      setCartTotal(cart.total)
-    } catch (error: any) {
-      setError(error)
-              logger.error('Error removing item:', error)
+      removeItem(itemId)
+      success('Item removed from cart')
+    } catch (err) {
+      error('Failed to remove item')
     }
   }
 
-  const handleClearCart = async () => {
-    if (!user?.uid) return
-    
+  const handleClearCart = () => {
     try {
-      const cart = await cartService.clearCart(user.uid)
-      setCartItems([])
-      setCartTotal(0)
-    } catch (error: any) {
-      setError(error)
-              logger.error('Error clearing cart:', error)
+      clearCart()
+      success('Cart cleared')
+    } catch (err) {
+      error('Failed to clear cart')
     }
   }
 
-  const handleCheckout = async () => {
-    if (!user?.uid) {
-      router.push('/login?redirect=/checkout')
+  const handleCheckout = () => {
+    if (items.length === 0) {
+      error('Your cart is empty')
       return
     }
     
-    try {
-      // Validate cart before checkout
-      const validation = await cartService.validateCart(user.uid)
-      if (!validation.isValid) {
-        setError(new Error(validation.errors.join(', ')))
-        return
-      }
-      
-      router.push('/checkout')
-    } catch (error: any) {
-      setError(error)
-      logger.error('Error during checkout:', error)
-    }
+    // Allow guest checkout
+    router.push('/checkout')
   }
 
-  const handleAddToCart = async (item: RecommendedItem) => {
-    if (!user?.uid) return
-    
-    try {
-      // Convert recommended item to Product format
-      const product: Product = {
-        id: item.id,
-        name: item.name,
-        description: `High-quality ${item.name} with excellent features and durability.`,
-        price: item.price,
-        originalPrice: item.originalPrice,
-        imageUrl: item.image,
-        images: [item.image],
-        thumbnailUrl: item.image,
-        category: item.category,
-        subcategory: undefined,
-        brand: 'Brand',
-        sku: `SKU-${item.id}`,
-        stock: 99,
-        rating: item.rating,
-        reviewCount: item.reviewCount,
-        tags: [item.category, 'featured'],
-        specifications: {},
-        isActive: true,
-        isFeatured: false,
-        currency: 'USD',
-        inventory: 99,
-        supplierId: 'supplier-1',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-      
-      const cart = await cartService.addToCart(user.uid, item.id, 1)
-      const transformedItems = transformCartItems(cart)
-      setCartItems(transformedItems)
-      setCartTotal(cart.total)
-    } catch (error: any) {
-      setError(error)
-              logger.error('Error adding to cart:', error)
-    }
-  }
-
-  const handleAddToWishlist = (item: RecommendedItem) => {
-    // This would typically add to wishlist store
-            logger.log('Added to wishlist:', item.name)
-    // You could implement wishlist functionality here
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-            <AlertTriangle className="h-6 w-6 text-red-600" />
-          </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Something went wrong
-          </h3>
-          <p className="text-sm text-gray-600 mb-6">
-            {error.message}
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    )
-  }
+  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+  const shipping = subtotal > 50 ? 0 : 5.99
+  const tax = subtotal * 0.08
+  const finalTotal = subtotal + shipping + tax
 
   if (isLoading) {
     return (
@@ -240,10 +81,10 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        {/* Compact Header */}
+        {/* Header */}
         <div className="mb-6">
           <Link 
-            href="/" 
+            href="/products" 
             className="inline-flex items-center text-gray-600 hover:text-primary-600 transition-colors duration-200 mb-4 group"
           >
             <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
@@ -260,11 +101,10 @@ export default function CartPage() {
               </p>
             </div>
             
-            {/* Cart Stats - Compact */}
             <div className="mt-4 lg:mt-0 flex items-center space-x-4 text-sm text-gray-500">
               <div className="flex items-center space-x-2">
                 <ShoppingBag className="h-4 w-4 text-primary-600" />
-                <span>{cartItems.length} Items</span>
+                <span>{itemCount} Items</span>
               </div>
               <div className="flex items-center space-x-2">
                 <CreditCard className="h-4 w-4 text-green-600" />
@@ -274,7 +114,7 @@ export default function CartPage() {
           </div>
         </div>
 
-        {/* Trust Indicators - Compact */}
+        {/* Trust Indicators */}
         <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.06)] p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center space-x-3">
@@ -307,104 +147,157 @@ export default function CartPage() {
           </div>
         </div>
 
-        {/* Two-Column Layout */}
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Main Cart Content */}
-          <div className="lg:col-span-2">
-            <ShoppingCart
-              items={cartItems}
-              onUpdateQuantity={handleUpdateQuantity}
-              onRemoveItem={handleRemoveItem}
-              onClearCart={handleClearCart}
-              onCheckout={handleCheckout}
-              onAddToCart={handleAddToCart}
-              onAddToWishlist={handleAddToWishlist}
-            />
+        {items.length === 0 ? (
+          /* Empty Cart */
+          <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.06)] p-12 text-center">
+            <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h3>
+            <p className="text-gray-600 mb-6">Looks like you haven't added any items to your cart yet.</p>
+            <Link
+              href="/products"
+              className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+            >
+              Start Shopping
+            </Link>
           </div>
+        ) : (
+          /* Cart with Items */
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Cart Items */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.06)] p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-gray-900">Cart Items</h2>
+                  <button
+                    onClick={handleClearCart}
+                    className="text-sm text-red-600 hover:text-red-700 transition-colors"
+                  >
+                    Clear All
+                  </button>
+                </div>
 
-          {/* Sidebar - Order Summary & Quick Actions */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.06)] p-6 sticky top-6">
-              {/* Order Summary */}
-              <div className="mb-6">
+                <div className="space-y-4">
+                  {items.map((item) => (
+                    <div key={item.id} className="flex items-center space-x-4 p-4 border border-gray-100 rounded-lg">
+                      <div className="w-20 h-20 flex-shrink-0">
+                        <EnhancedImage
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-gray-900 truncate">{item.name}</h3>
+                        <p className="text-sm text-gray-500">{item.category}</p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <span className="font-semibold text-gray-900">${item.price}</span>
+                          {item.originalPrice && (
+                            <span className="text-sm text-gray-400 line-through">${item.originalPrice}</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                          disabled={item.quantity <= 1}
+                          className="w-8 h-8 rounded border border-gray-300 hover:bg-gray-50 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <Minus className="h-4 w-4 text-gray-600" />
+                        </button>
+                        <span className="w-12 text-center font-medium text-gray-900">{item.quantity}</span>
+                        <button
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                          disabled={item.quantity >= (item.maxQuantity || 99)}
+                          className="w-8 h-8 rounded border border-gray-300 hover:bg-gray-50 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <Plus className="h-4 w-4 text-gray-600" />
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="p-2 text-red-600 hover:text-red-700 transition-colors"
+                      >
+                        <Trash className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Order Summary */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.06)] p-6 sticky top-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
                 
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span>Subtotal ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
-                    <span>${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</span>
+                    <span>Subtotal ({itemCount} items)</span>
+                    <span>${subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Shipping</span>
-                    <span>{cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) > 50 ? 'Free' : '$5.99'}</span>
+                    <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Tax</span>
-                    <span>${(cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.08).toFixed(2)}</span>
+                    <span>${tax.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-gray-200 pt-3">
                     <div className="flex justify-between font-semibold text-lg">
                       <span>Total</span>
-                      <span>${(cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + (cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) > 50 ? 0 : 5.99) + (cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.08)).toFixed(2)}</span>
+                      <span>${finalTotal.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Quick Actions */}
-              <div className="space-y-3">
-                <button
-                  onClick={handleCheckout}
-                  disabled={cartItems.some(item => !item.inStock)}
-                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Proceed to Checkout
-                </button>
-                
-                <div className="flex gap-2">
+                <div className="mt-6 space-y-3">
                   <button
-                    onClick={handleClearCart}
-                    className="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+                    onClick={handleCheckout}
+                    className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors"
                   >
-                    Clear Cart
+                    Proceed to Checkout
                   </button>
+                  
                   <Link
                     href="/products"
-                    className="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-50 transition-colors text-center"
+                    className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-50 transition-colors text-center block"
                   >
                     Continue Shopping
                   </Link>
                 </div>
-              </div>
 
-              {/* Shipping Progress */}
-              {cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) < 50 && (
-                <div className="mt-6 p-4 bg-primary-50 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Truck className="h-4 w-4 text-primary-600" />
-                    <span className="text-sm font-medium text-primary-800">Free Shipping Progress</span>
+                {/* Free Shipping Progress */}
+                {subtotal < 50 && (
+                  <div className="mt-6 p-4 bg-primary-50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Truck className="h-4 w-4 text-primary-600" />
+                      <span className="text-sm font-medium text-primary-800">Free Shipping Progress</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                      <div 
+                        className="bg-primary-600 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min((subtotal / 50) * 100, 100)}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs text-primary-700">
+                      Add ${(50 - subtotal).toFixed(2)} more to get free shipping!
+                    </p>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                    <div 
-                      className="bg-primary-600 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.min((cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) / 50) * 100, 100)}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-xs text-primary-700">
-                    Add ${(50 - cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)).toFixed(2)} more to get free shipping!
-                  </p>
+                )}
+
+                <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-500">
+                  <Shield className="h-3 w-3" />
+                  <span>Secure checkout with SSL encryption</span>
                 </div>
-              )}
-
-              {/* Security Badge */}
-              <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-500">
-                <Shield className="h-3 w-3" />
-                <span>Secure checkout with SSL encryption</span>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
-} 
+}

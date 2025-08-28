@@ -91,7 +91,7 @@ export class PaymentService {
       } as PaymentTransaction
 
     } catch (error) {
-      console.error('Error processing payment:', error)
+      // // // console.error('Error processing payment:', error)
       throw new Error(`Payment processing failed: ${(error as any).message}`)
     }
   }
@@ -155,7 +155,7 @@ export class PaymentService {
       } as RefundTransaction
 
     } catch (error) {
-      console.error('Error processing refund:', error)
+      // // // console.error('Error processing refund:', error)
       throw new Error(`Refund processing failed: ${(error as any).message}`)
     }
   }
@@ -175,7 +175,7 @@ export class PaymentService {
     // Integrate with Stripe or other credit card processor
     try {
       // Mock implementation for now
-      console.log('Processing credit card payment via Stripe...')
+      // // // console.log('Processing credit card payment via Stripe...')
       
       // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 2000))
@@ -203,7 +203,7 @@ export class PaymentService {
   // Process mobile money payment
   private async processMobileMoneyPayment(orderData: any, transactionId: string) {
     try {
-      console.log('Processing mobile money payment via Flutterwave...')
+      // // // console.log('Processing mobile money payment via Flutterwave...')
       
       // Simulate mobile money processing
       await new Promise(resolve => setTimeout(resolve, 3000))
@@ -231,7 +231,7 @@ export class PaymentService {
   // Process bank transfer payment
   private async processBankTransferPayment(orderData: any, transactionId: string) {
     try {
-      console.log('Processing bank transfer via Razorpay...')
+      // // // console.log('Processing bank transfer via Razorpay...')
       
       // Simulate bank transfer processing
       await new Promise(resolve => setTimeout(resolve, 1500))
@@ -259,7 +259,7 @@ export class PaymentService {
   // Process gateway refund
   private async processGatewayRefund(transaction: PaymentTransaction, amount: number) {
     try {
-      console.log(`Processing refund via ${transaction.gateway}...`)
+      // // // console.log(`Processing refund via ${transaction.gateway}...`)
       
       // Simulate refund processing
       await new Promise(resolve => setTimeout(resolve, 2000))
@@ -293,7 +293,7 @@ export class PaymentService {
       
       return null
     } catch (error) {
-      console.error('Error getting transaction:', error)
+      // // // console.error('Error getting transaction:', error)
       throw new Error('Failed to get transaction')
     }
   }
@@ -317,7 +317,7 @@ export class PaymentService {
       })) as PaymentTransaction[]
       
     } catch (error) {
-      console.error('Error getting user transactions:', error)
+      // // // console.error('Error getting user transactions:', error)
       throw new Error('Failed to get user transactions')
     }
   }

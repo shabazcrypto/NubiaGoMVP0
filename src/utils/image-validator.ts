@@ -11,7 +11,7 @@ export class ImageValidator {
       const response = await fetch(url, { method: 'HEAD' })
       return response.ok
     } catch (error) {
-      console.warn(`Image validation failed for ${url}:`, error)
+      // // // console.warn(`Image validation failed for ${url}:`, error)
       return false
     }
   }
@@ -24,12 +24,12 @@ export class ImageValidator {
       const img = new Image()
       
       img.onload = () => {
-        console.log(`✅ Image loaded successfully: ${src}`)
+        // Image loaded successfully
         resolve(img)
       }
       
       img.onerror = (error) => {
-        console.error(`❌ Image failed to load: ${src}`, error)
+        // // // console.error(`❌ Image failed to load: ${src}`, error)
         reject(new Error(`Failed to load image: ${src}`))
       }
       
@@ -91,9 +91,9 @@ export class ImageValidator {
       }
     }
 
-    console.log('Image validation results:', { valid: valid.length, invalid: invalid.length })
+    // Image validation completed
     if (invalid.length > 0) {
-      console.warn('Invalid images:', invalid)
+      // Some images failed validation
     }
 
     return { valid, invalid }
@@ -132,18 +132,15 @@ export class ImageValidator {
 export const debugImages = async () => {
   if (process.env.NODE_ENV !== 'development') return
 
-  console.log('🔍 Running image diagnostics...')
+  // Running image diagnostics in development mode
   
   const results = await ImageValidator.validateAppImages()
   const optimalFormat = ImageValidator.getOptimalFormat()
   
-  console.log('📊 Image Diagnostics Report:')
-  console.log(`✅ Valid images: ${results.valid.length}`)
-  console.log(`❌ Invalid images: ${results.invalid.length}`)
-  console.log(`🎯 Optimal format: ${optimalFormat}`)
+  // Image diagnostics completed
   
   if (results.invalid.length > 0) {
-    console.warn('⚠️ The following images failed to load:')
-    results.invalid.forEach(img => console.warn(`  - ${img}`))
+    // Some images failed to load
+    results.invalid.forEach(img => // // // console.warn(`  - ${img}`))
   }
 }

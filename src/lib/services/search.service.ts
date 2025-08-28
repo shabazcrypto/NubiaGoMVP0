@@ -98,7 +98,7 @@ export class SearchService {
         facets
       }
     } catch (error) {
-      console.error('Error searching products:', error)
+      // // // console.error('Error searching products:', error)
       throw new Error('Failed to search products')
     }
   }
@@ -179,7 +179,7 @@ export class SearchService {
 
       return Array.from(suggestions).slice(0, limit)
     } catch (error) {
-      console.error('Error getting search suggestions:', error)
+      // // // console.error('Error getting search suggestions:', error)
       return []
     }
   }
@@ -192,7 +192,7 @@ export class SearchService {
       const categories = await productService.getCategories()
       return categories.slice(0, 5).map(cat => cat.name)
     } catch (error) {
-      console.error('Error getting trending searches:', error)
+      // // // console.error('Error getting trending searches:', error)
       return []
     }
   }
@@ -201,9 +201,9 @@ export class SearchService {
   async trackSearch(query: string, results: number, filters?: any): Promise<void> {
     try {
       // TODO: Track search analytics
-      console.log('Search tracked:', { query, results, filters })
+      // // // console.log('Search tracked:', { query, results, filters })
     } catch (error) {
-      console.error('Error tracking search:', error)
+      // // // console.error('Error tracking search:', error)
     }
   }
 
@@ -214,7 +214,7 @@ export class SearchService {
       // For now, return featured products
       return await productService.getFeaturedProducts(limit)
     } catch (error) {
-      console.error('Error getting personalized recommendations:', error)
+      // // // console.error('Error getting personalized recommendations:', error)
       return []
     }
   }
@@ -251,7 +251,7 @@ export class SearchService {
 
       return { products, categories, brands }
     } catch (error) {
-      console.error('Error with autocomplete search:', error)
+      // // // console.error('Error with autocomplete search:', error)
       return { products: [], categories: [], brands: [] }
     }
   }

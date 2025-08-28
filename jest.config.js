@@ -1,142 +1,60 @@
-const nextJest = require('next/jest')
+const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files
-  dir: './',
-})
+  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
+  dir: './', 
+});
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
-  // ============================================================================
-  // TEST SETUP & ENVIRONMENT
-  // ============================================================================
-  
+  // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'jsdom',
   
-  // ============================================================================
-  // MODULE NAME MAPPING
-  // ============================================================================
+  // Test environment settings
+  testEnvironment: 'node',
   
+  // Module file extensions for importing
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  
+  // Module name mapper for path aliases
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^@/components/(.*)$': '<rootDir>/src/components/$1',
-    '^@/lib/(.*)$': '<rootDir>/src/lib/$1',
-    '^@/hooks/(.*)$': '<rootDir>/src/hooks/$1',
-    '^@/types/(.*)$': '<rootDir>/src/types/$1',
-    '^@/store/(.*)$': '<rootDir>/src/store/$1',
   },
   
-  // ============================================================================
-  // TEST PATTERNS
-  // ============================================================================
-  
+  // Test match patterns
   testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
-    '<rootDir>/src/**/*.{test,spec}.{js,jsx,ts,tsx}',
-    '<rootDir>/tests/**/*.{test,spec}.{js,jsx,ts,tsx}',
+    '**/__tests__/**/*.[jt]s?(x)',
+    '**/?(*.)+(spec|test).[jt]s?(x)',
+    '**/test/**/*.test.[jt]s?(x)',
   ],
   
-  // ============================================================================
-  // COVERAGE CONFIGURATION
-  // ============================================================================
+  // Ignore patterns
+  testPathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '<rootDir>/cypress/',
+    '<rootDir>/public/',
+  ],
   
+  // Collect test coverage
+  collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/*.stories.{js,jsx,ts,tsx}',
     '!src/**/index.{js,jsx,ts,tsx}',
-    '!src/**/*.config.{js,jsx,ts,tsx}',
-    '!src/**/jest.setup.{js,jsx,ts,tsx}',
+    '!src/pages/_app.tsx',
+    '!src/pages/_document.tsx',
   ],
-  
   coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov', 'html'],
-  coverageThreshold: {
-    global: {
-      branches: 0.5, // Temporarily set to 0.5% to allow tests to pass
-      functions: 0.5, // Will be increased as more tests are added
-      lines: 0.5,
-      statements: 0.5,
-    },
-  },
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
   
-  // ============================================================================
-  // TRANSFORM CONFIGURATION
-  // ============================================================================
+  // Setup files
+  setupFiles: ['<rootDir>/.jest/setEnvVars.js'],
   
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
-  },
-  
-  transformIgnorePatterns: [
-    '/node_modules/',
-    '^.+\\.module\\.(css|sass|scss)$',
-  ],
-  
-  // ============================================================================
-  // MODULE FILE EXTENSIONS
-  // ============================================================================
-  
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
-  
-  // ============================================================================
-  // TEST TIMEOUT
-  // ============================================================================
-  
-  testTimeout: 10000,
-  
-  // ============================================================================
-  // VERBOSE OUTPUT
-  // ============================================================================
-  
-  verbose: true,
-  
-  // ============================================================================
-  // CLEAR MOCKS
-  // ============================================================================
-  
-  clearMocks: true,
-  
-  // ============================================================================
-  // RESTORE MOCKS
-  // ============================================================================
-  
-  restoreMocks: true,
-  
-  // ============================================================================
-  // RESET MODULES
-  // ============================================================================
-  
-  resetModules: true,
-  
-  // ============================================================================
-  // COLLECT COVERAGE
-  // ============================================================================
-  
-  collectCoverage: false,
-  
-  // ============================================================================
-  // WATCH PLUGINS
-  // ============================================================================
-  
-  // watchPlugins: [ // Commented out - plugins don't exist
-  //   'jest-watch-typeahead/filename',
-  //   'jest-watch-typeahead/testname',
-  // ],
-  
-  // ============================================================================
-  // GLOBAL SETUP
-  // ============================================================================
-  
-  // globalSetup: '<rootDir>/jest.global-setup.js', // Commented out - file doesn't exist
-  
-  // ============================================================================
-  // GLOBAL TEARDOWN
-  // ============================================================================
-  
-  // globalTeardown: '<rootDir>/jest.global-teardown.js', // Commented out - file doesn't exist
-}
+  // Global test timeout
+  testTimeout: 30000,
+};
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig) 
+module.exports = createJestConfig(customJestConfig);

@@ -82,7 +82,7 @@ export class JWTVerifier {
 
       return { valid: true, payload: decoded }
     } catch (error) {
-      console.error('JWT verification error:', error)
+      // // // console.error('JWT verification error:', error)
       return { valid: false, error: 'Token verification failed' }
     }
   }
@@ -103,7 +103,7 @@ export class JWTVerifier {
       
       return decoded as JWTPayload
     } catch (error) {
-      console.error('JWT decode error:', error)
+      // // // console.error('JWT decode error:', error)
       return null
     }
   }
@@ -123,7 +123,7 @@ export class JWTVerifier {
       
       return decoded as JWTHeader
     } catch (error) {
-      console.error('JWT header decode error:', error)
+      // // // console.error('JWT header decode error:', error)
       return null
     }
   }
@@ -174,20 +174,20 @@ export class JWTVerifier {
       // 1. Decode header to get key ID and algorithm
       const header = this.decodeJWTHeader(token)
       if (!header || !header.kid || !header.alg) {
-        console.error('Invalid JWT header')
+        // // // console.error('Invalid JWT header')
         return false
       }
 
       // 2. Validate algorithm (only allow RS256)
       if (header.alg !== 'RS256') {
-        console.error(`Unsupported algorithm: ${header.alg}`)
+        // // // console.error(`Unsupported algorithm: ${header.alg}`)
         return false
       }
 
       // 3. Fetch Firebase public keys
       const publicKeys = await this.fetchFirebasePublicKeys()
       if (!publicKeys || !publicKeys[header.kid]) {
-        console.error(`Public key not found for kid: ${header.kid}`)
+        // // // console.error(`Public key not found for kid: ${header.kid}`)
         return false
       }
 
@@ -198,13 +198,13 @@ export class JWTVerifier {
       const isValid = await this.verifyRSASignature(token, publicKey)
       
       if (!isValid) {
-        console.error('Signature verification failed')
+        // // // console.error('Signature verification failed')
         return false
       }
 
       return true
     } catch (error) {
-      console.error('Signature verification error:', error)
+      // // // console.error('Signature verification error:', error)
       return false
     }
   }
@@ -240,7 +240,7 @@ export class JWTVerifier {
 
       return keys
     } catch (error) {
-      console.error('Failed to fetch Firebase public keys:', error)
+      // // // console.error('Failed to fetch Firebase public keys:', error)
       // Return cached keys if available, even if expired
       return this.publicKeysCache || {}
     }
@@ -295,7 +295,7 @@ export class JWTVerifier {
 
       return isValid
     } catch (error) {
-      console.error('RSA signature verification error:', error)
+      // // // console.error('RSA signature verification error:', error)
       return false
     }
   }

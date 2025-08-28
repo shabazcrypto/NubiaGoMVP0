@@ -1,274 +1,107 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
-import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion'
+import React, { useState, useEffect, ReactNode } from 'react'
+import { RefreshCw } from 'lucide-react'
 
 interface PullToRefreshProps {
-  onRefresh: () => Promise<void>
+  children: ReactNode
+  onRefresh?: () => Promise<void> | void
   threshold?: number
-  maxPull?: number
-  children: React.ReactNode
-  className?: string
   disabled?: boolean
-  showIndicator?: boolean
 }
 
-export default function PullToRefresh({
-  onRefresh,
+export default function PullToRefresh({ 
+  children, 
+  onRefresh, 
   threshold = 80,
-  maxPull = 120,
-  children,
-  className = '',
-  disabled = false,
-  showIndicator = true
+  disabled = false 
 }: PullToRefreshProps) {
+  const [startY, setStartY] = useState(0)
+  const [currentY, setCurrentY] = useState(0)
+  const [isPulling, setIsPulling] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [canRefresh, setCanRefresh] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const startY = useRef<number>(0)
-  const currentY = useRef<number>(0)
-  
-  // Motion values for smooth animations
-  const y = useMotionValue(0)
-  const opacity = useTransform(y, [0, threshold], [0, 1])
-  const scale = useTransform(y, [0, threshold], [0.8, 1])
-  const rotate = useTransform(y, [0, threshold], [0, 180])
 
-  // Check if we're at the top of the scrollable container
-  const isAtTop = useCallback(() => {
-    if (!containerRef.current) return false
-    return containerRef.current.scrollTop === 0
-  }, [])
+  const pullDistance = Math.max(0, currentY - startY)
+  const shouldRefresh = pullDistance > threshold
 
-  // Handle touch/mouse start
-  const handleStart = useCallback((clientY: number) => {
-    if (disabled || isRefreshing || !isAtTop()) return
-    
-    startY.current = clientY
-    currentY.current = clientY
-  }, [disabled, isRefreshing, isAtTop])
-
-  // Handle touch/mouse move
-  const handleMove = useCallback((clientY: number) => {
-    if (disabled || isRefreshing || !isAtTop()) return
-    
-    currentY.current = clientY
-    const deltaY = currentY.current - startY.current
-    
-    if (deltaY > 0) {
-      // Prevent default scrolling when pulling down
-      event?.preventDefault?.()
-      
-      const pullDistance = Math.min(deltaY * 0.5, maxPull)
-      y.set(pullDistance)
-      
-      // Enable refresh when threshold is reached
-      if (pullDistance >= threshold) {
-        setCanRefresh(true)
-      } else {
-        setCanRefresh(false)
-      }
-    }
-  }, [disabled, isRefreshing, isAtTop, threshold, maxPull, y])
-
-  // Handle touch/mouse end
-  const handleEnd = useCallback(async () => {
-    if (disabled || isRefreshing || !canRefresh) {
-      // Reset position if refresh not triggered
-      y.set(0)
-      setCanRefresh(false)
-      return
-    }
-
-    // Trigger refresh
-    setIsRefreshing(true)
-    y.set(threshold) // Keep at threshold while refreshing
-    
-    try {
-      await onRefresh()
-    } catch (error) {
-      console.error('Pull to refresh failed:', error)
-    } finally {
-      setIsRefreshing(false)
-      y.set(0)
-      setCanRefresh(false)
-    }
-  }, [disabled, isRefreshing, canRefresh, threshold, y, onRefresh])
-
-  // Touch event handlers
   useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-
-    let isTracking = false
+    if (disabled) return
 
     const handleTouchStart = (e: TouchEvent) => {
-      if (isAtTop()) {
-        isTracking = true
-        handleStart(e.touches[0].clientY)
+      if (window.scrollY === 0) {
+        setStartY(e.touches[0].clientY)
+        setIsPulling(true)
       }
     }
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (isTracking && isAtTop()) {
-        handleMove(e.touches[0].clientY)
+      if (isPulling && window.scrollY === 0) {
+        setCurrentY(e.touches[0].clientY)
+        if (pullDistance > 0) {
+          e.preventDefault()
+        }
       }
     }
 
-    const handleTouchEnd = () => {
-      if (isTracking) {
-        isTracking = false
-        handleEnd()
+    const handleTouchEnd = async () => {
+      if (isPulling) {
+        setIsPulling(false)
+        
+        if (shouldRefresh && onRefresh) {
+          setIsRefreshing(true)
+          try {
+            await onRefresh()
+          } catch (error) {
+            // Handle error silently
+          } finally {
+            setIsRefreshing(false)
+          }
+        }
+        
+        setStartY(0)
+        setCurrentY(0)
       }
     }
 
-    // Mouse event handlers for desktop testing
-    const handleMouseDown = (e: MouseEvent) => {
-      if (isAtTop()) {
-        isTracking = true
-        handleStart(e.clientY)
-      }
-    }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isTracking && isAtTop()) {
-        handleMove(e.clientY)
-      }
-    }
-
-    const handleMouseUp = () => {
-      if (isTracking) {
-        isTracking = false
-        handleEnd()
-      }
-    }
-
-    // Add event listeners
-    container.addEventListener('touchstart', handleTouchStart, { passive: false })
-    container.addEventListener('touchmove', handleTouchMove, { passive: false })
-    container.addEventListener('touchend', handleTouchEnd)
-    container.addEventListener('mousedown', handleMouseDown)
-    container.addEventListener('mousemove', handleMouseMove)
-    container.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('touchstart', handleTouchStart, { passive: false })
+    document.addEventListener('touchmove', handleTouchMove, { passive: false })
+    document.addEventListener('touchend', handleTouchEnd)
 
     return () => {
-      container.removeEventListener('touchstart', handleTouchStart)
-      container.removeEventListener('touchmove', handleTouchMove)
-      container.removeEventListener('touchend', handleTouchEnd)
-      container.removeEventListener('mousedown', handleMouseDown)
-      container.removeEventListener('mousemove', handleMouseMove)
-      container.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('touchstart', handleTouchStart)
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [handleStart, handleMove, handleEnd, isAtTop])
+  }, [isPulling, pullDistance, shouldRefresh, onRefresh, disabled])
+
+  const refreshIndicatorStyle = {
+    transform: `translateY(${Math.min(pullDistance * 0.5, 60)}px)`,
+    opacity: Math.min(pullDistance / threshold, 1),
+  }
 
   return (
-    <div 
-      ref={containerRef}
-      className={`relative overflow-hidden ${className}`}
-      style={{ touchAction: 'pan-y' }}
-    >
+    <div className="relative">
       {/* Pull to refresh indicator */}
-      {showIndicator && (
-        <motion.div
-          className="absolute top-0 left-0 right-0 flex items-center justify-center pointer-events-none z-10"
-          style={{ y, opacity }}
-        >
-          <div className="bg-white rounded-full shadow-lg p-3 flex items-center space-x-2">
-            <motion.div
-              className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full"
-              style={{ rotate, scale }}
-              animate={isRefreshing ? { rotate: 360 } : {}}
-              transition={{ duration: 1, repeat: isRefreshing ? Infinity : 0, ease: "linear" }}
-            />
-            <span className="text-sm font-medium text-gray-700 whitespace-nowrap">
-              {isRefreshing ? 'Refreshing...' : canRefresh ? 'Release to refresh' : 'Pull to refresh'}
-            </span>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Content */}
-      <div className="relative">
-        {children}
+      <div 
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full z-50 flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-lg transition-all duration-200"
+        style={refreshIndicatorStyle}
+      >
+        <RefreshCw 
+          className={`w-6 h-6 text-blue-500 ${
+            isRefreshing ? 'animate-spin' : shouldRefresh ? 'rotate-180' : ''
+          } transition-transform duration-200`}
+        />
       </div>
 
-      {/* Overlay when refreshing */}
-      {isRefreshing && (
-        <motion.div
-          className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center space-y-4">
-            <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-700 font-medium">Refreshing...</p>
-          </div>
-        </motion.div>
-      )}
+      {/* Content */}
+      <div 
+        style={{
+          transform: isPulling ? `translateY(${Math.min(pullDistance * 0.3, 40)}px)` : 'translateY(0)',
+          transition: isPulling ? 'none' : 'transform 0.3s ease-out'
+        }}
+      >
+        {children}
+      </div>
     </div>
   )
-}
-
-// Hook for pull-to-refresh functionality
-export function usePullToRefresh(
-  onRefresh: () => Promise<void>,
-  options: {
-    threshold?: number
-    maxPull?: number
-    disabled?: boolean
-  } = {}
-) {
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [pullDistance, setPullDistance] = useState(0)
-  const [canRefresh, setCanRefresh] = useState(false)
-
-  const { threshold = 80, maxPull = 120, disabled = false } = options
-
-  const handleRefresh = useCallback(async () => {
-    if (disabled || isRefreshing) return
-
-    setIsRefreshing(true)
-    try {
-      await onRefresh()
-    } catch (error) {
-      console.error('Pull to refresh failed:', error)
-    } finally {
-      setIsRefreshing(false)
-    }
-  }, [disabled, isRefreshing, onRefresh])
-
-  const updatePullDistance = useCallback((distance: number) => {
-    const clampedDistance = Math.min(distance, maxPull)
-    setPullDistance(clampedDistance)
-    setCanRefresh(clampedDistance >= threshold)
-  }, [maxPull, threshold])
-
-  const resetPull = useCallback(() => {
-    setPullDistance(0)
-    setCanRefresh(false)
-  }, [])
-
-  return {
-    isRefreshing,
-    pullDistance,
-    canRefresh,
-    handleRefresh,
-    updatePullDistance,
-    resetPull
-  }
-}
-
-// Higher-order component for easy integration
-export function withPullToRefresh<T extends object>(
-  WrappedComponent: React.ComponentType<T>,
-  refreshFunction: () => Promise<void>
-) {
-  return function PullToRefreshWrapper(props: T) {
-    return (
-      <PullToRefresh onRefresh={refreshFunction}>
-        <WrappedComponent {...props} />
-      </PullToRefresh>
-    )
-  }
 }

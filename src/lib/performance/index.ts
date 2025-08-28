@@ -135,7 +135,7 @@ export function usePerformanceMonitor(componentName: string) {
     
     // Log slow renders in development
     if (process.env.NODE_ENV === 'development' && duration > 16) {
-      console.warn(`Slow render detected in ${componentName}: ${duration.toFixed(2)}ms`)
+      // // // console.warn(`Slow render detected in ${componentName}: ${duration.toFixed(2)}ms`)
     }
   }, [componentName])
 

@@ -123,17 +123,17 @@ export default function ChatPage() {
   }
 
   const handleTyping = (isTyping: boolean) => {
-    console.log('Typing:', isTyping)
+    // // // console.log('Typing:', isTyping)
     // Handle typing indicator
   }
 
   const handleCall = (type: 'audio' | 'video') => {
-    console.log('Call:', type)
+    // // // console.log('Call:', type)
     // Handle call functionality
   }
 
   const handleSearch = (query: string) => {
-    console.log('Search:', query)
+    // // // console.log('Search:', query)
     // Handle message search
   }
 

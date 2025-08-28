@@ -33,7 +33,7 @@ export function useFormAutoSave<T extends object>({
           const parsedData = JSON.parse(savedData)
           setData(parsedData)
         } catch (err) {
-          console.error('Error loading saved form data:', err)
+          // // // console.error('Error loading saved form data:', err)
         }
       }
     }
@@ -57,7 +57,7 @@ export function useFormAutoSave<T extends object>({
         setHasUnsavedChanges(false)
         success('Changes saved successfully')
       } catch (err) {
-        console.error('Error saving form:', err)
+        // // // console.error('Error saving form:', err)
         error('Failed to save changes')
       } finally {
         setIsSaving(false)
@@ -86,7 +86,7 @@ export function useFormAutoSave<T extends object>({
       setHasUnsavedChanges(false)
       success('Changes saved successfully')
     } catch (err) {
-      console.error('Error saving form:', err)
+      // // // console.error('Error saving form:', err)
       error('Failed to save changes')
     } finally {
       setIsSaving(false)

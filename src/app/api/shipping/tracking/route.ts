@@ -51,7 +51,7 @@ export const POST = protectAPI()(async (request: NextRequest) => {
       message: 'Tracking information retrieved successfully'
     })
   } catch (error: any) {
-    console.error('Shipping tracking error:', error)
+    // // // console.error('Shipping tracking error:', error)
     return NextResponse.json(
       { 
         success: false, 

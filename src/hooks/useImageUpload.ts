@@ -109,7 +109,7 @@ export function useImageUpload(): UseImageUploadReturn {
     try {
       await Promise.all(urls.map(url => localImageService.preloadImage(url)))
     } catch (err) {
-      console.warn('Failed to preload some images:', err)
+      // // // console.warn('Failed to preload some images:', err)
     }
   }, [])
 

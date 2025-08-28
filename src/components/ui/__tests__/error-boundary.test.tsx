@@ -29,7 +29,7 @@ const ThrowString = ({ shouldThrow }: { shouldThrow: boolean }) => {
 
 describe('ErrorBoundary', () => {
   beforeEach(() => {
-    // Suppress console.error for error boundary tests
+    // Suppress // console.error for error boundary tests
     jest.spyOn(console, 'error').mockImplementation(() => {})
   })
 

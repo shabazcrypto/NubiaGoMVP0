@@ -90,10 +90,10 @@ export default function ComponentAuditor() {
       }
       
       setComponentAnalysis(analysis)
-      console.log('✅ Component analysis completed!', analysis)
+      // // // console.log('✅ Component analysis completed!', analysis)
       
     } catch (error) {
-      console.error('❌ Component analysis failed:', error)
+      // // // console.error('❌ Component analysis failed:', error)
     } finally {
       setIsAnalyzing(false)
     }

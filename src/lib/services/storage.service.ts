@@ -90,9 +90,9 @@ export class StorageService {
           contentType: file.type
         })
 
-        console.log(`✅ Uploaded: ${file.name} -> ${path}`)
+        // // // console.log(`✅ Uploaded: ${file.name} -> ${path}`)
       } catch (error) {
-        console.error(`❌ Failed to upload ${file.name}:`, error)
+        // // // console.error(`❌ Failed to upload ${file.name}:`, error)
         throw new Error(`Failed to upload ${file.name}: ${error}`)
       }
     }
@@ -134,9 +134,9 @@ export class StorageService {
           contentType: file.type
         })
 
-        console.log(`✅ Uploaded product image: ${file.name} -> ${path}`)
+        // // // console.log(`✅ Uploaded product image: ${file.name} -> ${path}`)
       } catch (error) {
-        console.error(`❌ Failed to upload product image ${file.name}:`, error)
+        // // // console.error(`❌ Failed to upload product image ${file.name}:`, error)
         throw new Error(`Failed to upload product image ${file.name}: ${error}`)
       }
     }
@@ -167,7 +167,7 @@ export class StorageService {
       // Get download URL
       const downloadURL = await getDownloadURL(snapshot.ref)
 
-      console.log(`✅ Uploaded profile image: ${file.name} -> ${path}`)
+      // // // console.log(`✅ Uploaded profile image: ${file.name} -> ${path}`)
 
       return {
         url: downloadURL,
@@ -177,7 +177,7 @@ export class StorageService {
         contentType: file.type
       }
     } catch (error) {
-      console.error(`❌ Failed to upload profile image ${file.name}:`, error)
+      // // // console.error(`❌ Failed to upload profile image ${file.name}:`, error)
       throw new Error(`Failed to upload profile image ${file.name}: ${error}`)
     }
   }
@@ -189,9 +189,9 @@ export class StorageService {
     try {
       const storageRef = ref(this.storage, path)
       await deleteObject(storageRef)
-      console.log(`✅ Deleted file: ${path}`)
+      // // // console.log(`✅ Deleted file: ${path}`)
     } catch (error) {
-      console.error(`❌ Failed to delete file ${path}:`, error)
+      // // // console.error(`❌ Failed to delete file ${path}:`, error)
       throw new Error(`Failed to delete file ${path}: ${error}`)
     }
   }
@@ -208,9 +208,9 @@ export class StorageService {
       const deletePromises = files.items.map(item => deleteObject(item))
       await Promise.all(deletePromises)
 
-      console.log(`✅ Deleted all files for user: ${userId}`)
+      // // // console.log(`✅ Deleted all files for user: ${userId}`)
     } catch (error) {
-      console.error(`❌ Failed to delete user files for ${userId}:`, error)
+      // // // console.error(`❌ Failed to delete user files for ${userId}:`, error)
       throw new Error(`Failed to delete user files for ${userId}: ${error}`)
     }
   }
@@ -223,7 +223,7 @@ export class StorageService {
       const storageRef = ref(this.storage, path)
       return await getDownloadURL(storageRef)
     } catch (error) {
-      console.error(`❌ Failed to get download URL for ${path}:`, error)
+      // // // console.error(`❌ Failed to get download URL for ${path}:`, error)
       throw new Error(`Failed to get download URL for ${path}: ${error}`)
     }
   }
@@ -290,7 +290,7 @@ export class StorageService {
         createdAt: new Date()
       })
     } catch (error) {
-      console.error('Failed to store document metadata:', error)
+      // // // console.error('Failed to store document metadata:', error)
       // Don't throw error here as the file is already uploaded
     }
   }
@@ -312,7 +312,7 @@ export class StorageService {
         ...doc.data()
       }))
     } catch (error) {
-      console.error('Failed to get user documents:', error)
+      // // // console.error('Failed to get user documents:', error)
       return []
     }
   }

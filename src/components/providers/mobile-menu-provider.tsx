@@ -1,34 +1,15 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 interface MobileMenuContextType {
-  isMenuOpen: boolean
-  toggleMenu: () => void
-  closeMenu: () => void
-  openMenu: () => void
+  isOpen: boolean
+  toggle: () => void
+  open: () => void
+  close: () => void
 }
 
 const MobileMenuContext = createContext<MobileMenuContextType | undefined>(undefined)
-
-export function MobileMenuProvider({ children }: { children: ReactNode }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
-  const closeMenu = () => setIsMenuOpen(false)
-  const openMenu = () => setIsMenuOpen(true)
-
-  return (
-    <MobileMenuContext.Provider value={{
-      isMenuOpen,
-      toggleMenu,
-      closeMenu,
-      openMenu
-    }}>
-      {children}
-    </MobileMenuContext.Provider>
-  )
-}
 
 export function useMobileMenu() {
   const context = useContext(MobileMenuContext)
@@ -36,4 +17,29 @@ export function useMobileMenu() {
     throw new Error('useMobileMenu must be used within a MobileMenuProvider')
   }
   return context
+}
+
+interface MobileMenuProviderProps {
+  children: ReactNode
+}
+
+export function MobileMenuProvider({ children }: MobileMenuProviderProps) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggle = () => setIsOpen(prev => !prev)
+  const open = () => setIsOpen(true)
+  const close = () => setIsOpen(false)
+
+  const value: MobileMenuContextType = {
+    isOpen,
+    toggle,
+    open,
+    close
+  }
+
+  return (
+    <MobileMenuContext.Provider value={value}>
+      {children}
+    </MobileMenuContext.Provider>
+  )
 }

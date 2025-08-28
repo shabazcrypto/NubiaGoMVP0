@@ -39,7 +39,7 @@ export default function VerifyEmailPage() {
         router.push('/dashboard')
       }
     } catch (error) {
-      console.error('Error checking email verification:', error)
+      // // // console.error('Error checking email verification:', error)
     } finally {
       setIsChecking(false)
     }

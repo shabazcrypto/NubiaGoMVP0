@@ -50,13 +50,13 @@ class ErrorLoggingService {
     this.errorQueue.push(logEntry)
 
     // Console logging for immediate visibility
-    console.error(`[${options.category || 'app'}] Error logged:`, {
-      id: errorId,
-      message: error.message,
-      stack: error.stack,
-      context: options.context,
-      tags: options.tags
-    })
+    // // // console.error(`[${options.category || 'app'}] Error logged:`, {
+    //   id: errorId,
+    //   message: error.message,
+    //   stack: error.stack,
+    //   context: options.context,
+    //   tags: options.tags
+    // })
 
     // Process immediately if critical
     if (options.level === 'error' && options.reportToExternal !== false) {
@@ -78,12 +78,12 @@ class ErrorLoggingService {
   private async processErrorImmediately(logEntry: ErrorLogEntry): Promise<void> {
     try {
       // For now, just log to console
-      console.error('Critical error processed immediately:', logEntry)
+      // // // console.error('Critical error processed immediately:', logEntry)
       
       // In the future, this could send to external services
       // await this.sendToExternalService(logEntry)
     } catch (error) {
-      console.error('Failed to process error immediately:', error)
+      // // // console.error('Failed to process error immediately:', error)
     }
   }
 
@@ -99,13 +99,13 @@ class ErrorLoggingService {
       this.errorQueue = []
 
       // For now, just log to console
-      console.log(`Flushing ${errorsToFlush.length} errors from queue`)
+      // // // console.log(`Flushing ${errorsToFlush.length} errors from queue`)
       
       // In the future, this could save to database or send to external services
       // await this.saveToDatabase(errorsToFlush)
       // await this.sendToExternalServices(errorsToFlush)
     } catch (error) {
-      console.error('Failed to flush error queue:', error)
+      // // // console.error('Failed to flush error queue:', error)
       // Restore errors to queue
       this.errorQueue.unshift(...this.errorQueue)
     } finally {

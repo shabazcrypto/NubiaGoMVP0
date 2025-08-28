@@ -133,14 +133,14 @@ export interface TemplateField {
   type: 'text' | 'textarea' | 'rich-text' | 'image' | 'select' | 'number' | 'date' | 'boolean'
   label: string
   required: boolean
-  defaultValue?: any
+  defaultValue?: unknown
   validation?: ValidationRule[]
   options?: SelectOption[]
 }
 
 export interface ValidationRule {
   type: 'required' | 'minLength' | 'maxLength' | 'pattern' | 'custom'
-  value: any
+  value: unknown
   message: string
 }
 
@@ -259,9 +259,9 @@ export class CMSContentService {
 
       logger.info(`✅ CMS content created: ${id}`)
       return newContent
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to create CMS content:', error)
-      throw new Error(`Failed to create CMS content: ${error.message}`)
+      throw new Error(`Failed to create CMS content: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
 
@@ -294,7 +294,7 @@ export class CMSContentService {
 
       logger.info(`✅ CMS content updated: ${id}`)
       return { ...currentContent, ...updatedContent } as CMSContent
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to update CMS content:', error)
       throw new Error(`Failed to update CMS content: ${error.message}`)
     }
@@ -304,7 +304,7 @@ export class CMSContentService {
     try {
       await deleteDoc(doc(this.contentCollection, id))
       logger.info(`✅ CMS content deleted: ${id}`)
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to delete CMS content:', error)
       throw new Error(`Failed to delete CMS content: ${error.message}`)
     }
@@ -327,7 +327,7 @@ export class CMSContentService {
         expiresAt: data.expiresAt?.toDate(),
         scheduledPublishAt: data.scheduledPublishAt?.toDate()
       } as CMSContent
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to fetch CMS content:', error)
       throw new Error(`Failed to fetch CMS content: ${error.message}`)
     }
@@ -359,10 +359,10 @@ export class CMSContentService {
         expiresAt: data.expiresAt?.toDate(),
         scheduledPublishAt: data.scheduledPublishAt?.toDate()
       } as CMSContent
-    } catch (error: any) {
+    } catch (error: unknown) {
       // If Firebase is not properly initialized, return mock data
       if (error.message.includes('Firebase not properly initialized') || error.message.includes('Expected first argument to collection')) {
-        console.log('CMS: Using mock data for getContentBySlug due to Firebase initialization issue')
+        // // // console.log('CMS: Using mock data for getContentBySlug due to Firebase initialization issue')
         return {
           id: 'mock-blog-post',
           title: 'Sample Blog Post',
@@ -445,7 +445,7 @@ export class CMSContentService {
       }
 
       return content
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to fetch CMS content list:', error)
       throw new Error(`Failed to fetch CMS content list: ${error.message}`)
     }
@@ -472,7 +472,7 @@ export class CMSContentService {
 
       logger.info(`✅ CMS template created: ${id}`)
       return newTemplate
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to create CMS template:', error)
       throw new Error(`Failed to create CMS template: ${error.message}`)
     }
@@ -493,7 +493,7 @@ export class CMSContentService {
       })
 
       return templates.filter(t => t.isActive)
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to fetch CMS templates:', error)
       throw new Error(`Failed to fetch CMS templates: ${error.message}`)
     }
@@ -508,7 +508,7 @@ export class CMSContentService {
         updatedAt: serverTimestamp()
       })
       logger.info(`✅ Content submitted for approval: ${contentId}`)
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to submit content for approval:', error)
       throw new Error(`Failed to submit content for approval: ${error.message}`)
     }
@@ -516,7 +516,7 @@ export class CMSContentService {
 
   async approveContent(contentId: string, approverId: string, notes?: string): Promise<void> {
     try {
-      const updates: any = {
+      const updates: Record<string, any> = {
         status: 'published',
         approvalStatus: 'approved',
         approverId,
@@ -525,12 +525,12 @@ export class CMSContentService {
       }
 
       if (notes) {
-        updates.approvalNotes = notes
+        (updates as any).approvalNotes = notes
       }
 
       await updateDoc(doc(db, this.contentCollection.path, contentId), updates)
       logger.info(`✅ Content approved: ${contentId}`)
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to approve content:', error)
       throw new Error(`Failed to approve content: ${error.message}`)
     }
@@ -546,7 +546,7 @@ export class CMSContentService {
         updatedAt: serverTimestamp()
       })
       logger.info(`✅ Content rejected: ${contentId}`)
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to reject content:', error)
       throw new Error(`Failed to reject content: ${error.message}`)
     }
@@ -575,7 +575,7 @@ export class CMSContentService {
 
       logger.info(`✅ CMS version created: ${id}`)
       return version
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to create CMS version:', error)
       throw new Error(`Failed to create CMS version: ${error.message}`)
     }
@@ -601,7 +601,7 @@ export class CMSContentService {
       })
 
       return versions
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to fetch version history:', error)
       throw new Error(`Failed to fetch version history: ${error.message}`)
     }
@@ -634,7 +634,7 @@ export class CMSContentService {
 
       await updateDoc(contentRef, restoredContent)
       logger.info(`✅ Content version restored: ${contentId}`)
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('❌ Failed to restore version:', error)
       throw new Error(`Failed to restore version: ${error.message}`)
     }

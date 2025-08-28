@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error: any) {
-    console.error('Failed to fetch blog posts:', error)
+    // // // console.error('Failed to fetch blog posts:', error)
     return NextResponse.json(
       { 
         success: false, 
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     )
 
   } catch (error: any) {
-    console.error('Failed to create blog post:', error)
+    // // // console.error('Failed to create blog post:', error)
     return NextResponse.json(
       { 
         success: false, 

@@ -48,25 +48,25 @@ class Logger {
 
   log(message: string, ...args: any[]): void {
     if (this.shouldLog('log')) {
-      console.log(this.formatMessage('log', message), ...args)
+      // // // console.log(this.formatMessage('log', message), ...args)
     }
   }
 
   info(message: string, ...args: any[]): void {
     if (this.shouldLog('info')) {
-      console.info(this.formatMessage('info', message), ...args)
+      // // // console.info(this.formatMessage('info', message), ...args)
     }
   }
 
   warn(message: string, ...args: any[]): void {
     if (this.shouldLog('warn')) {
-      console.warn(this.formatMessage('warn', message), ...args)
+      // // // console.warn(this.formatMessage('warn', message), ...args)
     }
   }
 
   error(message: string, ...args: any[]): void {
     if (this.shouldLog('error')) {
-      console.error(this.formatMessage('error', message), ...args)
+      // // // console.error(this.formatMessage('error', message), ...args)
     }
   }
 

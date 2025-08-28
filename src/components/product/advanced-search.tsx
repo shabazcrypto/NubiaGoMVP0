@@ -256,7 +256,7 @@ export const AdvancedSearch = React.memo(function AdvancedSearch() {
       setResults(searchResults)
       setTotalResults(searchResults.length)
     } catch (error) {
-      console.error('Search failed:', error)
+      // // // console.error('Search failed:', error)
       setResults([])
       setTotalResults(0)
     } finally {

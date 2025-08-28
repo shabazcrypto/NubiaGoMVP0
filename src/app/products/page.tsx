@@ -176,7 +176,7 @@ export default function ProductsPage() {
 
       setHasMore(result.hasMore)
     } catch (error) {
-      console.error('Error loading products:', error)
+      // // // console.error('Error loading products:', error)
       // Set empty products array on error to show empty state
       if (!isLoadingMore) {
         setProducts([])
@@ -191,7 +191,7 @@ export default function ProductsPage() {
 
   const handleToggleWishlist = (product: Product) => {
     // Mock wishlist toggle - just log for now
-    console.log('Toggle wishlist for product:', product.id)
+    // // // console.log('Toggle wishlist for product:', product.id)
   }
 
   // Temu-inspired quick filter application (purely client-side)
@@ -199,8 +199,8 @@ export default function ProductsPage() {
     let list = [...products]
     
     // Debug: Log the products array
-    console.log('Products array:', products)
-    console.log('Products length:', products.length)
+    // // // console.log('Products array:', products)
+    // // // console.log('Products length:', products.length)
     
     // Lightweight client-side search filter
     if (searchQuery.trim()) {
@@ -233,7 +233,7 @@ export default function ProductsPage() {
         break
     }
     
-    console.log('Filtered products:', list)
+    // // // console.log('Filtered products:', list)
     return list
   }
 

@@ -24,16 +24,16 @@ export default function AdminAuthGuard({
   const [checkingAuth, setCheckingAuth] = useState(true)
 
            useEffect(() => {
-           console.log('AdminAuthGuard: Auth state changed', { user, loading, checkingAuth })
+           // AdminAuthGuard: Auth state changed - logging removed for production
            
            // TEMPORARY: Disable Firebase authentication completely for now
-           console.log('AdminAuthGuard: Firebase disabled - allowing access for testing')
+           // AdminAuthGuard: Firebase disabled - allowing access for testing
            setIsAuthorized(true)
            setCheckingAuth(false)
            
            // TODO: Re-enable this when Firebase is ready
            // if (process.env.NODE_ENV === 'development') {
-           //   console.log('AdminAuthGuard: Development mode - allowing access for testing')
+           //   // AdminAuthGuard: Development mode - allowing access for testing
            //   setIsAuthorized(true)
            //   setCheckingAuth(false)
            //   return
@@ -43,19 +43,19 @@ export default function AdminAuthGuard({
            /*
            if (!loading) {
              if (!user) {
-               console.log('AdminAuthGuard: No user, redirecting to login')
+               // AdminAuthGuard: No user, redirecting to login
                router.push(`${ROUTES.AUTH.LOGIN}?redirect=${ROUTES.ADMIN.DASHBOARD}`)
                return
              }
 
              if (user.role !== 'admin') {
-               console.log('AdminAuthGuard: User not admin, redirecting to unauthorized')
+               // AdminAuthGuard: User not admin, redirecting to unauthorized
                router.push(ROUTES.AUTH.UNAUTHORIZED)
                return
              }
 
              if (user.status !== 'active') {
-               console.log('AdminAuthGuard: User not active, redirecting to suspended')
+               // AdminAuthGuard: User not active, redirecting to suspended
                router.push(ROUTES.AUTH.ACCOUNT_SUSPENDED)
                return
              }

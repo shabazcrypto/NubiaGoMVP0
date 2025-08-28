@@ -61,7 +61,7 @@ export default function WishlistPage() {
         
         setWishlistItems(transformedItems)
       } catch (error) {
-        console.error('Error loading wishlist:', error)
+        // // // console.error('Error loading wishlist:', error)
       } finally {
         setIsLoading(false)
       }
@@ -77,7 +77,7 @@ export default function WishlistPage() {
       await wishlistService.removeFromWishlist(user.uid, itemId)
       setWishlistItems(prev => prev.filter(item => item.id !== itemId))
     } catch (error) {
-      console.error('Error removing from wishlist:', error)
+      // // // console.error('Error removing from wishlist:', error)
     }
   }
 
@@ -90,7 +90,7 @@ export default function WishlistPage() {
       // Remove from local state
       setWishlistItems(prev => prev.filter(wishlistItem => wishlistItem.id !== item.id))
     } catch (error) {
-      console.error('Error moving to cart:', error)
+      // // // console.error('Error moving to cart:', error)
     }
   }
 

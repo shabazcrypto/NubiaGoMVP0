@@ -140,10 +140,10 @@ const MessageNotifications: React.FC<MessageNotificationsProps> = ({
   const notifications: any[] = []
   const unreadCount = notifications.filter(n => !n.isRead).length
   const markNotificationAsRead = (id: string) => {
-    console.log('Mark notification as read:', id)
+    // // // console.log('Mark notification as read:', id)
   }
   const clearNotifications = () => {
-    console.log('Clear notifications')
+    // // // console.log('Clear notifications')
   }
 
   const [isVisible, setIsVisible] = useState(false)

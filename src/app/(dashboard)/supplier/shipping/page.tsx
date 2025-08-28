@@ -80,7 +80,7 @@ export default function SupplierShippingPage() {
       ]
       setOrders(mockOrders)
     } catch (error) {
-      console.error('Error loading shipping orders:', error)
+      // // // console.error('Error loading shipping orders:', error)
       toast('Failed to load shipping orders', 'error')
     } finally {
       setLoading(false)
@@ -208,7 +208,7 @@ export default function SupplierShippingPage() {
             {activeTab === 'calculator' && (
               <ShippingCalculator
                 onRateSelect={(rate) => {
-                  console.log('Selected rate:', rate)
+                  // // // console.log('Selected rate:', rate)
                 }}
               />
             )}

@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Payment initiation failed:', error)
+    // // // console.error('Payment initiation failed:', error)
     return NextResponse.json(
       { 
         success: false, 

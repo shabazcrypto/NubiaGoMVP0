@@ -156,7 +156,7 @@ export class PerformanceService {
       observer.observe({ entryTypes: ['navigation'] })
       this.observers.set('navigation', observer)
     } catch (error) {
-      console.warn('Failed to observe navigation timing:', error)
+      // // // console.warn('Failed to observe navigation timing:', error)
     }
   }
 
@@ -186,7 +186,7 @@ export class PerformanceService {
       observer.observe({ entryTypes: ['resource'] })
       this.observers.set('resource', observer)
     } catch (error) {
-      console.warn('Failed to observe resource timing:', error)
+      // // // console.warn('Failed to observe resource timing:', error)
     }
   }
 
@@ -211,7 +211,7 @@ export class PerformanceService {
       observer.observe({ entryTypes: ['measure'] })
       this.observers.set('interaction', observer)
     } catch (error) {
-      console.warn('Failed to observe user interactions:', error)
+      // // // console.warn('Failed to observe user interactions:', error)
     }
   }
 
@@ -271,7 +271,7 @@ export class PerformanceService {
       fidObserver.observe({ entryTypes: ['first-input'] })
       this.observers.set('fid', fidObserver)
     } catch (error) {
-      console.warn('Failed to observe web vitals:', error)
+      // // // console.warn('Failed to observe web vitals:', error)
     }
   }
 
@@ -288,7 +288,7 @@ export class PerformanceService {
 
     // Log in development only
     if (process.env.NODE_ENV === 'development') {
-      console.log(`Performance Event [${type}]:`, event)
+      // // // console.log(`Performance Event [${type}]:`, event)
     }
 
     // In production, send critical events to monitoring service

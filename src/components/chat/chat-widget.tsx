@@ -272,14 +272,14 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   const sendMessage = async (messageText: string) => {
     if (!messageText.trim() || !user) return
 
-    console.log('Sending message:', messageText)
+    // // // console.log('Sending message:', messageText)
     // Mock implementation
   }
 
   const handleFileUpload = async (file: File) => {
     if (!user) return
 
-    console.log('Uploading file:', file.name)
+    // // // console.log('Uploading file:', file.name)
     // Mock implementation
   }
 
@@ -288,7 +288,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   }
 
   const handleDeleteMessage = async (messageId: string) => {
-    console.log('Deleting message:', messageId)
+    // // // console.log('Deleting message:', messageId)
     // Mock implementation
   }
 

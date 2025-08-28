@@ -51,9 +51,7 @@ export default function AdminProductsPage() {
     updateProductApproval,
     updateProductStatus,
     bulkUpdateProducts,
-    deleteProduct,
-    productFilters,
-    setProductFilters
+    deleteProduct
   } = useAdminDashboardStore()
 
   // Filter products based on search and filters
@@ -73,17 +71,6 @@ export default function AdminProductsPage() {
   useEffect(() => {
     fetchProducts()
   }, [fetchProducts])
-
-  // Update filters when they change
-  useEffect(() => {
-    setProductFilters({
-      ...productFilters,
-      status: filterStatus === 'all' ? undefined : filterStatus as 'active' | 'inactive' | 'draft' | undefined,
-      category: filterCategory === 'all' ? undefined : filterCategory,
-      approvalStatus: filterApproval === 'all' ? undefined : filterApproval as 'pending' | 'approved' | 'rejected' | undefined,
-      search: searchQuery || undefined
-    })
-  }, [filterStatus, filterCategory, filterApproval, searchQuery, setProductFilters, productFilters])
 
   const handleAddProduct = () => {
     router.push('/products/create')

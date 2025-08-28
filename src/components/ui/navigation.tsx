@@ -201,7 +201,7 @@ function UserDropdown({ user, onLogout }: UserDropdownProps) {
       await onLogout()
       router.push('/login')
     } catch (error) {
-      console.error('Logout failed:', error)
+      // // // console.error('Logout failed:', error)
     }
   }
 
@@ -280,7 +280,7 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
       router.push('/login')
       onClose()
     } catch (error) {
-      console.error('Logout failed:', error)
+      // // // console.error('Logout failed:', error)
     }
   }
 
@@ -383,7 +383,7 @@ export default function Navigation() {
         const cart = await cartService.getCart(user.uid)
         setCartItemCount(cart.itemCount)
       } catch (error) {
-        console.error('Error loading cart count:', error)
+        // // // console.error('Error loading cart count:', error)
         setCartItemCount(0)
       }
     }

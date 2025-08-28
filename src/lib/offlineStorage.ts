@@ -251,7 +251,7 @@ class OfflineStorageManager {
           available: (estimate.quota || 0) - (estimate.usage || 0),
         }
       } catch (error) {
-        console.warn('Failed to get storage estimate:', error)
+        // // // console.warn('Failed to get storage estimate:', error)
       }
     }
     return { used: 0, quota: 0, available: 0 }
@@ -338,7 +338,7 @@ export async function getProductOfflineFirst(id: string): Promise<any | null> {
         return product
       }
     } catch (error) {
-      console.warn('Network request failed, using offline data only')
+      // // // console.warn('Network request failed, using offline data only')
     }
   }
 
@@ -360,7 +360,7 @@ export async function searchProductsOfflineFirst(query: string): Promise<any[]> 
         return results.products || []
       }
     } catch (error) {
-      console.warn('Network search failed, using offline data only')
+      // // // console.warn('Network search failed, using offline data only')
     }
   }
 

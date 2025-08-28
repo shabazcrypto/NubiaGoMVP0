@@ -130,7 +130,7 @@ export function CreditCardForm({
       await new Promise(resolve => setTimeout(resolve, 2000))
       
       // In a real implementation, you would send this to your payment processor
-      console.log('Processing payment with card data:', {
+      // // // console.log('Processing payment with card data:', {
         ...data,
         cardNumber: data.cardNumber.replace(/\s/g, '').slice(-4), // Only last 4 digits
       })

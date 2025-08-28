@@ -470,7 +470,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         updateUserRole: async (uid, newRole, newStatus, adminId, reason) => {
           try {
             // TEMPORARY: Mock update since Firebase is disabled
-            console.log('Mock: Updating user role', { uid, newRole, newStatus, adminId, reason })
+            // Mock: Updating user role
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh users after update
             await get().fetchUsers(get().userFilters)
@@ -485,7 +485,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         bulkUpdateUsers: async (userIds, updates, adminId, reason) => {
           try {
             // TEMPORARY: Mock bulk update since Firebase is disabled
-            console.log('Mock: Bulk updating users', { userIds, updates, adminId, reason })
+            // Mock: Bulk updating users
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh users after update
             await get().fetchUsers(get().userFilters)
@@ -501,7 +501,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         deleteUser: async (uid, adminId, reason) => {
           try {
             // TEMPORARY: Mock delete since Firebase is disabled
-            console.log('Mock: Deleting user', { uid, adminId, reason })
+            // Mock: Deleting user
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh users after delete
             await get().fetchUsers(get().userFilters)
@@ -549,7 +549,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         updateProductApproval: async (productId, approvalStatus, adminId, notes) => {
           try {
             // TEMPORARY: Mock update since Firebase is disabled
-            console.log('Mock: Updating product approval', { productId, approvalStatus, adminId, notes })
+            // Mock: Updating product approval
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh products after update
             await get().fetchProducts(get().productFilters)
@@ -564,7 +564,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         updateProductStatus: async (productId, newStatus, adminId, reason) => {
           try {
             // TEMPORARY: Mock update since Firebase is disabled
-            console.log('Mock: Updating product status', { productId, newStatus, adminId, reason })
+            // Mock: Updating product status
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh products after update
             await get().fetchProducts(get().productFilters)
@@ -579,7 +579,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         bulkUpdateProducts: async (productIds, updates, adminId, reason) => {
           try {
             // TEMPORARY: Mock bulk update since Firebase is disabled
-            console.log('Mock: Bulk updating products', { productIds, updates, adminId, reason })
+            // Mock: Bulk updating products
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh products after update
             await get().fetchProducts(get().productFilters)
@@ -595,7 +595,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         deleteProduct: async (productId, adminId, reason) => {
           try {
             // TEMPORARY: Mock delete since Firebase is disabled
-            console.log('Mock: Deleting product', { productId, adminId, reason })
+            // Mock: Deleting product
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh products after delete
             await get().fetchProducts(get().productFilters)
@@ -634,7 +634,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         updateOrderStatus: async (orderId, newStatus, adminId, notes, trackingNumber) => {
           try {
             // TEMPORARY: Mock update since Firebase is disabled
-            console.log('Mock: Updating order status', { orderId, newStatus, adminId, notes, trackingNumber })
+            // Mock: Updating order status
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh orders after update
             await get().fetchOrders(get().orderFilters)
@@ -649,7 +649,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         cancelOrder: async (orderId, adminId, reason, refundAmount) => {
           try {
             // TEMPORARY: Mock cancel since Firebase is disabled
-            console.log('Mock: Cancelling order', { orderId, adminId, reason, refundAmount })
+            // Mock: Cancelling order
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh orders after update
             await get().fetchOrders(get().orderFilters)
@@ -664,7 +664,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         processRefund: async (orderId, adminId, refundAmount, reason) => {
           try {
             // TEMPORARY: Mock refund since Firebase is disabled
-            console.log('Mock: Processing refund', { orderId, adminId, refundAmount, reason })
+            // Mock: Processing refund
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh orders after update
             await get().fetchOrders(get().orderFilters)
@@ -679,7 +679,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         bulkUpdateOrders: async (orderIds, updates, adminId, reason) => {
           try {
             // TEMPORARY: Mock bulk update since Firebase is disabled
-            console.log('Mock: Bulk updating orders', { orderIds, updates, adminId, reason })
+            // Mock: Bulk updating orders
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh orders after update
             await get().fetchOrders(get().orderFilters)
@@ -719,7 +719,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         updateSupplierApproval: async (supplierId, approvalStatus, adminId, notes) => {
           try {
             // TEMPORARY: Mock update since Firebase is disabled
-            console.log('Mock: Updating supplier approval', { supplierId, approvalStatus, adminId, notes })
+            // Mock: Updating supplier approval
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
@@ -734,7 +734,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         suspendSupplier: async (supplierId, adminId, reason, duration) => {
           try {
             // TEMPORARY: Mock suspend since Firebase is disabled
-            console.log('Mock: Suspending supplier', { supplierId, adminId, reason, duration })
+            // Mock: Suspending supplier
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
@@ -749,7 +749,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         reactivateSupplier: async (supplierId, adminId, reason) => {
           try {
             // TEMPORARY: Mock reactivate since Firebase is disabled
-            console.log('Mock: Reactivating supplier', { supplierId, adminId, reason })
+            // Mock: Reactivating supplier
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
@@ -764,7 +764,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         updateVerificationStatus: async (supplierId, verificationType, verified, adminId, notes) => {
           try {
             // TEMPORARY: Mock update since Firebase is disabled
-            console.log('Mock: Updating verification status', { supplierId, verificationType, verified, adminId, notes })
+            // Mock: Updating verification status
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
@@ -779,7 +779,7 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         bulkUpdateSuppliers: async (supplierIds, updates, adminId, reason) => {
           try {
             // TEMPORARY: Mock bulk update since Firebase is disabled
-            console.log('Mock: Bulk updating suppliers', { supplierIds, updates, adminId, reason })
+            // Mock: Bulk updating suppliers
             await new Promise(resolve => setTimeout(resolve, 300)) // Simulate API delay
             // Refresh suppliers after update
             await get().fetchSuppliers(get().supplierFilters)
@@ -806,12 +806,12 @@ export const useAdminDashboardStore = create<AdminDashboardState>()(
         // Real-time subscriptions
         subscribeToRealTimeUpdates: () => {
           // TEMPORARY: Mock real-time updates since Firebase is disabled
-          console.log('Mock real-time updates enabled')
+            // Mock: Updating analytics settings
         },
 
         unsubscribeFromRealTimeUpdates: () => {
           // TEMPORARY: Mock cleanup since Firebase is disabled
-          console.log('Mock real-time updates disabled')
+            // Mock: Generating report
         },
 
 

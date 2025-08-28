@@ -31,7 +31,7 @@ export function SafeImageUpload(props: SafeImageUploadProps) {
         />
       }
       onError={(error, errorInfo) => {
-        console.error('ImageUpload Error:', error, errorInfo)
+        // // // console.error('ImageUpload Error:', error, errorInfo)
         if (props.onError) {
           props.onError(error.message || 'Unknown error occurred')
         }

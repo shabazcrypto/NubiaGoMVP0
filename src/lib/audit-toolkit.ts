@@ -117,7 +117,7 @@ export class NubiaGoAuditor {
   private pages: PageAudit[] = []
 
   constructor() {
-    console.log('🚀 NubiaGo Auditor Initialized! Ready to transform this platform!')
+    // // // console.log('🚀 NubiaGo Auditor Initialized! Ready to transform this platform!')
   }
 
   // 🎯 COMPONENT ACCESSIBILITY AUDIT
@@ -321,7 +321,7 @@ export class NubiaGoAuditor {
 
   // 🎯 COMPREHENSIVE PAGE AUDIT
   auditPage(url: string): PageAudit {
-    console.log(`🔍 Auditing page: ${url}`)
+    // // // console.log(`🔍 Auditing page: ${url}`)
     
     const components = this.extractPageComponents()
     const issues = [
@@ -590,4 +590,4 @@ export const quickAudit = {
   cultural: () => nubiaGoAuditor.auditCulturalRelevance()
 }
 
-console.log('🎉 NubiaGo Audit Toolkit Loaded! Ready to transform this platform into excellence! 🚀')
+// // // console.log('🎉 NubiaGo Audit Toolkit Loaded! Ready to transform this platform into excellence! 🚀')

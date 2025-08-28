@@ -59,13 +59,13 @@ export default function AdminCreateProductPage() {
       // 3. Update admin analytics
       // 4. Send notifications if needed
       
-      console.log('Admin creating product:', data)
+      // // // console.log('Admin creating product:', data)
       
       success('Product created successfully!')
       router.push('/admin/products')
     } catch (err) {
       error('Failed to create product')
-      console.error('Error creating product:', err)
+      // // // console.error('Error creating product:', err)
     } finally {
       setIsLoading(false)
     }

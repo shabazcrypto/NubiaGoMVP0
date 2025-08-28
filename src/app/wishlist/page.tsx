@@ -45,7 +45,7 @@ export default function WishlistPage() {
         const transformedItems = transformWishlistItems(wishlist)
         setWishlistItems(transformedItems)
       } catch (error: any) {
-        console.error('Error fetching wishlist:', error)
+        // // // console.error('Error fetching wishlist:', error)
       } finally {
         setIsLoading(false)
       }
@@ -62,7 +62,7 @@ export default function WishlistPage() {
       const transformedItems = transformWishlistItems(wishlist)
       setWishlistItems(transformedItems)
     } catch (error: any) {
-      console.error('Error removing from wishlist:', error)
+      // // // console.error('Error removing from wishlist:', error)
     }
   }
 
@@ -74,7 +74,7 @@ export default function WishlistPage() {
       // Optionally remove from wishlist after adding to cart
       await handleRemoveFromWishlist(item.id)
     } catch (error: any) {
-      console.error('Error adding to cart:', error)
+      // // // console.error('Error adding to cart:', error)
     }
   }
 
@@ -89,9 +89,9 @@ export default function WishlistPage() {
     try {
       const shareResult = await wishlistService.shareWishlist(user.uid)
       // You can implement sharing functionality here
-      console.log('Share URL:', shareResult.shareUrl)
+      // // // console.log('Share URL:', shareResult.shareUrl)
     } catch (error: any) {
-      console.error('Error sharing wishlist:', error)
+      // // // console.error('Error sharing wishlist:', error)
     }
   }
 
@@ -103,7 +103,7 @@ export default function WishlistPage() {
       const transformedItems = transformWishlistItems(result.wishlist)
       setWishlistItems(transformedItems)
     } catch (error: any) {
-      console.error('Error moving to cart:', error)
+      // // // console.error('Error moving to cart:', error)
     }
   }
 

@@ -307,7 +307,7 @@ export function withPerformanceMonitoring<P extends object>(
       const renderTime = endTime - startTime.current
 
       if (process.env.NODE_ENV === 'development') {
-        console.log(`${componentName} render #${renderCount.current}: ${renderTime.toFixed(2)}ms`)
+        // // // console.log(`${componentName} render #${renderCount.current}: ${renderTime.toFixed(2)}ms`)
       }
 
       startTime.current = performance.now()

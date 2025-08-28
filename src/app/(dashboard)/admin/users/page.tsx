@@ -50,9 +50,7 @@ export default function AdminUsersPage() {
     fetchUsers,
     updateUserRole,
     bulkUpdateUsers,
-    deleteUser,
-    userFilters,
-    setUserFilters
+    deleteUser
   } = useAdminDashboardStore()
 
   // Filter users based on search and filters
@@ -87,16 +85,6 @@ export default function AdminUsersPage() {
   useEffect(() => {
     fetchUsers()
   }, [fetchUsers])
-
-  // Update filters when they change
-  useEffect(() => {
-    setUserFilters({
-      ...userFilters,
-      status: statusFilter === 'all' ? undefined : statusFilter as 'pending' | 'active' | 'suspended' | undefined,
-      role: roleFilter === 'all' ? undefined : roleFilter as 'customer' | 'supplier' | 'admin' | undefined,
-      search: searchQuery || undefined
-    })
-  }, [statusFilter, roleFilter, searchQuery, setUserFilters])
 
   const handleApproveSupplier = async (supplierId: string) => {
     try {
@@ -499,16 +487,16 @@ export default function AdminUsersPage() {
                                   >
                                     <Edit className="h-4 w-4" />
                                   </button>
-                                                                      <button
-                                      onClick={() => {
-                                        if (confirm('Are you sure you want to delete this user?')) {
-                                          deleteUser(user.uid ?? '', 'admin-1', 'User deletion')
-                                        }
-                                      }}
-                                      className="text-red-600 hover:text-red-900"
-                                    >
-                                      <Trash2 className="h-4 w-4" />
-                                    </button>
+                                  <button
+                                    onClick={() => {
+                                      if (confirm('Are you sure you want to delete this user?')) {
+                                        deleteUser(user.uid ?? '', 'admin-1', 'User deletion')
+                                      }
+                                    }}
+                                    className="text-red-600 hover:text-red-900"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </button>
                                 </div>
                               </td>
                             </tr>
@@ -546,7 +534,7 @@ export default function AdminUsersPage() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {suppliers.map((supplier) => (
+                          {suppliers.map((supplier) => (
                             <tr key={supplier.uid} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">
@@ -591,7 +579,7 @@ export default function AdminUsersPage() {
                                     </>
                                   )}
                                   <button
-                                     onClick={() => setShowSupplierDetails(supplier.uid)}
+                                    onClick={() => setShowSupplierDetails(supplier.uid)}
                                     className="text-primary-600 hover:text-primary-900"
                                   >
                                     <Eye className="h-4 w-4" />
@@ -669,16 +657,16 @@ export default function AdminUsersPage() {
                                   >
                                     <Edit className="h-4 w-4" />
                                   </button>
-                                                                     <button
-                                     onClick={() => {
-                                       if (confirm('Are you sure you want to delete this admin?')) {
-                                         deleteUser(admin.uid, 'admin-1', 'Admin deletion')
-                                       }
-                                     }}
-                                     className="text-red-600 hover:text-red-900"
-                                   >
-                                     <Trash2 className="h-4 w-4" />
-                                   </button>
+                                  <button
+                                    onClick={() => {
+                                      if (confirm('Are you sure you want to delete this admin?')) {
+                                        deleteUser(admin.uid, 'admin-1', 'Admin deletion')
+                                      }
+                                    }}
+                                    className="text-red-600 hover:text-red-900"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </button>
                                 </div>
                               </td>
                             </tr>

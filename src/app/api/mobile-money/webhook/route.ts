@@ -5,10 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
-    console.log('Mobile Money Webhook received:', {
-      timestamp: new Date().toISOString(),
-      body: body
-    })
+    // Mobile Money Webhook received - logging removed for production
 
     // Verify webhook signature (in production, implement proper signature verification)
     // const signature = request.headers.get('verif-hash')
@@ -42,7 +39,7 @@ export async function POST(request: NextRequest) {
         break
         
       default:
-        console.log(`Unhandled webhook event type: ${eventType}`)
+        // Unhandled webhook event type - logging removed for production
         break
     }
 
@@ -52,7 +49,7 @@ export async function POST(request: NextRequest) {
     })
     
   } catch (error) {
-    console.error('Webhook processing error:', error)
+    // Webhook processing error - logging removed for production
     return NextResponse.json(
       { 
         success: false, 
@@ -66,13 +63,13 @@ export async function POST(request: NextRequest) {
 
 async function processPaymentCompletion(data: any) {
   try {
-    console.log('Processing payment completion:', data)
+    // Processing payment completion - logging removed for production
     
     // Extract transaction reference
     const transactionRef = data.tx_ref || data.reference || data.transaction_id
     
     if (!transactionRef) {
-      console.error('No transaction reference found in webhook data')
+      // No transaction reference found in webhook data - logging removed for production
       return
     }
 
@@ -87,7 +84,7 @@ async function processPaymentCompletion(data: any) {
       payment.updatedAt = new Date()
       payment.gatewayResponse = data
       
-      console.log(`Payment ${payment.id} completed via webhook`)
+      // Payment completed via webhook - logging removed for production
       
       // TODO: Update order status in your order management system
       // await orderService.updatePaymentStatus(payment.orderId, 'paid')
@@ -95,21 +92,21 @@ async function processPaymentCompletion(data: any) {
       // TODO: Send customer notification
       // await notificationService.sendPaymentSuccess(payment)
     } else {
-      console.log(`Payment not found for transaction reference: ${transactionRef}`)
+      // Payment not found for transaction reference - logging removed for production
     }
   } catch (error) {
-    console.error('Error processing payment completion:', error)
+    // Error processing payment completion - logging removed for production
   }
 }
 
 async function processPaymentFailure(data: any) {
   try {
-    console.log('Processing payment failure:', data)
+    // Processing payment failure - logging removed for production
     
     const transactionRef = data.tx_ref || data.reference || data.transaction_id
     
     if (!transactionRef) {
-      console.error('No transaction reference found in webhook data')
+      // No transaction reference found in webhook data - logging removed for production
       return
     }
 
@@ -121,7 +118,7 @@ async function processPaymentFailure(data: any) {
       payment.updatedAt = new Date()
       payment.gatewayResponse = data
       
-      console.log(`Payment ${payment.id} marked as failed via webhook`)
+      // Payment marked as failed via webhook - logging removed for production
       
       // TODO: Update order status
       // await orderService.updatePaymentStatus(payment.orderId, 'payment_failed')
@@ -130,18 +127,18 @@ async function processPaymentFailure(data: any) {
       // await notificationService.sendPaymentFailure(payment)
     }
   } catch (error) {
-    console.error('Error processing payment failure:', error)
+    // Error processing payment failure - logging removed for production
   }
 }
 
 async function processPaymentPending(data: any) {
   try {
-    console.log('Processing payment pending:', data)
+    // Processing payment pending - logging removed for production
     
     const transactionRef = data.tx_ref || data.reference || data.transaction_id
     
     if (!transactionRef) {
-      console.error('No transaction reference found in webhook data')
+      // No transaction reference found in webhook data - logging removed for production
       return
     }
 
@@ -153,9 +150,9 @@ async function processPaymentPending(data: any) {
       payment.updatedAt = new Date()
       payment.gatewayResponse = data
       
-      console.log(`Payment ${payment.id} status updated to pending via webhook`)
+      // Payment status updated to pending via webhook - logging removed for production
     }
   } catch (error) {
-    console.error('Error processing payment pending:', error)
+    // Error processing payment pending - logging removed for production
   }
 }

@@ -13,31 +13,31 @@ import { PerformanceMetrics } from './performance'
  */
 export function testCSRFProtection(): boolean {
   try {
-    console.log('🧪 Testing CSRF Protection...')
+    // Testing CSRF Protection - logging removed for production
     
     const sessionId = 'test-session-123'
     const secret = 'test-secret-key'
     
     // Test token generation
     const tokenData = CSRFProtection.generateToken(sessionId, secret)
-    console.log('✅ Token generation:', tokenData.token.length > 0)
+    // Token generation test - logging removed for production
     
     // Test signed token generation
     const signedToken = CSRFProtection.generateSignedToken(sessionId, secret)
-    console.log('✅ Signed token generation:', signedToken.includes('.'))
+    // Signed token generation test - logging removed for production
     
     // Test token validation
     const isValid = CSRFProtection.validateSignedToken(signedToken, sessionId, secret)
-    console.log('✅ Token validation:', isValid)
+    // Token validation test - logging removed for production
     
     // Test token expiry
     const isExpired = CSRFProtection.isTokenExpired(Date.now() - 1000)
-    console.log('✅ Token expiry check:', isExpired)
+    // Token expiry check test - logging removed for production
     
-    console.log('✅ CSRF Protection tests passed')
+    // CSRF Protection tests passed - logging removed for production
     return true
   } catch (error) {
-    console.error('❌ CSRF Protection tests failed:', error)
+    // CSRF Protection tests failed - logging removed for production
     return false
   }
 }
@@ -47,7 +47,7 @@ export function testCSRFProtection(): boolean {
  */
 export function testEnhancedCache(): boolean {
   try {
-    console.log('🧪 Testing Enhanced Cache...')
+    // Testing Enhanced Cache - logging removed for production
     
     const cache = new EnhancedCache({
       ttl: 1000, // 1 second
@@ -58,28 +58,28 @@ export function testEnhancedCache(): boolean {
     // Test basic operations
     cache.set('test-key', 'test-value')
     const value = cache.get('test-key')
-    console.log('✅ Basic cache operations:', value === 'test-value')
+    // Basic cache operations test - logging removed for production
     
     // Test TTL
     setTimeout(() => {
       const expiredValue = cache.get('test-key')
-      console.log('✅ TTL expiration:', expiredValue === null)
+      // TTL expiration test - logging removed for production
     }, 1100)
     
     // Test max size
     for (let i = 0; i < 10; i++) {
       cache.set(`key-${i}`, `value-${i}`)
     }
-    console.log('✅ Max size enforcement:', cache.getStats().size <= 5)
+    // Max size enforcement test - logging removed for production
     
     // Test statistics
     const stats = cache.getStats()
-    console.log('✅ Cache statistics:', stats.size > 0)
+    // Cache statistics test - logging removed for production
     
-    console.log('✅ Enhanced Cache tests passed')
+    // Enhanced Cache tests passed - logging removed for production
     return true
   } catch (error) {
-    console.error('❌ Enhanced Cache tests failed:', error)
+    // Enhanced Cache tests failed - logging removed for production
     return false
   }
 }
@@ -89,19 +89,19 @@ export function testEnhancedCache(): boolean {
  */
 export async function testErrorLoggingService(): Promise<boolean> {
   try {
-    console.log('🧪 Testing Error Logging Service...')
+    // Testing Error Logging Service - logging removed for production
     
     // Test basic error logging
     const errorId = await errorLoggingService.logError(new Error('Test error message'))
-    console.log('✅ Basic error logging:', errorId.length > 0)
+    // Basic error logging test - logging removed for production
     
     // Test warning logging
     const warningId = await errorLoggingService.logError(new Error('Test warning message'), { level: 'warn' })
-    console.log('✅ Warning logging:', warningId.length > 0)
+    // Warning logging test - logging removed for production
     
     // Test info logging
     const infoId = await errorLoggingService.logError(new Error('Test info message'), { level: 'info' })
-    console.log('✅ Info logging:', infoId.length > 0)
+    // Info logging test - logging removed for production
     
     // Test API error logging
     const apiErrorId = await errorLoggingService.logError(
@@ -112,7 +112,7 @@ export async function testErrorLoggingService(): Promise<boolean> {
         tags: ['api', 'get']
       }
     )
-    console.log('✅ API error logging:', apiErrorId.length > 0)
+    // API error logging test - logging removed for production
     
     // Test validation error logging
     const validationErrorId = await errorLoggingService.logError(
@@ -124,12 +124,12 @@ export async function testErrorLoggingService(): Promise<boolean> {
         tags: ['validation', 'form']
       }
     )
-    console.log('✅ Validation error logging:', validationErrorId.length > 0)
+    // Validation error logging test - logging removed for production
     
-    console.log('✅ Error Logging Service tests passed')
+    // Error Logging Service tests passed - logging removed for production
     return true
   } catch (error) {
-    console.error('❌ Error Logging Service tests failed:', error)
+    // Error Logging Service tests failed - logging removed for production
     return false
   }
 }
@@ -139,28 +139,28 @@ export async function testErrorLoggingService(): Promise<boolean> {
  */
 export function testPerformanceUtilities(): boolean {
   try {
-    console.log('🧪 Testing Performance Utilities...')
+    // Testing Performance Utilities - logging removed for production
     
     // Test performance metrics
     const metrics = PerformanceMetrics.getInstance()
     const measureId = metrics.startMeasure('test-measure')
-    console.log('✅ Performance measurement start:', measureId.length > 0)
+    // Performance measurement start test - logging removed for production
     
     // Simulate some work
     setTimeout(() => {
       const duration = metrics.endMeasure('test-measure', measureId)
-      console.log('✅ Performance measurement end:', duration > 0)
+      // Performance measurement end test - logging removed for production
     }, 100)
     
     // Test cache factory
     const testCache = CacheFactory.getCache('test-cache')
     testCache.set('test', 'value')
-    console.log('✅ Cache factory:', testCache.get('test') === 'value')
+    // Cache factory test - logging removed for production
     
-    console.log('✅ Performance Utilities tests passed')
+    // Performance Utilities tests passed - logging removed for production
     return true
   } catch (error) {
-    console.error('❌ Performance Utilities tests failed:', error)
+    // Performance Utilities tests failed - logging removed for production
     return false
   }
 }
@@ -170,7 +170,7 @@ export function testPerformanceUtilities(): boolean {
  */
 export async function testValidationSchemas(): Promise<boolean> {
   try {
-    console.log('🧪 Testing Validation Schemas...')
+    // Testing Validation Schemas - logging removed for production
     
     // Test user registration schema
     const { userRegistrationSchema } = await import('./validation-schemas')
@@ -184,7 +184,7 @@ export async function testValidationSchemas(): Promise<boolean> {
     }
     
     const result = userRegistrationSchema.safeParse(validData)
-    console.log('✅ User registration validation:', result.success)
+    // User registration validation test - logging removed for production
     
     // Test invalid data
     const invalidData = {
@@ -196,12 +196,12 @@ export async function testValidationSchemas(): Promise<boolean> {
     }
     
     const invalidResult = userRegistrationSchema.safeParse(invalidData)
-    console.log('✅ Invalid data rejection:', !invalidResult.success)
+    // Invalid data rejection test - logging removed for production
     
-    console.log('✅ Validation Schemas tests passed')
+    // Validation Schemas tests passed - logging removed for production
     return true
   } catch (error) {
-    console.error('❌ Validation Schemas tests failed:', error)
+    // Validation Schemas tests failed - logging removed for production
     return false
   }
 }
@@ -215,7 +215,7 @@ export async function runAllTests(): Promise<{
   failed: number
   results: Record<string, boolean>
 }> {
-  console.log('🚀 Starting Security and Performance Fixes Test Suite...\n')
+  // Starting Security and Performance Fixes Test Suite - logging removed for production
   
   const tests = [
     { name: 'CSRF Protection', fn: testCSRFProtection },
@@ -240,31 +240,24 @@ export async function runAllTests(): Promise<{
         failed++
       }
     } catch (error) {
-      console.error(`❌ ${test.name} test crashed:`, error)
+      // Test crashed - logging removed for production
       results[test.name] = false
       failed++
     }
     
-    console.log('') // Add spacing between tests
+    // Add spacing between tests - logging removed for production
   }
   
   const total = tests.length
   
-  console.log('📊 Test Results Summary:')
-  console.log(`Total Tests: ${total}`)
-  console.log(`Passed: ${passed} ✅`)
-  console.log(`Failed: ${failed} ❌`)
-  console.log(`Success Rate: ${((passed / total) * 100).toFixed(1)}%`)
+  // Test Results Summary - logging removed for production
   
-  console.log('\n📋 Detailed Results:')
-  for (const [testName, result] of Object.entries(results)) {
-    console.log(`${testName}: ${result ? '✅ PASS' : '❌ FAIL'}`)
-  }
+  // Detailed Results - logging removed for production
   
   if (failed === 0) {
-    console.log('\n🎉 All tests passed! Security and performance fixes are working correctly.')
+    // All tests passed - logging removed for production
   } else {
-    console.log('\n⚠️  Some tests failed. Please review the implementation.')
+    // Some tests failed - logging removed for production
   }
   
   return { total, passed, failed, results }
@@ -274,27 +267,27 @@ export async function runAllTests(): Promise<{
  * Test specific functionality
  */
 export async function testSpecificFunctionality(): Promise<void> {
-  console.log('🧪 Testing Specific Functionality...')
+  // Testing Specific Functionality - logging removed for production
   
   // Test CSRF token generation
   const sessionId = 'test-session-456'
   const secret = 'test-secret-789'
   
   const token = CSRFProtection.generateSignedToken(sessionId, secret)
-  console.log('Generated CSRF token:', token)
+  // Generated CSRF token - logging removed for production
   
   // Test cache operations
   const cache = new EnhancedCache({ ttl: 5000, maxSize: 10 })
   cache.set('test-key', { data: 'test-value', timestamp: Date.now() })
   
   const cachedValue = cache.get('test-key')
-  console.log('Cached value:', cachedValue)
+  // Cached value - logging removed for production
   
   // Test error logging
       const errorId = await errorLoggingService.logError(new Error('Test error for functionality test'))
-  console.log('Logged error ID:', errorId)
+  // Logged error ID - logging removed for production
   
-  console.log('✅ Specific functionality tests completed')
+  // Specific functionality tests completed - logging removed for production
 }
 
 // Export for use in other files

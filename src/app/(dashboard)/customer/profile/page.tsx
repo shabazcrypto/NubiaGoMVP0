@@ -50,7 +50,7 @@ export default function CustomerProfilePage() {
         setError(null)
       } catch (err) {
         setError('Failed to load user profile')
-        console.error('Error loading user profile:', err)
+        // // // console.error('Error loading user profile:', err)
       } finally {
         setIsLoading(false)
       }
@@ -76,20 +76,20 @@ export default function CustomerProfilePage() {
         }))
       }
     } catch (error) {
-      console.error('Error updating profile with new avatar:', error)
+      // // // console.error('Error updating profile with new avatar:', error)
     }
   }
 
   // Handle avatar upload error
   const handleAvatarUploadError = (error: string) => {
-    console.error('Avatar upload failed:', error)
+    // // // console.error('Avatar upload failed:', error)
     // You can add toast notification here
   }
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Profile updated:', profile)
+    // // // console.log('Profile updated:', profile)
     // Add your form submission logic here
   }
 

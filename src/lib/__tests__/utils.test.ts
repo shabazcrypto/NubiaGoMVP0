@@ -248,12 +248,12 @@ describe('Utils', () => {
 
     it('calls warning toast with correct message', () => {
       toast.warning('Please check your input')
-      expect(console.warn).toHaveBeenCalledWith('⚠️ Warning:', 'Please check your input')
+      expect(// console.warn).toHaveBeenCalledWith('⚠️ Warning:', 'Please check your input')
     })
 
     it('calls info toast with correct message', () => {
       toast.info('New update available')
-      expect(console.info).toHaveBeenCalledWith('ℹ️ Info:', 'New update available')
+      expect(// console.info).toHaveBeenCalledWith('ℹ️ Info:', 'New update available')
     })
   })
 })

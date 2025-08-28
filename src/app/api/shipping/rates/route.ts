@@ -72,7 +72,7 @@ export const POST = protectAPI()(async (request: NextRequest) => {
       message: `Found ${rates.length} shipping options`
     })
   } catch (error: any) {
-    console.error('Shipping rates calculation error:', error)
+    // // // console.error('Shipping rates calculation error:', error)
     return NextResponse.json(
       { 
         success: false, 

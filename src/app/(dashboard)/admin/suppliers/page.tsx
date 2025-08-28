@@ -34,9 +34,7 @@ export default function AdminSuppliersPage() {
     updateSupplierApproval,
     suspendSupplier,
     reactivateSupplier,
-    bulkUpdateSuppliers,
-    supplierFilters,
-    setSupplierFilters
+    bulkUpdateSuppliers
   } = useAdminDashboardStore()
 
   // Local loading state for better UX
@@ -46,14 +44,7 @@ export default function AdminSuppliersPage() {
 
   // Debug information
   useEffect(() => {
-    console.log('Admin Suppliers Debug:', {
-      supplierLoading,
-      localLoading,
-      loading,
-      suppliersCount: suppliers?.length || 0,
-      supplierStats: supplierStats,
-      localError
-    })
+    // Debug data available in development
   }, [supplierLoading, localLoading, loading, suppliers, supplierStats, localError])
 
   // Fallback data to prevent crashes
@@ -101,7 +92,6 @@ export default function AdminSuppliersPage() {
         await fetchSuppliers()
         clearTimeout(timeoutId)
       } catch (err) {
-        console.error('Failed to fetch suppliers:', err)
         setLocalError(err instanceof Error ? err.message : 'Failed to fetch suppliers')
       } finally {
         setLocalLoading(false)
@@ -110,16 +100,6 @@ export default function AdminSuppliersPage() {
     
     loadSuppliers()
   }, [fetchSuppliers])
-
-  // Update filters when they change
-  useEffect(() => {
-    setSupplierFilters({
-      ...supplierFilters,
-      status: filterStatus === 'all' ? undefined : filterStatus as 'approved' | 'pending' | 'rejected' | 'suspended' | undefined,
-      category: filterCategory === 'all' ? undefined : filterCategory,
-      search: searchQuery || undefined
-    })
-  }, [filterStatus, filterCategory, searchQuery, setSupplierFilters, supplierFilters])
 
   const handleApproveSupplier = async (supplierId: string) => {
     try {
@@ -360,10 +340,10 @@ export default function AdminSuppliersPage() {
                               <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
                                 <Store className="h-4 w-4 text-gray-600" />
                               </div>
-                                                             <div>
-                                 <p className="font-medium text-gray-900">{supplier.businessName}</p>
-                                 <p className="text-gray-500">{supplier.ownerName} • {supplier.categories?.[0] || 'Uncategorized'}</p>
-                               </div>
+                              <div>
+                                <p className="font-medium text-gray-900">{supplier.businessName}</p>
+                                <p className="text-gray-500">{supplier.ownerName} • {supplier.categories?.[0] || 'Uncategorized'}</p>
+                              </div>
                             </div>
                             <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                               supplier.status === 'approved' ? 'bg-green-100 text-green-800' :
@@ -638,7 +618,7 @@ export default function AdminSuppliersPage() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                                                     {safeSuppliers.filter(s => s.status === 'pending').map((supplier) => (
+                          {safeSuppliers.filter(s => s.status === 'pending').map((supplier) => (
                             <tr key={supplier.id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">{supplier.businessName}</div>
@@ -650,9 +630,9 @@ export default function AdminSuppliersPage() {
                                 <div className="text-sm text-gray-900">{supplier.ownerEmail}</div>
                                 <div className="text-sm text-gray-500">{supplier.ownerPhone}</div>
                               </td>
-                                                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {supplier.categories?.[0] || supplier.businessType || 'N/A'}
-                                </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {supplier.categories?.[0] || supplier.businessType || 'N/A'}
+                              </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div className="flex space-x-2">
                                   <button
@@ -698,7 +678,7 @@ export default function AdminSuppliersPage() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                                                     {safeSuppliers.filter(s => s.status === 'approved').map((supplier) => (
+                          {safeSuppliers.filter(s => s.status === 'approved').map((supplier) => (
                             <tr key={supplier.id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">{supplier.businessName}</div>
@@ -759,13 +739,13 @@ export default function AdminSuppliersPage() {
                       <div className="bg-white p-6 rounded-lg shadow-sm">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Category Distribution</h3>
                         <div className="space-y-3">
-                                                     {Object.entries(
-                             safeSuppliers.reduce((acc, supplier) => {
-                               const category = supplier.categories?.[0] || supplier.businessType || 'Other'
-                               acc[category] = (acc[category] || 0) + 1
-                               return acc
-                             }, {} as Record<string, number>)
-                           )
+                          {Object.entries(
+                            safeSuppliers.reduce((acc, supplier) => {
+                              const category = supplier.categories?.[0] || supplier.businessType || 'Other'
+                              acc[category] = (acc[category] || 0) + 1
+                              return acc
+                            }, {} as Record<string, number>)
+                          )
                             .sort(([, a], [, b]) => b - a)
                             .map(([category, count]) => (
                               <div key={category} className="flex items-center justify-between">

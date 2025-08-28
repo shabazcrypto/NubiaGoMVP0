@@ -52,9 +52,9 @@ export class AuditService {
         timestamp: new Date(logEntry.timestamp)
       })
       
-      console.log(`📝 Audit logged: ${auditData.action} by ${auditData.userEmail}`)
+      // // // console.log(`📝 Audit logged: ${auditData.action} by ${auditData.userEmail}`)
     } catch (error) {
-      console.error('❌ Failed to log audit event:', error)
+      // // // console.error('❌ Failed to log audit event:', error)
       // Don't throw error as audit logging shouldn't break main functionality
     }
   }
@@ -305,7 +305,7 @@ export class AuditService {
 
       return filteredLogs
     } catch (error) {
-      console.error('❌ Failed to get audit logs:', error)
+      // // // console.error('❌ Failed to get audit logs:', error)
       throw new Error(`Failed to get audit logs: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
@@ -368,7 +368,7 @@ export class AuditService {
 
       return JSON.stringify(logs, null, 2)
     } catch (error) {
-      console.error('❌ Failed to export audit logs:', error)
+      // // // console.error('❌ Failed to export audit logs:', error)
       throw new Error(`Failed to export audit logs: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
@@ -430,7 +430,7 @@ export class AuditService {
       })
 
       // Delete old logs (this would need to be implemented with proper batch deletion)
-      console.log(`🗑️ Found ${oldLogs.length} old audit logs to clean up`)
+      // // // console.log(`🗑️ Found ${oldLogs.length} old audit logs to clean up`)
       
       // In a real implementation, you would delete these logs
       // For now, we'll just log the cleanup action
@@ -440,7 +440,7 @@ export class AuditService {
         cutoffDate: cutoffDate.toISOString()
       })
     } catch (error) {
-      console.error('❌ Failed to cleanup old logs:', error)
+      // // // console.error('❌ Failed to cleanup old logs:', error)
       throw new Error(`Failed to cleanup old logs: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
@@ -497,7 +497,7 @@ export class AuditService {
         topUsers
       }
     } catch (error) {
-      console.error('❌ Failed to get audit stats:', error)
+      // // // console.error('❌ Failed to get audit stats:', error)
       throw new Error(`Failed to get audit stats: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }

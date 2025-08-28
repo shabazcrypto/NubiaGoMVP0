@@ -235,10 +235,10 @@ export default function RootLayout({
                 window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js')
                     .then(function(registration) {
-                      console.log('SW registered: ', registration);
+                      // // // console.log('SW registered: ', registration);
                     })
                     .catch(function(registrationError) {
-                      console.log('SW registration failed: ', registrationError);
+                      // // // console.log('SW registration failed: ', registrationError);
                     });
                 });
               }
@@ -315,7 +315,7 @@ export default function RootLayout({
                     setTimeout(function() {
                       const perfData = performance.getEntriesByType('navigation')[0];
                       if (perfData) {
-                        console.log('Page Load Performance:', {
+                        // // // console.log('Page Load Performance:', {
                           'DOM Content Loaded': perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart + 'ms',
                           'Load Complete': perfData.loadEventEnd - perfData.loadEventStart + 'ms',
                           'Total Load Time': perfData.loadEventEnd - perfData.fetchStart + 'ms'
@@ -324,7 +324,7 @@ export default function RootLayout({
 
                       // Log resource hints statistics
                       if (window.assetPreloader) {
-                        console.log('Resource Hints Stats:', window.assetPreloader.getStats());
+                        // // // console.log('Resource Hints Stats:', window.assetPreloader.getStats());
                       }
                     }, 0);
                   });

@@ -195,7 +195,7 @@ export function LiveOrderTracking({ orderId }: { orderId: string }) {
   useEffect(() => {
     if (showMap && mapRef.current && tracking?.currentLocation) {
       // In a real app, this would initialize Google Maps or similar
-      console.log('Initializing map with location:', tracking.currentLocation)
+      // // // console.log('Initializing map with location:', tracking.currentLocation)
     }
   }, [showMap, tracking])
 

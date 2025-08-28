@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
 
     return response
   } catch (error) {
-    console.error('Middleware error:', error)
+    // // // console.error('Middleware error:', error)
     return new NextResponse(
       JSON.stringify({ success: false, message: 'Internal Server Error' }),
       { status: 500, headers: { 'content-type': 'application/json' } }

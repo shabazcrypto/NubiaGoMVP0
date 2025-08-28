@@ -42,7 +42,7 @@ export default function CategoriesPage() {
         setCategories(data.data || [])
       }
     } catch (error) {
-      console.error('Failed to fetch categories:', error)
+      // // // console.error('Failed to fetch categories:', error)
     } finally {
       setLoading(false)
     }

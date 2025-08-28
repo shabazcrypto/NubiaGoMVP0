@@ -168,25 +168,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     
     // Log critical issues
     if (report.errors.length > 0) {
-      console.warn('Performance report contains errors:', report.errors.length)
+      // // // console.warn('Performance report contains errors:', report.errors.length)
     }
     
     // Check for performance regressions
     const { lcp, fid, cls } = report.coreWebVitals
     if (lcp && lcp > 4000) {
-      console.warn('LCP performance issue detected:', lcp)
+      // // // console.warn('LCP performance issue detected:', lcp)
     }
     if (fid && fid > 100) {
-      console.warn('FID performance issue detected:', fid)
+      // // // console.warn('FID performance issue detected:', fid)
     }
     if (cls && cls > 0.1) {
-      console.warn('CLS performance issue detected:', cls)
+      // // // console.warn('CLS performance issue detected:', cls)
     }
     
     return NextResponse.json({ success: true })
     
   } catch (error) {
-    console.error('Performance analytics error:', error)
+    // // // console.error('Performance analytics error:', error)
     
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -230,7 +230,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     })
     
   } catch (error) {
-    console.error('Performance analytics GET error:', error)
+    // // // console.error('Performance analytics GET error:', error)
     
     return NextResponse.json(
       { error: 'Internal server error' },

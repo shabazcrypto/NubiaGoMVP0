@@ -64,7 +64,7 @@ export default function AdminOrders() {
       }
       setSelectedOrders([])
     } catch (error) {
-      console.error('Bulk action failed:', error)
+      // // // console.error('Bulk action failed:', error)
     }
   }
 
@@ -74,7 +74,7 @@ export default function AdminOrders() {
       // Success handling would go here
     } catch (error) {
       // Error handling would go here
-      console.error('Failed to update order status:', error)
+      // // // console.error('Failed to update order status:', error)
     }
   }
 
@@ -84,7 +84,7 @@ export default function AdminOrders() {
       // Success handling would go here
     } catch (error) {
       // Error handling would go here
-      console.error('Failed to cancel order:', error)
+      // // // console.error('Failed to cancel order:', error)
     }
   }
 

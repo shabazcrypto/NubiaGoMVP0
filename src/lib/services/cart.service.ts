@@ -72,7 +72,7 @@ export class CartService {
         items: itemsWithProducts as unknown as any
       }
     } catch (error) {
-      console.error('Error getting cart:', error)
+      // // // console.error('Error getting cart:', error)
       throw new Error('Failed to fetch cart')
     }
   }
@@ -115,7 +115,7 @@ export class CartService {
 
       return cart
     } catch (error) {
-      console.error('Error adding to cart:', error)
+      // // // console.error('Error adding to cart:', error)
       throw new Error('Failed to add item to cart')
     }
   }
@@ -151,7 +151,7 @@ export class CartService {
 
       return cart
     } catch (error) {
-      console.error('Error updating cart item:', error)
+      // // // console.error('Error updating cart item:', error)
       throw new Error('Failed to update cart item')
     }
   }
@@ -171,7 +171,7 @@ export class CartService {
 
       return cart
     } catch (error) {
-      console.error('Error removing from cart:', error)
+      // // // console.error('Error removing from cart:', error)
       throw new Error('Failed to remove item from cart')
     }
   }
@@ -191,7 +191,7 @@ export class CartService {
       await setDoc(cartRef, emptyCart)
       return emptyCart
     } catch (error) {
-      console.error('Error clearing cart:', error)
+      // // // console.error('Error clearing cart:', error)
       throw new Error('Failed to clear cart')
     }
   }
@@ -207,7 +207,7 @@ export class CartService {
       
       return cart
     } catch (error) {
-      console.error('Error moving from wishlist to cart:', error)
+      // // // console.error('Error moving from wishlist to cart:', error)
       throw new Error('Failed to move item from wishlist to cart')
     }
   }
@@ -229,7 +229,7 @@ export class CartService {
 
       return cart
     } catch (error) {
-      console.error('Error applying discount:', error)
+      // // // console.error('Error applying discount:', error)
       throw new Error('Failed to apply discount')
     }
   }
@@ -254,7 +254,7 @@ export class CartService {
       
       return shippingCost
     } catch (error) {
-      console.error('Error calculating shipping:', error)
+      // // // console.error('Error calculating shipping:', error)
       throw new Error('Failed to calculate shipping')
     }
   }
@@ -301,7 +301,7 @@ export class CartService {
         errors
       }
     } catch (error) {
-      console.error('Error validating cart:', error)
+      // // // console.error('Error validating cart:', error)
       throw new Error('Failed to validate cart')
     }
   }

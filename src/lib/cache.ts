@@ -405,7 +405,7 @@ export class EnhancedCache {
       
       localStorage.setItem(this.namespace, JSON.stringify(data))
     } catch (error) {
-      console.warn('Failed to persist cache to localStorage:', error)
+      // // // console.warn('Failed to persist cache to localStorage:', error)
     }
   }
 
@@ -427,7 +427,7 @@ export class EnhancedCache {
         try {
           localStorage.removeItem(this.namespace)
         } catch (error) {
-          console.warn('Failed to remove expired cache from localStorage:', error)
+          // // // console.warn('Failed to remove expired cache from localStorage:', error)
         }
         return
       }
@@ -439,11 +439,11 @@ export class EnhancedCache {
         }
       }
     } catch (error) {
-      console.warn('Failed to load cache from localStorage:', error)
+      // // // console.warn('Failed to load cache from localStorage:', error)
       try {
         localStorage.removeItem(this.namespace)
       } catch (removeError) {
-        console.warn('Failed to remove corrupted cache from localStorage:', removeError)
+        // // // console.warn('Failed to remove corrupted cache from localStorage:', removeError)
       }
     }
   }

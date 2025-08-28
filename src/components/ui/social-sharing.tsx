@@ -76,7 +76,7 @@ export function SocialSharing({
         setTimeout(() => setCopied(false), 2000)
       }
     } catch (error) {
-      console.error('Failed to copy:', error)
+      // // // console.error('Failed to copy:', error)
     }
   }
 
@@ -89,7 +89,7 @@ export function SocialSharing({
           url: data.url
         })
       } catch (error) {
-        console.error('Error sharing:', error)
+        // // // console.error('Error sharing:', error)
       }
     } else {
       setIsOpen(!isOpen)

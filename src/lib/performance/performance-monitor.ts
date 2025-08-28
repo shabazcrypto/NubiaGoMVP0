@@ -92,7 +92,7 @@ export class PerformanceMonitor {
     // Start periodic reporting
     this.startReporting()
     
-    console.log('🚀 Performance Monitor initialized')
+    // // // console.log('🚀 Performance Monitor initialized')
   }
 
   /**
@@ -193,7 +193,7 @@ export class PerformanceMonitor {
         observer.observe({ type, buffered: true })
         this.observers.set(type, observer)
       } catch (error) {
-        console.warn(`Failed to observe ${type}:`, error)
+        // // // console.warn(`Failed to observe ${type}:`, error)
       }
     }
   }
@@ -256,7 +256,7 @@ export class PerformanceMonitor {
         const measure = performance.measure(name, startMark, endMark)
         return measure.duration
       } catch (error) {
-        console.warn(`Failed to measure ${name}:`, error)
+        // // // console.warn(`Failed to measure ${name}:`, error)
       }
     }
     return null
@@ -334,7 +334,7 @@ export class PerformanceMonitor {
         body: JSON.stringify(report),
       })
     } catch (error) {
-      console.warn('Failed to report performance metrics:', error)
+      // // // console.warn('Failed to report performance metrics:', error)
     }
   }
 

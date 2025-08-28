@@ -33,7 +33,7 @@ export default function OrdersPage() {
         
         setOrders(userOrders)
       } catch (err) {
-        console.error('Error fetching orders:', err)
+        // // // console.error('Error fetching orders:', err)
         error('Failed to load orders')
         setOrders([])
       } finally {

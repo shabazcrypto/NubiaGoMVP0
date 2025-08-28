@@ -24,7 +24,7 @@ export class AnalyticsService {
         referrer: typeof window !== 'undefined' ? document.referrer : ''
       })
     } catch (error) {
-      console.error('Error tracking page view:', error)
+      // // // console.error('Error tracking page view:', error)
     }
   }
 
@@ -44,7 +44,7 @@ export class AnalyticsService {
         viewCount: increment(1)
       })
     } catch (error) {
-      console.error('Error tracking product view:', error)
+      // // // console.error('Error tracking product view:', error)
     }
   }
 
@@ -60,7 +60,7 @@ export class AnalyticsService {
         timestamp: new Date()
       })
     } catch (error) {
-      console.error('Error tracking add to cart:', error)
+      // // // console.error('Error tracking add to cart:', error)
     }
   }
 
@@ -76,7 +76,7 @@ export class AnalyticsService {
         timestamp: new Date()
       })
     } catch (error) {
-      console.error('Error tracking purchase:', error)
+      // // // console.error('Error tracking purchase:', error)
     }
   }
 
@@ -91,7 +91,7 @@ export class AnalyticsService {
         timestamp: new Date()
       })
     } catch (error) {
-      console.error('Error tracking search:', error)
+      // // // console.error('Error tracking search:', error)
     }
   }
 
@@ -149,7 +149,7 @@ export class AnalyticsService {
         dailySales: dailySalesArray
       }
     } catch (error) {
-      console.error('Error getting sales analytics:', error)
+      // // // console.error('Error getting sales analytics:', error)
       throw new Error('Failed to get sales analytics')
     }
   }
@@ -185,7 +185,7 @@ export class AnalyticsService {
         userRetention
       }
     } catch (error) {
-      console.error('Error getting user analytics:', error)
+      // // // console.error('Error getting user analytics:', error)
       throw new Error('Failed to get user analytics')
     }
   }
@@ -238,7 +238,7 @@ export class AnalyticsService {
         topSellingProducts
       }
     } catch (error) {
-      console.error('Error getting product analytics:', error)
+      // // // console.error('Error getting product analytics:', error)
       throw new Error('Failed to get product analytics')
     }
   }
@@ -276,7 +276,7 @@ export class AnalyticsService {
         searchToPurchaseRate
       }
     } catch (error) {
-      console.error('Error getting conversion analytics:', error)
+      // // // console.error('Error getting conversion analytics:', error)
       throw new Error('Failed to get conversion analytics')
     }
   }
@@ -292,7 +292,7 @@ export class AnalyticsService {
         timestamp: new Date()
       })
     } catch (error) {
-      console.error('Error tracking custom event:', error)
+      // // // console.error('Error tracking custom event:', error)
     }
   }
 }

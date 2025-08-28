@@ -62,7 +62,7 @@ export default function SearchPage() {
         setProducts(data.data || [])
       }
     } catch (error) {
-      console.error('Search failed:', error)
+      // // // console.error('Search failed:', error)
     } finally {
       setLoading(false)
     }

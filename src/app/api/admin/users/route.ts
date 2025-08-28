@@ -10,22 +10,15 @@ async function hasExistingUsers() {
     const usersSnapshot = await getDocs(collection(db, 'users'))
     return !usersSnapshot.empty
   } catch (error) {
-    console.error('Error checking for existing users:', error)
+    // // // console.error('Error checking for existing users:', error)
     return true // Assume users exist on error to be safe
   }
 }
 
+export const runtime = 'edge'
+
 export async function POST(request: NextRequest) {
   try {
-    // Handle Vercel authentication
-    const vercelAuthHeader = request.headers.get('x-vercel-authentication')
-    if (vercelAuthHeader) {
-      return NextResponse.json(
-        { success: false, error: 'Vercel authentication not supported' },
-        { status: 401 }
-      )
-    }
-
     const body = await request.json()
     const { email, password, displayName, role } = body
 
@@ -81,7 +74,7 @@ export async function POST(request: NextRequest) {
       message: 'First admin user created successfully'
     }, { status: 201 })
   } catch (error: any) {
-    console.error('Create user error:', error)
+    // // // console.error('Create user error:', error)
     return NextResponse.json(
       { 
         success: false, 

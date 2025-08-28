@@ -349,12 +349,12 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
   
   const removeFromModerationQueue = (messageId: string) => {
     // Mock function
-    console.log('Remove from moderation queue:', messageId)
+    // // // console.log('Remove from moderation queue:', messageId)
   }
   
   const clearModerationQueue = () => {
     // Mock function
-    console.log('Clear moderation queue')
+    // // // console.log('Clear moderation queue')
   }
 
   const [activeTab, setActiveTab] = useState<'queue' | 'users'>('queue')
@@ -382,7 +382,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
         setUsers(result.data.users || [])
       }
     } catch (error) {
-      console.error('Failed to load users:', error)
+      // // // console.error('Failed to load users:', error)
     }
   }
 
@@ -396,7 +396,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
         removeFromModerationQueue(messageId)
       }
     } catch (error) {
-      console.error('Failed to approve message:', error)
+      // // // console.error('Failed to approve message:', error)
     }
   }
 
@@ -410,7 +410,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
         removeFromModerationQueue(messageId)
       }
     } catch (error) {
-      console.error('Failed to reject message:', error)
+      // // // console.error('Failed to reject message:', error)
     }
   }
 
@@ -429,7 +429,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
         ))
       }
     } catch (error) {
-      console.error('Failed to ban user:', error)
+      // // // console.error('Failed to ban user:', error)
     }
   }
 
@@ -447,7 +447,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
         ))
       }
     } catch (error) {
-      console.error('Failed to unban user:', error)
+      // // // console.error('Failed to unban user:', error)
     }
   }
 
@@ -465,7 +465,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
         ))
       }
     } catch (error) {
-      console.error('Failed to mute user:', error)
+      // // // console.error('Failed to mute user:', error)
     }
   }
 
@@ -483,7 +483,7 @@ const AdminModeration: React.FC<AdminModerationProps> = ({
         ))
       }
     } catch (error) {
-      console.error('Failed to unmute user:', error)
+      // // // console.error('Failed to unmute user:', error)
     }
   }
 

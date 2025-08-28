@@ -7,15 +7,14 @@ import {
   ArrowLeft, CheckCircle, Package, Truck, Shield, Clock, Loader2, AlertCircle
 } from 'lucide-react'
 import Link from 'next/link'
-import { CartService } from '@/lib/services/cart.service'
+import { useCartStore } from '@/hooks/useCartStore'
 import { OrderService } from '@/lib/services/order.service'
 import { useAuth } from '@/hooks/useAuth'
 import { PaymentForm } from '@/components/payment/payment-form'
 import { PaymentStatus } from '@/components/payment/payment-status'
 import { usePaymentStore } from '@/store/payment'
-import { useLogistics } from '@/hooks/useLogistics'
-import { ShippingAddress, ShippingPackage } from '@/lib/services/logistics.service'
-import { toast } from '@/lib/utils'
+import { useToast } from '@/components/ui/toast'
+import EnhancedImage from '@/components/mobile/EnhancedImage'
 
 interface CheckoutForm {
   firstName: string
@@ -35,15 +34,13 @@ export default function CheckoutPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user } = useAuth()
+  const { items, total, clearCart } = useCartStore()
   const { paymentUrl, status, clearPayment } = usePaymentStore()
-  const { rates, loading: ratesLoading, error: ratesError, getRates, clearRates } = useLogistics()
-  const cartService = new CartService()
+  const { success, error } = useToast()
   const orderService = new OrderService()
   
-  const [cartItems, setCartItems] = useState<any[]>([])
-  const [cartTotal, setCartTotal] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [selectedRate, setSelectedRate] = useState<any>(null)
+  const [selectedShipping, setSelectedShipping] = useState('standard')
   
   const [formData, setFormData] = useState<CheckoutForm>({
     firstName: user?.displayName?.split(' ')[0] || '',
@@ -55,30 +52,13 @@ export default function CheckoutPage() {
       city: '',
       state: '',
       zipCode: '',
-      country: ''
+      country: 'USA'
     }
   })
   const [step, setStep] = useState(1)
   const [orderId, setOrderId] = useState<string | null>(null)
   const [paymentId, setPaymentId] = useState<string | null>(null)
   const [formErrors, setFormErrors] = useState<{[key: string]: string}>({})
-
-  // Load cart data
-  useEffect(() => {
-    const loadCart = async () => {
-      if (!user?.uid) return
-      
-      try {
-        const cart = await cartService.getCart(user.uid)
-        setCartItems(cart.items)
-        setCartTotal(cart.total)
-      } catch (error) {
-        console.error('Error loading cart:', error)
-      }
-    }
-    
-    loadCart()
-  }, [user?.uid])
 
   // Check for existing order from URL params
   useEffect(() => {
@@ -89,68 +69,19 @@ export default function CheckoutPage() {
     if (paymentIdParam) setPaymentId(paymentIdParam)
   }, [searchParams])
 
+  // Redirect to cart if empty
+  useEffect(() => {
+    if (items.length === 0 && !orderId) {
+      router.push('/cart')
+    }
+  }, [items.length, orderId, router])
+
   // Redirect to payment URL if available
   useEffect(() => {
     if (paymentUrl && status === 'pending') {
       window.open(paymentUrl, '_blank')
     }
   }, [paymentUrl, status])
-
-  // Calculate shipping rates when address changes
-  useEffect(() => {
-    const calculateShippingRates = async () => {
-      if (!formData.address.street || !formData.address.city || !formData.address.state || !formData.address.zipCode || !formData.address.country) {
-        return
-      }
-
-      // Create shipping addresses
-      const fromAddress: ShippingAddress = {
-        name: 'Nubiago Store',
-        company: 'Nubiago',
-        address1: '123 Main Street',
-        address2: '',
-        city: 'Lagos',
-        state: 'Lagos',
-        postalCode: '100001',
-        country: 'Nigeria',
-        phone: '+234 123 456 7890',
-        email: 'store@nubiago.com'
-      }
-
-      const toAddress: ShippingAddress = {
-        name: `${formData.firstName} ${formData.lastName}`,
-        company: '',
-        address1: formData.address.street,
-        address2: '',
-        city: formData.address.city,
-        state: formData.address.state,
-        postalCode: formData.address.zipCode,
-        country: formData.address.country,
-        phone: formData.phone,
-        email: formData.email
-      }
-
-      // Create package from cart items
-      const packages: ShippingPackage[] = [{
-        weight: Math.max(1, cartItems.reduce((total, item) => total + (item.quantity || 1), 0)),
-        length: 10,
-        width: 8,
-        height: 6,
-        weightUnit: 'lb',
-        dimensionUnit: 'in'
-      }]
-
-      try {
-        await getRates(fromAddress, toAddress, packages)
-      } catch (error) {
-        console.error('Failed to calculate shipping rates:', error)
-      }
-    }
-
-    // Debounce the calculation
-    const timeoutId = setTimeout(calculateShippingRates, 1000)
-    return () => clearTimeout(timeoutId)
-  }, [formData.address, cartItems, getRates])
 
   const handleInputChange = (field: string, value: string) => {
     // Clear error when user starts typing
@@ -191,17 +122,18 @@ export default function CheckoutPage() {
 
   const handlePaymentSuccess = () => {
     setStep(3)
+    clearCart()
+    success('Payment successful! Your order has been placed.')
+    router.push(`/checkout/success?orderId=${orderId}`)
   }
 
-  const handlePaymentError = (error: string) => {
-    console.error('Payment error:', error)
+  const handlePaymentError = (errorMsg: string) => {
+    error(`Payment failed: ${errorMsg}`)
   }
 
   const handlePaymentStatusChange = async (newStatus: string) => {
     if (newStatus === 'completed') {
-      if (user?.uid) {
-        await cartService.clearCart(user.uid)
-      }
+      clearCart()
       clearPayment()
       router.push(`/checkout/success?orderId=${orderId}&paymentId=${paymentId}`)
     } else if (newStatus === 'failed') {
@@ -214,56 +146,60 @@ export default function CheckoutPage() {
       setLoading(true)
       
       const orderData = {
-        userId: user?.uid || '',
-        items: cartItems.map(item => ({
+        userId: user?.uid || `guest-${Date.now()}`,
+        items: items.map(item => ({
           id: `oi-${Date.now()}-${Math.random()}`,
-          productId: item.productId,
+          productId: item.id,
           quantity: item.quantity,
           price: item.price,
           total: item.price * item.quantity,
-          product: item.product,
+          product: {
+            id: item.id,
+            name: item.name,
+            imageUrl: item.image,
+            price: item.price
+          },
         })),
-                 shippingAddress: {
-           id: `addr-${Date.now()}-1`,
-           type: 'shipping' as const,
-           firstName: formData.firstName,
-           lastName: formData.lastName,
-           address1: formData.address.street,
-           city: formData.address.city,
-           state: formData.address.state,
-           postalCode: formData.address.zipCode,
-           country: formData.address.country,
-           phone: formData.phone,
-           isDefault: false,
-         },
-         billingAddress: {
-           id: `addr-${Date.now()}-2`,
-           type: 'billing' as const,
-           firstName: formData.firstName,
-           lastName: formData.lastName,
-           address1: formData.address.street,
-           city: formData.address.city,
-           state: formData.address.state,
-           postalCode: formData.address.zipCode,
-           country: formData.address.country,
-           phone: formData.phone,
-           isDefault: false,
-         },
-        paymentMethod: 'credit_card', // Default payment method
-        shippingMethod: selectedRate ? selectedRate.serviceName : 'standard',
-        subtotal: cartTotal,
-        shipping: selectedRate ? selectedRate.rate : 0,
-        tax: cartTotal * 0.08,
-        total: cartTotal + (selectedRate ? selectedRate.rate : 0) + (cartTotal * 0.08),
+        shippingAddress: {
+          id: `addr-${Date.now()}-1`,
+          type: 'shipping' as const,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address1: formData.address.street,
+          city: formData.address.city,
+          state: formData.address.state,
+          postalCode: formData.address.zipCode,
+          country: formData.address.country,
+          phone: formData.phone,
+          isDefault: false,
+        },
+        billingAddress: {
+          id: `addr-${Date.now()}-2`,
+          type: 'billing' as const,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address1: formData.address.street,
+          city: formData.address.city,
+          state: formData.address.state,
+          postalCode: formData.address.zipCode,
+          country: formData.address.country,
+          phone: formData.phone,
+          isDefault: false,
+        },
+        paymentMethod: 'credit_card',
+        shippingMethod: selectedShipping,
+        subtotal: subtotal,
+        shipping: shippingCost,
+        tax: tax,
+        total: finalTotal,
         status: 'pending',
         paymentStatus: 'pending'
       }
       
       const newOrder = await orderService.createOrder(orderData)
       return newOrder.id
-    } catch (error) {
-      console.error('Error creating order:', error)
-      throw error
+    } catch (err) {
+      throw err
     } finally {
       setLoading(false)
     }
@@ -271,12 +207,7 @@ export default function CheckoutPage() {
 
   const handleContinueToPayment = async () => {
     if (!validateForm()) {
-      toast('Please fill in all required fields', 'error')
-      return
-    }
-    
-    if (!selectedRate && rates.length > 0) {
-      toast('Please select a shipping method', 'error')
+      error('Please fill in all required fields')
       return
     }
     
@@ -284,16 +215,31 @@ export default function CheckoutPage() {
       const newOrderId = await createOrder()
       setOrderId(newOrderId)
       setStep(2)
-    } catch (error) {
-      console.error('Error creating order:', error)
-      toast('Failed to create order. Please try again.', 'error')
+      success('Order created successfully. Please complete payment.')
+    } catch (err) {
+      error('Failed to create order. Please try again.')
     }
   }
 
-  const subtotal = cartTotal
-  const shipping = selectedRate ? selectedRate.rate : 0
+  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+  const shippingCost = selectedShipping === 'express' ? 15.99 : subtotal > 50 ? 0 : 5.99
   const tax = subtotal * 0.08
-  const total = subtotal + shipping + tax
+  const finalTotal = subtotal + shippingCost + tax
+
+  const shippingOptions = [
+    {
+      id: 'standard',
+      name: 'Standard Shipping',
+      description: '5-7 business days',
+      price: subtotal > 50 ? 0 : 5.99
+    },
+    {
+      id: 'express',
+      name: 'Express Shipping',
+      description: '2-3 business days',
+      price: 15.99
+    }
+  ]
 
   // If we have a payment ID, show payment status
   if (paymentId) {
@@ -518,11 +464,11 @@ export default function CheckoutPage() {
                     required
                   >
                     <option value="">Select Country</option>
-                    <option value="Nigeria">Nigeria</option>
-                    <option value="Ghana">Ghana</option>
                     <option value="USA">United States</option>
                     <option value="Canada">Canada</option>
                     <option value="UK">United Kingdom</option>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="Ghana">Ghana</option>
                   </select>
                   {formErrors['address.country'] && (
                     <p className="text-red-500 text-sm mt-1">{formErrors['address.country']}</p>
@@ -531,69 +477,53 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Shipping Rates */}
-            {rates.length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <div className="flex items-center space-x-3 mb-6">
-                  <Truck className="h-5 w-5 text-primary-600" />
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900">Shipping Options</h2>
-                    <p className="text-sm text-gray-500">Choose your preferred shipping method</p>
-                  </div>
+            {/* Shipping Options */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <div className="flex items-center space-x-3 mb-6">
+                <Truck className="h-5 w-5 text-primary-600" />
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">Shipping Options</h2>
+                  <p className="text-sm text-gray-500">Choose your preferred shipping method</p>
                 </div>
-                
-                {ratesLoading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <Loader2 className="h-6 w-6 animate-spin text-primary-600" />
-                    <span className="ml-2 text-gray-600">Calculating shipping rates...</span>
-                  </div>
-                ) : ratesError ? (
-                  <div className="bg-red-50 border border-red-200 rounded-md p-4">
-                    <div className="flex items-center">
-                      <AlertCircle className="h-5 w-5 text-red-400" />
-                      <span className="ml-2 text-red-800">{ratesError}</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {rates.map((rate, index) => (
-                      <div
-                        key={index}
-                        className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                          selectedRate?.id === rate.id
-                            ? 'border-primary-600 bg-primary-50'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        onClick={() => setSelectedRate(rate)}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                              selectedRate?.id === rate.id
-                                ? 'border-primary-600 bg-primary-600'
-                                : 'border-gray-300'
-                            }`}>
-                              {selectedRate?.id === rate.id && (
-                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                              )}
-                            </div>
-                            <div>
-                              <h3 className="font-medium text-gray-900">{rate.serviceName}</h3>
-                              <p className="text-sm text-gray-500">
-                                {rate.carrier} • {rate.estimatedDays} days
-                              </p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-gray-900">${rate.rate.toFixed(2)}</p>
-                          </div>
+              </div>
+              
+              <div className="space-y-3">
+                {shippingOptions.map((option) => (
+                  <div
+                    key={option.id}
+                    className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                      selectedShipping === option.id
+                        ? 'border-primary-600 bg-primary-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                    onClick={() => setSelectedShipping(option.id)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                          selectedShipping === option.id
+                            ? 'border-primary-600 bg-primary-600'
+                            : 'border-gray-300'
+                        }`}>
+                          {selectedShipping === option.id && (
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-900">{option.name}</h3>
+                          <p className="text-sm text-gray-500">{option.description}</p>
                         </div>
                       </div>
-                    ))}
+                      <div className="text-right">
+                        <p className="font-semibold text-gray-900">
+                          {option.price === 0 ? 'Free' : `$${option.price.toFixed(2)}`}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                )}
+                ))}
               </div>
-            )}
+            </div>
 
             {/* Payment Information */}
             {step >= 2 && (
@@ -608,8 +538,8 @@ export default function CheckoutPage() {
                 
                 {orderId ? (
                   <PaymentForm
-                    amount={total}
-                    currency="NGN"
+                    amount={finalTotal}
+                    currency="USD"
                     orderId={orderId}
                     onSuccess={handlePaymentSuccess}
                     onError={handlePaymentError}
@@ -649,13 +579,17 @@ export default function CheckoutPage() {
               </div>
               
               <div className="px-6 py-4 space-y-4">
-                {cartItems.map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center">
-                      <Package className="h-6 w-6 text-gray-600" />
+                {items.map((item) => (
+                  <div key={item.id} className="flex items-center space-x-3">
+                    <div className="w-12 h-12 flex-shrink-0">
+                      <EnhancedImage
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover rounded"
+                      />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">{item.product.name}</p>
+                      <p className="font-medium text-gray-900">{item.name}</p>
                       <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                     </div>
                     <p className="font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</p>
@@ -668,16 +602,11 @@ export default function CheckoutPage() {
                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">
-                      Shipping {selectedRate && `(${selectedRate.serviceName})`}
+                    <span className="text-gray-600">Shipping</span>
+                    <span className="font-medium">
+                      {shippingCost === 0 ? 'Free' : `$${shippingCost.toFixed(2)}`}
                     </span>
-                    <span className="font-medium">${shipping.toFixed(2)}</span>
                   </div>
-                  {selectedRate && (
-                    <div className="text-xs text-gray-500 pl-4">
-                      {selectedRate.carrier} • {selectedRate.estimatedDays} days
-                    </div>
-                  )}
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Tax</span>
                     <span className="font-medium">${tax.toFixed(2)}</span>
@@ -685,7 +614,7 @@ export default function CheckoutPage() {
                   <div className="border-t border-gray-200 pt-2">
                     <div className="flex justify-between">
                       <span className="text-lg font-semibold text-gray-900">Total</span>
-                      <span className="text-lg font-semibold text-gray-900">${total.toFixed(2)}</span>
+                      <span className="text-lg font-semibold text-gray-900">${finalTotal.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
@@ -725,7 +654,7 @@ export default function CheckoutPage() {
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <Clock className="h-4 w-4 text-gray-600" />
-                  <span className="text-sm text-gray-600">Standard delivery: 3-5 business days</span>
+                  <span className="text-sm text-gray-600">Standard delivery: 5-7 business days</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-gray-600" />
@@ -738,4 +667,4 @@ export default function CheckoutPage() {
       </div>
     </div>
   )
-} 
+}

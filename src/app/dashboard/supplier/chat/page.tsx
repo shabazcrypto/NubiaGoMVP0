@@ -117,7 +117,7 @@ const SupplierChatDashboard: React.FC = () => {
         setRecentChannels(recent)
       }
     } catch (error) {
-      console.error('Failed to load channels:', error)
+      // // // console.error('Failed to load channels:', error)
     } finally {
       setLoading(false)
     }
@@ -137,7 +137,7 @@ const SupplierChatDashboard: React.FC = () => {
       
       setStats(mockStats)
     } catch (error) {
-      console.error('Failed to load stats:', error)
+      // // // console.error('Failed to load stats:', error)
     }
   }
 
@@ -183,7 +183,7 @@ const SupplierChatDashboard: React.FC = () => {
         loadChannels() // Reload channels
       }
     } catch (error) {
-      console.error('Failed to create order channel:', error)
+      // // // console.error('Failed to create order channel:', error)
     }
   }
 

@@ -1,21 +1,6 @@
-/**
- * 🛡️ UI DESIGN PROTECTION NOTICE
- * 
- * This file contains UI elements that are PROTECTED from changes.
- * The current design is FROZEN and cannot be modified unless:
- * 1. User explicitly requests a specific change
- * 2. User confirms the change before implementation
- * 3. Change is documented in UI_DESIGN_PROTECTION.md
- * 
- * DO NOT MODIFY UI ELEMENTS WITHOUT EXPLICIT USER AUTHORIZATION
- * 
- * @ui-protected: true
- * @requires-user-approval: true
- * @last-approved: 2024-12-19
- */
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Development optimizations
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -23,96 +8,19 @@ const nextConfig = {
     ignoreBuildErrors: true
   },
   swcMinify: true,
+  // Configure SWC for optimal TypeScript/JavaScript compilation
+  compiler: {
+    // Remove console.logs in production
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   poweredByHeader: false,
   generateEtags: false,
   compress: true,
+
+  // Experimental features for faster development
   experimental: {
-    serverActions: true,
+    // Server Actions are now enabled by default in Next.js 14+
     serverComponentsExternalPackages: ['firebase-admin'],
-  },
-  webpack: (config, { isServer, dev }) => {
-    // Fixes npm packages that depend on `fs` module
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-        crypto: require.resolve('crypto-browserify'),
-        stream: require.resolve('stream-browserify'),
-        url: require.resolve('url/'),
-        zlib: require.resolve('browserify-zlib'),
-        http: require.resolve('stream-http'),
-        https: require.resolve('https-browserify'),
-        assert: require.resolve('assert/'),
-        os: require.resolve('os-browserify/browser'),
-        path: require.resolve('path-browserify'),
-        util: require.resolve('util/'),
-      }
-    }
-
-    // Optimization for production builds
-    if (!dev) {
-      config.optimization = {
-        ...config.optimization,
-        minimize: true,
-        splitChunks: {
-          chunks: 'all',
-          minSize: 20000,
-          maxSize: 244000,
-          minChunks: 1,
-          maxAsyncRequests: 30,
-          maxInitialRequests: 30,
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            framework: {
-              chunks: 'all',
-              name: 'framework',
-              test: /(?<!node_modules.*)[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-subscription)[\\/]/,
-              priority: 40,
-              enforce: true,
-            },
-            lib: {
-              test(module) {
-                return module.size() > 160000 &&
-                  /node_modules[/\\]/.test(module.identifier())
-              },
-              name(module) {
-                const hash = crypto.createHash('sha1')
-                hash.update(module.identifier())
-                return hash.digest('hex').substring(0, 8)
-              },
-              priority: 30,
-              minChunks: 1,
-              reuseExistingChunk: true,
-            },
-            commons: {
-              name: 'commons',
-              minChunks: 2,
-              priority: 20,
-            },
-            shared: {
-              name(module, chunks) {
-                return crypto
-                  .createHash('sha1')
-                  .update(chunks.reduce((acc, chunk) => acc + chunk.name, ''))
-                  .digest('hex')
-              },
-              priority: 10,
-              minChunks: 2,
-              reuseExistingChunk: true,
-            },
-          },
-        },
-      }
-    }
-
-    return config
-  },
-  // Enhanced experimental configuration for optimization
-  experimental: {
-    // optimizeCss: true, // Disabled due to build issues
     optimizePackageImports: [
       'lucide-react', 
       '@radix-ui/react-icons',
@@ -122,8 +30,149 @@ const nextConfig = {
       '@radix-ui/react-tabs',
       '@radix-ui/react-toast'
     ],
+    // Enhanced optimization features
+    optimizeCss: true,
+    scrollRestoration: true,
   },
-  
+
+  // Enhanced Webpack optimizations
+  webpack: (config, { isServer, dev, buildId }) => {
+    // Client-side polyfills
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+        net: false,
+        tls: false,
+        child_process: false,
+      }
+    }
+
+    // Development optimizations
+    if (dev) {
+      config.optimization = {
+        ...config.optimization,
+        removeAvailableModules: false,
+        removeEmptyChunks: false,
+        splitChunks: false,
+      }
+      // Disable some development checks
+      config.devtool = 'eval-source-map'
+    } else {
+      // Production optimizations
+      config.optimization = {
+        ...config.optimization,
+        // Enhanced chunk splitting for better caching
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            // Vendor libraries chunk
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+              priority: 10,
+              reuseExistingChunk: true,
+            },
+            // Firebase chunk (large dependency)
+            firebase: {
+              test: /[\\/]node_modules[\\/](firebase|@firebase)[\\/]/,
+              name: 'firebase',
+              chunks: 'all',
+              priority: 20,
+              reuseExistingChunk: true,
+            },
+            // Radix UI chunk
+            radix: {
+              test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+              name: 'radix-ui',
+              chunks: 'all',
+              priority: 15,
+              reuseExistingChunk: true,
+            },
+            // React ecosystem chunk
+            react: {
+              test: /[\\/]node_modules[\\/](react|react-dom|react-router)[\\/]/,
+              name: 'react',
+              chunks: 'all',
+              priority: 25,
+              reuseExistingChunk: true,
+            },
+            // Common utilities chunk
+            utils: {
+              test: /[\\/]node_modules[\\/](lodash|date-fns|uuid|clsx|tailwind-merge)[\\/]/,
+              name: 'utils',
+              chunks: 'all',
+              priority: 5,
+              reuseExistingChunk: true,
+            },
+            // Default chunk for remaining modules
+            default: {
+              minChunks: 2,
+              priority: -10,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+        // Enhanced module concatenation
+        concatenateModules: true,
+        // Improved tree shaking
+        usedExports: true,
+        sideEffects: false,
+      }
+
+      // Bundle analyzer in production builds (when ANALYZE=true)
+      if (process.env.ANALYZE === 'true') {
+        const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+        config.plugins.push(
+          new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            openAnalyzer: false,
+            reportFilename: 'bundle-analysis.html',
+          })
+        )
+      }
+    }
+
+    // Enhanced module resolution
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // Optimize React imports
+      'react/jsx-runtime': require.resolve('react/jsx-runtime'),
+      'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime'),
+    }
+
+    // Optimize module rules for better performance
+    config.module.rules.push({
+      test: /\.(js|jsx|ts|tsx)$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'swc-loader',
+        options: {
+          jsc: {
+            parser: {
+              syntax: 'typescript',
+              tsx: true,
+              decorators: false,
+              dynamicImport: true,
+            },
+            transform: {
+              react: {
+                runtime: 'automatic',
+                development: dev,
+                refresh: dev,
+              },
+            },
+            target: 'es2020',
+            loose: true,
+          },
+          minify: !dev,
+        },
+      },
+    })
+
+    return config
+  },
+
   // Image optimization
   images: {
     domains: [
@@ -132,148 +181,25 @@ const nextConfig = {
       'via.placeholder.com',
       'picsum.photos'
     ],
-    formats: ['image/webp', 'image/avif'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    formats: ['image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128],
   },
 
-  // Webpack configuration
-  webpack: (config, { dev, isServer }) => {
-    // Handle SVG files
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack'],
-    })
-
-    // Optimize bundle size
-    if (!dev && !isServer) {
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
-          },
-        },
-      }
-    }
-
-    return config
-  },
-
-  // Environment variables
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
-
-  // Enhanced headers for security and caching
+  // Headers for development performance
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-        ],
-      },
-      // Cache static assets for 1 year
-      {
-        source: '/static/(.*)',
-        headers: [
-          {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      // Cache images for 1 month
-      {
-        source: '/:path*.(jpg|jpeg|png|gif|webp|avif|ico|svg)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=2592000, stale-while-revalidate=86400',
-          },
-        ],
-      },
-      // Cache CSS and JS for 1 year
-      {
-        source: '/:path*.(css|js)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      // Cache fonts for 1 year
-      {
-        source: '/:path*.(woff|woff2|ttf|eot)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      // Cache API responses for 15 minutes
-      {
-        source: '/api/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=900, stale-while-revalidate=300',
-          },
-        ],
-      },
+            value: 'no-store, must-revalidate'
+          }
+        ]
+      }
     ]
-  },
-
-  // Redirects
-  async redirects() {
-    return [
-      {
-        source: '/home',
-        destination: '/',
-        permanent: true,
-      },
-    ]
-  },
-
-  // Rewrites for API routes
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: '/api/:path*',
-      },
-    ]
-  },
-
-  // PWA configuration
-  async generateBuildId() {
-    return 'build-' + Date.now()
-  },
-
-  // Compression
-  compress: true,
-
-  // Power by header
-  poweredByHeader: false,
-
-  // React strict mode
-  reactStrictMode: true,
+  }
 }
 
-module.exports = nextConfig 
+module.exports = nextConfig

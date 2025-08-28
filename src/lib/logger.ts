@@ -21,7 +21,7 @@ class Logger {
    */
   log(message: string, ...args: any[]) {
     if (this.isDevelopment) {
-      console.log(`[LOG] ${message}`, ...args)
+      // // // console.log(`[LOG] ${message}`, ...args)
     }
   }
 
@@ -30,7 +30,7 @@ class Logger {
    */
   info(message: string, ...args: any[]) {
     if (this.isDevelopment) {
-      console.info(`[INFO] ${message}`, ...args)
+      // // // console.info(`[INFO] ${message}`, ...args)
     }
   }
 
@@ -48,7 +48,7 @@ class Logger {
    */
   warn(message: string, ...args: any[]) {
     if (this.isDevelopment) {
-      console.warn(`[WARN] ${message}`, ...args)
+      // // // console.warn(`[WARN] ${message}`, ...args)
     } else if (this.isProduction) {
       // In production, send to monitoring service
       this.sendToMonitoring('warn', message, args)
@@ -68,7 +68,7 @@ class Logger {
     }
 
     if (this.isDevelopment) {
-      console.error(`[ERROR] ${message}`, error, ...args)
+      // // // console.error(`[ERROR] ${message}`, error, ...args)
     }
 
     if (this.isProduction) {
@@ -82,7 +82,7 @@ class Logger {
    */
   performance(message: string, duration: number, metadata?: any) {
     if (this.isDevelopment) {
-      console.log(`[PERF] ${message}: ${duration.toFixed(2)}ms`, metadata)
+      // // // console.log(`[PERF] ${message}: ${duration.toFixed(2)}ms`, metadata)
     } else if (this.isProduction) {
       // In production, send to analytics
       this.sendToMonitoring('performance', message, { duration, metadata })
@@ -97,7 +97,7 @@ class Logger {
     
     if (this.isDevelopment) {
       const color = status >= 400 ? '\x1b[31m' : status >= 300 ? '\x1b[33m' : '\x1b[32m'
-      console.log(`${color}[API]${'\x1b[0m'} ${message}`)
+      // // // console.log(`${color}[API]${'\x1b[0m'} ${message}`)
     } else if (this.isProduction) {
       this.sendToMonitoring('api', message, { method, url, status, duration })
     }

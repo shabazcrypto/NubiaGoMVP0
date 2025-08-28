@@ -61,13 +61,13 @@ export default function SupplierCreateProductPage() {
       // 3. Send notification to admin team
       // 4. Update supplier analytics
       
-      console.log('Supplier submitting product for approval:', data)
+      // // // console.log('Supplier submitting product for approval:', data)
       
       success('Product submitted for approval successfully!')
       router.push('/products/supplier')
     } catch (err) {
       error('Failed to submit product for approval')
-      console.error('Error submitting product:', err)
+      // // // console.error('Error submitting product:', err)
     } finally {
       setIsLoading(false)
     }

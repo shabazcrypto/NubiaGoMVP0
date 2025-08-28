@@ -94,7 +94,7 @@ export default function CustomerProfile() {
       updateUserProfile(`${profile.firstName} ${profile.lastName}`)
       setIsEditing(false)
     } catch (error) {
-      console.error('Error updating profile:', error)
+      // // // console.error('Error updating profile:', error)
     } finally {
       setLoading(false)
     }

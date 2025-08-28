@@ -1,415 +1,21 @@
-/* Import mobile navigation styles */
-@import '../styles/mobile-navigation.css';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* ============================================================================
-MOBILE-FIRST RESPONSIVE DESIGN & OPTIMIZATIONS
-============================================================================ */
-
-/* Base mobile optimizations */
-* {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-/* Enable text selection for specific elements */
-p, h1, h2, h3, h4, h5, h6, span, div, input, textarea {
-  -webkit-user-select: text;
-  user-select: text;
-}
-
-/* Touch-friendly button sizes */
-.mobile-touch-target {
-  min-height: 44px;
-  min-width: 44px;
-}
-
-/* Mobile-specific spacing */
-.mobile-safe-area {
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-}
-
-.safe-area-top {
-  padding-top: env(safe-area-inset-top);
-}
-
-.safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* Mobile header styles */
-.mobile-header {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Mobile product grid */
-.mobile-product-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  padding: 16px;
-}
-
-.mobile-product-card {
-  background: white;
-  border-radius: 16px;
-  border: 1px solid #e5e5e5;
-  overflow: hidden;
-  box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
-}
-
-.mobile-product-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-/* Mobile category pills */
-.mobile-category-pills-container {
-  position: relative;
-  padding: 0 16px;
-}
-
-.mobile-category-pills {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 8px 0;
-}
-
-.mobile-category-pills::-webkit-scrollbar {
-  display: none;
-}
-
-.mobile-category-pill {
-  display: flex;
-  align-items: center;
-  padding: 8px 16px;
-  background: white;
-  border: 1px solid #e5e5e5;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #404040;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.mobile-category-pill.active {
-  background: #0f52ba;
-  color: white;
-  border-color: #0f52ba;
-}
-
-/* Mobile bottom navigation */
-.mobile-bottom-navigation {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Ensure mobile bottom navigation is hidden on desktop screens */
-@media (min-width: 768px) {
-  .mobile-bottom-navigation {
-    display: none !important;
-  }
-  
-  /* Debug: Ensure mobile homepage is hidden on desktop */
-  .mobile-homepage {
-    display: none !important;
-  }
-}
-  
-.mobile-nav-item {
-  min-height: 60px;
-  min-width: 60px;
-}
-
-/* Mobile homepage sections */
-.mobile-homepage {
-  background: #fafafa;
-}
-
-/* Mobile search styles */
-.mobile-search-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  background: white;
-}
-
-/* Mobile form optimizations */
-.mobile-form-input {
-  min-height: 48px;
-  font-size: 16px; /* Prevents zoom on iOS */
-}
-
-/* Mobile image optimizations */
-.mobile-optimized-image {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-/* Mobile performance optimizations */
-@media (max-width: 768px) {
-  /* Optimize scrolling */
-  .mobile-smooth-scroll {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-  }
-  
-  /* Reduce shadows on mobile for better performance */
-  .mobile-reduced-shadow {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-}
-
-/* Mobile-specific breakpoints */
-@media (max-width: 480px) {
-  .mobile-product-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 16px;
-  }
-  
-  .mobile-product-image {
-    height: 250px;
-  }
-}
-
-/* Touch interaction optimizations */
-@media (hover: none) and (pointer: coarse) {
-  /* Touch device specific styles */
-  .mobile-touch-optimized {
-    cursor: pointer;
-  }
-}
-
-/* High DPI display optimizations */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .mobile-high-dpi-image {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-  }
-}
-
-/* Dark mode support for mobile */
-@media (prefers-color-scheme: dark) {
-  .mobile-dark-mode {
-    background: #1f2937;
-    color: #f9fafb;
-  }
-  
-  .mobile-dark-mode .mobile-product-card {
-    background: #374151;
-    border-color: #4b5563;
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .mobile-reduced-motion * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Mobile-specific utility classes */
-.mobile-hidden {
-  display: none !important;
-}
-
-.mobile-block {
-  display: block !important;
-}
-
-.mobile-flex {
-  display: flex !important;
-}
-
-.mobile-grid {
-  display: grid !important;
-}
-
-/* Mobile loading states */
-.mobile-loading-skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: mobile-skeleton-loading 1.5s infinite;
-}
-
-@keyframes mobile-skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* Mobile scrollbar hiding */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-  
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-  
-/* Mobile focus styles */
-.mobile-focus-visible:focus-visible {
-  outline: 2px solid #0f52ba;
-  outline-offset: 2px;
-}
-
-/* Mobile text truncation */
-.mobile-text-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mobile-line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Mobile safe area utilities */
-.mobile-safe-area-inset {
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* Mobile performance monitoring */
-.mobile-performance-monitor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 4px 8px;
-  font-size: 12px;
-  font-family: monospace;
-}
-
-/* Mobile network status indicator */
-.mobile-network-status {
-  position: fixed;
-  top: env(safe-area-inset-top);
-  right: 16px;
-  z-index: 9999;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #10b981;
-}
-
-.mobile-network-status.slow {
-  background: #f59e0b;
-}
-
-.mobile-network-status.offline {
-  background: #ef4444;
-}
-
-/* Mobile accessibility improvements */
-@media (prefers-contrast: high) {
-  .mobile-high-contrast {
-    border-width: 2px;
-    color: #000;
-    background: #fff;
-  }
-}
-
-/* Mobile landscape optimizations */
-@media (orientation: landscape) and (max-height: 500px) {
-  .mobile-landscape-optimized {
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-  
-  .mobile-landscape-optimized .mobile-product-image {
-    height: 120px;
-  }
-}
-
-/* Mobile portrait optimizations */
-@media (orientation: portrait) and (max-width: 480px) {
-  .mobile-portrait-optimized {
-    padding: 12px;
-  }
-  
-  .mobile-portrait-optimized .mobile-product-grid {
-    gap: 8px;
-  }
-}
-
-/* ============================================================================
-PROFESSIONAL DESIGN SYSTEM UTILITIES
-============================================================================ */
-
-/* Professional color utilities */
-.text-brand-blue {
-  color: #0f52ba;
-}
 
 /* ============================================================================
 NUBIAGO BRAND SYSTEM - BILLION USER SCALE
 ============================================================================ */
 
 /* NubiaGo Brand Color Utilities */
-.text-nubia-blue {
-  color: #2563eb; /* NubiaGo Primary Blue */
-}
-
-.text-nubia-orange {
-  color: #f59e0b; /* NubiaGo Accent Orange */
-}
-
-.text-nubia-black {
-  color: #000000; /* NubiaGo Text Black */
-}
-
-.text-nubia-gray {
-  color: #666666; /* NubiaGo Text Gray */
-}
-
-.bg-nubia-blue {
-  background-color: #2563eb; /* NubiaGo Primary Blue */
-}
-
-.bg-nubia-orange {
-  background-color: #f59e0b; /* NubiaGo Accent Orange */
-}
-
-.bg-nubia-black {
-  background-color: #000000; /* NubiaGo Text Black */
-}
-
-.bg-nubia-light {
-  background-color: #f8f9fa; /* NubiaGo Background Light */
-}
-
-.bg-nubia-white {
-  background-color: #ffffff; /* NubiaGo White */
-}
+.text-nubia-blue { color: #2563eb; }
+.text-nubia-orange { color: #f59e0b; }
+.text-nubia-black { color: #000000; }
+.text-nubia-gray { color: #666666; }
+.bg-nubia-blue { background-color: #2563eb; }
+.bg-nubia-orange { background-color: #f59e0b; }
+.bg-nubia-black { background-color: #000000; }
+.bg-nubia-light { background-color: #f8f9fa; }
+.bg-nubia-white { background-color: #ffffff; }
 
 /* Legacy brand classes (for backward compatibility) */
 .text-brand-yellow { color: #f59e0b; }
@@ -419,98 +25,83 @@ NUBIAGO BRAND SYSTEM - BILLION USER SCALE
 .bg-brand-black { background-color: #000000; }
 
 /* Professional spacing utilities */
-.section-padding {
-  padding: 5rem 1rem;
-}
+.section-padding { padding: 5rem 1rem; }
 
 @media (min-width: 640px) {
-  .section-padding {
-    padding: 5rem 1.5rem;
-  }
+  .section-padding { padding: 5rem 1.5rem; }
 }
 
 @media (min-width: 1024px) {
-  .section-padding {
-    padding: 5rem 2rem;
-  }
+  .section-padding { padding: 5rem 2rem; }
 }
 
 /* NubiaGo Brand Typography System */
 .nubia-heading-1 {
-  font-size: 3rem;        /* 48px - Page titles, hero headings */
+  font-size: 3rem;
   line-height: 1.2;
   font-weight: 700;
-  color: #000000;         /* NubiaGo Text Black */
+  color: #000000;
 }
 
 .nubia-heading-2 {
-  font-size: 2.25rem;     /* 36px - Section headers */
+  font-size: 2.25rem;
   line-height: 1.2;
   font-weight: 700;
-  color: #000000;         /* NubiaGo Text Black */
+  color: #000000;
 }
 
 .nubia-heading-3 {
-  font-size: 1.875rem;    /* 30px - Subsection titles */
+  font-size: 1.875rem;
   line-height: 1.2;
   font-weight: 600;
-  color: #000000;         /* NubiaGo Text Black */
+  color: #000000;
 }
 
 .nubia-heading-4 {
-  font-size: 1.5rem;      /* 24px - Component headings */
+  font-size: 1.5rem;
   line-height: 1.2;
   font-weight: 600;
-  color: #000000;         /* NubiaGo Text Black */
+  color: #000000;
 }
 
 .nubia-heading-5 {
-  font-size: 1.25rem;     /* 20px - Small headings */
+  font-size: 1.25rem;
   line-height: 1.2;
   font-weight: 600;
-  color: #000000;         /* NubiaGo Text Black */
+  color: #000000;
 }
 
 .nubia-body-large {
-  font-size: 1.125rem;    /* 18px - Introductions, important content */
+  font-size: 1.125rem;
   line-height: 1.5;
   font-weight: 400;
-  color: #666666;         /* NubiaGo Text Gray */
+  color: #666666;
 }
 
 .nubia-body-regular {
-  font-size: 1rem;        /* 16px - Standard body text, paragraphs */
+  font-size: 1rem;
   line-height: 1.5;
   font-weight: 400;
-  color: #666666;         /* NubiaGo Text Gray */
+  color: #666666;
 }
 
 .nubia-body-small {
-  font-size: 0.875rem;    /* 14px - Captions, helper text, labels */
+  font-size: 0.875rem;
   line-height: 1.5;
   font-weight: 400;
-  color: #666666;         /* NubiaGo Text Gray */
+  color: #666666;
 }
 
 .nubia-body-xs {
-  font-size: 0.75rem;     /* 12px - Legal text, metadata, footnotes */
+  font-size: 0.75rem;
   line-height: 1.5;
   font-weight: 400;
-  color: #666666;         /* NubiaGo Text Gray */
+  color: #666666;
 }
-
-/* Legacy typography classes (for backward compatibility) */
-.heading-xl { font-size: 3rem; line-height: 1.2; font-weight: 700; color: #000000; }
-.heading-lg { font-size: 2.25rem; line-height: 1.3; font-weight: 700; color: #000000; }
-.heading-md { font-size: 1.875rem; line-height: 1.4; font-weight: 600; color: #000000; }
-.heading-sm { font-size: 1.5rem; line-height: 1.5; font-weight: 600; color: #000000; }
-.body-lg { font-size: 1.125rem; line-height: 1.6; color: #666666; }
-.body-md { font-size: 1rem; line-height: 1.6; color: #666666; }
-.body-sm { font-size: 0.875rem; line-height: 1.5; color: #666666; }
 
 /* NubiaGo Brand Component System */
 .nubia-card {
-  background: #ffffff;    /* NubiaGo White */
+  background: #ffffff;
   border-radius: 16px;
   border: 1px solid #e5e5e5;
   box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
@@ -523,8 +114,8 @@ NUBIAGO BRAND SYSTEM - BILLION USER SCALE
 }
 
 .nubia-button-primary {
-  background-color: #2563eb; /* NubiaGo Primary Blue */
-  color: #ffffff;            /* NubiaGo White */
+  background-color: #2563eb;
+  color: #ffffff;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-weight: 600;
@@ -544,8 +135,8 @@ NUBIAGO BRAND SYSTEM - BILLION USER SCALE
 }
 
 .nubia-button-accent {
-  background-color: #f59e0b; /* NubiaGo Accent Orange */
-  color: #000000;            /* NubiaGo Text Black */
+  background-color: #f59e0b;
+  color: #000000;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-weight: 600;
@@ -566,9 +157,9 @@ NUBIAGO BRAND SYSTEM - BILLION USER SCALE
 
 .nubia-button-outline {
   background-color: transparent;
-  color: #2563eb;            /* NubiaGo Primary Blue */
+  color: #2563eb;
   padding: 0.75rem 1.5rem;
-  border: 2px solid #2563eb; /* NubiaGo Primary Blue */
+  border: 2px solid #2563eb;
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.875rem;
@@ -580,17 +171,11 @@ NUBIAGO BRAND SYSTEM - BILLION USER SCALE
 }
 
 .nubia-button-outline:hover {
-  background-color: #2563eb; /* NubiaGo Primary Blue */
-  color: #ffffff;            /* NubiaGo White */
+  background-color: #2563eb;
+  color: #ffffff;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
-
-/* Legacy component classes (for backward compatibility) */
-.card-elevated { background: white; border-radius: 16px; border: 1px solid #e5e5e5; box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04); }
-.button-primary { background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; font-size: 0.875rem; }
-.button-secondary { background-color: #f59e0b; color: #000000; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; font-size: 0.875rem; }
-.button-outline { background-color: transparent; color: #2563eb; padding: 0.75rem 1.5rem; border: 2px solid #2563eb; border-radius: 12px; font-weight: 600; font-size: 0.875rem; }
 
 @layer base {
   :root {
@@ -620,6 +205,7 @@ NUBIAGO BRAND SYSTEM - BILLION USER SCALE
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -655,4 +241,4 @@ NUBIAGO BRAND SYSTEM - BILLION USER SCALE
   body {
     @apply bg-background text-foreground;
   }
-} 
+}

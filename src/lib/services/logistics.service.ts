@@ -70,7 +70,7 @@ export class LogisticsService {
       const allApis = await apiService.getAllApiConfigurations()
       return allApis.filter(api => api.type === 'logistics' && api.isActive)
     } catch (error) {
-      console.error('Failed to get active logistics APIs:', error)
+      // // // console.error('Failed to get active logistics APIs:', error)
       return []
     }
   }
@@ -90,13 +90,13 @@ export class LogisticsService {
           const rates = await this.getRatesFromProvider(api, fromAddress, toAddress, packages)
           allRates.push(...rates)
         } catch (error) {
-          console.error(`Failed to get rates from ${api.provider}:`, error)
+          // // // console.error(`Failed to get rates from ${api.provider}:`, error)
         }
       }
 
       return allRates.sort((a, b) => a.rate - b.rate)
     } catch (error) {
-      console.error('Failed to get shipping rates:', error)
+      // // // console.error('Failed to get shipping rates:', error)
       throw new Error('Failed to calculate shipping rates')
     }
   }
@@ -207,7 +207,7 @@ export class LogisticsService {
 
       return rates
     } catch (error) {
-      console.error('FedEx rate calculation failed:', error)
+      // // // console.error('FedEx rate calculation failed:', error)
       // Return mock rates as fallback
       return this.getMockFedExRates()
     }
@@ -305,7 +305,7 @@ export class LogisticsService {
 
       return rates
     } catch (error) {
-      console.error('UPS rate calculation failed:', error)
+      // // // console.error('UPS rate calculation failed:', error)
       // Return mock rates as fallback
       return this.getMockUPSRates()
     }
@@ -379,7 +379,7 @@ export class LogisticsService {
 
       return rates
     } catch (error) {
-      console.error('DHL rate calculation failed:', error)
+      // // // console.error('DHL rate calculation failed:', error)
       // Return mock rates as fallback
       return this.getMockDHLRates()
     }
@@ -446,7 +446,7 @@ export class LogisticsService {
 
       return rates
     } catch (error) {
-      console.error('Bagster rate calculation failed:', error)
+      // // // console.error('Bagster rate calculation failed:', error)
       // Return mock rates as fallback
       return this.getMockBagsterRates()
     }
@@ -480,7 +480,7 @@ export class LogisticsService {
       const data = await response.json()
       return data.rates || []
     } catch (error) {
-      console.error('Generic rate calculation failed:', error)
+      // // // console.error('Generic rate calculation failed:', error)
       return []
     }
   }
@@ -508,7 +508,7 @@ export class LogisticsService {
           return await this.getGenericTracking(api, trackingNumber)
       }
     } catch (error) {
-      console.error('Failed to get tracking info:', error)
+      // // // console.error('Failed to get tracking info:', error)
       return null
     }
   }
@@ -553,7 +553,7 @@ export class LogisticsService {
         })) || []
       }
     } catch (error) {
-      console.error('FedEx tracking failed:', error)
+      // // // console.error('FedEx tracking failed:', error)
       return this.getMockTrackingInfo(trackingNumber, 'FedEx')
     }
   }
@@ -601,7 +601,7 @@ export class LogisticsService {
         })) || []
       }
     } catch (error) {
-      console.error('UPS tracking failed:', error)
+      // // // console.error('UPS tracking failed:', error)
       return this.getMockTrackingInfo(trackingNumber, 'UPS')
     }
   }
@@ -637,7 +637,7 @@ export class LogisticsService {
         })) || []
       }
     } catch (error) {
-      console.error('DHL tracking failed:', error)
+      // // // console.error('DHL tracking failed:', error)
       return this.getMockTrackingInfo(trackingNumber, 'DHL')
     }
   }
@@ -673,7 +673,7 @@ export class LogisticsService {
         })) || []
       }
     } catch (error) {
-      console.error('Bagster tracking failed:', error)
+      // // // console.error('Bagster tracking failed:', error)
       return this.getMockTrackingInfo(trackingNumber, 'Bagster')
     }
   }
@@ -695,7 +695,7 @@ export class LogisticsService {
       const data = await response.json()
       return data
     } catch (error) {
-      console.error('Generic tracking failed:', error)
+      // // // console.error('Generic tracking failed:', error)
       return this.getMockTrackingInfo(trackingNumber, api.provider || 'unknown')
     }
   }
@@ -768,7 +768,7 @@ export class LogisticsService {
         createdAt: new Date()
       }
     } catch (error) {
-      console.error('Label generation failed:', error)
+      // // // console.error('Label generation failed:', error)
       throw new Error('Failed to generate shipping label')
     }
   }

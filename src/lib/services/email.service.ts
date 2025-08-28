@@ -16,11 +16,11 @@ class ConsoleEmailProvider implements EmailProvider {
   name = 'Console'
 
   async sendEmail(to: string, template: EmailTemplate): Promise<void> {
-    console.log('📧 Email sent via Console Provider:')
-    console.log('To:', to)
-    console.log('Subject:', template.subject)
-    console.log('Content:', template.text)
-    console.log('---')
+    // // // console.log('📧 Email sent via Console Provider:')
+    // // // console.log('To:', to)
+    // // // console.log('Subject:', template.subject)
+    // // // console.log('Content:', template.text)
+    // // // console.log('---')
   }
 }
 
@@ -60,52 +60,32 @@ class SendGridProvider implements EmailProvider {
         throw new Error(`SendGrid API error: ${response.status} ${response.statusText}`)
       }
     } catch (error) {
-      console.error('SendGrid email error:', error)
+      // // // console.error('SendGrid email error:', error)
       throw error
     }
   }
 }
 
-// Nodemailer SMTP Provider
-class NodemailerProvider implements EmailProvider {
-  name = 'Nodemailer'
-  private config: { host: string; port: number; user: string; pass: string }
-
-  constructor(config: { host: string; port: number; user: string; pass: string }) {
-    this.config = config
-  }
+// SMTP API Provider
+class SMTPProvider implements EmailProvider {
+  name = 'SMTP'
 
   async sendEmail(to: string, template: EmailTemplate): Promise<void> {
-    if (!this.config.user || !this.config.pass) {
-      throw new Error('SMTP credentials not configured')
-    }
-
     try {
-      // For server-side only
-      if (typeof window === 'undefined') {
-        const nodemailer = await import('nodemailer')
-        const transporter = nodemailer.createTransport({
-          host: this.config.host,
-          port: this.config.port,
-          secure: this.config.port === 465,
-          auth: {
-            user: this.config.user,
-            pass: this.config.pass
-          }
-        })
+      const response = await fetch('/api/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ to, template })
+      })
 
-        await transporter.sendMail({
-          from: this.config.user,
-          to,
-          subject: template.subject,
-          text: template.text,
-          html: template.html
-        })
-      } else {
-        throw new Error('Nodemailer is server-side only')
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || 'Failed to send email')
       }
     } catch (error) {
-      console.error('Nodemailer email error:', error)
+      // // // console.error('SMTP email error:', error)
       throw error
     }
   }
@@ -147,7 +127,7 @@ class MailgunProvider implements EmailProvider {
         throw new Error(`Mailgun API error: ${response.status} ${response.statusText}`)
       }
     } catch (error) {
-      console.error('Mailgun email error:', error)
+      // // // console.error('Mailgun email error:', error)
       throw error
     }
   }
@@ -185,12 +165,12 @@ export class EmailService {
     switch (this.config.provider.toLowerCase()) {
       case 'sendgrid':
         return new SendGridProvider(this.config.apiKey)
-      case 'nodemailer':
-        return new NodemailerProvider(this.config.smtp!)
+      case 'smtp':
+        return new SMTPProvider()
       case 'mailgun':
         return new MailgunProvider(this.config.apiKey)
       default:
-        console.warn(`Email provider '${this.config.provider}' not configured, using console provider`)
+        // // // console.warn(`Email provider '${this.config.provider}' not configured, using console provider`)
         return new ConsoleEmailProvider()
     }
   }
@@ -209,9 +189,9 @@ export class EmailService {
 
       await this.provider.sendEmail(to, template)
       
-      console.log(`✅ Email sent successfully to: ${to}`)
+      // // // console.log(`✅ Email sent successfully to: ${to}`)
     } catch (error) {
-      console.error('❌ Failed to send email:', error)
+      // // // console.error('❌ Failed to send email:', error)
       throw new Error(`Failed to send email: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }

@@ -105,7 +105,7 @@ async function processRequest(request: BatchRequest['requests'][0]): Promise<Bat
     }
     
   } catch (error) {
-    console.error('Batch request error:', error)
+    // // // console.error('Batch request error:', error)
     
     return {
       status: 500,
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     })
     
   } catch (error) {
-    console.error('Batch API error:', error)
+    // // // console.error('Batch API error:', error)
     
     return NextResponse.json(
       { error: 'Internal server error' },

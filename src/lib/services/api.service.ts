@@ -43,10 +43,10 @@ export class ApiService {
         updatedAt: Timestamp.fromDate(now)
       })
 
-      console.log(`✅ API configuration created: ${id}`)
+      // // // // console.info(`✅ API configuration created: ${id}`)
       return apiConfig
     } catch (error: any) {
-      console.error('❌ Failed to create API configuration:', error)
+      // // // // console.error('❌ Failed to create API configuration:', error)
       throw new Error(`Failed to create API configuration: ${error.message}`)
     }
   }
@@ -82,7 +82,7 @@ export class ApiService {
 
       return apis.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     } catch (error: any) {
-      console.error('❌ Failed to fetch API configurations:', error)
+      // // // // console.error('❌ Failed to fetch API configurations:', error)
       throw new Error(`Failed to fetch API configurations: ${error.message}`)
     }
   }
@@ -98,7 +98,7 @@ export class ApiService {
       const docSnap = await getDoc(docRef)
 
       if (!docSnap.exists()) {
-        console.warn(`API configuration not found: ${id}`)
+        // // // // console.warn(`API configuration not found: ${id}`)
         return null
       }
 
@@ -123,7 +123,7 @@ export class ApiService {
         lastTested: data.lastTested?.toDate(),
       }
     } catch (error: any) {
-      console.error('❌ Failed to fetch API configuration:', error)
+      // // // // console.error('❌ Failed to fetch API configuration:', error)
       throw new Error(`Failed to fetch API configuration: ${error.message}`)
     }
   }
@@ -177,10 +177,10 @@ export class ApiService {
         lastTested: data.lastTested?.toDate(),
       }
 
-      console.log(`✅ API configuration updated: ${id}`)
+      // // // // console.info(`✅ API configuration updated: ${id}`)
       return updatedConfig
     } catch (error: any) {
-      console.error('❌ Failed to update API configuration:', error)
+      // // // // console.error('❌ Failed to update API configuration:', error)
       throw new Error(`Failed to update API configuration: ${error.message}`)
     }
   }
@@ -200,9 +200,9 @@ export class ApiService {
       }
 
       await deleteDoc(docRef)
-      console.log(`✅ API configuration deleted: ${id}`)
+      // // // // console.info(`✅ API configuration deleted: ${id}`)
     } catch (error: any) {
-      console.error('❌ Failed to delete API configuration:', error)
+      // // // // console.error('❌ Failed to delete API configuration:', error)
       throw new Error(`Failed to delete API configuration: ${error.message}`)
     }
   }
@@ -269,7 +269,7 @@ export class ApiService {
         message: success ? 'Connection successful' : 'Connection failed'
       }
     } catch (error: any) {
-      console.error('❌ Failed to test API connection:', error)
+      // // // // console.error('❌ Failed to test API connection:', error)
       throw new Error(`Failed to test API connection: ${error.message}`)
     }
   }
@@ -315,7 +315,7 @@ export class ApiService {
 
       return apis
     } catch (error: any) {
-      console.error('❌ Failed to fetch API configurations by type:', error)
+      // // // // console.error('❌ Failed to fetch API configurations by type:', error)
       throw new Error(`Failed to fetch API configurations by type: ${error.message}`)
     }
   }
@@ -357,7 +357,7 @@ export class ApiService {
 
       return apis
     } catch (error: any) {
-      console.error('❌ Failed to fetch active API configurations:', error)
+      // // // // console.error('❌ Failed to fetch active API configurations:', error)
       throw new Error(`Failed to fetch active API configurations: ${error.message}`)
     }
   }
@@ -395,13 +395,13 @@ export class ApiService {
 
         callback(apis)
       }, (error) => {
-        console.error('❌ Error listening to API configuration changes:', error)
+        // // // // console.error('❌ Error listening to API configuration changes:', error)
       })
 
       this.listeners.set('configurations', unsubscribe)
       return unsubscribe
     } catch (error: any) {
-      console.error('❌ Failed to set up API configuration listener:', error)
+      // // // // console.error('❌ Failed to set up API configuration listener:', error)
       throw new Error(`Failed to set up API configuration listener: ${error.message}`)
     }
   }
@@ -412,7 +412,7 @@ export class ApiService {
       try {
         unsubscribe()
       } catch (error) {
-        console.error('❌ Error cleaning up listener:', error)
+        // // // // console.error('❌ Error cleaning up listener:', error)
       }
     })
     this.listeners.clear()
@@ -440,7 +440,7 @@ export class ApiService {
       // In a real implementation, you would make actual API calls
       return true
     } catch (error) {
-      console.error('Logistics API test failed:', error)
+      // // // // console.error('Logistics API test failed:', error)
       return false
     }
   }
@@ -462,14 +462,14 @@ export class ApiService {
       
       // For now, simulate a successful test
       // This would be replaced with actual API call
-      console.log(`Testing Bagster API connection to: ${testUrl}`)
+      // // // // console.info(`Testing Bagster API connection to: ${testUrl}`)
       
       // Simulate API response time
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       return true
     } catch (error) {
-      console.error('Bagster API test failed:', error)
+      // // // // console.error('Bagster API test failed:', error)
       return false
     }
   }

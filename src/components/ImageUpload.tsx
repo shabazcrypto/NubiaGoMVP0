@@ -156,7 +156,7 @@ export default function ImageUpload({
 
       return { isValid: true };
     } catch (error) {
-      console.error('File validation error:', error);
+      // // // console.error('File validation error:', error);
       return { isValid: false, error: 'File validation failed' };
     }
   };
@@ -184,7 +184,7 @@ export default function ImageUpload({
 
       return { isValid: true };
     } catch (error) {
-      console.error('Content validation error:', error);
+      // // // console.error('Content validation error:', error);
       return { isValid: false, error: 'Content validation failed' };
     }
   };
@@ -306,7 +306,7 @@ export default function ImageUpload({
 
     // Show errors if any
     if (errors.length > 0) {
-      console.error('File validation errors:', errors);
+      // // // console.error('File validation errors:', errors);
       // You can add a toast notification here
     }
 
@@ -349,7 +349,7 @@ export default function ImageUpload({
       const urls = await Promise.all(uploadPromises);
       onImagesChange(urls);
     } catch (error) {
-      console.error('Upload failed:', error);
+      // // // console.error('Upload failed:', error);
     }
   };
 

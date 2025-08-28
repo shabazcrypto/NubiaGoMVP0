@@ -96,7 +96,7 @@ export function useNetworkStatus(): NetworkStatusHook {
       try {
         connection.addEventListener('change', updateNetworkInfo)
       } catch (error) {
-        console.warn('Failed to add connection change listener:', error)
+        // // // console.warn('Failed to add connection change listener:', error)
       }
     }
 
@@ -109,7 +109,7 @@ export function useNetworkStatus(): NetworkStatusHook {
         try {
           connection.removeEventListener('change', updateNetworkInfo)
         } catch (error) {
-          console.warn('Failed to remove connection change listener:', error)
+          // // // console.warn('Failed to remove connection change listener:', error)
         }
       }
     }
@@ -124,7 +124,7 @@ export function useNetworkStatus(): NetworkStatusHook {
           setDataSaverMode(saved as DataSaverMode)
         }
       } catch (error) {
-        console.warn('Failed to load data saver mode from localStorage:', error)
+        // // // console.warn('Failed to load data saver mode from localStorage:', error)
       }
     }
   }, [])
@@ -136,7 +136,7 @@ export function useNetworkStatus(): NetworkStatusHook {
       try {
         localStorage.setItem('dataSaverMode', mode)
       } catch (error) {
-        console.warn('Failed to save data saver mode to localStorage:', error)
+        // // // console.warn('Failed to save data saver mode to localStorage:', error)
       }
     }
   }

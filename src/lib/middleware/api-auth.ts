@@ -60,7 +60,7 @@ export async function authenticateAPI(
     try {
       userData = await EdgeUserService.getUserData(jwtUserData.uid)
     } catch (error) {
-      console.warn('Could not fetch user data from Firestore in Edge Runtime:', error)
+      // // // console.warn('Could not fetch user data from Firestore in Edge Runtime:', error)
     }
     
     // If we can't get Firestore data, use JWT data with defaults
@@ -114,7 +114,7 @@ export async function authenticateAPI(
 
     return authenticatedRequest
   } catch (error) {
-    console.error('API authentication error:', error)
+    // // // console.error('API authentication error:', error)
     
     return NextResponse.json(
       { error: 'Authentication failed', code: 'AUTH_FAILED' },
@@ -403,7 +403,7 @@ export function withEnterpriseRateLimit(
  * @deprecated Use withEnterpriseRateLimit instead
  */
 export function withRateLimit(maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) {
-  console.warn('withRateLimit is deprecated. Use withEnterpriseRateLimit instead.')
+  // // // console.warn('withRateLimit is deprecated. Use withEnterpriseRateLimit instead.')
   return withEnterpriseRateLimit(maxRequests, windowMs)
 }
 
@@ -451,18 +451,18 @@ export function withRequestLogging(handler: (request: AuthenticatedRequest) => P
     const userAgent = request.headers.get('user-agent') || 'unknown'
     const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown'
 
-    console.log(`[${new Date().toISOString()}] ${method} ${url} - ${ip} - ${userAgent}`)
+    // // // console.log(`[${new Date().toISOString()}] ${method} ${url} - ${ip} - ${userAgent}`)
 
     try {
       const response = await handler(request)
       const duration = Date.now() - startTime
       
-      console.log(`[${new Date().toISOString()}] ${method} ${url} - ${response.status} - ${duration}ms`)
+      // // // console.log(`[${new Date().toISOString()}] ${method} ${url} - ${response.status} - ${duration}ms`)
       
       return response
     } catch (error) {
       const duration = Date.now() - startTime
-      console.error(`[${new Date().toISOString()}] ${method} ${url} - ERROR - ${duration}ms:`, error)
+      // // // console.error(`[${new Date().toISOString()}] ${method} ${url} - ERROR - ${duration}ms:`, error)
       throw error
     }
   }
@@ -476,7 +476,7 @@ export function withErrorHandling(handler: (request: AuthenticatedRequest) => Pr
     try {
       return await handler(request)
     } catch (error: any) {
-      console.error('API Error:', error)
+      // // // console.error('API Error:', error)
       
       // Don't expose internal errors in production
       const isDevelopment = process.env.NODE_ENV === 'development'

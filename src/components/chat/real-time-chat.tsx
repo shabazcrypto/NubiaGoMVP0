@@ -27,7 +27,7 @@ export function RealTimeChat() {
     if (!user?.uid || !currentRoom) return
 
     const connectWebSocket = () => {
-      console.log('Connecting to real-time chat server...')
+      // // // console.log('Connecting to real-time chat server...')
       
       // Use Firebase Firestore real-time listeners
       const setupFirebaseListener = async () => {
@@ -62,7 +62,7 @@ export function RealTimeChat() {
           setIsConnected(true)
           return unsubscribe
         } catch (error) {
-          console.error('Failed to connect to Firebase chat:', error)
+          // // // console.error('Failed to connect to Firebase chat:', error)
           setIsConnected(false)
           return () => {}
         }

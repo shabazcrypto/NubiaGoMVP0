@@ -20,7 +20,7 @@ export class EdgeUserService {
   static async getUserData(uid: string): Promise<EdgeUser | null> {
     try {
       if (!uid) {
-        console.error('User ID is required')
+        // // // console.error('User ID is required')
         return null
       }
 
@@ -28,14 +28,14 @@ export class EdgeUserService {
       if (typeof window === 'undefined') {
         // In Edge Runtime, we can't use Firebase client SDK
         // Return a mock user for now or handle differently
-        console.warn('Firebase client SDK not available in Edge Runtime')
+        // // // console.warn('Firebase client SDK not available in Edge Runtime')
         return null
       }
 
       const userDoc = await getDoc(doc(db, 'users', uid))
       
       if (!userDoc.exists()) {
-        console.warn(`User document not found for UID: ${uid}`)
+        // // // console.warn(`User document not found for UID: ${uid}`)
         return null
       }
 
@@ -50,7 +50,7 @@ export class EdgeUserService {
         emailVerified: userData.emailVerified || false
       }
     } catch (error) {
-      console.error('Error fetching user data:', error)
+      // // // console.error('Error fetching user data:', error)
       return null
     }
   }

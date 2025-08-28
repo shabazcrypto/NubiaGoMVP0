@@ -36,7 +36,7 @@ export function LocalImage({
 
   const handleError = () => {
     if (!hasError && currentSrc !== fallbackSrc) {
-      console.warn(`Image failed to load: ${currentSrc}, falling back to: ${fallbackSrc}`)
+      // // // console.warn(`Image failed to load: ${currentSrc}, falling back to: ${fallbackSrc}`)
       setCurrentSrc(fallbackSrc)
       setHasError(true)
       setIsLoading(false)

@@ -29,6 +29,7 @@ import {
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth'
 import { useCartStore } from '@/hooks/useCartStore'
 import { useMobileMenu } from '@/components/providers/mobile-menu-provider'
+
 import { Logo } from '@/components/ui/Logo'
 import { CategoriesDropdown } from './CategoriesDropdown'
 

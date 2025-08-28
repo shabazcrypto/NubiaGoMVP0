@@ -34,7 +34,7 @@ export const GET = protectAdminAPI(async (request) => {
       message: 'API configurations retrieved successfully'
     })
   } catch (error: any) {
-    console.error('API configurations fetch error:', error)
+    // // // console.error('API configurations fetch error:', error)
     return NextResponse.json(
       { 
         success: false, 
@@ -75,7 +75,7 @@ export const POST = protectAdminAPI(async (request) => {
       message: 'API configuration created successfully'
     }, { status: 201 })
   } catch (error: any) {
-    console.error('API configuration creation error:', error)
+    // // // console.error('API configuration creation error:', error)
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(

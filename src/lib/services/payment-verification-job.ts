@@ -7,11 +7,11 @@ export class PaymentVerificationJob {
   // Start the payment verification job
   start() {
     if (this.isRunning) {
-      console.log('Payment verification job is already running')
+      // Payment verification job is already running - logging removed for production
       return
     }
 
-    console.log('Starting payment verification job...')
+    // Starting payment verification job - logging removed for production
     this.isRunning = true
 
     // Run every 2 minutes
@@ -30,13 +30,13 @@ export class PaymentVerificationJob {
       this.intervalId = null
     }
     this.isRunning = false
-    console.log('Payment verification job stopped')
+    // Payment verification job stopped - logging removed for production
   }
 
   // Verify all pending payments
   private async verifyPendingPayments() {
     try {
-      console.log('Running payment verification job...')
+      // Running payment verification job - logging removed for production
       
       const allPayments = await mobileMoneyService.getAllPayments()
       
@@ -56,7 +56,7 @@ export class PaymentVerificationJob {
         return true
       })
 
-      console.log(`Found ${pendingPayments.length} payments to verify`)
+      // Found payments to verify - logging removed for production
 
       // Process payments in batches to avoid overwhelming the system
       const batchSize = 10
@@ -73,7 +73,7 @@ export class PaymentVerificationJob {
         }
       }
     } catch (error) {
-      console.error('Payment verification job failed:', error)
+      // Payment verification job failed - logging removed for production
     }
   }
 
@@ -89,12 +89,12 @@ export class PaymentVerificationJob {
         const verification = await mobileMoneyService.getPaymentStatus(payment.id)
         
         if (verification) {
-          console.log(`Payment ${payment.id} status: ${verification.status}`)
+          // Payment status check - logging removed for production
           
           // If payment is completed, update order status
           if (verification.status === 'completed') {
             await this.updateOrderStatus(payment.orderId, 'paid')
-            console.log(`Order ${payment.orderId} marked as paid`)
+            // Order marked as paid - logging removed for production
           }
         }
       }
@@ -103,10 +103,10 @@ export class PaymentVerificationJob {
       if (this.isPaymentExpired(payment)) {
         payment.status = 'expired'
         payment.updatedAt = new Date()
-        console.log(`Payment ${payment.id} marked as expired`)
+        // Payment marked as expired - logging removed for production
       }
     } catch (error) {
-      console.error(`Failed to verify payment ${payment.id}:`, error)
+      // Failed to verify payment - logging removed for production
     }
   }
 
@@ -122,9 +122,9 @@ export class PaymentVerificationJob {
       // TODO: Integrate with your existing order service
       // await orderService.updatePaymentStatus(orderId, status)
       
-      console.log(`Order ${orderId} payment status updated to: ${status}`)
+      // Order payment status updated - logging removed for production
     } catch (error) {
-      console.error(`Failed to update order ${orderId} status:`, error)
+      // Failed to update order status - logging removed for production
     }
   }
 

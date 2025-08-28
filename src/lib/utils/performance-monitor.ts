@@ -26,7 +26,7 @@ class PerformanceMonitor {
         const longTaskObserver = new PerformanceObserver((list) => {
           list.getEntries().forEach((entry) => {
             if (entry.duration > 50) {
-              console.warn(`Long task detected: ${entry.duration}ms`, entry)
+              // // // console.warn(`Long task detected: ${entry.duration}ms`, entry)
             }
           })
         })
@@ -37,7 +37,7 @@ class PerformanceMonitor {
         const clsObserver = new PerformanceObserver((list) => {
           list.getEntries().forEach((entry: any) => {
             if (entry.value > 0.1) {
-              console.warn(`Layout shift detected: ${entry.value}`, entry)
+              // // // console.warn(`Layout shift detected: ${entry.value}`, entry)
             }
           })
         })
@@ -45,7 +45,7 @@ class PerformanceMonitor {
         this.observers.push(clsObserver)
       }
     } catch (error) {
-      console.warn('Performance monitoring not available:', error)
+      // // // console.warn('Performance monitoring not available:', error)
     }
   }
 
@@ -63,7 +63,7 @@ class PerformanceMonitor {
     })
 
     if (loadTime > 3000) {
-      console.warn(`Slow page load detected for ${pageName}: ${loadTime}ms`)
+      // // // console.warn(`Slow page load detected for ${pageName}: ${loadTime}ms`)
     }
   }
 
@@ -80,7 +80,7 @@ class PerformanceMonitor {
     })
 
     if (renderTime > 100) {
-      console.warn(`Slow component render detected for ${componentName}: ${renderTime}ms`)
+      // // // console.warn(`Slow component render detected for ${componentName}: ${renderTime}ms`)
     }
   }
 
@@ -112,7 +112,7 @@ class PerformanceMonitor {
         })
       }
     } catch (err) {
-      console.warn('Failed to send analytics:', err)
+      // // // console.warn('Failed to send analytics:', err)
     }
   }
 
@@ -191,7 +191,7 @@ export const performanceUtils = {
         try {
           callback()
         } catch (error) {
-          console.warn('Cleanup error:', error)
+          // // // console.warn('Cleanup error:', error)
         }
       })
     }

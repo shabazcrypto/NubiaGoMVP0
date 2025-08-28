@@ -194,7 +194,7 @@ export async function GET(request: NextRequest) {
       total: filteredCategories.length
     })
   } catch (error) {
-    console.error('Categories API error:', error)
+    // // // console.error('Categories API error:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to fetch categories' },
       { status: 500 }
@@ -234,7 +234,7 @@ export async function POST(request: NextRequest) {
       data: newCategory
     }, { status: 201 })
   } catch (error) {
-    console.error('Create category error:', error)
+    // // // console.error('Create category error:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to create category' },
       { status: 500 }

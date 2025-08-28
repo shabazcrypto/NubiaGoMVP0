@@ -28,7 +28,7 @@ export class UserService {
         ...docSnap.data()
       } as User
     } catch (error) {
-      console.error('Error getting user profile:', error)
+      // // // console.error('Error getting user profile:', error)
       // During build time, return null instead of throwing
       if (process.env.NODE_ENV === 'production' || process.env.NEXT_PHASE === 'phase-production-build') {
         return null
@@ -52,7 +52,7 @@ export class UserService {
         ...updatedDoc.data()
       } as User
     } catch (error) {
-      console.error('Error updating user profile:', error)
+      // // // console.error('Error updating user profile:', error)
       throw new Error('Failed to update user profile')
     }
   }
@@ -88,7 +88,7 @@ export class UserService {
 
       return addresses
     } catch (error) {
-      console.error('Error getting user addresses:', error)
+      // // // console.error('Error getting user addresses:', error)
       // During build time, return empty array instead of throwing
       if (process.env.NODE_ENV === 'production' || process.env.NEXT_PHASE === 'phase-production-build') {
         return []
@@ -121,7 +121,7 @@ export class UserService {
         ...address
       } as Address
     } catch (error) {
-      console.error('Error adding user address:', error)
+      // // // console.error('Error adding user address:', error)
       throw new Error('Failed to add address')
     }
   }
@@ -141,7 +141,7 @@ export class UserService {
         ...updatedDoc.data()
       } as Address
     } catch (error) {
-      console.error('Error updating user address:', error)
+      // // // console.error('Error updating user address:', error)
       throw new Error('Failed to update address')
     }
   }
@@ -153,7 +153,7 @@ export class UserService {
       await deleteDoc(addressRef)
       return true
     } catch (error) {
-      console.error('Error deleting user address:', error)
+      // // // console.error('Error deleting user address:', error)
       throw new Error('Failed to delete address')
     }
   }
@@ -171,7 +171,7 @@ export class UserService {
         updatedAt: new Date()
       })
     } catch (error) {
-      console.error('Error setting default address:', error)
+      // // // console.error('Error setting default address:', error)
       throw new Error('Failed to set default address')
     }
   }
@@ -191,7 +191,7 @@ export class UserService {
       
       await Promise.all(updatePromises)
     } catch (error) {
-      console.error('Error clearing default address:', error)
+      // // // console.error('Error clearing default address:', error)
       throw new Error('Failed to clear default address')
     }
   }
@@ -207,7 +207,7 @@ export class UserService {
         ...doc.data()
       })) as User[]
     } catch (error) {
-      console.error('Error getting all users:', error)
+      // // // console.error('Error getting all users:', error)
       throw new Error('Failed to fetch users')
     }
   }
@@ -227,7 +227,7 @@ export class UserService {
         ...updatedDoc.data()
       } as User
     } catch (error) {
-      console.error('Error updating user role:', error)
+      // // // console.error('Error updating user role:', error)
       throw new Error('Failed to update user role')
     }
   }
@@ -247,7 +247,7 @@ export class UserService {
         ...updatedDoc.data()
       } as User
     } catch (error) {
-      console.error('Error updating user status:', error)
+      // // // console.error('Error updating user status:', error)
       throw new Error('Failed to update user status')
     }
   }

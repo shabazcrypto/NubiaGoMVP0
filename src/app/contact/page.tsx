@@ -24,7 +24,7 @@ export default function ContactPage() {
       await new Promise(resolve => setTimeout(resolve, 1000))
       setIsSubmitted(true)
     } catch (err) {
-      console.error('Failed to send message')
+      // // // console.error('Failed to send message')
     } finally {
       setIsLoading(false)
     }

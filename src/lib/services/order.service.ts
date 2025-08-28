@@ -71,7 +71,7 @@ export class OrderService {
 
       return newOrder
     } catch (error) {
-      console.error('Error creating order:', error)
+      // // // console.error('Error creating order:', error)
       throw new Error('Failed to create order')
     }
   }
@@ -88,7 +88,7 @@ export class OrderService {
 
       return orderDoc.data() as Order
     } catch (error) {
-      console.error('Error getting order:', error)
+      // // // console.error('Error getting order:', error)
       // During build time, return null instead of throwing
       if (process.env.NODE_ENV === 'production' || process.env.NEXT_PHASE === 'phase-production-build') {
         return null
@@ -127,7 +127,7 @@ export class OrderService {
         hasMore: endIndex < orders.length
       }
     } catch (error) {
-      console.error('Error getting user orders:', error)
+      // // // console.error('Error getting user orders:', error)
       // During build time, return empty array instead of throwing
       if (process.env.NODE_ENV === 'production' || process.env.NEXT_PHASE === 'phase-production-build') {
         return {
@@ -152,7 +152,7 @@ export class OrderService {
       const updatedDoc = await getDoc(orderRef)
       return updatedDoc.data() as Order
     } catch (error) {
-      console.error('Error updating order status:', error)
+      // // // console.error('Error updating order status:', error)
       throw new Error('Failed to update order status')
     }
   }
@@ -169,7 +169,7 @@ export class OrderService {
       const updatedDoc = await getDoc(orderRef)
       return updatedDoc.data() as Order
     } catch (error) {
-      console.error('Error updating payment status:', error)
+      // // // console.error('Error updating payment status:', error)
       throw new Error('Failed to update payment status')
     }
   }
@@ -186,7 +186,7 @@ export class OrderService {
       const updatedDoc = await getDoc(orderRef)
       return updatedDoc.data() as Order
     } catch (error) {
-      console.error('Error adding tracking number:', error)
+      // // // console.error('Error adding tracking number:', error)
       throw new Error('Failed to add tracking number')
     }
   }
@@ -217,7 +217,7 @@ export class OrderService {
       const updatedDoc = await getDoc(orderRef)
       return updatedDoc.data() as Order
     } catch (error) {
-      console.error('Error cancelling order:', error)
+      // // // console.error('Error cancelling order:', error)
       throw new Error('Failed to cancel order')
     }
   }
@@ -248,7 +248,7 @@ export class OrderService {
       const updatedDoc = await getDoc(orderRef)
       return updatedDoc.data() as Order
     } catch (error) {
-      console.error('Error processing payment:', error)
+      // // // console.error('Error processing payment:', error)
       throw new Error('Failed to process payment')
     }
   }
@@ -286,7 +286,7 @@ export class OrderService {
         pendingOrders
       }
     } catch (error) {
-      console.error('Error getting order statistics:', error)
+      // // // console.error('Error getting order statistics:', error)
       throw new Error('Failed to fetch order statistics')
     }
   }
@@ -324,7 +324,7 @@ export class OrderService {
         hasMore: endIndex < orders.length
       }
     } catch (error) {
-      console.error('Error getting all orders:', error)
+      // // // console.error('Error getting all orders:', error)
       throw new Error('Failed to fetch orders')
     }
   }
@@ -347,7 +347,7 @@ export class OrderService {
         const paymentService = new PaymentService()
         await paymentService.processRefund(order.id, refundAmount, reason)
       } catch (error) {
-        console.warn('Payment service refund failed, proceeding with order update:', error)
+        // // // console.warn('Payment service refund failed, proceeding with order update:', error)
       }
 
       // Update order status
@@ -362,7 +362,7 @@ export class OrderService {
       const updatedDoc = await getDoc(orderRef)
       return updatedDoc.data() as Order
     } catch (error) {
-      console.error('Error refunding order:', error)
+      // // // console.error('Error refunding order:', error)
       throw new Error('Failed to refund order')
     }
   }

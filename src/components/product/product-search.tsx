@@ -53,7 +53,7 @@ const ProductSearch = React.memo(function ProductSearch({
         const itemIds = new Set(wishlist.items.map(item => item.productId))
         setWishlistItems(itemIds)
       } catch (error) {
-        console.error('Error fetching wishlist items:', error)
+        // // // console.error('Error fetching wishlist items:', error)
       }
     }
 
@@ -106,7 +106,7 @@ const ProductSearch = React.memo(function ProductSearch({
       await cartService.addToCart(user.uid, product.id, 1)
       alert(`${product.name} has been added to your cart`)
     } catch (error: any) {
-      console.error('Error adding to cart:', error)
+      // // // console.error('Error adding to cart:', error)
       alert('Failed to add item to cart')
     }
   }, [user?.uid, cartService])
@@ -138,7 +138,7 @@ const ProductSearch = React.memo(function ProductSearch({
       
       onToggleWishlist?.(product)
     } catch (error: any) {
-      console.error('Error toggling wishlist:', error)
+      // // // console.error('Error toggling wishlist:', error)
       alert('Failed to update wishlist')
     }
   }, [user?.uid, wishlistItems, wishlistService, onToggleWishlist])

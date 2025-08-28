@@ -81,7 +81,7 @@ class AuthService {
           this.notifyAuthStateListeners(profile)
         }
       } catch (error) {
-        console.error('Error handling auth state change:', error)
+        // // // console.error('Error handling auth state change:', error)
         this.notifyAuthStateListeners(null)
       }
     } else {
@@ -265,7 +265,7 @@ class AuthService {
       
       return null
     } catch (error) {
-      console.error('Error getting user profile:', error)
+      // // // console.error('Error getting user profile:', error)
       return null
     }
   }
@@ -279,7 +279,7 @@ class AuthService {
         updatedAt: new Date()
       })
     } catch (error) {
-      console.error('Error updating last login:', error)
+      // // // console.error('Error updating last login:', error)
     }
   }
 
@@ -326,7 +326,7 @@ class AuthService {
 
   // Handle auth errors
   private handleAuthError(error: AuthError): Error {
-    console.error('Auth error:', error)
+    // // // console.error('Auth error:', error)
     
     switch (error.code) {
       case 'auth/user-not-found':

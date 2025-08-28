@@ -14,7 +14,7 @@ import {
 
 // Simple toast function for compatibility
 export function toast(message: string, type: ToastType = 'info') {
-  console.log(`[${type.toUpperCase()}] ${message}`)
+  // Toast notification - logging removed for production
   // In a real implementation, this would trigger a toast notification
 }
 
@@ -187,16 +187,16 @@ export function ToastContainer() {
 // Note: Components should use: import { toast } from '@/hooks/use-toast'
 export const legacyToast = {
   success: (title: string, message?: string) => {
-    console.log('Toast (success):', title, message)
+    // Toast (success) - logging removed for production
   },
   error: (title: string, message?: string) => {
-    console.error('Toast (error):', title, message)
+    // Toast (error) - logging removed for production
   },
   warning: (title: string, message?: string) => {
-    console.warn('Toast (warning):', title, message)
+    // Toast (warning) - logging removed for production
   },
   info: (title: string, message?: string) => {
-    console.info('Toast (info):', title, message)
+    // Toast (info) - logging removed for production
   }
 }
 
@@ -208,24 +208,24 @@ export function useToast() {
   // addToast functionality removed - use shadcn/ui toast hook instead
 
   const toast = useCallback((options: Omit<Toast, 'id'>) => {
-    console.log('Toast:', options)
+    // Toast notification - logging removed for production
     // Simple console logging to prevent infinite loops
   }, [])
 
   const success = useCallback((title: string, message?: string) => {
-    console.log('Success Toast:', title, message)
+    // Success Toast - logging removed for production
   }, [])
 
   const error = useCallback((title: string, message?: string) => {
-    console.log('Error Toast:', title, message)
+    // Error Toast - logging removed for production
   }, [])
 
   const warning = useCallback((title: string, message?: string) => {
-    console.log('Warning Toast:', title, message)
+    // Warning Toast - logging removed for production
   }, [])
 
   const info = useCallback((title: string, message?: string) => {
-    console.log('Info Toast:', title, message)
+    // Info Toast - logging removed for production
   }, [])
 
   return { toast, success, error, warning, info }

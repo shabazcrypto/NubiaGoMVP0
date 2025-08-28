@@ -79,7 +79,7 @@ describe('Logger', () => {
     it('logs info messages in all environments', () => {
       logger.info('Test info message')
       
-      expect(mockConsole.info).toHaveBeenCalledWith(
+      expect(mock// console.info).toHaveBeenCalledWith(
         expect.stringContaining('Test info message')
       )
     })
@@ -87,7 +87,7 @@ describe('Logger', () => {
     it('logs warn messages in all environments', () => {
       logger.warn('Test warning message')
       
-      expect(mockConsole.warn).toHaveBeenCalledWith(
+      expect(mock// console.warn).toHaveBeenCalledWith(
         expect.stringContaining('Test warning message')
       )
     })
@@ -95,7 +95,7 @@ describe('Logger', () => {
     it('logs error messages in all environments', () => {
       logger.error('Test error message')
       
-      expect(mockConsole.error).toHaveBeenCalledWith(
+      expect(mock// console.error).toHaveBeenCalledWith(
         expect.stringContaining('Test error message')
       )
     })
@@ -109,7 +109,7 @@ describe('Logger', () => {
       logger.info('Test message')
       const after = Date.now()
       
-      const logCall = mockConsole.info.mock.calls[0][0]
+      const logCall = mock// console.info.mock.calls[0][0]
       expect(logCall).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z INFO  Test message$/)
       
       // Check if timestamp is within reasonable range
@@ -126,22 +126,22 @@ describe('Logger', () => {
       logger.warn('Test warning')
       logger.error('Test error')
       
-      expect(mockConsole.info.mock.calls[0][0]).toContain('INFO')
-      expect(mockConsole.warn.mock.calls[0][0]).toContain('WARN')
-      expect(mockConsole.error.mock.calls[0][0]).toContain('ERROR')
+      expect(mock// console.info.mock.calls[0][0]).toContain('INFO')
+      expect(mock// console.warn.mock.calls[0][0]).toContain('WARN')
+      expect(mock// console.error.mock.calls[0][0]).toContain('ERROR')
     })
 
     it('includes message content', () => {
       logger.info('Test message content')
       
-      expect(mockConsole.info.mock.calls[0][0]).toContain('Test message content')
+      expect(mock// console.info.mock.calls[0][0]).toContain('Test message content')
     })
 
     it('handles additional arguments', () => {
       const extraData = { key: 'value', number: 42 }
       logger.info('Test message', extraData)
       
-      expect(mockConsole.info).toHaveBeenCalledWith(
+      expect(mock// console.info).toHaveBeenCalledWith(
         expect.stringContaining('Test message'),
         extraData
       )
@@ -157,7 +157,7 @@ describe('Logger', () => {
       const error = new Error('Test error')
       logger.error('Error occurred', error)
       
-      expect(mockConsole.error).toHaveBeenCalledWith(
+      expect(mock// console.error).toHaveBeenCalledWith(
         expect.stringContaining('Error occurred'),
         error
       )
@@ -167,7 +167,7 @@ describe('Logger', () => {
       const errorObj = { message: 'Custom error', code: 'ERR001' }
       logger.error('Custom error occurred', errorObj)
       
-      expect(mockConsole.error).toHaveBeenCalledWith(
+      expect(mock// console.error).toHaveBeenCalledWith(
         expect.stringContaining('Custom error occurred'),
         errorObj
       )

@@ -79,7 +79,7 @@ export default function BlogPage() {
         throw new Error(data.error || 'Failed to fetch blog posts')
       }
     } catch (error: any) {
-      console.error('Error fetching blog posts:', error)
+      // // // console.error('Error fetching blog posts:', error)
       setError(error.message || 'Failed to fetch blog posts')
     } finally {
       setIsLoading(false)

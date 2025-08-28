@@ -69,7 +69,7 @@ export default function AuditDashboard() {
   // 🚀 START COMPREHENSIVE AUDIT
   const startComprehensiveAudit = async () => {
     setIsAuditing(true)
-    console.log('🚀 Starting comprehensive NubiaGo audit...')
+    // // // console.log('🚀 Starting comprehensive NubiaGo audit...')
 
     try {
       // Simulate comprehensive audit
@@ -91,9 +91,9 @@ export default function AuditDashboard() {
       setAuditResults(allIssues)
       calculateMetrics(allIssues)
       
-      console.log('✅ Comprehensive audit completed!')
+      // // // console.log('✅ Comprehensive audit completed!')
     } catch (error) {
-      console.error('❌ Audit failed:', error)
+      // // // console.error('❌ Audit failed:', error)
     } finally {
       setIsAuditing(false)
     }

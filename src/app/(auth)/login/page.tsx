@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
@@ -24,16 +24,30 @@ export default function LoginPage() {
   // Get redirect URL from query parameters
   const redirectUrl = searchParams.get('redirect') || '/customer'
 
+  // Debug Firebase config on mount
+  useEffect(() => {
+    // console.log('Firebase Config:', {
+    //   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? '[SET]' : '[MISSING]',
+    //   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ? '[SET]' : '[MISSING]',
+    //   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ? '[SET]' : '[MISSING]'
+    // })
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     clearError()
+    setIsLoading(true)
 
     try {
+      // console.log('Attempting sign in with:', { email: formData.email })
       await signIn(formData.email, formData.password)
       router.push(redirectUrl)
     } catch (err: any) {
+      // console.error('Sign in error:', err)
       setError(err.message || 'Invalid email or password')
+    } finally {
+      setIsLoading(false)
     }
   }
 

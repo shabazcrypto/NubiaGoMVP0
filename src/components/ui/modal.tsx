@@ -229,7 +229,7 @@ export function ConfirmModal({
       await onConfirm()
       onClose()
     } catch (error) {
-      console.error('Confirmation failed:', error)
+      // // // console.error('Confirmation failed:', error)
     } finally {
       setIsConfirming(false)
     }

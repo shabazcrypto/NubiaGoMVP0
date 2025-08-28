@@ -114,7 +114,7 @@ export class ImageOptimizer {
         })
         .join(', ')
     } catch (error) {
-      console.warn('Error generating srcset:', error)
+      // // // console.warn('Error generating srcset:', error)
       return baseSrc
     }
   }
@@ -152,7 +152,7 @@ export class ImageOptimizer {
         })
         .join(', ')
     } catch (error) {
-      console.warn('Error generating format srcset:', error)
+      // // // console.warn('Error generating format srcset:', error)
       return baseSrc
     }
   }
@@ -219,7 +219,7 @@ export class ImageOptimizer {
       
       return url.toString()
     } catch (error) {
-      console.warn('Error optimizing image URL:', error)
+      // // // console.warn('Error optimizing image URL:', error)
       return src
     }
   }

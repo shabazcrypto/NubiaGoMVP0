@@ -109,7 +109,7 @@ class RedisCacheService {
           token: process.env.UPSTASH_REDIS_REST_TOKEN,
         })
       } catch (error) {
-        console.warn('Redis not available, falling back to memory cache:', error)
+        // // // console.warn('Redis not available, falling back to memory cache:', error)
       }
     }
   }
@@ -120,7 +120,7 @@ class RedisCacheService {
     try {
       await this.redis.setex(key, Math.floor(ttl / 1000), JSON.stringify(data))
     } catch (error) {
-      console.error('Redis set error:', error)
+      // // // console.error('Redis set error:', error)
     }
   }
 
@@ -131,7 +131,7 @@ class RedisCacheService {
       const data = await this.redis.get(key)
       return data ? JSON.parse(data) : null
     } catch (error) {
-      console.error('Redis get error:', error)
+      // // // console.error('Redis get error:', error)
       return null
     }
   }
@@ -142,7 +142,7 @@ class RedisCacheService {
     try {
       await this.redis.del(key)
     } catch (error) {
-      console.error('Redis delete error:', error)
+      // // // console.error('Redis delete error:', error)
     }
   }
 
@@ -155,7 +155,7 @@ class RedisCacheService {
         await this.redis.del(...keys)
       }
     } catch (error) {
-      console.error('Redis invalidate pattern error:', error)
+      // // // console.error('Redis invalidate pattern error:', error)
     }
   }
 }

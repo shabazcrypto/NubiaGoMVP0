@@ -40,20 +40,30 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     // Check if auth is available and properly configured
     const checkFirebaseAvailability = () => {
+      // // // console.log('Checking Firebase availability:', {
+      //   auth: !!auth,
+      //   config: {
+      //     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? '[SET]' : '[MISSING]',
+      //     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ? '[SET]' : '[MISSING]',
+      //     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ? '[SET]' : '[MISSING]'
+      //   }
+      // })
+
       if (!auth) {
-        console.warn('Firebase Auth not available')
+        // // // console.warn('Firebase Auth not available')
         setIsFirebaseAvailable(false)
         setLoading(false)
         return false
       }
 
       if (typeof auth.onAuthStateChanged !== 'function') {
-        console.warn('Firebase Auth methods not available')
+        // // // console.warn('Firebase Auth methods not available')
         setIsFirebaseAvailable(false)
         setLoading(false)
         return false
       }
 
+      // // // console.log('Firebase Auth is available')
       setIsFirebaseAvailable(true)
       return true
     }
@@ -67,14 +77,14 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
         setUser(user)
         setLoading(false)
       }, (error) => {
-        console.error('Auth state change error:', error)
+        // // // console.error('Auth state change error:', error)
         setError('Authentication error occurred')
         setLoading(false)
       })
 
       return unsubscribe
     } catch (error) {
-      console.error('Failed to set up auth state listener:', error)
+      // // // console.error('Failed to set up auth state listener:', error)
       setIsFirebaseAvailable(false)
       setLoading(false)
     }
@@ -91,7 +101,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       const result = await signInWithEmailAndPassword(auth, email, password)
       return result
     } catch (error: any) {
-      console.error('Sign in error:', error)
+      // // // console.error('Sign in error:', error)
       let errorMessage = 'Sign in failed'
       
       if (error.message === 'Authentication service not available') {
@@ -139,7 +149,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       
       return result
     } catch (error: any) {
-      console.error('Sign up error:', error)
+      // // // console.error('Sign up error:', error)
       let errorMessage = 'Account creation failed'
       
       if (error.message === 'Authentication service not available') {
@@ -178,7 +188,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       
       await firebaseSignOut(auth)
     } catch (error: any) {
-      console.error('Sign out error:', error)
+      // // // console.error('Sign out error:', error)
       setError('Sign out failed')
       throw error
     }
@@ -194,7 +204,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       
       await sendPasswordResetEmail(auth, email)
     } catch (error: any) {
-      console.error('Password reset error:', error)
+      // // // console.error('Password reset error:', error)
       let errorMessage = 'Password reset failed'
       
       if (error.message === 'Authentication service not available') {
@@ -227,7 +237,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       
       await updateProfile(user, { displayName })
     } catch (error: any) {
-      console.error('Profile update error:', error)
+      // // // console.error('Profile update error:', error)
       setError('Profile update failed')
       throw error
     }
@@ -250,7 +260,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       const result = await signInWithPopup(auth, provider)
       return result
     } catch (error: any) {
-      console.error('Google sign in error:', error)
+      // // // console.error('Google sign in error:', error)
       let errorMessage = 'Google sign in failed'
       
       if (error.message === 'Google authentication not available') {

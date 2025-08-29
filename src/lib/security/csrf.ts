@@ -1,4 +1,5 @@
 ﻿// Client-side CSRF token implementation
+import { NextRequest, NextResponse } from 'next/server';
 import { ServerCrypto } from '../crypto/server';
 import { ClientCrypto } from '../crypto/client';
 

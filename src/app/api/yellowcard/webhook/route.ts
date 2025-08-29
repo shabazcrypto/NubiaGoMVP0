@@ -5,13 +5,14 @@ import { createCSRFHash } from '@/lib/security/server-csrf';
 import { yellowCardService } from '@/lib/services/yellowcard.service';
 
 // Initialize Firebase Admin if not already initialized
+let db: any = null;
 try {
-  initializeFirebaseAdmin();
+  const { db: adminDb } = initializeFirebaseAdmin();
+  db = adminDb || getFirestore();
 } catch (error) {
   console.error('Failed to initialize Firebase Admin:', error);
 }
 
-const db = getFirestore();
 const PAYMENTS_COLLECTION = 'yellowcard_payments';
 
 // Verify the webhook signature
@@ -78,10 +79,18 @@ export async function POST(request: NextRequest) {
     await yellowCardService.handleWebhookEvent(event);
 
     // Save the webhook event to Firestore
-    await db.collection(PAYMENTS_COLLECTION).add({
-      ...event,
-      processedAt: new Date().toISOString(),
-    });
+    if (db) {
+      await db.collection(PAYMENTS_COLLECTION).add({
+        ...event,
+        processedAt: new Date().toISOString(),
+      });
+    } else {
+      console.error('Firebase Admin not initialized');
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ received: true });
   } catch (error) {

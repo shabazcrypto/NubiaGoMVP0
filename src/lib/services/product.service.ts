@@ -152,6 +152,35 @@ export class ProductService {
     return result
   }
 
+  async getProductsBySubcategory(subcategory: string, page: number = 1, pageSize: number = 20): Promise<{
+    products: Product[]
+    total: number
+    hasMore: boolean
+  }> {
+    const cacheKey = this.getCacheKey('getProductsBySubcategory', { subcategory, page, pageSize })
+    const cached = this.getFromCache<{ products: Product[]; total: number; hasMore: boolean }>(cacheKey)
+    if (cached) return cached
+
+    // For mock data, treat subcategory similar to category
+    const inputSlug = this.normalizeCategorySlug(subcategory)
+    const filteredProducts = MOCK_PRODUCTS.filter(p => {
+      const productCategorySlug = this.normalizeCategorySlug(p.category as any)
+      const productTags = p.tags?.map(tag => this.normalizeCategorySlug(tag)) || []
+      return productCategorySlug === inputSlug || 
+             productCategorySlug.includes(inputSlug) ||
+             productTags.some(tag => tag === inputSlug || tag.includes(inputSlug))
+    })
+
+    const result = {
+      products: filteredProducts,
+      total: filteredProducts.length,
+      hasMore: false
+    }
+
+    this.setCache(cacheKey, result)
+    return result
+  }
+
   async getFeaturedProducts(limitCount: number = 10): Promise<Product[]> {
     const cacheKey = this.getCacheKey('getFeaturedProducts', { limitCount })
     const cached = this.getFromCache<Product[]>(cacheKey)

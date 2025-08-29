@@ -15,9 +15,6 @@ import StoreProvider from '@/components/providers/store-provider'
 import { Footer } from '@/components/ui/footer'
 import { SimpleLoading } from '@/components/ui/simple-loading'
 import { UnifiedHeader } from '@/components/navigation/UnifiedHeader'
-import { UnifiedBottomNav } from '@/components/navigation/UnifiedBottomNav'
-import { MobileOptimizationProvider } from '@/components/providers/mobile-optimization-provider'
-import { MobileMenuProvider } from '@/components/providers/mobile-menu-provider'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { Suspense } from 'react'
 
@@ -60,12 +57,12 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/manifest.json',
-     other: {
-     'theme-color': '#0F52BA',
-     'apple-mobile-web-app-capable': 'yes',
-     'apple-mobile-web-app-status-bar-style': 'default',
-     'apple-mobile-web-app-title': 'HomeBase',
-   },
+  other: {
+    'theme-color': '#0F52BA',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'apple-mobile-web-app-title': 'HomeBase',
+  },
 }
 
 // Loading fallback component
@@ -116,15 +113,14 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="//firebasestorage.googleapis.com" />
-                 <link rel="dns-prefetch" href="//api.homebase.com" />
+        <link rel="dns-prefetch" href="//api.homebase.com" />
 
-         {/* Preconnect to critical origins */}
-         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
-         <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
-         {/* Removed Unsplash preconnect to avoid failing DNS/requests */}
-         <link rel="preconnect" href="https://api.homebase.com" crossOrigin="anonymous" />
+        {/* Preconnect to critical origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://api.homebase.com" crossOrigin="anonymous" />
 
         {/* ============================================================================
         CRITICAL RESOURCE PRELOADING
@@ -132,7 +128,6 @@ export default function RootLayout({
 
         {/* Critical CSS preload */}
         <link rel="preload" href="/globals.css" as="style" />
-        <link rel="preload" href="/mobile.css" as="style" media="(max-width: 768px)" />
         <link rel="preload" href="/desktop.css" as="style" media="(min-width: 769px)" />
 
         {/* Critical fonts preload */}
@@ -171,34 +166,17 @@ export default function RootLayout({
         <link rel="prefetch" href="/products?category=home-living" as="document" />
 
         {/* ============================================================================
-        MOBILE-OPTIMIZED RESOURCE HINTS
-        ============================================================================ */}
-
-                 {/* Favicon and Touch Icons */}
-        <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" type="image/x-icon" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
-        <meta name="theme-color" content="#2563eb" />
-        <meta name="msapplication-TileColor" content="#2563eb" />
-        <link rel="manifest" href="/manifest.json" />
-
-        {/* Mobile-specific CSS */}
-        <link rel="preload" href="/mobile.css" as="style" media="(max-width: 768px)" />
-
-        {/* ============================================================================
         FAVICONS AND ICONS
         ============================================================================ */}
 
-                 {/* App Icons */}
-         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-         <link rel="shortcut icon" href="/favicon-32x32.png" />
-         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-         <link rel="manifest" href="/manifest.json" />
-         <link rel="manifest" href="/site.webmanifest" />
+        {/* App Icons */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="/site.webmanifest" />
 
         {/* ============================================================================
         EXTERNAL RESOURCES
@@ -217,7 +195,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0F52BA" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-                 <meta name="apple-mobile-web-app-title" content="HomeBase" />
+        <meta name="apple-mobile-web-app-title" content="HomeBase" />
 
         {/* Performance optimization meta tags */}
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
@@ -247,47 +225,33 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} dark:bg-gray-900 dark:text-gray-100`}>
-                 <ErrorBoundaryProvider>
-           <Suspense fallback={<SimpleLoading timeout={15000} />}>
-             <SSRSafeErrorBoundary>
-               <FirebaseAuthProvider>
-                 {/* <ToastProvider> */}
-                   <StoreProvider>
-                     <RoleChangeHandler>
-                       <MobileOptimizationProvider>
-                                                 <MobileMenuProvider>
-                            {/* Unified Header with Top Utility Bar, Main Header, and Categories */}
-                            <ErrorBoundary>
-                              <UnifiedHeader />
-                            </ErrorBoundary>
+        <ErrorBoundaryProvider>
+          <Suspense fallback={<SimpleLoading timeout={15000} />}>
+            <SSRSafeErrorBoundary>
+              <FirebaseAuthProvider>
+                <StoreProvider>
+                  <RoleChangeHandler>
+                    {/* Unified Header with Top Utility Bar, Main Header, and Categories */}
+                    <ErrorBoundary>
+                      <UnifiedHeader />
+                    </ErrorBoundary>
 
-                            {/* Desktop navigation - DISABLED - UnifiedHeader handles all navigation */}
-                            {/* <ConditionalNavigation /> */}
+                    {/* Desktop navigation - DISABLED - UnifiedHeader handles all navigation */}
+                    <ConditionalNavigation />
 
-                            {/* Main content with proper spacing */}
-                            <main className="min-h-screen pb-20 lg:pb-0">
-                              {children}
-                            </main>
+                    {/* Main content with responsive spacing */}
+                    <main className="min-h-screen px-4 sm:px-6 lg:px-8 pb-16 lg:pb-0">
+                      {children}
+                    </main>
 
-                            {/* Unified bottom navigation */}
-                            <ErrorBoundary>
-                              <UnifiedBottomNav />
-                            </ErrorBoundary>
-
-                            {/* Desktop footer */}
-                            <div className="hidden lg:block">
-                              <Footer />
-                            </div>
-                          </MobileMenuProvider>
-                       </MobileOptimizationProvider>
-                     </RoleChangeHandler>
-                   </StoreProvider>
-                 {/* </ToastProvider> */}
-               </FirebaseAuthProvider>
-             </SSRSafeErrorBoundary>
-           </Suspense>
-         </ErrorBoundaryProvider>
-        {/* <Toaster /> */}
+                    {/* Desktop footer */}
+                    <Footer />
+                  </RoleChangeHandler>
+                </StoreProvider>
+              </FirebaseAuthProvider>
+            </SSRSafeErrorBoundary>
+          </Suspense>
+        </ErrorBoundaryProvider>
         <SpeedInsights />
 
         {/* ============================================================================

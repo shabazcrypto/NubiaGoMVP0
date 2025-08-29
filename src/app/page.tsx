@@ -241,6 +241,355 @@ function HeroSection() {
 }
 
 // ============================================================================
+// NEW ARRIVALS SECTION
+// ============================================================================
+
+function NewArrivalsSection() {
+  const products = [
+    {
+      id: '1',
+      name: 'Wireless Bluetooth Headphones',
+      price: '$85K',
+      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=500&fit=crop&crop=center',
+      badge: 'New'
+    },
+    {
+      id: '2',
+      name: 'Organic Cotton T-Shirt',
+      price: '$45K',
+      image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&crop=center',
+      badge: 'Hot'
+    },
+    {
+      id: '3',
+      name: 'Complete Skincare Set',
+      price: '$32K',
+      image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=500&fit=crop&crop=center',
+      badge: 'Hot'
+    },
+    {
+      id: '4',
+      name: 'Smart Fitness Watch',
+      price: '$120K',
+      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=500&fit=crop&crop=center',
+      badge: 'New'
+    }
+  ]
+
+  return (
+    <section className="relative py-12 sm:py-16 lg:py-20 bg-neutral-50 overflow-hidden">
+      <div className="mobile-container">
+        {/* Header */}
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+          <div className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-600 text-white text-sm font-semibold rounded-full mb-4">
+            <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+            Fresh Arrivals
+          </div>
+          <h2 className="responsive-heading-2 text-neutral-900 mb-4">
+            New Arrivals
+          </h2>
+          <p className="responsive-body text-neutral-600 max-w-2xl mx-auto">
+            Curated selection of premium products, handpicked for discerning customers
+          </p>
+        </div>
+
+        {/* Product Grid */}
+        <div className="mobile-grid">
+          {products.map((product) => (
+            <div key={product.id} className="bg-white rounded-2xl border border-neutral-200 shadow-soft overflow-hidden">
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <Link href={`/products/${product.id}`}>
+                  <Image
+                    src={product.image}
+                    alt={`${product.name} - ${product.badge} product`}
+                    width={400}
+                    height={500}
+                    className="w-full h-full object-cover"
+                  />
+                </Link>
+                
+                {/* Badge */}
+                <div className={`absolute top-3 left-3 ${product.badge === 'New' ? 'bg-primary-600' : 'bg-yellow-500'} text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-medium`}>
+                  {product.badge}
+                </div>
+                
+                {/* Quick Actions */}
+                <div className="absolute top-3 right-3">
+                  <Link href="/wishlist" className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-medium touch-target">
+                    <Heart className="h-4 w-4 text-neutral-700" />
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Product Info */}
+              <div className="p-3 sm:p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <Link href={`/products/${product.id}`} className="text-sm font-semibold text-neutral-900 line-clamp-2 leading-tight">
+                    {product.name}
+                  </Link>
+                  <div className="text-sm font-bold text-primary-600 ml-2">{product.price}</div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-1">
+                    <div className="flex text-yellow-500">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-3 w-3 fill-current" />
+                      ))}
+                    </div>
+                    <span className="text-xs text-neutral-500 ml-1">(24)</span>
+                  </div>
+                  <Link href={`/products/${product.id}`} className="text-xs text-neutral-500">
+                    Quick View
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="text-center mt-8 sm:mt-12 lg:mt-16">
+          <Link href="/products" className="mobile-button bg-primary-600 text-white font-semibold rounded-2xl shadow-medium inline-flex items-center">
+            View All New Arrivals
+            <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ============================================================================
+// SHOP BY CATEGORIES SECTION
+// ============================================================================
+
+function ShopByCategoriesSection() {
+  const categories = [
+    {
+      id: 1,
+      name: 'Electronics',
+      image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=300&fit=crop&crop=center',
+      count: '600+ Products',
+      href: '/products?category=electronics'
+    },
+    {
+      id: 2,
+      name: 'Fashion',
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop&crop=center',
+      count: '750+ Products',
+      href: '/products?category=fashion'
+    },
+    {
+      id: 3,
+      name: 'Home & Living',
+      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&crop=center',
+      count: '500+ Products',
+      href: '/products?category=home'
+    },
+    {
+      id: 4,
+      name: 'Beauty',
+      image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=300&fit=crop&crop=center',
+      count: '400+ Products',
+      href: '/products?category=beauty'
+    },
+    {
+      id: 5,
+      name: 'Sports',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center',
+      count: '350+ Products',
+      href: '/products?category=sports'
+    },
+    {
+      id: 6,
+      name: 'Books',
+      image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
+      count: '300+ Products',
+      href: '/products?category=books'
+    }
+  ]
+
+  return (
+    <section className="py-8 sm:py-12 bg-white">
+      <div className="mobile-container">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="responsive-heading-3 text-gray-900 mb-3">Shop by Categories</h2>
+          <p className="responsive-body text-gray-600">Explore our wide range of product categories</p>
+        </div>
+
+        <div className="mobile-grid">
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              href={category.href}
+              className="group relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src={category.image}
+                  alt={category.name}
+                  width={400}
+                  height={300}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                  <div className="p-3 sm:p-4 text-white">
+                    <h3 className="text-base sm:text-lg font-bold mb-1">{category.name}</h3>
+                    <p className="text-white/80 text-sm">{category.count}</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ============================================================================
+// TESTIMONIALS SECTION
+// ============================================================================
+
+function TestimonialsSection() {
+  const testimonials = [
+    {
+      id: 1,
+      name: 'Sarah Johnson',
+      role: 'Fashion Enthusiast',
+      content: 'Amazing quality products and lightning-fast delivery! The customer service is exceptional.',
+      rating: 5,
+      location: 'Lagos, Nigeria'
+    },
+    {
+      id: 2,
+      name: 'David Chen',
+      role: 'Tech Professional',
+      content: 'Found exactly what I was looking for at great prices. Highly recommend this platform!',
+      rating: 5,
+      location: 'Nairobi, Kenya'
+    },
+    {
+      id: 3,
+      name: 'Amina Hassan',
+      role: 'Home Decor Lover',
+      content: 'The variety of products is incredible. I love how easy it is to find unique items.',
+      rating: 5,
+      location: 'Cairo, Egypt'
+    }
+  ]
+
+  return (
+    <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      <div className="mobile-container">
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white text-sm font-semibold rounded-full mb-4 shadow-lg">
+            <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+            Customer Reviews
+          </div>
+          <h2 className="responsive-heading-2 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4">
+            What Our Customers Say
+          </h2>
+          <p className="responsive-body text-gray-600 max-w-2xl mx-auto">
+            Join thousands of satisfied customers across Africa who trust us for their shopping needs
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgb(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-2">
+              <div className="flex items-center mb-6">
+                <Image
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"
+                  alt={testimonial.name}
+                  width={64}
+                  height={64}
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+                <div className="ml-4">
+                  <h3 className="font-semibold text-gray-900">{testimonial.name}</h3>
+                  <p className="text-sm text-gray-500">{testimonial.role}</p>
+                  <p className="text-xs text-gray-400">{testimonial.location}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center mb-4">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              
+              <p className="text-gray-600 leading-relaxed italic">
+                "{testimonial.content}"
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center mt-8 sm:mt-12">
+          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm text-gray-500">
+            <div className="flex items-center space-x-2">
+              <Star className="h-6 w-6 text-yellow-400 fill-current" />
+              <span>4.9/5 Average Rating</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Users className="h-6 w-6 text-gray-600" />
+              <span>50K+ Happy Customers</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Globe className="h-6 w-6 text-gray-600" />
+              <span>34+ Countries</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ============================================================================
+// NEWSLETTER SECTION
+// ============================================================================
+
+function NewsletterSection() {
+  return (
+    <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 text-white">
+      <div className="mobile-container">
+        <div className="text-center max-w-3xl mx-auto">
+          <h2 className="responsive-heading-2 mb-4">
+            Stay Updated with <span className="text-yellow-400">NubiaGo</span>
+          </h2>
+          <p className="responsive-body text-white/90 mb-8">
+            Get the latest deals, new arrivals, and exclusive offers delivered straight to your inbox
+          </p>
+          
+          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              className="mobile-input flex-1 text-gray-900"
+              required
+            />
+            <button
+              type="submit"
+              className="mobile-button bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+            >
+              Subscribe Now
+            </button>
+          </form>
+          
+          <p className="text-xs text-white/60 mt-4">
+            By subscribing, you agree to our Privacy Policy and Terms of Service
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ============================================================================
 // MAIN PAGE COMPONENT
 // ============================================================================
 
@@ -332,72 +681,10 @@ export default function HomePage() {
       {/* Unified Responsive Homepage */}
       <PullToRefresh onRefresh={() => Promise.resolve(window.location.reload())}>
         <HeroSection />
-        
-        {/* Simple Categories Section */}
-        <section className="py-8 sm:py-12 bg-white">
-          <div className="mobile-container">
-            <div className="text-center mb-6 sm:mb-8">
-              <h2 className="responsive-heading-3 text-gray-900 mb-3">Shop by Categories</h2>
-              <p className="responsive-body text-gray-600">Explore our wide range of product categories</p>
-            </div>
-
-            <div className="mobile-grid">
-              {[
-                { name: 'Electronics', icon: '📱', href: '/products?category=electronics' },
-                { name: 'Fashion', icon: '👕', href: '/products?category=fashion' },
-                { name: 'Home & Living', icon: '🏠', href: '/products?category=home' },
-                { name: 'Beauty', icon: '💄', href: '/products?category=beauty' },
-                { name: 'Sports', icon: '⚽', href: '/products?category=sports' },
-                { name: 'Books', icon: '📚', href: '/products?category=books' }
-              ].map((category) => (
-                <Link
-                  key={category.name}
-                  href={category.href}
-                  className="group bg-gray-50 hover:bg-gray-100 rounded-xl p-6 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-                >
-                  <div className="text-4xl mb-3">{category.icon}</div>
-                  <h3 className="font-semibold text-gray-900">{category.name}</h3>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Simple Features Section */}
-        <section className="py-8 sm:py-12 bg-gray-50">
-          <div className="mobile-container">
-            <div className="text-center mb-8">
-              <h2 className="responsive-heading-3 text-gray-900 mb-3">Why Choose NubiaGo?</h2>
-              <p className="responsive-body text-gray-600">Your trusted marketplace across Africa</p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-white rounded-xl p-6 text-center shadow-sm">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Secure Payments</h3>
-                <p className="text-gray-600 text-sm">Multiple secure payment methods available</p>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 text-center shadow-sm">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Truck className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Fast Delivery</h3>
-                <p className="text-gray-600 text-sm">Quick and reliable delivery across Africa</p>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 text-center shadow-sm">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-6 w-6 text-purple-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Trusted Sellers</h3>
-                <p className="text-gray-600 text-sm">50K+ verified sellers you can trust</p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <NewArrivalsSection />
+        <ShopByCategoriesSection />
+        <TestimonialsSection />
+        <NewsletterSection />
       </PullToRefresh>
     </>
   )

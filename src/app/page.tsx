@@ -332,13 +332,72 @@ export default function HomePage() {
       {/* Unified Responsive Homepage */}
       <PullToRefresh onRefresh={() => Promise.resolve(window.location.reload())}>
         <HeroSection />
-        <NewArrivalsSection />
-        <ShopByCategoriesSection />
-        <FashionCollectionSection />
-        <ShopOurOffersSection />
-        <TestimonialsSection />
-        <FeaturedDealsSection />
-        <NewsletterSection />
+        
+        {/* Simple Categories Section */}
+        <section className="py-8 sm:py-12 bg-white">
+          <div className="mobile-container">
+            <div className="text-center mb-6 sm:mb-8">
+              <h2 className="responsive-heading-3 text-gray-900 mb-3">Shop by Categories</h2>
+              <p className="responsive-body text-gray-600">Explore our wide range of product categories</p>
+            </div>
+
+            <div className="mobile-grid">
+              {[
+                { name: 'Electronics', icon: '📱', href: '/products?category=electronics' },
+                { name: 'Fashion', icon: '👕', href: '/products?category=fashion' },
+                { name: 'Home & Living', icon: '🏠', href: '/products?category=home' },
+                { name: 'Beauty', icon: '💄', href: '/products?category=beauty' },
+                { name: 'Sports', icon: '⚽', href: '/products?category=sports' },
+                { name: 'Books', icon: '📚', href: '/products?category=books' }
+              ].map((category) => (
+                <Link
+                  key={category.name}
+                  href={category.href}
+                  className="group bg-gray-50 hover:bg-gray-100 rounded-xl p-6 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                >
+                  <div className="text-4xl mb-3">{category.icon}</div>
+                  <h3 className="font-semibold text-gray-900">{category.name}</h3>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Simple Features Section */}
+        <section className="py-8 sm:py-12 bg-gray-50">
+          <div className="mobile-container">
+            <div className="text-center mb-8">
+              <h2 className="responsive-heading-3 text-gray-900 mb-3">Why Choose NubiaGo?</h2>
+              <p className="responsive-body text-gray-600">Your trusted marketplace across Africa</p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="bg-white rounded-xl p-6 text-center shadow-sm">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Secure Payments</h3>
+                <p className="text-gray-600 text-sm">Multiple secure payment methods available</p>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 text-center shadow-sm">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Truck className="h-6 w-6 text-green-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Fast Delivery</h3>
+                <p className="text-gray-600 text-sm">Quick and reliable delivery across Africa</p>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 text-center shadow-sm">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Trusted Sellers</h3>
+                <p className="text-gray-600 text-sm">50K+ verified sellers you can trust</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </PullToRefresh>
     </>
   )

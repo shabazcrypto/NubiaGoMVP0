@@ -254,6 +254,7 @@
   "author": "HomeBase Team",
   "license": "MIT",
   "overrides": {
+    "@firebase/app": "^0.9.3",
     "punycode": "^2.3.1"
   },
   "resolutions": {

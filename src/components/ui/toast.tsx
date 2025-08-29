@@ -1,338 +1,129 @@
-'use client'
+﻿'use client';
 
-import React, { useState, useEffect, useCallback } from 'react'
-import { createPortal } from 'react-dom'
-import { 
-  CheckCircle, 
-  AlertCircle, 
-  XCircle, 
-  Info, 
-  X,
-  AlertTriangle
-} from 'lucide-react'
-// useToastStore removed - using shadcn/ui toast system
+import * as React from 'react';
+import * as ToastPrimitives from '@radix-ui/react-toast';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { X } from 'lucide-react';
 
-// Simple toast function for compatibility
-export function toast(message: string, type: ToastType = 'info') {
-  // Toast notification - logging removed for production
-  // In a real implementation, this would trigger a toast notification
-}
+import { cn } from '@/lib/utils';
 
-// ============================================================================
-// TYPES
-// ============================================================================
+const ToastProvider = ToastPrimitives.Provider;
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info'
+const ToastViewport = React.forwardRef<
+  React.ElementRef<typeof ToastPrimitives.Viewport>,
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
+>(({ className, ...props }, ref) => (
+  <ToastPrimitives.Viewport
+    ref={ref}
+    className={cn(
+      'fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]',
+      className
+    )}
+    {...props}
+  />
+));
+ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
-export interface Toast {
-  id: string
-  type: ToastType
-  title: string
-  message?: string
-  duration?: number
-  action?: {
-    label: string
-    onClick: () => void
+const toastVariants = cva(
+  'group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full',
+  {
+    variants: {
+      variant: {
+        default: 'border bg-background text-foreground',
+        destructive:
+          'destructive group border-destructive bg-destructive text-destructive-foreground',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
   }
-  onClose?: () => void
-}
+);
 
-interface ToastProps {
-  toast: Toast
-  onRemove: (id: string) => void
-}
-
-// ============================================================================
-// TOAST ICONS
-// ============================================================================
-
-const toastIcons = {
-  success: CheckCircle,
-  error: XCircle,
-  warning: AlertTriangle,
-  info: Info,
-}
-
-const toastColors = {
-  success: {
-    bg: 'bg-green-50',
-    border: 'border-green-200',
-    icon: 'text-green-600',
-    title: 'text-green-800',
-    message: 'text-green-700',
-  },
-  error: {
-    bg: 'bg-red-50',
-    border: 'border-red-200',
-    icon: 'text-red-600',
-    title: 'text-red-800',
-    message: 'text-red-700',
-  },
-  warning: {
-    bg: 'bg-yellow-50',
-    border: 'border-yellow-200',
-    icon: 'text-yellow-600',
-    title: 'text-yellow-800',
-    message: 'text-yellow-700',
-  },
-  info: {
-    bg: 'bg-primary-50',
-    border: 'border-primary-200',
-    icon: 'text-primary-600',
-    title: 'text-primary-800',
-    message: 'text-primary-700',
-  },
-}
-
-// ============================================================================
-// TOAST COMPONENT
-// ============================================================================
-
-function ToastComponent({ toast, onRemove }: ToastProps) {
-  const [isVisible, setIsVisible] = useState(false)
-  const [isLeaving, setIsLeaving] = useState(false)
-  const colors = toastColors[toast.type]
-  const Icon = toastIcons[toast.type]
-
-  useEffect(() => {
-    // Trigger entrance animation
-    const timer = setTimeout(() => setIsVisible(true), 10)
-    return () => clearTimeout(timer)
-  }, [])
-
-  useEffect(() => {
-    if (toast.duration && toast.duration > 0) {
-      const timer = setTimeout(() => {
-        handleClose()
-      }, toast.duration)
-
-      return () => clearTimeout(timer)
-    }
-  }, [toast.duration])
-
-  const handleClose = useCallback(() => {
-    setIsLeaving(true)
-    setTimeout(() => {
-      onRemove(toast.id)
-      toast.onClose?.()
-    }, 300)
-  }, [toast.id, onRemove, toast.onClose])
-
+const Toast = React.forwardRef<
+  React.ElementRef<typeof ToastPrimitives.Root>,
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
+    VariantProps<typeof toastVariants>
+>(({ className, variant, ...props }, ref) => {
   return (
-    <div
-      className={`
-        transform transition-all duration-300 ease-out
-        ${isVisible && !isLeaving ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
-        ${isLeaving ? 'translate-x-full opacity-0' : ''}
-      `}
-    >
-      <div className={`
-        max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto
-        border ${colors.border} ${colors.bg}
-        overflow-hidden
-      `}>
-        <div className="p-4">
-          <div className="flex items-start">
-            <div className="flex-shrink-0">
-              <Icon className={`h-5 w-5 ${colors.icon}`} />
-            </div>
-            <div className="ml-3 flex-1">
-              <p className={`text-sm font-medium ${colors.title}`}>
-                {toast.title}
-              </p>
-              {toast.message && (
-                <p className={`mt-1 text-sm ${colors.message}`}>
-                  {toast.message}
-                </p>
-              )}
-              {toast.action && (
-                <div className="mt-3">
-                  <button
-                    onClick={() => {
-                      toast.action?.onClick()
-                      handleClose()
-                    }}
-                    className={`text-sm font-medium ${colors.title} hover:${colors.title.replace('text-', 'text-')} underline`}
-                  >
-                    {toast.action.label}
-                  </button>
-                </div>
-              )}
-            </div>
-            <div className="ml-4 flex-shrink-0 flex">
-              <button
-                onClick={handleClose}
-                className={`inline-flex ${colors.icon} hover:${colors.icon.replace('text-', 'text-')} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${colors.icon.replace('text-', '')} rounded-md`}
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+    <ToastPrimitives.Root
+      ref={ref}
+      className={cn(toastVariants({ variant }), className)}
+      {...props}
+    />
+  );
+});
+Toast.displayName = ToastPrimitives.Root.displayName;
 
-// ============================================================================
-// TOAST CONTAINER
-// ============================================================================
+const ToastAction = React.forwardRef<
+  React.ElementRef<typeof ToastPrimitives.Action>,
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action>
+>(({ className, ...props }, ref) => (
+  <ToastPrimitives.Action
+    ref={ref}
+    className={cn(
+      'inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive',
+      className
+    )}
+    {...props}
+  />
+));
+ToastAction.displayName = ToastPrimitives.Action.displayName;
 
-export function ToastContainer() {
-  // Use the shadcn/ui toast implementation via Toaster
-  return null // This is handled by the Toaster component from shadcn/ui
-}
+const ToastClose = React.forwardRef<
+  React.ElementRef<typeof ToastPrimitives.Close>,
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
+>(({ className, ...props }, ref) => (
+  <ToastPrimitives.Close
+    ref={ref}
+    className={cn(
+      'absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600',
+      className
+    )}
+    toast-close=""
+    {...props}
+  >
+    <X className="h-4 w-4" />
+  </ToastPrimitives.Close>
+));
+ToastClose.displayName = ToastPrimitives.Close.displayName;
 
-// Legacy toast function for backward compatibility
-// Note: Components should use: import { toast } from '@/hooks/use-toast'
-export const legacyToast = {
-  success: (title: string, message?: string) => {
-    // Toast (success) - logging removed for production
-  },
-  error: (title: string, message?: string) => {
-    // Toast (error) - logging removed for production
-  },
-  warning: (title: string, message?: string) => {
-    // Toast (warning) - logging removed for production
-  },
-  info: (title: string, message?: string) => {
-    // Toast (info) - logging removed for production
-  }
-}
+const ToastTitle = React.forwardRef<
+  React.ElementRef<typeof ToastPrimitives.Title>,
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
+>(({ className, ...props }, ref) => (
+  <ToastPrimitives.Title
+    ref={ref}
+    className={cn('text-sm font-semibold', className)}
+    {...props}
+  />
+));
+ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
-// ============================================================================
-// TOAST HOOK
-// ============================================================================
+const ToastDescription = React.forwardRef<
+  React.ElementRef<typeof ToastPrimitives.Description>,
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
+>(({ className, ...props }, ref) => (
+  <ToastPrimitives.Description
+    ref={ref}
+    className={cn('text-sm opacity-90', className)}
+    {...props}
+  />
+));
+ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
-export function useToast() {
-  // addToast functionality removed - use shadcn/ui toast hook instead
+type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
 
-  const toast = useCallback((options: Omit<Toast, 'id'>) => {
-    // Toast notification - logging removed for production
-    // Simple console logging to prevent infinite loops
-  }, [])
+type ToastActionElement = React.ReactElement<typeof ToastAction>;
 
-  const success = useCallback((title: string, message?: string) => {
-    // Success Toast - logging removed for production
-  }, [])
-
-  const error = useCallback((title: string, message?: string) => {
-    // Error Toast - logging removed for production
-  }, [])
-
-  const warning = useCallback((title: string, message?: string) => {
-    // Warning Toast - logging removed for production
-  }, [])
-
-  const info = useCallback((title: string, message?: string) => {
-    // Info Toast - logging removed for production
-  }, [])
-
-  return { toast, success, error, warning, info }
-}
-
-// ============================================================================
-// TOAST PROVIDER
-// ============================================================================
-
-export function ToastProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      {children}
-      <ToastContainer />
-    </>
-  )
-}
-
-// ============================================================================
-// TOAST UTILITIES - REMOVED DUE TO HOOK RULES VIOLATION
-// ============================================================================
-// Note: These utility functions were removed because they violate React Hook rules.
-// Use the useToast hook directly in your components instead.
-
-// ============================================================================
-// TOAST COMPONENTS FOR COMMON USE CASES
-// ============================================================================
-
-export function NetworkErrorToast() {
-  return null
-}
-
-export function FormErrorToast({ errors }: { errors: string[] }) {
-  return null
-}
-
-export function SuccessActionToast({ message }: { message: string }) {
-  return null
-}
-
-// ============================================================================
-// TOAST ANIMATIONS
-// ============================================================================
-
-export const toastAnimations = {
-  enter: 'transform transition-all duration-300 ease-out translate-x-0 opacity-100',
-  exit: 'transform transition-all duration-300 ease-in translate-x-full opacity-0',
-  slideIn: 'animate-slide-in-right',
-  slideOut: 'animate-slide-out-right',
-  fadeIn: 'animate-fade-in',
-  fadeOut: 'animate-fade-out',
-}
-
-// ============================================================================
-// TOAST POSITIONS
-// ============================================================================
-
-export const toastPositions = {
-  'top-right': 'fixed top-4 right-4',
-  'top-left': 'fixed top-4 left-4',
-  'top-center': 'fixed top-4 left-1/2 transform -translate-x-1/2',
-  'bottom-right': 'fixed bottom-4 right-4',
-  'bottom-left': 'fixed bottom-4 left-4',
-  'bottom-center': 'fixed bottom-4 left-1/2 transform -translate-x-1/2',
-}
-
-// ============================================================================
-// TOAST DEFAULTS
-// ============================================================================
-
-export const toastDefaults = {
-  duration: 4000,
-  position: 'top-right' as keyof typeof toastPositions,
-  maxToasts: 5,
-}
-
-// ============================================================================
-// TOAST MANAGER
-// ============================================================================
-
-export class ToastManager {
-  private static instance: ToastManager
-  private toasts: Toast[] = []
-
-  static getInstance(): ToastManager {
-    if (!ToastManager.instance) {
-      ToastManager.instance = new ToastManager()
-    }
-    return ToastManager.instance
-  }
-
-  add(toast: Toast): void {
-    this.toasts.push(toast)
-    if (this.toasts.length > toastDefaults.maxToasts) {
-      this.toasts.shift()
-    }
-  }
-
-  remove(id: string): void {
-    this.toasts = this.toasts.filter(toast => toast.id !== id)
-  }
-
-  clear(): void {
-    this.toasts = []
-  }
-
-  getToasts(): Toast[] {
-    return [...this.toasts]
-  }
-} 
+export {
+  type ToastProps,
+  type ToastActionElement,
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+};

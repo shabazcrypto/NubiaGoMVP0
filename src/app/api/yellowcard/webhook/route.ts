@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { getFirestore } from 'firebase-admin/firestore';
 import { initializeFirebaseAdmin } from '@/lib/firebase/firebase-admin';
-import crypto from 'crypto';
+import { createCSRFHash } from '@/lib/security/server-csrf';
+import { yellowCardService } from '@/lib/services/yellowcard.service';
 
 // Initialize Firebase Admin if not already initialized
 try {
@@ -19,139 +20,75 @@ function verifyWebhookSignature(
   signature: string,
   secret: string
 ): boolean {
-  if (process.env.NODE_ENV === 'development' && !signature) {
-    console.warn('Skipping webhook signature verification in development mode');
-    return true;
+  try {
+    const hmac = createCSRFHash(secret, payload);
+    return timingSafeEqual(hmac, signature);
+  } catch (error) {
+    console.error('Error verifying webhook signature:', error);
+    return false;
   }
+}
 
-  const hmac = crypto.createHmac('sha256', secret);
-  const calculatedSignature = hmac.update(payload).digest('hex');
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(calculatedSignature)
-  );
+// Helper function for timing-safe comparison
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+  
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    // Get the raw body for signature verification
+    const signature = request.headers.get('x-yellowcard-signature');
     const payload = await request.text();
-    const signature = request.headers.get('x-yellowcard-signature') || '';
-    const webhookSecret = process.env.YELLOWCARD_WEBHOOK_SECRET || 'test-secret';
 
-    // Verify webhook signature
-    if (!verifyWebhookSignature(payload, signature, webhookSecret)) {
-      console.error('Invalid webhook signature');
+    if (!signature) {
       return NextResponse.json(
-        { success: false, error: 'Invalid signature' },
+        { error: 'Missing signature' },
+        { status: 400 }
+      );
+    }
+
+    // Get the webhook secret from environment variables
+    const webhookSecret = process.env.YELLOWCARD_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.error('YELLOWCARD_WEBHOOK_SECRET is not set');
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
+
+    // Verify the webhook signature
+    if (!verifyWebhookSignature(payload, signature, webhookSecret)) {
+      return NextResponse.json(
+        { error: 'Invalid signature' },
         { status: 401 }
       );
     }
 
-    const data = JSON.parse(payload);
-    console.log('Received webhook:', JSON.stringify(data, null, 2));
+    const event = JSON.parse(payload);
+    
+    // Process the webhook event
+    await yellowCardService.handleWebhookEvent(event);
 
-    // Handle different webhook event types
-    switch (data.event) {
-      case 'payment.completed':
-        await handlePaymentCompleted(data.data);
-        break;
-      case 'payment.failed':
-        await handlePaymentFailed(data.data);
-        break;
-      case 'payment.expired':
-        await handlePaymentExpired(data.data);
-        break;
-      default:
-        console.warn('Unhandled webhook event type:', data.event);
-    }
+    // Save the webhook event to Firestore
+    await db.collection(PAYMENTS_COLLECTION).add({
+      ...event,
+      processedAt: new Date().toISOString(),
+    });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Webhook processing error:', error);
+    console.error('Error processing webhook:', error);
     return NextResponse.json(
-      { success: false, error: 'Webhook processing failed' },
+      { error: 'Error processing webhook' },
       { status: 500 }
     );
   }
-}
-
-async function handlePaymentCompleted(paymentData: any) {
-  const paymentRef = db.collection(PAYMENTS_COLLECTION).doc(paymentData.id);
-  const paymentDoc = await paymentRef.get();
-
-  if (!paymentDoc.exists) {
-    console.error('Payment not found:', paymentData.id);
-    return;
-  }
-
-  const payment = paymentDoc.data();
-  
-  // Only update if not already completed to prevent duplicate processing
-  if (payment.status !== 'completed') {
-    await db.runTransaction(async (transaction) => {
-      // Update payment status
-      transaction.update(paymentRef, {
-        status: 'completed',
-        providerReference: paymentData.provider_reference,
-        updatedAt: new Date().toISOString(),
-        metadata: {
-          ...payment.metadata,
-          completedAt: new Date().toISOString(),
-          providerData: paymentData,
-        },
-      });
-
-      // TODO: Add your order processing logic here
-      // Example: Update order status, send confirmation email, etc.
-      // await processOrderCompletion(payment.orderId, paymentData);
-    });
-
-    console.log(`Payment ${paymentData.id} marked as completed`);
-  }
-}
-
-async function handlePaymentFailed(paymentData: any) {
-  const paymentRef = db.collection(PAYMENTS_COLLECTION).doc(paymentData.id);
-  
-  await paymentRef.update({
-    status: 'failed',
-    updatedAt: new Date().toISOString(),
-    metadata: {
-      failureReason: paymentData.failure_reason || 'Unknown failure',
-      failedAt: new Date().toISOString(),
-      providerData: paymentData,
-    },
-  });
-
-  console.log(`Payment ${paymentData.id} marked as failed:`, paymentData.failure_reason);
-  
-  // TODO: Notify user of payment failure
-  // await sendPaymentFailureNotification(paymentData.userId, paymentData);
-}
-
-async function handlePaymentExpired(paymentData: any) {
-  const paymentRef = db.collection(PAYMENTS_COLLECTION).doc(paymentData.id);
-  
-  await paymentRef.update({
-    status: 'expired',
-    updatedAt: new Date().toISOString(),
-    metadata: {
-      expiredAt: new Date().toISOString(),
-      providerData: paymentData,
-    },
-  });
-
-  console.log(`Payment ${paymentData.id} marked as expired`);
-  
-  // TODO: Notify user of payment expiration
-  // await sendPaymentExpiredNotification(paymentData.userId, paymentData);
-}
-
-// Prevent GET requests to webhook endpoint
-export async function GET() {
-  return NextResponse.json(
-    { success: false, error: 'Method not allowed' },
-    { status: 405 }
-  );
 }

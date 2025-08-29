@@ -1,6 +1,5 @@
 import { db } from '@/lib/firebase/config'
 import { doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, getDocs, orderBy } from 'firebase/firestore'
-import crypto from 'crypto'
 
 // YellowCard API Types
 export interface YellowCardConfig {
@@ -325,7 +324,7 @@ class YellowCardService {
       }
 
       // Verify webhook signature
-      const isValid = this.verifyWebhookSignature(payload, signature, this.config.webhookSecret)
+      const isValid = await this.verifyWebhookSignature(payload, signature, this.config.webhookSecret)
       if (!isValid) {
         throw new Error('Invalid webhook signature')
       }
@@ -364,12 +363,11 @@ class YellowCardService {
     }
 
     const timestamp = Date.now().toString()
-    const nonce = crypto.randomBytes(16).toString('hex')
+    const nonce = (await import('crypto')).randomBytes(16).toString('hex')
     
     // Create signature
     const message = `${method}${endpoint}${timestamp}${nonce}${payload ? JSON.stringify(payload) : ''}`
-    const signature = crypto
-      .createHmac('sha256', this.config.apiSecret)
+    const signature = (await import('crypto')).createHmac('sha256', this.config.apiSecret)
       .update(message)
       .digest('hex')
 
@@ -396,13 +394,12 @@ class YellowCardService {
     return await response.json()
   }
 
-  private verifyWebhookSignature(payload: any, signature: string, secret: string): boolean {
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
+  private async verifyWebhookSignature(payload: any, signature: string, secret: string): Promise<boolean> {
+    const expectedSignature = (await import('crypto')).createHmac('sha256', secret)
       .update(JSON.stringify(payload))
       .digest('hex')
     
-    return crypto.timingSafeEqual(
+    return (await import('crypto')).timingSafeEqual(
       Buffer.from(signature, 'hex'),
       Buffer.from(expectedSignature, 'hex')
     )

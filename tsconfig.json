@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2022",
+    "target": "es5",
     "lib": [
       "dom",
       "dom.iterable",
-      "es2022"
+      "esnext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -26,24 +27,6 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/lib/*": [
-        "./src/lib/*"
-      ],
-      "@/types/*": [
-        "./src/types/*"
-      ],
-      "@/hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@/store/*": [
-        "./src/store/*"
-      ],
-      "@/utils/*": [
-        "./src/utils/*"
       ]
     }
   },
@@ -51,15 +34,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "out/types/**/*.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "**/__tests__/**",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/*.spec.ts",
-    "**/*.spec.tsx"
+    "node_modules"
   ]
 }

@@ -1,22 +1,17 @@
 // Basic server-side crypto implementation
-import crypto from 'crypto';
+import CryptoJS from 'crypto-js';
 
 export class ServerCrypto {
   static generateSecret(): string {
-    return crypto.randomBytes(32).toString('hex');
+    return CryptoJS.lib.WordArray.random(32).toString();
   }
   
   static encrypt(text: string, secret: string): string {
-    const cipher = crypto.createCipher('aes-256-cbc', secret);
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
+    return CryptoJS.AES.encrypt(text, secret).toString();
   }
   
   static decrypt(encryptedText: string, secret: string): string {
-    const decipher = crypto.createDecipher('aes-256-cbc', secret);
-    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+    const bytes = CryptoJS.AES.decrypt(encryptedText, secret);
+    return bytes.toString(CryptoJS.enc.Utf8);
   }
 }

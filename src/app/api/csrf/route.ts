@@ -8,8 +8,8 @@ if (typeof window !== 'undefined') {
 
 // Get CSRF secret from environment variables
 const CSRF_SECRET = process.env.CSRF_SECRET;
-if (!CSRF_SECRET) {
-  throw new Error('CSRF_SECRET environment variable is not set');
+if (!CSRF_SECRET && process.env.NODE_ENV !== 'development') {
+  console.warn('CSRF_SECRET environment variable is not set - CSRF protection disabled');
 }
 
 /**
@@ -18,6 +18,13 @@ if (!CSRF_SECRET) {
  */
 export async function GET() {
   try {
+    if (!CSRF_SECRET) {
+      return NextResponse.json(
+        { error: 'CSRF protection not configured' },
+        { status: 503 }
+      );
+    }
+
     const token = ServerCrypto.generateRandomString(32);
     const tokenHash = ServerCrypto.createCSRFToken(CSRF_SECRET, token);
 
@@ -45,6 +52,13 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
+    if (!CSRF_SECRET) {
+      return NextResponse.json(
+        { error: 'CSRF protection not configured' },
+        { status: 503 }
+      );
+    }
+
     const { token, tokenHash } = await request.json();
 
     if (!token || !tokenHash) {

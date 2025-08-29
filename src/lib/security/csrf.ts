@@ -5,8 +5,8 @@ import { ClientCrypto } from '../crypto/client';
 
 // Get CSRF secret from environment variables
 const CSRF_SECRET = process.env.CSRF_SECRET;
-if (!CSRF_SECRET && typeof window === 'undefined') {
-  throw new Error('CSRF_SECRET environment variable is not set');
+if (!CSRF_SECRET && typeof window === 'undefined' && process.env.NODE_ENV !== 'development') {
+  console.warn('CSRF_SECRET environment variable is not set - some features may not work properly');
 }
 
 // Client-side only: Get public CSRF secret

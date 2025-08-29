@@ -2,20 +2,23 @@ import { NextRequest, NextResponse } from 'next/server'
 import { authService } from '@/lib/services/auth.service'
 import { adminUserService } from '@/lib/services/admin/admin-user.service'
 import { protectAdminAPI } from '@/lib/middleware/api-auth'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from '@/lib/firebase/config'
+import { getFirestore } from 'firebase-admin/firestore'
+import { initializeFirebaseAdmin } from '@/lib/firebase/firebase-admin'
 
 async function hasExistingUsers() {
   try {
-    const usersSnapshot = await getDocs(collection(db, 'users'))
+    const { db } = initializeFirebaseAdmin()
+    if (!db) {
+      console.warn('Firebase Admin not initialized')
+      return true // Assume users exist on error to be safe
+    }
+    const usersSnapshot = await db.collection('users').get()
     return !usersSnapshot.empty
   } catch (error) {
     // // // console.error('Error checking for existing users:', error)
     return true // Assume users exist on error to be safe
   }
 }
-
-export const runtime = 'edge'
 
 export async function POST(request: NextRequest) {
   try {
